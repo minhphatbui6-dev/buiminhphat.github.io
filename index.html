@@ -1,176 +1,136 @@
-DOCTYPE html>
-<html lang=vi">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bui Minh Phat - Signed App</title>
-    <!-- Sử dụng Tailwind CSS bản chuẩn -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* Hiệu ứng tuyết rơi từ trên xuống, đung đưa nhẹ sang hai bên */
+        /* Ép toàn bộ ứng dụng thành 1 khối cuộn duy nhất, không chia tách */
+        html, body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto !important; /* Bật cuộn tổng thể */
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Tuyết rơi cố định theo màn hình nền, không bị trôi khi cuộn */
         @keyframes snowFallEffect {
-            0% {
-                transform: translateY(-20px) translateX(0) scale(1);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(105vh) translateX(35px) scale(0.8);
-                opacity: 0;
-            }
+            0% { transform: translateY(-20px) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(105vh) translateX(35px); opacity: 0; }
         }
         .snowflake {
-            position: absolute;
+            position: fixed;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 50%;
             pointer-events: none;
-            opacity: 0;
             animation: snowFallEffect linear infinite;
-            /* Tạo hiệu ứng phát sáng mờ ảo cho hạt tuyết tròn */
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            z-index: 0;
         }
-        /* Giấu thanh cuộn trình duyệt */
-        .scrollbar-none::-webkit-scrollbar { display: none; }
-        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-black text-white h-screen flex flex-col justify-between font-sans relative overflow-hidden select-none">
+<body class="select-none">
 
-    <!-- Hệ thống nhạc nền tự động nhận file nhac.mp3 -->
     <audio id="bg-music" loop preload="auto">
-    <source src="https://files.catbox.moe/dzelk8.mp3" type="audio/mp3">
-</audio>
+        <source src="snapvideo--lop %23michelin %23boy %23physics -2135.mp3" type="audio/mp3">
+    </audio>
 
-    <!-- Khung chứa hiệu ứng tuyết rơi -->
-    <div id="snow-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
+    <!-- Tuyết nền -->
+    <div id="snow-container"></div>
 
-    <!-- Khu vực Header thông tin cá nhân -->
-    <header class="flex flex-col items-center text-center pt-14 z-10 relative w-full px-6">
-        <!-- Ảnh đại diện anime tròn với viền mờ nhẹ -->
-        <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
-            <img src="IMG_0147.jpeg" alt="Avatar" class="w-full h-full object-cover">
-        </div>
+    <!-- KHUNG TỔNG ĐI CHUNG: Tất cả Header và Nút bấm nằm chung ở đây -->
+    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <!-- Tên hiển thị dạng chữ nghiêng đậm (italic font-bold) chuẩn ảnh -->
-        <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
-        <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
-        
-        <!-- Chữ SIGNED APP nhỏ cách thưa nằm giữa -->
-        <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-12 mb-6">SIGNED APP</p>
-    </header>
+        <!-- Header: Avatar + Tên (Bọc chung để đi cùng nhau) -->
+        <header class="flex flex-col items-center text-center w-full">
+            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
+                <img src="https://i.imgur.com/vH9Z69Q.png" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
+            <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
+            <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-12">SIGNED APP</p>
+        </header>
 
-    <!-- Danh sách 5 nút bấm ứng dụng -->
-    <main class="flex-1 w-full max-w-md mx-auto px-5 overflow-y-auto space-y-4 pb-12 z-10 scrollbar-none">
-        
-        <!-- 1. HACK LQ IOS -->
-        <a href="https://tumadam.com/aovcheat" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl hover:border-white/20 active:scale-[0.98] transition-all group">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-900 flex-shrink-0 border border-white/10">
-                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=lq" alt="Icon" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">
-                HACK LQ IOS
-            </div>
-        </a>
+        <!-- Danh sách nút bấm: Nối đuôi ngay sau Header -->
+        <main class="w-full space-y-4">
+            
+            <a href="https://tumadam.com/aovcheat" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src="https://i.imgur.com/8N691U8.png" alt="Liên Quân" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ IOS</div>
+            </a>
 
-        <!-- 2. HACK LQ ANDROID 64 BIT -->
-        <a href="https://tumadam.com/aov-mapmod-andr-64bit" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl hover:border-white/20 active:scale-[0.98] transition-all group">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-900 flex-shrink-0 border border-white/10">
-                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=lq" alt="Icon" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">
-                HACK LQ ANDROID 64 BIT
-            </div>
-        </a>
+            <a href="https://tumadam.com/aov-mapmod-andr-64bit" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src="https://i.imgur.com/8N691U8.png" alt="Liên Quân" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ ANDROID 64 BIT</div>
+            </a>
 
-        <!-- 3. HACK DELTA ROBLOX VNG IOS -->
-        <a href="https://tumadam.com/roblox-vn" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl hover:border-white/20 active:scale-[0.98] transition-all group">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-900 flex-shrink-0 border border-white/10">
-                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=roblox" alt="Icon" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">
-                HACK DELTA ROBLOX VNG IOS
-            </div>
-        </a>
+            <a href="https://tumadam.com/roblox-vn" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src="https://i.imgur.com/M6LgO3O.png" alt="Roblox" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG IOS</div>
+            </a>
 
-        <!-- 4. HACK DELTA ROBLOX VNG ANDROID -->
-        <a href="https://bandishare.io/delta-x-apk-1/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl hover:border-white/20 active:scale-[0.98] transition-all group">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-900 flex-shrink-0 border border-white/10">
-                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=roblox" alt="Icon" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">
-                HACK DELTA ROBLOX VNG ANDROID
-            </div>
-        </a>
+            <a href="https://bandishare.io/delta-x-apk-1/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src="https://i.imgur.com/M6LgO3O.png" alt="Roblox" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG ANDROID</div>
+            </a>
 
-        <!-- 5. MINECRAFT ANDROID -->
-        <a href="https://minecraftpe.games/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl hover:border-white/20 active:scale-[0.98] transition-all group">
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-neutral-900 flex-shrink-0 border border-white/10">
-                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=mine" alt="Icon" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">
-                MINECRAFT ANDROID
-            </div>
-        </a>
+            <a href="https://minecraftpe.games/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src="https://i.imgur.com/R38Qsh9.png" alt="Minecraft" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">MINECRAFT ANDROID</div>
+            </a>
 
-    </main>
+        </main>
 
-    <!-- Chân trang hiển thị dòng Copyright nhỏ -->
-    <footer class="w-full text-center pb-6 pt-2 z-10 bg-gradient-to-t from-black via-black to-transparent">
-        <p class="text-[12px] text-white/30 tracking-wide font-normal">© 2026 Bui Minh Phat</p>
-    </footer>
+        <!-- Bản quyền cuối trang -->
+        <footer class="w-full text-center pt-4">
+            <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
+        </footer>
+    </div>
 
-    <!-- Logic tạo hạt tuyết rơi ngẫu nhiên -->
     <script>
         const container = document.getElementById('snow-container');
-        // Số lượng hạt tuyết xuất hiện cùng lúc trên màn hình
         const snowflakeCount = 55;
-        
         for (let i = 0; i < snowflakeCount; i++) {
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
-            
-            // Tạo kích thước hạt tuyết ngẫu nhiên từ to đến nhỏ (2px - 6px)
             const size = Math.random() * 4 + 2;
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
-            
-            // Rải đều vị trí xuất hiện ngang màn hình
             snowflake.style.left = `${Math.random() * 100}%`;
-            
-            // Tạo vị trí chiều dọc ban đầu ngẫu nhiên để tuyết rơi đều, không bị rơi cùng một lượt
             snowflake.style.top = `${Math.random() * -20 - 5}px`;
-            
-            // Tốc độ rơi ngẫu nhiên từ 4 giây đến 9 giây
             snowflake.style.animationDuration = `${Math.random() * 5 + 4}s`;
-            // Thời gian chờ xuất hiện ngẫu nhiên
             snowflake.style.animationDelay = `${Math.random() * 6}s`;
-            
             container.appendChild(snowflake);
         }
 
-        // Tự động bật nhạc khi người dùng tương tác với trang web
         const music = document.getElementById('bg-music');
-        let hasInteracted = false;
-
-        function startAudio() {
-            if (!hasInteracted) {
-                music.play().then(() => {
-                    hasInteracted = true;
-                    window.removeEventListener('click', startAudio);
-                    window.removeEventListener('touchstart', startAudio);
-                }).catch(err => {
-                    console.log("Đang chờ chạm màn hình để phát nhạc...");
-                });
-            }
+        function playAudio() {
+            music.play().then(() => {
+                document.removeEventListener('click', playAudio);
+                document.removeEventListener('touchstart', playAudio);
+                document.removeEventListener('scroll', playAudio);
+            }).catch(error => { console.log("Chờ chạm..."); });
         }
-
-        window.addEventListener('click', startAudio);
-        window.addEventListener('touchstart', startAudio);
+        document.addEventListener('click', playAudio);
+        document.addEventListener('touchstart', playAudio);
+        document.addEventListener('scroll', playAudio);
     </script>
 </body>
 </html>
