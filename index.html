@@ -6,7 +6,6 @@
     <title>Bui Minh Phat - Signed App</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* Ép toàn bộ ứng dụng thành 1 khối cuộn duy nhất, không chia tách */
         html, body {
             background-color: #000000;
             color: #ffffff;
@@ -15,10 +14,9 @@
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
-            overflow-y: auto !important; /* Bật cuộn tổng thể */
+            overflow-y: auto !important;
             -webkit-overflow-scrolling: touch;
         }
-        /* Tuyết rơi cố định theo màn hình nền, không bị trôi khi cuộn */
         @keyframes snowFallEffect {
             0% { transform: translateY(-20px) translateX(0); opacity: 0; }
             10% { opacity: 0.8; }
@@ -42,63 +40,65 @@
         <source src="snapvideo--lop %23michelin %23boy %23physics -2135.mp3" type="audio/mp3">
     </audio>
 
-    <!-- Tuyết nền -->
     <div id="snow-container"></div>
 
-    <!-- KHUNG TỔNG ĐI CHUNG: Tất cả Header và Nút bấm nằm chung ở đây -->
     <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <!-- Header: Avatar + Tên (Bọc chung để đi cùng nhau) -->
+        <!-- Header: Avatar từ Catbox + Tên -->
         <header class="flex flex-col items-center text-center w-full">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
-                <img src="https://i.imgur.com/vH9Z69Q.png" alt="Avatar" class="w-full h-full object-cover">
+                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
             <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
             <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-12">SIGNED APP</p>
         </header>
 
-        <!-- Danh sách nút bấm: Nối đuôi ngay sau Header -->
+        <!-- Danh sách nút bấm -->
         <main class="w-full space-y-4">
             
+            <!-- HACK LQ IOS -->
             <a href="https://tumadam.com/aovcheat" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
                 <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://i.imgur.com/8N691U8.png" alt="Liên Quân" class="w-full h-full object-cover">
+                    <img src="https://img.excelmobi.com/icon/com.garena.game.kgvn.png" alt="Liên Quân" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ IOS</div>
             </a>
 
+            <!-- HACK LQ ANDROID 64 BIT -->
             <a href="https://tumadam.com/aov-mapmod-andr-64bit" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
                 <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://i.imgur.com/8N691U8.png" alt="Liên Quân" class="w-full h-full object-cover">
+                    <img src="https://img.excelmobi.com/icon/com.garena.game.kgvn.png" alt="Liên Quân" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ ANDROID 64 BIT</div>
             </a>
 
+            <!-- HACK DELTA ROBLOX VNG IOS -->
             <a href="https://tumadam.com/roblox-vn" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
                 <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://i.imgur.com/M6LgO3O.png" alt="Roblox" class="w-full h-full object-cover">
+                    <img src="https://images.rbxcdn.com/2342138c2678da47f050cbfa51d4eb3c.png" alt="Roblox" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG IOS</div>
             </a>
 
+            <!-- HACK DELTA ROBLOX VNG ANDROID -->
             <a href="https://bandishare.io/delta-x-apk-1/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
                 <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://i.imgur.com/M6LgO3O.png" alt="Roblox" class="w-full h-full object-cover">
+                    <img src="https://images.rbxcdn.com/2342138c2678da47f050cbfa51d4eb3c.png" alt="Roblox" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG ANDROID</div>
             </a>
 
+            <!-- MINECRAFT ANDROID -->
             <a href="https://minecraftpe.games/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
                 <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://i.imgur.com/R38Qsh9.png" alt="Minecraft" class="w-full h-full object-cover">
+                    <img src="https://store-images.s-microsoft.com/image/apps.61748.14371987515082490.5be6985a-0ca0-410d-88cb-fd99908daae7.2e8d9987-0b19-4b68-b79e-f00e3cf86dfa" alt="Minecraft" class="w-full h-full object-cover">
                 </div>
                 <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">MINECRAFT ANDROID</div>
             </a>
 
         </main>
 
-        <!-- Bản quyền cuối trang -->
         <footer class="w-full text-center pt-4">
             <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
         </footer>
