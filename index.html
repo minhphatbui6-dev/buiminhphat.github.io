@@ -32,6 +32,10 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             z-index: 0;
         }
+        /* Hiệu ứng chữ phát sáng cho đồng hồ */
+        .clock-glow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body class="select-none">
@@ -51,7 +55,14 @@
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
             <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
-            <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-12">SIGNED APP</p>
+            
+            <!-- THANH THỜI GIAN REALTIME ĐẦY ĐỦ GIỜ VÀ NGÀY -->
+            <div class="mt-6 px-6 py-2 bg-zinc-900/50 border border-white/5 rounded-full backdrop-blur-md shadow-lg flex flex-col items-center min-w-[200px]">
+                <div id="digital-clock" class="text-xl font-bold tracking-widest text-white clock-glow">00:00:00</div>
+                <div id="digital-date" class="text-[10px] uppercase tracking-wider text-white/40 mt-0.5 font-medium">00/00/2026</div>
+            </div>
+
+            <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-8">SIGNED APP</p>
         </header>
 
         <!-- Danh sách nút bấm với Icon Catbox do Phát tạo -->
@@ -105,6 +116,7 @@
     </div>
 
     <script>
+        // Code tạo tuyết rơi
         const container = document.getElementById('snow-container');
         const snowflakeCount = 55;
         for (let i = 0; i < snowflakeCount; i++) {
@@ -120,6 +132,7 @@
             container.appendChild(snowflake);
         }
 
+        // Code chơi nhạc nền
         const music = document.getElementById('bg-music');
         function playAudio() {
             music.play().then(() => {
@@ -131,6 +144,25 @@
         document.addEventListener('click', playAudio);
         document.addEventListener('touchstart', playAudio);
         document.addEventListener('scroll', playAudio);
+
+        // Code chạy đồng hồ thời gian thực (Giờ và Ngày tự nhảy liên tục)
+        function updateClock() {
+            const now = new Date();
+            
+            // Lấy Giờ : Phút : Giây
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Lấy Ngày / Tháng / Năm
+            let day = now.getDate().toString().padStart(2, '0');
+            let month = (now.getMonth() + 1).toString().padStart(2, '0');
+            let year = now.getFullYear();
+            document.getElementById('digital-date').textContent = `${day}/${month}/${year}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000); // Cập nhật lại sau mỗi 1 giây
     </script>
 </body>
 </html>
