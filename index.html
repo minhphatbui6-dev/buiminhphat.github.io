@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bui Minh Phat - Signed App</title>
+    <title>Bui Minh Phat</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         html, body {
@@ -32,82 +32,39 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             z-index: 0;
         }
-        /* Hiệu ứng chữ phát sáng cho đồng hồ */
         .clock-glow {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
-<body class="select-none">
+<body class="select-none text-white bg-black">
 
     <audio id="bg-music" loop preload="auto">
-        <source src="snapvideo--lop %23michelin %23boy %23physics -2135.mp3" type="audio/mp3">
+        <source src="https://files.catbox.moe/r4cv8l.mp3" type="audio/mp3">
     </audio>
 
     <div id="snow-container"></div>
 
+    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG KÈM ICON TRĂNG KHUYẾT CHẠY LIÊN TỤC -->
+    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
+        <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
+        <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
+    </div>
+
     <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <!-- Header: Avatar chuẩn từ Catbox -->
-        <header class="flex flex-col items-center text-center w-full">
+        <!-- Header: Chỉ giữ thông tin cá nhân của Phát -->
+        <header class="flex flex-col items-center text-center w-full pt-12">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
                 <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
             <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
-            
-            <!-- THANH THỜI GIAN REALTIME ĐẦY ĐỦ GIỜ VÀ NGÀY -->
-            <div class="mt-6 px-6 py-2 bg-zinc-900/50 border border-white/5 rounded-full backdrop-blur-md shadow-lg flex flex-col items-center min-w-[200px]">
-                <div id="digital-clock" class="text-xl font-bold tracking-widest text-white clock-glow">00:00:00</div>
-                <div id="digital-date" class="text-[10px] uppercase tracking-wider text-white/40 mt-0.5 font-medium">00/00/2026</div>
-            </div>
-
-            <p class="text-[11px] tracking-[0.35em] font-bold text-white/40 uppercase mt-8">SIGNED APP</p>
         </header>
 
-        <!-- Danh sách nút bấm với Icon Catbox do Phát tạo -->
-        <main class="w-full space-y-4">
-            
-            <!-- HACK LQ IOS -->
-            <a href="https://tumadam.com/aovcheat" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
-                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://files.catbox.moe/6diiqq.jpeg" alt="Liên Quân" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ IOS</div>
-            </a>
-
-            <!-- HACK LQ ANDROID 64 BIT -->
-            <a href="https://tumadam.com/aov-mapmod-andr-64bit" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
-                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://files.catbox.moe/6diiqq.jpeg" alt="Liên Quân" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK LQ ANDROID 64 BIT</div>
-            </a>
-
-            <!-- HACK DELTA ROBLOX VNG IOS -->
-            <a href="https://tumadam.com/roblox-vn" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
-                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://files.catbox.moe/yhtstp.jpeg" alt="Roblox" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG IOS</div>
-            </a>
-
-            <!-- HACK DELTA ROBLOX VNG ANDROID -->
-            <a href="https://bandishare.io/delta-x-apk-1/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
-                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://files.catbox.moe/yhtstp.jpeg" alt="Roblox" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">HACK DELTA ROBLOX VNG ANDROID</div>
-            </a>
-
-            <!-- MINECRAFT ANDROID -->
-            <a href="https://minecraftpe.games/" target="_blank" class="flex items-center bg-zinc-950/80 border border-white/10 rounded-[2rem] p-3.5 shadow-xl active:scale-[0.98] transition-all">
-                <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0">
-                    <img src="https://files.catbox.moe/wcdn9g.jpeg" alt="Minecraft" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-1 text-center pr-12 font-bold tracking-wider text-base uppercase">MINECRAFT ANDROID</div>
-            </a>
-
+        <!-- Phần thân tạm thời để trống để bạn chuẩn bị kế hoạch mới -->
+        <main class="w-full min-h-[100px] flex items-center justify-center">
+            <p class="text-white/20 italic text-sm tracking-widest uppercase">Loading new project...</p>
         </main>
 
         <footer class="w-full text-center pt-4">
@@ -116,7 +73,7 @@
     </div>
 
     <script>
-        // Code tạo tuyết rơi
+        // Tuyết rơi
         const container = document.getElementById('snow-container');
         const snowflakeCount = 55;
         for (let i = 0; i < snowflakeCount; i++) {
@@ -132,7 +89,7 @@
             container.appendChild(snowflake);
         }
 
-        // Code chơi nhạc nền
+        // Nhạc nền mượt mà khi chạm
         const music = document.getElementById('bg-music');
         function playAudio() {
             music.play().then(() => {
@@ -145,24 +102,16 @@
         document.addEventListener('touchstart', playAudio);
         document.addEventListener('scroll', playAudio);
 
-        // Code chạy đồng hồ thời gian thực (Giờ và Ngày tự nhảy liên tục)
+        // Đồng hồ góc trái nhảy số thực tế từng giây
         function updateClock() {
             const now = new Date();
-            
-            // Lấy Giờ : Phút : Giây
             let hours = now.getHours().toString().padStart(2, '0');
             let minutes = now.getMinutes().toString().padStart(2, '0');
             let seconds = now.getSeconds().toString().padStart(2, '0');
             document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
-            
-            // Lấy Ngày / Tháng / Năm
-            let day = now.getDate().toString().padStart(2, '0');
-            let month = (now.getMonth() + 1).toString().padStart(2, '0');
-            let year = now.getFullYear();
-            document.getElementById('digital-date').textContent = `${day}/${month}/${year}`;
         }
         updateClock();
-        setInterval(updateClock, 1000); // Cập nhật lại sau mỗi 1 giây
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
