@@ -31,21 +31,40 @@
             animation: snowFallEffect linear infinite;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             z-index: 0;
+            will-change: transform; 
         }
         .clock-glow {
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin-custom {
+            animation: spin 1.5s linear infinite;
         }
     </style>
 </head>
 <body class="select-none text-white bg-black">
 
-    <audio id="bg-music" loop preload="auto">
+    <!-- MÀN HÌNH LOADING CHIẾM TOÀN MÀN HÌNH -->
+    <div id="loading-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
+        <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
+            <div class="absolute inset-0 border-2 border-white/10 border-t-white rounded-full animate-spin-custom"></div>
+            <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Loading Avatar" class="w-16 h-16 rounded-full object-cover opacity-80">
+        </div>
+        <h2 class="text-xl font-bold tracking-wide text-white mb-2">Bui Minh Phat</h2>
+        <p id="loading-text" class="text-xs text-white/50 tracking-widest uppercase animate-pulse">Đang khởi động...</p>
+    </div>
+
+    <!-- Nhạc nền -->
+    <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
         <source src="https://files.catbox.moe/r4cv8l.mp3" type="audio/mp3">
     </audio>
 
     <div id="snow-container"></div>
 
-    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG KÈM ICON TRĂNG KHUYẾT CHẠY LIÊN TỤC -->
+    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG -->
     <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
         <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
         <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
@@ -53,7 +72,7 @@
 
     <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <!-- Header: Chỉ giữ thông tin cá nhân của Phát -->
+        <!-- Header: Thông tin cá nhân -->
         <header class="flex flex-col items-center text-center w-full pt-12">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
                 <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
@@ -62,7 +81,7 @@
             <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
         </header>
 
-        <!-- Phần thân tạm thời để trống để bạn chuẩn bị kế hoạch mới -->
+        <!-- Phần thân tạm thời để trống -->
         <main class="w-full min-h-[100px] flex items-center justify-center">
             <p class="text-white/20 italic text-sm tracking-widest uppercase">Loading new project...</p>
         </main>
@@ -73,7 +92,7 @@
     </div>
 
     <script>
-        // Tuyết rơi
+        // Hiệu ứng tuyết rơi mượt mà xuất hiện ngay khi load trang
         const container = document.getElementById('snow-container');
         const snowflakeCount = 55;
         for (let i = 0; i < snowflakeCount; i++) {
@@ -85,24 +104,68 @@
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `${Math.random() * -20 - 5}px`;
             snowflake.style.animationDuration = `${Math.random() * 5 + 4}s`;
-            snowflake.style.animationDelay = `${Math.random() * 6}s`;
+            snowflake.style.animationDelay = `${Math.random() * -8}s`; 
             container.appendChild(snowflake);
         }
 
-        // Nhạc nền mượt mà khi chạm
-        const music = document.getElementById('bg-music');
-        function playAudio() {
-            music.play().then(() => {
-                document.removeEventListener('click', playAudio);
-                document.removeEventListener('touchstart', playAudio);
-                document.removeEventListener('scroll', playAudio);
-            }).catch(error => { console.log("Chờ chạm..."); });
-        }
-        document.addEventListener('click', playAudio);
-        document.addEventListener('touchstart', playAudio);
-        document.addEventListener('scroll', playAudio);
+        // HÀM GỌI GIỌNG NÓI AI TIẾNG VIỆT
+        function speakAI(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Reset các giọng cũ (nếu có)
 
-        // Đồng hồ góc trái nhảy số thực tế từng giây
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'vi-VN'; 
+                utterance.rate = 1.0;    // Tốc độ nói bình thường, rõ ràng
+                utterance.pitch = 1.0;   
+
+                // Tìm giọng đọc tiếng Việt của hệ thống
+                const voices = window.speechSynthesis.getVoices();
+                const viVoice = voices.find(voice => voice.lang.includes('vi'));
+                if (viVoice) {
+                    utterance.voice = viVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Kích hoạt nạp sẵn danh sách giọng nói
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+        }
+
+        // XỬ LÝ LOADING VÀ KÍCH HOẠT ÂM THANH
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingText = document.getElementById('loading-text');
+        const music = document.getElementById('bg-music');
+
+        setTimeout(() => {
+            loadingText.textContent = "Chạm để vào trang";
+            loadingText.classList.remove('animate-pulse');
+            loadingText.classList.add('text-green-400', 'font-bold');
+            
+            const enterPage = () => {
+                // 1. Phát nhạc nền ngay lập tức
+                music.play().catch(err => console.log("Lỗi nhạc nền:", err));
+                
+                // 2. Giọng AI cất lên câu chào thương hiệu của Phát
+                speakAI("Hello mấy ní");
+
+                // 3. Hiệu ứng mờ dần màn hình loading
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 700);
+
+                loadingScreen.removeEventListener('click', enterPage);
+                loadingScreen.removeEventListener('touchstart', enterPage);
+            };
+
+            loadingScreen.addEventListener('click', enterPage);
+            loadingScreen.addEventListener('touchstart', enterPage);
+        }, 2000);
+
+        // Đồng hồ chạy thời gian thực từng giây
         function updateClock() {
             const now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
