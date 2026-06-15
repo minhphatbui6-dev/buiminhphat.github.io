@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         html, body {
-            background-color: #0d1b2a;
+            background-color: #0b1528;
             color: #e0e1dd;
             font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
             margin: 0;
@@ -19,9 +19,9 @@
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch;
         }
-        /* Hình nền cung điện băng huyền ảo */
+        /* HÌNH NỀN CUNG ĐIỆN BĂNG Y CHANG IMAGE_4.PNG */
         .bg-ice-palace {
-            background-image: linear-gradient(to bottom, rgba(13, 27, 42, 0.4), rgba(13, 27, 42, 0.85)), url('https://files.catbox.moe/b8h3yi.jpeg');
+            background-image: linear-gradient(to bottom, rgba(15, 32, 67, 0.2), rgba(11, 21, 40, 0.8)), url('https://files.catbox.moe/6c858s.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -43,13 +43,27 @@
             will-change: transform; 
         }
         .crystal-glow {
-            text-shadow: 0 0 10px rgba(142, 202, 230, 0.6);
+            text-shadow: 0 0 12px rgba(142, 202, 230, 0.8);
         }
         .crystal-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(142, 202, 230, 0.2);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(165, 243, 252, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        /* KHUNG VIỀN PHA LÊ CHO AVATAR Y CHANG MẪU */
+        .ice-frame {
+            position: relative;
+            padding: 6px;
+            background: linear-gradient(135deg, #22d3ee, #3b82f6, #06b6d4, #60a5fa);
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.6);
+            animation: pulseGlow 3s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); }
+            100% { box-shadow: 0 0 35px rgba(96, 165, 250, 0.9); }
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -63,10 +77,10 @@
 <body class="select-none bg-ice-palace text-white min-h-screen flex flex-col justify-between">
 
     <!-- Màn hình Loading -->
-    <div id="loading-screen" class="fixed inset-0 bg-[#070f18] z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
+    <div id="loading-screen" class="fixed inset-0 bg-[#050b14] z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
             <div class="absolute inset-0 border-2 border-cyan-500/20 border-t-cyan-300 rounded-full animate-spin-custom"></div>
-            <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Loading Avatar" class="w-16 h-16 rounded-full object-cover opacity-90 shadow-[0_0_15px_rgba(142,202,230,0.4)]">
+            <img src="https://files.catbox.moe/k3c3m7.png" alt="Loading Avatar" class="w-16 h-16 rounded-full object-cover opacity-90 shadow-[0_0_15px_rgba(142,202,230,0.4)]">
         </div>
         <h2 class="text-xl font-bold tracking-wide text-cyan-100 crystal-glow mb-2">Bui Minh Phat</h2>
         <p id="loading-text" class="text-xs text-cyan-300/50 tracking-widest uppercase animate-pulse">Đang đóng băng giao diện...</p>
@@ -88,53 +102,29 @@
     <!-- Khung nội dung chính -->
     <div class="w-full max-w-md mx-auto px-5 py-8 flex flex-col items-center relative z-10 space-y-6 my-auto">
         
-        <header class="flex flex-col items-center text-center w-full pt-6">
-            <div class="w-28 h-28 rounded-full overflow-hidden border-2 border-cyan-300/40 shadow-[0_0_20px_rgba(142,202,230,0.5)] mb-4">
-                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
+        <header class="flex flex-col items-center text-center w-full pt-4">
+            <!-- Khu vực Avatar Cô gái Anime kèm khung pha lê -->
+            <div class="ice-frame mb-4">
+                <div class="w-28 h-28 rounded-full overflow-hidden border border-white/25">
+                    <img src="https://files.catbox.moe/k3c3m7.png" alt="Anime Ice Girl" class="w-full h-full object-cover">
+                </div>
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-cyan-50 crystal-glow mb-1">Bui Minh Phat</h1>
-            <p class="text-sm text-cyan-300/50 font-light tracking-wide">@buiminhphat20</p>
+            <p class="text-sm text-cyan-300/60 font-light tracking-wide">@buiminhphat20</p>
         </header>
 
         <main class="w-full flex flex-col space-y-4">
             <!-- Tiểu sử / Bio ngắn -->
             <div class="w-full p-4 crystal-card rounded-2xl text-center shadow-inner">
-                <p class="text-sm text-cyan-100/90 leading-relaxed font-light">
+                <p class="text-sm text-cyan-50 leading-relaxed font-light drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
                     "Đừng bận tâm về kết quả, hãy tập trung vào hành trình." ❄️
                 </p>
             </div>
 
-            <!-- Các nút liên kết mạng xã hội -->
-            <div class="flex flex-col space-y-3 w-full">
-                <a href="https://www.tiktok.com/@buiminhphat20" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
-                    <div class="flex items-center space-x-3">
-                        <i class="fab fa-tiktok text-lg text-white drop-shadow-[0_0_3px_rgba(255,255,255,0.5)]"></i>
-                        <span class="text-sm font-medium tracking-wide text-cyan-50">Kênh TikTok Chính Thức</span>
-                    </div>
-                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
-                </a>
-
-                <!-- Thay link Facebook của bạn vào href dưới đây -->
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
-                    <div class="flex items-center space-x-3">
-                        <i class="fab fa-facebook text-lg text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.4)]"></i>
-                        <span class="text-sm font-medium tracking-wide text-cyan-50">Kết nối Facebook</span>
-                    </div>
-                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
-                </a>
-
-                <!-- Thay link Zalo (ví dụ: https://zalo.me/0xxxxxxxxx) vào href dưới đây -->
-                <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-comment text-lg text-teal-300 drop-shadow-[0_0_5px_rgba(45,212,191,0.4)]"></i>
-                        <span class="text-sm font-medium tracking-wide text-cyan-50">Liên hệ qua Zalo</span>
-                    </div>
-                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
-                </a>
-            </div>
+            <!-- ĐÃ XÓA TOÀN BỘ CÁC NÚT MẠNG XÃ HỘI TIKTOK/FB/ZALO THEO YÊU CẦU -->
 
             <div class="pt-2 text-center">
-                <p class="text-[10px] text-cyan-300/30 italic tracking-widest uppercase animate-pulse">Loading new project...</p>
+                <p class="text-[10px] text-cyan-300/40 italic tracking-widest uppercase animate-pulse">Ice Palace Loaded</p>
             </div>
         </main>
 
@@ -160,11 +150,10 @@
             container.appendChild(snowflake);
         }
 
-        // Trình phát giọng nói AI tiếng Việt mượt mà
+        // Trình phát giọng nói AI
         function speakAI(text, callback) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel(); 
-
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'vi-VN'; 
                 utterance.rate = 1.0;    
@@ -174,10 +163,7 @@
                     const voices = window.speechSynthesis.getVoices();
                     const viVoice = voices.find(voice => voice.lang.includes('vi'));
                     if (viVoice) utterance.voice = viVoice;
-
-                    utterance.onend = function() {
-                        if (callback) { callback(); callback = null; }
-                    };
+                    utterance.onend = function() { if (callback) { callback(); callback = null; } };
                     window.speechSynthesis.speak(utterance);
                 };
 
@@ -186,19 +172,10 @@
                 } else {
                     window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
                 }
-
-                setTimeout(() => {
-                    if (callback) {
-                        callback();
-                        callback = null; 
-                    }
-                }, 1800);
-            } else {
-                if (callback) callback();
-            }
+                setTimeout(() => { if (callback) { callback(); callback = null; } }, 1800);
+            } else { if (callback) callback(); }
         }
 
-        // Xử lý màn hình Loading & Âm thanh
         const loadingScreen = document.getElementById('loading-screen');
         const loadingText = document.getElementById('loading-text');
         const music = document.getElementById('bg-music');
@@ -210,28 +187,19 @@
             
             const enterPage = () => {
                 loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 700);
+                setTimeout(() => { loadingScreen.style.display = 'none'; }, 700);
 
                 music.play()
-                    .then(() => {
-                        speakAI("Hello mấy ní");
-                    })
-                    .catch(err => {
-                        console.log("Lỗi tự động phát nhạc:", err);
-                        speakAI("Hello mấy ní");
-                    });
+                    .then(() => { speakAI("Hello mấy ní"); })
+                    .catch(err => { speakAI("Hello mấy ní"); });
 
                 loadingScreen.removeEventListener('click', enterPage);
                 loadingScreen.removeEventListener('touchstart', enterPage);
             };
-
             loadingScreen.addEventListener('click', enterPage);
             loadingScreen.addEventListener('touchstart', enterPage);
         }, 2000);
 
-        // Đồng hồ thời gian thực
         function updateClock() {
             const now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
