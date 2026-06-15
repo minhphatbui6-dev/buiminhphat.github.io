@@ -52,18 +52,14 @@
             -webkit-backdrop-filter: blur(16px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
-        /* KHUNG VIỀN PHA LÊ ĐỔ BÓNG PHÁT SÁNG CHO AVATAR ANIME */
-        .ice-frame {
-            position: relative;
-            padding: 6px;
-            background: linear-gradient(135deg, #22d3ee, #3b82f6, #06b6d4, #60a5fa);
-            border-radius: 50%;
-            box-shadow: 0 0 25px rgba(34, 211, 238, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.6);
+        /* ĐỔ BÓNG PHÁT SÁNG NHẸ CHO AVATAR ĐÃ CÓ VIỀN SẴN */
+        .avatar-glow {
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
             animation: pulseGlow 3s infinite alternate;
         }
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); }
-            100% { box-shadow: 0 0 35px rgba(96, 165, 250, 0.9); }
+            0% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.5); }
+            100% { box-shadow: 0 0 35px rgba(96, 165, 250, 0.8); }
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -76,7 +72,7 @@
 </head>
 <body class="select-none bg-ice-palace text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Màn hình Loading kèm Avatar Anime của bạn -->
+    <!-- Màn hình Loading kèm Avatar của bạn -->
     <div id="loading-screen" class="fixed inset-0 bg-[#050b14] z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
             <div class="absolute inset-0 border-2 border-cyan-500/20 border-t-cyan-300 rounded-full animate-spin-custom"></div>
@@ -103,25 +99,18 @@
     <div class="w-full max-w-md mx-auto px-5 py-8 flex flex-col items-center relative z-10 space-y-6 my-auto">
         
         <header class="flex flex-col items-center text-center w-full pt-4">
-            <!-- Avatar lấy từ ảnh anime cô gái bạn gửi trước đó -->
-            <div class="ice-frame mb-4">
-                <div class="w-28 h-28 rounded-full overflow-hidden border border-white/25">
-                    <img src="https://files.catbox.moe/7vs536.jpeg" alt="Anime Ice Girl" class="w-full h-full object-cover object-center scale-110">
-                </div>
+            <!-- ĐÃ XÓA VIỀN CSS - Chỉ giữ lại ảnh gốc có viền sẵn kèm hiệu ứng phát sáng nhẹ -->
+            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 avatar-glow mb-4">
+                <img src="https://files.catbox.moe/7vs536.jpeg" alt="Anime Ice Girl" class="w-full h-full object-cover object-center">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-cyan-50 crystal-glow mb-1">Bui Minh Phat</h1>
             <p class="text-sm text-cyan-300/60 font-light tracking-wide">@buiminhphat20</p>
         </header>
 
-        <main class="w-full flex flex-col space-y-4">
-            <!-- Tiểu sử / Bio ngắn -->
-            <div class="w-full p-4 crystal-card rounded-2xl text-center shadow-inner">
-                <p class="text-sm text-cyan-50 leading-relaxed font-light drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
-                    "Đừng bận tâm về kết quả, hãy tập trung vào hành trình." ❄️
-                </p>
-            </div>
-
-            <div class="pt-2 text-center">
+        <main class="w-full flex flex-col items-center justify-center">
+            <!-- ĐÃ XÓA HOÀN TOÀN KHUNG TIỂU SỬ THEO YÊU CẦU -->
+            
+            <div class="pt-4 text-center">
                 <p class="text-[10px] text-cyan-300/40 italic tracking-widest uppercase animate-pulse">Ice Palace Loaded</p>
             </div>
         </main>
@@ -148,32 +137,6 @@
             container.appendChild(snowflake);
         }
 
-        // Trình phát giọng nói AI
-        function speakAI(text, callback) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); 
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'vi-VN'; 
-                utterance.rate = 1.0;    
-                utterance.pitch = 1.0;   
-
-                const setVoiceAndSpeak = () => {
-                    const voices = window.speechSynthesis.getVoices();
-                    const viVoice = voices.find(voice => voice.lang.includes('vi'));
-                    if (viVoice) utterance.voice = viVoice;
-                    utterance.onend = function() { if (callback) { callback(); callback = null; } };
-                    window.speechSynthesis.speak(utterance);
-                };
-
-                if (window.speechSynthesis.getVoices().length !== 0) {
-                    setVoiceAndSpeak();
-                } else {
-                    window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
-                }
-                setTimeout(() => { if (callback) { callback(); callback = null; } }, 1800);
-            } else { if (callback) callback(); }
-        }
-
         const loadingScreen = document.getElementById('loading-screen');
         const loadingText = document.getElementById('loading-text');
         const music = document.getElementById('bg-music');
@@ -187,9 +150,8 @@
                 loadingScreen.style.opacity = '0';
                 setTimeout(() => { loadingScreen.style.display = 'none'; }, 700);
 
-                music.play()
-                    .then(() => { speakAI("Hello mấy ní"); })
-                    .catch(err => { speakAI("Hello mấy ní"); });
+                // Chỉ phát nhạc nền, ĐÃ XÓA HOÀN TOÀN HÀM GIỌNG NÓI AI HELLO MẤY NÍ
+                music.play().catch(err => console.log("Music play blocked"));
 
                 loadingScreen.removeEventListener('click', enterPage);
                 loadingScreen.removeEventListener('touchstart', enterPage);
