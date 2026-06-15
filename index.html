@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bui Minh Phat</title>
+    <title>Bui Minh Phat - Ice Palace</title>
+    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         html, body {
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #0d1b2a;
+            color: #e0e1dd;
             font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
@@ -16,6 +18,13 @@
             overflow-x: hidden;
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch;
+        }
+        /* Hình nền cung điện băng huyền ảo */
+        .bg-ice-palace {
+            background-image: linear-gradient(to bottom, rgba(13, 27, 42, 0.4), rgba(13, 27, 42, 0.85)), url('https://files.catbox.moe/b8h3yi.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
         @keyframes snowFallEffect {
             0% { transform: translateY(-20px) translateX(0); opacity: 0; }
@@ -29,32 +38,38 @@
             border-radius: 50%;
             pointer-events: none;
             animation: snowFallEffect linear infinite;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 8px rgba(173, 216, 230, 0.8);
             z-index: 0;
             will-change: transform; 
         }
-        .clock-glow {
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        .crystal-glow {
+            text-shadow: 0 0 10px rgba(142, 202, 230, 0.6);
+        }
+        .crystal-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(142, 202, 230, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         .animate-spin-custom {
-            animation: spin 1.5s linear infinite;
+            animation: spin 2s linear infinite;
         }
     </style>
 </head>
-<body class="select-none text-white bg-black">
+<body class="select-none bg-ice-palace text-white min-h-screen flex flex-col justify-between">
 
-    <!-- MÀN HÌNH LOADING CHIẾM TOÀN MÀN HÌNH -->
-    <div id="loading-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
+    <!-- Màn hình Loading -->
+    <div id="loading-screen" class="fixed inset-0 bg-[#070f18] z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
-            <div class="absolute inset-0 border-2 border-white/10 border-t-white rounded-full animate-spin-custom"></div>
-            <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Loading Avatar" class="w-16 h-16 rounded-full object-cover opacity-80">
+            <div class="absolute inset-0 border-2 border-cyan-500/20 border-t-cyan-300 rounded-full animate-spin-custom"></div>
+            <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Loading Avatar" class="w-16 h-16 rounded-full object-cover opacity-90 shadow-[0_0_15px_rgba(142,202,230,0.4)]">
         </div>
-        <h2 class="text-xl font-bold tracking-wide text-white mb-2">Bui Minh Phat</h2>
-        <p id="loading-text" class="text-xs text-white/50 tracking-widest uppercase animate-pulse">Đang khởi động...</p>
+        <h2 class="text-xl font-bold tracking-wide text-cyan-100 crystal-glow mb-2">Bui Minh Phat</h2>
+        <p id="loading-text" class="text-xs text-cyan-300/50 tracking-widest uppercase animate-pulse">Đang đóng băng giao diện...</p>
     </div>
 
     <!-- Nhạc nền -->
@@ -64,98 +79,149 @@
 
     <div id="snow-container"></div>
 
-    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG -->
-    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
-        <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
-        <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
+    <!-- Đồng hồ góc trên trái -->
+    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 crystal-card rounded-full shadow-lg flex items-center space-x-2.5">
+        <span id="digital-clock" class="text-sm font-bold tracking-wider text-cyan-100 crystal-glow">00:00:00</span>
+        <span class="text-xs drop-shadow-[0_0_6px_rgba(142,202,230,0.6)]">❄️</span>
     </div>
 
-    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
+    <!-- Khung nội dung chính -->
+    <div class="w-full max-w-md mx-auto px-5 py-8 flex flex-col items-center relative z-10 space-y-6 my-auto">
         
-        <!-- Header: Thông tin cá nhân -->
-        <header class="flex flex-col items-center text-center w-full pt-12">
-            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
+        <header class="flex flex-col items-center text-center w-full pt-6">
+            <div class="w-28 h-28 rounded-full overflow-hidden border-2 border-cyan-300/40 shadow-[0_0_20px_rgba(142,202,230,0.5)] mb-4">
                 <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
-            <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
-            <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
+            <h1 class="text-3xl font-bold italic tracking-wide text-cyan-50 crystal-glow mb-1">Bui Minh Phat</h1>
+            <p class="text-sm text-cyan-300/50 font-light tracking-wide">@buiminhphat20</p>
         </header>
 
-        <!-- Phần thân tạm thời để trống -->
-        <main class="w-full min-h-[100px] flex items-center justify-center">
-            <p class="text-white/20 italic text-sm tracking-widest uppercase">Loading new project...</p>
+        <main class="w-full flex flex-col space-y-4">
+            <!-- Tiểu sử / Bio ngắn -->
+            <div class="w-full p-4 crystal-card rounded-2xl text-center shadow-inner">
+                <p class="text-sm text-cyan-100/90 leading-relaxed font-light">
+                    "Đừng bận tâm về kết quả, hãy tập trung vào hành trình." ❄️
+                </p>
+            </div>
+
+            <!-- Các nút liên kết mạng xã hội -->
+            <div class="flex flex-col space-y-3 w-full">
+                <a href="https://www.tiktok.com/@buiminhphat20" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <i class="fab fa-tiktok text-lg text-white drop-shadow-[0_0_3px_rgba(255,255,255,0.5)]"></i>
+                        <span class="text-sm font-medium tracking-wide text-cyan-50">Kênh TikTok Chính Thức</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
+                </a>
+
+                <!-- Thay link Facebook của bạn vào href dưới đây -->
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <i class="fab fa-facebook text-lg text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.4)]"></i>
+                        <span class="text-sm font-medium tracking-wide text-cyan-50">Kết nối Facebook</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
+                </a>
+
+                <!-- Thay link Zalo (ví dụ: https://zalo.me/0xxxxxxxxx) vào href dưới đây -->
+                <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between w-full px-5 py-4 crystal-card rounded-xl hover:bg-white/10 transition-all duration-300 transform active:scale-95 shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-comment text-lg text-teal-300 drop-shadow-[0_0_5px_rgba(45,212,191,0.4)]"></i>
+                        <span class="text-sm font-medium tracking-wide text-cyan-50">Liên hệ qua Zalo</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-cyan-300/30"></i>
+                </a>
+            </div>
+
+            <div class="pt-2 text-center">
+                <p class="text-[10px] text-cyan-300/30 italic tracking-widest uppercase animate-pulse">Loading new project...</p>
+            </div>
         </main>
 
         <footer class="w-full text-center pt-4">
-            <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
+            <p class="text-[11px] text-cyan-400/30 tracking-wide">© 2026 Bui Minh Phat. All Rights Reserved.</p>
         </footer>
     </div>
 
     <script>
-        // Hiệu ứng tuyết rơi mượt mà xuất hiện ngay khi load trang
+        // Hiệu ứng tuyết rơi pha lê
         const container = document.getElementById('snow-container');
-        const snowflakeCount = 55;
+        const snowflakeCount = 45;
         for (let i = 0; i < snowflakeCount; i++) {
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
-            const size = Math.random() * 4 + 2;
+            const size = Math.random() * 3 + 1.5; 
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `${Math.random() * -20 - 5}px`;
-            snowflake.style.animationDuration = `${Math.random() * 5 + 4}s`;
+            snowflake.style.animationDuration = `${Math.random() * 6 + 5}s`;
             snowflake.style.animationDelay = `${Math.random() * -8}s`; 
             container.appendChild(snowflake);
         }
 
-        // HÀM GỌI GIỌNG NÓI AI TIẾNG VIỆT
-        function speakAI(text) {
+        // Trình phát giọng nói AI tiếng Việt mượt mà
+        function speakAI(text, callback) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Reset các giọng cũ (nếu có)
+                window.speechSynthesis.cancel(); 
 
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'vi-VN'; 
-                utterance.rate = 1.0;    // Tốc độ nói bình thường, rõ ràng
+                utterance.rate = 1.0;    
                 utterance.pitch = 1.0;   
 
-                // Tìm giọng đọc tiếng Việt của hệ thống
-                const voices = window.speechSynthesis.getVoices();
-                const viVoice = voices.find(voice => voice.lang.includes('vi'));
-                if (viVoice) {
-                    utterance.voice = viVoice;
+                const setVoiceAndSpeak = () => {
+                    const voices = window.speechSynthesis.getVoices();
+                    const viVoice = voices.find(voice => voice.lang.includes('vi'));
+                    if (viVoice) utterance.voice = viVoice;
+
+                    utterance.onend = function() {
+                        if (callback) { callback(); callback = null; }
+                    };
+                    window.speechSynthesis.speak(utterance);
+                };
+
+                if (window.speechSynthesis.getVoices().length !== 0) {
+                    setVoiceAndSpeak();
+                } else {
+                    window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
                 }
 
-                window.speechSynthesis.speak(utterance);
+                setTimeout(() => {
+                    if (callback) {
+                        callback();
+                        callback = null; 
+                    }
+                }, 1800);
+            } else {
+                if (callback) callback();
             }
         }
 
-        // Kích hoạt nạp sẵn danh sách giọng nói
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.getVoices();
-        }
-
-        // XỬ LÝ LOADING VÀ KÍCH HOẠT ÂM THANH
+        // Xử lý màn hình Loading & Âm thanh
         const loadingScreen = document.getElementById('loading-screen');
         const loadingText = document.getElementById('loading-text');
         const music = document.getElementById('bg-music');
 
         setTimeout(() => {
-            loadingText.textContent = "Chạm để vào trang";
+            loadingText.textContent = "Chạm để mở cổng cung điện";
             loadingText.classList.remove('animate-pulse');
-            loadingText.classList.add('text-green-400', 'font-bold');
+            loadingText.classList.add('text-cyan-300', 'font-bold', 'crystal-glow');
             
             const enterPage = () => {
-                // 1. Phát nhạc nền ngay lập tức
-                music.play().catch(err => console.log("Lỗi nhạc nền:", err));
-                
-                // 2. Giọng AI cất lên câu chào thương hiệu của Phát
-                speakAI("Hello mấy ní");
-
-                // 3. Hiệu ứng mờ dần màn hình loading
                 loadingScreen.style.opacity = '0';
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
                 }, 700);
+
+                music.play()
+                    .then(() => {
+                        speakAI("Hello mấy ní");
+                    })
+                    .catch(err => {
+                        console.log("Lỗi tự động phát nhạc:", err);
+                        speakAI("Hello mấy ní");
+                    });
 
                 loadingScreen.removeEventListener('click', enterPage);
                 loadingScreen.removeEventListener('touchstart', enterPage);
@@ -165,7 +231,7 @@
             loadingScreen.addEventListener('touchstart', enterPage);
         }, 2000);
 
-        // Đồng hồ chạy thời gian thực từng giây
+        // Đồng hồ thời gian thực
         function updateClock() {
             const now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
