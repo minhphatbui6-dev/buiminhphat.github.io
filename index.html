@@ -1,16 +1,14 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bui Minh Phat - Ice Palace</title>
-    <!-- Tailwind CSS v4 -->
+    <title>Bui Minh Phat</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         html, body {
-            background-color: #0b1528;
-            color: #e0e1dd;
+            background-color: #000000;
+            color: #ffffff;
             font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
@@ -18,13 +16,6 @@ DOCTYPE html>
             overflow-x: hidden;
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch;
-        }
-        /* HÌNH NỀN CUNG ĐIỆN BĂNG CHÍNH THỨC CỦA BẠN */
-        .bg-ice-palace {
-            background-image: linear-gradient(to bottom, rgba(15, 32, 67, 0.2), rgba(11, 21, 40, 0.5)), url('https://files.catbox.moe/rd8roj.jpeg');
-            background-size: cover;
-            background-position: center top;
-            background-attachment: fixed;
         }
         @keyframes snowFallEffect {
             0% { transform: translateY(-20px) translateX(0); opacity: 0; }
@@ -38,128 +29,80 @@ DOCTYPE html>
             border-radius: 50%;
             pointer-events: none;
             animation: snowFallEffect linear infinite;
-            box-shadow: 0 0 8px rgba(173, 216, 230, 0.8);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             z-index: 0;
-            will-change: transform; 
         }
-        .crystal-glow {
-            text-shadow: 0 0 12px rgba(142, 202, 230, 0.8);
-        }
-        .crystal-card {
-            background: rgba(11, 21, 40, 0.4);
-            border: 1px solid rgba(165, 243, 252, 0.25);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-        /* ĐỔ BÓNG PHÁT SÁNG NHẸ CHO AVATAR ĐÃ CÓ VIỀN SẴN */
-        .avatar-glow {
-            box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
-            animation: pulseGlow 3s infinite alternate;
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.5); }
-            100% { box-shadow: 0 0 35px rgba(96, 165, 250, 0.8); }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .animate-spin-custom {
-            animation: spin 2s linear infinite;
+        .clock-glow {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
-<body class="select-none bg-ice-palace text-white min-h-screen flex flex-col justify-between">
+<body class="select-none text-white bg-black">
 
-    <!-- Màn hình Loading kèm Avatar của bạn -->
-    <div id="loading-screen" class="fixed inset-0 bg-[#050b14] z-[9999] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out">
-        <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
-            <div class="absolute inset-0 border-2 border-cyan-500/20 border-t-cyan-300 rounded-full animate-spin-custom"></div>
-            <img src="https://files.catbox.moe/7vs536.jpeg" alt="Loading" class="w-16 h-16 rounded-full object-cover opacity-90">
-        </div>
-        <h2 class="text-xl font-bold tracking-wide text-cyan-100 crystal-glow mb-2">Bui Minh Phat</h2>
-        <p id="loading-text" class="text-xs text-cyan-300/50 tracking-widest uppercase animate-pulse">Đang đóng băng giao diện...</p>
-    </div>
-
-    <!-- Nhạc nền -->
-    <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+    <audio id="bg-music" loop preload="auto">
         <source src="https://files.catbox.moe/r4cv8l.mp3" type="audio/mp3">
     </audio>
 
     <div id="snow-container"></div>
 
-    <!-- Đồng hồ góc trên trái -->
-    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 crystal-card rounded-full shadow-lg flex items-center space-x-2.5">
-        <span id="digital-clock" class="text-sm font-bold tracking-wider text-cyan-100 crystal-glow">00:00:00</span>
-        <span class="text-xs drop-shadow-[0_0_6px_rgba(142,202,230,0.6)]">❄️</span>
+    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG KÈM ICON TRĂNG KHUYẾT CHẠY LIÊN TỤC -->
+    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
+        <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
+        <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
     </div>
 
-    <!-- Khung nội dung chính -->
-    <div class="w-full max-w-md mx-auto px-5 py-8 flex flex-col items-center relative z-10 space-y-6 my-auto">
+    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <header class="flex flex-col items-center text-center w-full pt-4">
-            <!-- ĐÃ XÓA VIỀN CSS - Chỉ giữ lại ảnh gốc có viền sẵn kèm hiệu ứng phát sáng nhẹ -->
-            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 avatar-glow mb-4">
-                <img src="https://files.catbox.moe/7vs536.jpeg" alt="Anime Ice Girl" class="w-full h-full object-cover object-center">
+        <!-- Header: Chỉ giữ thông tin cá nhân của Phát -->
+        <header class="flex flex-col items-center text-center w-full pt-12">
+            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
+                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
-            <h1 class="text-3xl font-bold italic tracking-wide text-cyan-50 crystal-glow mb-1">Bui Minh Phat</h1>
-            <p class="text-sm text-cyan-300/60 font-light tracking-wide">@buiminhphat20</p>
+            <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
+            <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
         </header>
 
-        <main class="w-full flex flex-col items-center justify-center">
-            <!-- ĐÃ XÓA HOÀN TOÀN KHUNG TIỂU SỬ THEO YÊU CẦU -->
-            
-            <div class="pt-4 text-center">
-                <p class="text-[10px] text-cyan-300/40 italic tracking-widest uppercase animate-pulse">Ice Palace Loaded</p>
-            </div>
+        <!-- Phần thân tạm thời để trống để bạn chuẩn bị kế hoạch mới -->
+        <main class="w-full min-h-[100px] flex items-center justify-center">
+            <p class="text-white/20 italic text-sm tracking-widest uppercase">Loading new project...</p>
         </main>
 
         <footer class="w-full text-center pt-4">
-            <p class="text-[11px] text-cyan-400/30 tracking-wide">© 2026 Bui Minh Phat. All Rights Reserved.</p>
+            <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
         </footer>
     </div>
 
     <script>
-        // Hiệu ứng tuyết rơi pha lê
+        // Tuyết rơi
         const container = document.getElementById('snow-container');
-        const snowflakeCount = 45;
+        const snowflakeCount = 55;
         for (let i = 0; i < snowflakeCount; i++) {
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
-            const size = Math.random() * 3 + 1.5; 
+            const size = Math.random() * 4 + 2;
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
             snowflake.style.left = `${Math.random() * 100}%`;
             snowflake.style.top = `${Math.random() * -20 - 5}px`;
-            snowflake.style.animationDuration = `${Math.random() * 6 + 5}s`;
-            snowflake.style.animationDelay = `${Math.random() * -8}s`; 
+            snowflake.style.animationDuration = `${Math.random() * 5 + 4}s`;
+            snowflake.style.animationDelay = `${Math.random() * 6}s`;
             container.appendChild(snowflake);
         }
 
-        const loadingScreen = document.getElementById('loading-screen');
-        const loadingText = document.getElementById('loading-text');
+        // Nhạc nền mượt mà khi chạm
         const music = document.getElementById('bg-music');
+        function playAudio() {
+            music.play().then(() => {
+                document.removeEventListener('click', playAudio);
+                document.removeEventListener('touchstart', playAudio);
+                document.removeEventListener('scroll', playAudio);
+            }).catch(error => { console.log("Chờ chạm..."); });
+        }
+        document.addEventListener('click', playAudio);
+        document.addEventListener('touchstart', playAudio);
+        document.addEventListener('scroll', playAudio);
 
-        setTimeout(() => {
-            loadingText.textContent = "Chạm để mở cổng cung điện";
-            loadingText.classList.remove('animate-pulse');
-            loadingText.classList.add('text-cyan-300', 'font-bold', 'crystal-glow');
-            
-            const enterPage = () => {
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => { loadingScreen.style.display = 'none'; }, 700);
-
-                // Chỉ phát nhạc nền, ĐÃ XÓA HOÀN TOÀN HÀM GIỌNG NÓI AI HELLO MẤY NÍ
-                music.play().catch(err => console.log("Music play blocked"));
-
-                loadingScreen.removeEventListener('click', enterPage);
-                loadingScreen.removeEventListener('touchstart', enterPage);
-            };
-            loadingScreen.addEventListener('click', enterPage);
-            loadingScreen.addEventListener('touchstart', enterPage);
-        }, 2000);
-
+        // Đồng hồ góc trái nhảy số thực tế từng giây
         function updateClock() {
             const now = new Date();
             let hours = now.getHours().toString().padStart(2, '0');
