@@ -2,42 +2,35 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bui Minh Phat</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch;
-        }
-        @keyframes snowFallEffect {
-            0% { transform: translateY(-20px) translateX(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(105vh) translateX(35px); opacity: 0; }
-        }
-        .snowflake {
-            position: fixed;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: snowFallEffect linear infinite;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-            z-index: 0;
-        }
+        html, body { background-color: #000; color: #fff; margin: 0; padding: 0; min-height: 100vh; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        .snowflake { position: fixed; background: white; border-radius: 50%; pointer-events: none; animation: snowFallEffect linear infinite; z-index: 1; }
+        @keyframes snowFallEffect { 100% { transform: translateY(105vh); } }
         .clock-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
+        /* Style cho nút Locket Gold */
+        .locket-btn {
+            background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .locket-btn:hover {
+            border-color: rgba(250, 204, 21, 0.5);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+        }
     </style>
 </head>
-<body class="select-none text-white bg-black">
+<body class="select-none">
 
-    <audio id="bg-music" loop preload="auto">
+    <div id="overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black cursor-pointer" onclick="startExperience()">
+        <p class="text-white text-lg animate-pulse font-medium">Chạm để vào trang</p>
+    </div>
+
+    <audio id="bg-music" loop>
         <source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3">
     </audio>
 
@@ -45,33 +38,45 @@
 
     <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
         <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
-        <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
+        <span class="text-xs text-yellow-200">🌙</span>
     </div>
 
-    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
+    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-10 min-h-screen">
         
-        <header class="flex flex-col items-center text-center w-full pt-12">
-            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
+        <header class="flex flex-col items-center text-center w-full pt-16">
+            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-5">
                 <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
-            <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
+            <p class="text-sm text-white/70 font-light">id tiktok <span class="font-normal text-white">buiminhphat20</span></p>
         </header>
 
-        <main class="w-full mt-6 space-y-4">
+        <main class="w-full space-y-4">
+            <div class="text-center">
+                <p class="text-white/40 text-xs italic">Sản phẩm nổi bật</p>
+            </div>
+            
             <a href="https://storeipa.com/w4wg4p" 
                target="_blank" 
                rel="noopener noreferrer"
-               class="block w-full py-5 bg-gradient-to-r from-zinc-800 to-zinc-900 border border-white/10 rounded-2xl text-center hover:border-yellow-500/50 transition-all duration-300 group shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                <span class="block text-white font-bold text-lg group-hover:text-yellow-200 transition-colors">Locket Gold</span>
-                <div class="flex items-center justify-center mt-1 space-x-2">
-                    <span class="text-[10px] text-white/40 uppercase tracking-widest">Signed IPA</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-200">Verified</span>
+               class="locket-btn block w-full p-4 hover:scale-[1.02]">
+                <div class="flex items-center space-x-4">
+                    <img src="https://files.catbox.moe/awlpvc.jpeg" alt="Locket Gold" class="w-16 h-16 rounded-xl object-cover border border-white/10">
+                    
+                    <div class="flex-1 text-left">
+                        <span class="block text-white font-bold text-lg hover:text-yellow-200 transition-colors">Locket Gold</span>
+                        <div class="flex items-center mt-1 space-x-2">
+                            <span class="text-[10px] text-white/40 uppercase tracking-widest">Signed IPA</span>
+                            <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-yellow-500/10 text-yellow-200 border border-yellow-500/20">Verified</span>
+                        </div>
+                    </div>
+                    
+                    <svg class="w-5 h-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
             </a>
         </main>
 
-        <footer class="w-full text-center pt-4">
+        <footer class="w-full text-center mt-auto pt-10">
             <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
         </footer>
     </div>
@@ -79,32 +84,35 @@
     <script>
         // Tuyết rơi
         const container = document.getElementById('snow-container');
-        const snowflakeCount = 55;
+        const snowflakeCount = 50;
         for (let i = 0; i < snowflakeCount; i++) {
             const snowflake = document.createElement('div');
             snowflake.className = 'snowflake';
-            const size = Math.random() * 4 + 2;
+            const size = Math.random() * 4 + 1;
             snowflake.style.width = `${size}px`;
             snowflake.style.height = `${size}px`;
             snowflake.style.left = `${Math.random() * 100}%`;
-            snowflake.style.top = `${Math.random() * -20 - 5}px`;
-            snowflake.style.animationDuration = `${Math.random() * 5 + 4}s`;
-            snowflake.style.animationDelay = `${Math.random() * 6}s`;
+            snowflake.style.top = `-${Math.random() * 20}px`;
+            snowflake.style.animationDuration = `${Math.random() * 5 + 3}s`;
+            snowflake.style.animationDelay = `${Math.random() * 5}s`;
+            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
             container.appendChild(snowflake);
         }
 
-        // Nhạc nền
-        const music = document.getElementById('bg-music');
-        function playAudio() {
+        // Nhạc và Lớp phủ
+        function startExperience() {
+            const music = document.getElementById('bg-music');
+            const overlay = document.getElementById('overlay');
+            
             music.play().then(() => {
-                document.removeEventListener('click', playAudio);
-                document.removeEventListener('touchstart', playAudio);
-                document.removeEventListener('scroll', playAudio);
-            }).catch(e => console.log("Chờ tương tác..."));
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 500); // Ẩn sau khi mờ dần
+            }).catch(e => {
+                // Nếu vẫn bị chặn (rất hiếm khi dùng overlay), ẩn overlay và để người dùng tự bật sau
+                overlay.style.display = 'none';
+                console.log("Autoplay bị chặn.");
+            });
         }
-        document.addEventListener('click', playAudio);
-        document.addEventListener('touchstart', playAudio);
-        document.addEventListener('scroll', playAudio);
 
         // Đồng hồ
         function updateClock() {
