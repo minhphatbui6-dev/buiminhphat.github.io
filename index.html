@@ -32,9 +32,7 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
             z-index: 0;
         }
-        .clock-glow {
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-        }
+        .clock-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
     </style>
 </head>
 <body class="select-none text-white bg-black">
@@ -45,7 +43,6 @@
 
     <div id="snow-container"></div>
 
-    <!-- ĐỒNG HỒ GÓC TRÁI TRÊN CÙNG KÈM ICON TRĂNG KHUYẾT CHẠY LIÊN TỤC -->
     <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
         <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
         <span class="text-xs text-yellow-200 drop-shadow-[0_0_4px_rgba(254,240,138,0.5)]">🌙</span>
@@ -53,7 +50,6 @@
 
     <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
         
-        <!-- Header: Chỉ giữ thông tin cá nhân của Phát -->
         <header class="flex flex-col items-center text-center w-full pt-12">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-4">
                 <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
@@ -62,9 +58,17 @@
             <p class="text-sm text-white/70 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
         </header>
 
-        <!-- Phần thân tạm thời để trống để bạn chuẩn bị kế hoạch mới -->
-        <main class="w-full min-h-[100px] flex items-center justify-center">
-            <p class="text-white/20 italic text-sm tracking-widest uppercase">Loading new project...</p>
+        <main class="w-full mt-6 space-y-4">
+            <a href="https://storeipa.com/w4wg4p" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="block w-full py-5 bg-gradient-to-r from-zinc-800 to-zinc-900 border border-white/10 rounded-2xl text-center hover:border-yellow-500/50 transition-all duration-300 group shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <span class="block text-white font-bold text-lg group-hover:text-yellow-200 transition-colors">Locket Gold</span>
+                <div class="flex items-center justify-center mt-1 space-x-2">
+                    <span class="text-[10px] text-white/40 uppercase tracking-widest">Signed IPA</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-200">Verified</span>
+                </div>
+            </a>
         </main>
 
         <footer class="w-full text-center pt-4">
@@ -89,26 +93,23 @@
             container.appendChild(snowflake);
         }
 
-        // Nhạc nền mượt mà khi chạm
+        // Nhạc nền
         const music = document.getElementById('bg-music');
         function playAudio() {
             music.play().then(() => {
                 document.removeEventListener('click', playAudio);
                 document.removeEventListener('touchstart', playAudio);
                 document.removeEventListener('scroll', playAudio);
-            }).catch(error => { console.log("Chờ chạm..."); });
+            }).catch(e => console.log("Chờ tương tác..."));
         }
         document.addEventListener('click', playAudio);
         document.addEventListener('touchstart', playAudio);
         document.addEventListener('scroll', playAudio);
 
-        // Đồng hồ góc trái nhảy số thực tế từng giây
+        // Đồng hồ
         function updateClock() {
             const now = new Date();
-            let hours = now.getHours().toString().padStart(2, '0');
-            let minutes = now.getMinutes().toString().padStart(2, '0');
-            let seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('digital-clock').textContent = now.toLocaleTimeString('vi-VN');
         }
         updateClock();
         setInterval(updateClock, 1000);
