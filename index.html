@@ -6,70 +6,60 @@
     <title>Bui Minh Phat</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        html, body {
-            background-color: #ffffff;
-            color: #1f2937;
-            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        html, body { background-color: #ffffff; color: #1f2937; margin: 0; padding: 0; min-height: 100vh; }
+        #loading-screen { transition: opacity 0.5s ease; }
     </style>
 </head>
-<body class="select-none">
+<body>
+
+    <div id="loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
+        <div class="w-32 h-32 rounded-full overflow-hidden border border-gray-100 shadow-xl mb-6">
+            <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover">
+        </div>
+        <h1 class="text-2xl font-bold italic text-gray-900 mb-8">Bui Minh Phat</h1>
+        <button onclick="startExperience()" class="px-6 py-2 border border-gray-200 rounded-full text-gray-400 hover:text-gray-900 transition animate-pulse">
+            Chạm để vào
+        </button>
+    </div>
 
     <audio id="bg-music" loop preload="auto">
         <source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3">
     </audio>
 
-    <!-- Đồng hồ góc trái -->
-    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-gray-100 border border-black/5 rounded-full backdrop-blur-md shadow-sm flex items-center space-x-2.5">
-        <span id="digital-clock" class="text-sm font-bold tracking-wider text-gray-800">00:00:00</span>
-        <span class="text-xs">🌙</span>
-    </div>
+    <div class="max-w-md mx-auto px-5 py-14 flex flex-col items-center">
+        <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-gray-100 border border-black/5 rounded-full backdrop-blur-md shadow-sm flex items-center space-x-2.5">
+            <span id="digital-clock" class="text-sm font-bold tracking-wider text-gray-800">00:00:00</span>
+            <span class="text-xs">🌙</span>
+        </div>
 
-    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
-        
         <header class="flex flex-col items-center text-center w-full pt-12">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-black/5 shadow-xl mb-4">
-                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
+                <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-gray-900 mb-2">Bui Minh Phat</h1>
             <p class="text-sm text-gray-500 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
         </header>
 
-        <!-- Nút Locket Gold -->
         <main class="w-full mt-6 space-y-4">
-            <a href="https://storeipa.com/w4wg4p" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="flex items-center space-x-4 w-full p-4 bg-gray-50 border border-black/5 rounded-2xl hover:bg-gray-100 transition-all">
+            <a href="https://storeipa.com/w4wg4p" target="_blank" class="flex items-center space-x-4 w-full p-4 bg-gray-50 border border-black/5 rounded-2xl hover:bg-gray-100 transition-all">
                 <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-14 h-14 rounded-xl object-cover border border-black/5">
                 <div class="flex-1 text-left">
-                    <span class="block font-bold text-gray-900">Locket Gold</span>
-                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">Signed IPA</span>
+                    <span class="block font-bold text-gray-900 text-lg">Locket Gold</span>
                 </div>
             </a>
         </main>
-
-        <footer class="w-full text-center pt-4">
-            <p class="text-[12px] text-gray-400 tracking-wide">© 2026 Bui Minh Phat</p>
-        </footer>
     </div>
 
     <script>
-        // Nhạc nền (Tương tác để phát)
-        const music = document.getElementById('bg-music');
-        function playAudio() {
+        function startExperience() {
+            const music = document.getElementById('bg-music');
+            const loading = document.getElementById('loading-screen');
+            
             music.play();
-            document.removeEventListener('click', playAudio);
-            document.removeEventListener('touchstart', playAudio);
+            loading.style.opacity = '0';
+            setTimeout(() => loading.style.display = 'none', 500);
         }
-        document.addEventListener('click', playAudio);
-        document.addEventListener('touchstart', playAudio);
 
-        // Đồng hồ
         function updateClock() {
             document.getElementById('digital-clock').textContent = new Date().toLocaleTimeString('vi-VN');
         }
