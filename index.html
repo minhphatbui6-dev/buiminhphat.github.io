@@ -6,121 +6,51 @@
     <title>Bui Minh Phat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body { background-color: #000; color: #fff; margin: 0; padding: 0; min-height: 100vh; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
-        .snowflake { position: fixed; background: white; border-radius: 50%; pointer-events: none; animation: snowFallEffect linear infinite; z-index: 1; }
-        @keyframes snowFallEffect { 100% { transform: translateY(105vh); } }
-        .clock-glow { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
-        /* Style cho nút Locket Gold */
-        .locket-btn {
-            background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        body { background-color: #f8fafc; color: #1e293b; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .app-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
-        .locket-btn:hover {
-            border-color: rgba(250, 204, 21, 0.5);
-            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+        .ios-badge {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            display: inline-block;
         }
     </style>
 </head>
-<body class="select-none">
+<body class="p-4">
 
-    <div id="overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black cursor-pointer" onclick="startExperience()">
-        <p class="text-white text-lg animate-pulse font-medium">Chạm để vào trang</p>
-    </div>
+    <div class="max-w-md mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 px-2">
+            <span class="text-2xl">🔔</span>
+        </div>
 
-    <audio id="bg-music" loop>
-        <source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3">
-    </audio>
+        <!-- Section Tiêu đề -->
+        <h2 class="text-center text-sm font-bold text-gray-400 mb-6 tracking-widest uppercase">— LOCKET GOLD —</h2>
 
-    <div id="snow-container"></div>
-
-    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-zinc-900/60 border border-white/10 rounded-full backdrop-blur-md shadow-lg flex items-center space-x-2.5">
-        <span id="digital-clock" class="text-sm font-bold tracking-wider text-white clock-glow">00:00:00</span>
-        <span class="text-xs text-yellow-200">🌙</span>
-    </div>
-
-    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-10 min-h-screen">
-        
-        <header class="flex flex-col items-center text-center w-full pt-16">
-            <div class="w-28 h-28 rounded-full overflow-hidden border border-white/10 shadow-2xl mb-5">
-                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
-            </div>
-            <h1 class="text-3xl font-bold italic tracking-wide text-white mb-2">Bui Minh Phat</h1>
-            <p class="text-sm text-white/70 font-light">id tiktok <span class="font-normal text-white">buiminhphat20</span></p>
-        </header>
-
-        <main class="w-full space-y-4">
-            <div class="text-center">
-                <p class="text-white/40 text-xs italic">Sản phẩm nổi bật</p>
-            </div>
-            
-            <a href="https://storeipa.com/w4wg4p" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="locket-btn block w-full p-4 hover:scale-[1.02]">
-                <div class="flex items-center space-x-4">
-                    <img src="https://files.catbox.moe/awlpvc.jpeg" alt="Locket Gold" class="w-16 h-16 rounded-xl object-cover border border-white/10">
-                    
-                    <div class="flex-1 text-left">
-                        <span class="block text-white font-bold text-lg hover:text-yellow-200 transition-colors">Locket Gold</span>
-                        <div class="flex items-center mt-1 space-x-2">
-                            <span class="text-[10px] text-white/40 uppercase tracking-widest">Signed IPA</span>
-                            <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-yellow-500/10 text-yellow-200 border border-yellow-500/20">Verified</span>
-                        </div>
-                    </div>
-                    
-                    <svg class="w-5 h-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <!-- Card ứng dụng -->
+        <div class="app-card flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-14 h-14 rounded-2xl object-cover">
+                <div>
+                    <h3 class="font-bold text-lg">Locket Gold</h3>
+                    <span class="ios-badge mt-1"> iOS</span>
                 </div>
+            </div>
+            <a href="https://storeipa.com/w4wg4p" target="_blank" class="p-3 bg-gray-50 rounded-full hover:bg-blue-50 transition">
+                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
             </a>
-        </main>
-
-        <footer class="w-full text-center mt-auto pt-10">
-            <p class="text-[12px] text-white/30 tracking-wide">© 2026 Bui Minh Phat</p>
-        </footer>
+        </div>
     </div>
 
-    <script>
-        // Tuyết rơi
-        const container = document.getElementById('snow-container');
-        const snowflakeCount = 50;
-        for (let i = 0; i < snowflakeCount; i++) {
-            const snowflake = document.createElement('div');
-            snowflake.className = 'snowflake';
-            const size = Math.random() * 4 + 1;
-            snowflake.style.width = `${size}px`;
-            snowflake.style.height = `${size}px`;
-            snowflake.style.left = `${Math.random() * 100}%`;
-            snowflake.style.top = `-${Math.random() * 20}px`;
-            snowflake.style.animationDuration = `${Math.random() * 5 + 3}s`;
-            snowflake.style.animationDelay = `${Math.random() * 5}s`;
-            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
-            container.appendChild(snowflake);
-        }
-
-        // Nhạc và Lớp phủ
-        function startExperience() {
-            const music = document.getElementById('bg-music');
-            const overlay = document.getElementById('overlay');
-            
-            music.play().then(() => {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 500); // Ẩn sau khi mờ dần
-            }).catch(e => {
-                // Nếu vẫn bị chặn (rất hiếm khi dùng overlay), ẩn overlay và để người dùng tự bật sau
-                overlay.style.display = 'none';
-                console.log("Autoplay bị chặn.");
-            });
-        }
-
-        // Đồng hồ
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('digital-clock').textContent = now.toLocaleTimeString('vi-VN');
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
 </body>
 </html>
