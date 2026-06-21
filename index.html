@@ -22,7 +22,10 @@
         </button>
     </div>
 
-    <audio id="bg-music" loop preload="auto">
+    <audio id="music-1">
+        <source src="https://files.catbox.moe/uc4l2l.mov" type="audio/mp4">
+    </audio>
+    <audio id="music-2" loop>
         <source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3">
     </audio>
 
@@ -51,14 +54,22 @@
     </div>
 
     <script>
+        const music1 = document.getElementById('music-1');
+        const music2 = document.getElementById('music-2');
+        const loading = document.getElementById('loading-screen');
+
         function startExperience() {
-            const music = document.getElementById('bg-music');
-            const loading = document.getElementById('loading-screen');
-            
-            music.play();
             loading.style.opacity = '0';
             setTimeout(() => loading.style.display = 'none', 500);
+            
+            // Phát nhạc 1
+            music1.play().catch(e => console.log("Lỗi phát nhạc 1"));
         }
+
+        // Khi nhạc 1 kết thúc -> Tự động phát nhạc 2
+        music1.onended = function() {
+            music2.play().catch(e => console.log("Lỗi phát nhạc 2"));
+        };
 
         function updateClock() {
             document.getElementById('digital-clock').textContent = new Date().toLocaleTimeString('vi-VN');
