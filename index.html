@@ -2,74 +2,79 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bui Minh Phat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        body { background-color: #f8fafc; color: #1e293b; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .app-card {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-        .ios-badge {
-            background: #f1f5f9;
-            color: #64748b;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 600;
-            display: inline-block;
+        html, body {
+            background-color: #ffffff;
+            color: #1f2937;
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
     </style>
 </head>
-<body class="p-4">
+<body class="select-none">
 
-    <!-- Lớp phủ nhạc -->
-    <div id="overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white cursor-pointer" onclick="startExperience()">
-        <p class="text-gray-500 text-lg animate-pulse font-medium">Chạm để vào trang</p>
-    </div>
-
-    <audio id="bg-music" loop>
+    <audio id="bg-music" loop preload="auto">
         <source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3">
     </audio>
 
-    <div class="max-w-md mx-auto">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6 px-2">
-            <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-200">
-            <span class="text-2xl">🔔</span>
-        </div>
+    <!-- Đồng hồ góc trái -->
+    <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-gray-100 border border-black/5 rounded-full backdrop-blur-md shadow-sm flex items-center space-x-2.5">
+        <span id="digital-clock" class="text-sm font-bold tracking-wider text-gray-800">00:00:00</span>
+        <span class="text-xs">🌙</span>
+    </div>
 
-        <!-- Section Tiêu đề -->
-        <h2 class="text-center text-sm font-bold text-gray-400 mb-6 tracking-widest uppercase">— LOCKET GOLD —</h2>
-
-        <!-- Card ứng dụng -->
-        <div class="app-card flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-14 h-14 rounded-2xl object-cover">
-                <div>
-                    <h3 class="font-bold text-lg">Locket Gold</h3>
-                    <span class="ios-badge mt-1"> iOS</span>
-                </div>
+    <div class="w-full max-w-md mx-auto px-5 py-14 flex flex-col items-center relative z-10 space-y-8">
+        
+        <header class="flex flex-col items-center text-center w-full pt-12">
+            <div class="w-28 h-28 rounded-full overflow-hidden border border-black/5 shadow-xl mb-4">
+                <img src="https://files.catbox.moe/b8h3yi.jpeg" alt="Avatar" class="w-full h-full object-cover">
             </div>
-            <a href="https://storeipa.com/w4wg4p" target="_blank" class="p-3 bg-gray-50 rounded-full hover:bg-blue-50 transition">
-                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <h1 class="text-3xl font-bold italic tracking-wide text-gray-900 mb-2">Bui Minh Phat</h1>
+            <p class="text-sm text-gray-500 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
+        </header>
+
+        <!-- Nút Locket Gold -->
+        <main class="w-full mt-6 space-y-4">
+            <a href="https://storeipa.com/w4wg4p" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="flex items-center space-x-4 w-full p-4 bg-gray-50 border border-black/5 rounded-2xl hover:bg-gray-100 transition-all">
+                <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-14 h-14 rounded-xl object-cover border border-black/5">
+                <div class="flex-1 text-left">
+                    <span class="block font-bold text-gray-900">Locket Gold</span>
+                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">Signed IPA</span>
+                </div>
             </a>
-        </div>
+        </main>
+
+        <footer class="w-full text-center pt-4">
+            <p class="text-[12px] text-gray-400 tracking-wide">© 2026 Bui Minh Phat</p>
+        </footer>
     </div>
 
     <script>
-        function startExperience() {
-            const music = document.getElementById('bg-music');
-            const overlay = document.getElementById('overlay');
-            music.play().then(() => {
-                overlay.style.display = 'none';
-            }).catch(e => console.log("Cần tương tác người dùng"));
+        // Nhạc nền (Tương tác để phát)
+        const music = document.getElementById('bg-music');
+        function playAudio() {
+            music.play();
+            document.removeEventListener('click', playAudio);
+            document.removeEventListener('touchstart', playAudio);
         }
+        document.addEventListener('click', playAudio);
+        document.addEventListener('touchstart', playAudio);
+
+        // Đồng hồ
+        function updateClock() {
+            document.getElementById('digital-clock').textContent = new Date().toLocaleTimeString('vi-VN');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
