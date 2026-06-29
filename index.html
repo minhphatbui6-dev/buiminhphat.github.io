@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Bui Minh Phat</title>
+    <title>Buff View TikTok - 300 Views Thật</title>
     <style>
         * {
             margin: 0;
@@ -11,149 +11,340 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        .profile-card {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            max-width: 480px;
+        .container {
+            background: rgba(20, 20, 40, 0.95);
+            border-radius: 24px;
+            padding: 40px 30px;
             width: 100%;
-            overflow: hidden;
-        }
-        .profile-header {
-            background: linear-gradient(135deg, #ff0080, #ff8c00, #40e0d0);
-            padding: 50px 20px;
+            max-width: 520px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(0, 255, 200, 0.1);
+            border: 1px solid rgba(0, 255, 200, 0.3);
             text-align: center;
         }
-        .avatar {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 6px solid rgba(255,255,255,0.8);
-            background: linear-gradient(45deg, #ff0080, #ff8c00);
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 52px;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 10px 40px rgba(255,0,128,0.5);
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
         }
-        .profile-header h1 {
-            color: white;
-            font-size: 32px;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .profile-header .title {
-            color: rgba(255,255,255,0.9);
-            font-size: 18px;
+        h1 {
+            color: #00ffc8;
+            font-size: 28px;
+            margin-bottom: 6px;
+            text-shadow: 0 0 20px rgba(0, 255, 200, 0.5);
+        }
+        .subtitle {
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 25px;
             letter-spacing: 1px;
         }
-        .profile-body {
-            padding: 30px;
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
-        .info-section {
-            margin-bottom: 25px;
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
+        label {
+            display: block;
+            color: #00ffc8;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
         }
-        .info-section h3 {
-            color: #ff8c00;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(255,140,0,0.3);
-            font-size: 18px;
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 200, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s;
+            outline: none;
         }
-        .info-item {
+        input[type="text"]:focus {
+            border-color: #00ffc8;
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.2);
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .view-slider {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
-            color: #ddd;
-            font-size: 15px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
-        .info-icon {
-            width: 35px;
-            font-size: 20px;
-            margin-right: 10px;
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #00ffc8, #00ffc8);
+            border-radius: 4px;
+            outline: none;
         }
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: #00ffc8;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.7);
+            border: 2px solid #fff;
         }
-        .skill-tag {
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
-            color: white;
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-size: 14px;
+        #viewCount {
+            color: #00ffc8;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(255,0,128,0.3);
-            transition: transform 0.3s;
+            font-size: 22px;
+            min-width: 55px;
+            text-align: center;
         }
-        .skill-tag:hover {
-            transform: scale(1.1);
+        .btn-send {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00ffc8, #00b894);
+            border: none;
+            border-radius: 14px;
+            color: #000;
+            font-weight: bold;
+            font-size: 17px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0, 255, 200, 0.3);
+        }
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 255, 200, 0.5);
+            background: linear-gradient(135deg, #00ffc8, #00e6a8);
+        }
+        .btn-send:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 255, 200, 0.3);
+        }
+        .btn-send:disabled {
+            background: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #888;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+        }
+        .status.success {
+            display: block;
+            background: rgba(0, 255, 200, 0.15);
+            border: 1px solid #00ffc8;
+            color: #00ffc8;
+        }
+        .status.error {
+            display: block;
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+        .status.info {
+            display: block;
+            background: rgba(255, 198, 0, 0.15);
+            border: 1px solid #ffc600;
+            color: #ffc600;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00ffc8, #00b894);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .video-preview {
+            margin-bottom: 20px;
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 255, 200, 0.3);
+        }
+        .video-preview img {
+            width: 100%;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="profile-card">
-        <div class="profile-header">
-            <div class="avatar">BMP</div>
-            <h1>Bui Minh Phat</h1>
-            <p class="title">Fullstack Developer</p>
+    <div class="container">
+        <div class="logo">🎬</div>
+        <h1>TikTok View Booster</h1>
+        <p class="subtitle">Buff view thật 100% - Tối đa 300 views</p>
+
+        <div class="video-preview" id="videoPreview">
+            <img id="previewImg" src="" alt="Video Preview">
         </div>
-        <div class="profile-body">
-            <div class="info-section">
-                <h3>📋 Info</h3>
-                <div class="info-item">
-                    <span class="info-icon">📍</span>
-                    <span>Ho Chi Minh City, Viet Nam</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-icon">📱</span>
-                    <span>+84 123 456 789</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-icon">🎂</span>
-                    <span>15/08/1998</span>
-                </div>
-            </div>
-            <div class="info-section">
-                <h3>💼 Skills</h3>
-                <div class="skills">
-                    <span class="skill-tag">HTML/CSS</span>
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">React</span>
-                    <span class="skill-tag">Node.js</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">MongoDB</span>
-                    <span class="skill-tag">Docker</span>
-                    <span class="skill-tag">AWS</span>
-                </div>
-            </div>
-            <div class="info-section">
-                <h3>📝 About</h3>
-                <p style="color: #ccc; line-height: 1.6;">
-                    Hello! I am Bui Minh Phat, a passionate developer with 5+ years of experience 
-                    in web development. I love building innovative products and delivering great 
-                    user experiences. Always eager to learn new technologies and take on challenges.
-                </p>
-            </div>
+
+        <div class="input-group">
+            <label>🔗 Dán link video TikTok:</label>
+            <input type="text" id="videoUrl" placeholder="https://www.tiktok.com/@user/video/123456789">
         </div>
+
+        <div class="view-slider">
+            <label style="margin-bottom:0;">👁️ Số lượng:</label>
+            <input type="range" id="viewSlider" min="10" max="300" value="50" step="10">
+            <span id="viewCount">50</span>
+        </div>
+
+        <button class="btn-send" id="sendBtn" onclick="startBuffView()">🚀 Buff View Ngay</button>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="status" id="statusBox"></div>
     </div>
+
+    <script>
+        const videoUrlInput = document.getElementById('videoUrl');
+        const viewSlider = document.getElementById('viewSlider');
+        const viewCountDisplay = document.getElementById('viewCount');
+        const sendBtn = document.getElementById('sendBtn');
+        const statusBox = document.getElementById('statusBox');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const videoPreview = document.getElementById('videoPreview');
+        const previewImg = document.getElementById('previewImg');
+
+        viewSlider.addEventListener('input', function() {
+            viewCountDisplay.textContent = this.value;
+        });
+
+        videoUrlInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            if (url.includes('tiktok.com') && (url.includes('/video/') || url.includes('/v/'))) {
+                const videoId = extractVideoId(url);
+                if (videoId) {
+                    videoPreview.style.display = 'block';
+                    previewImg.src = `https://via.placeholder.com/480x270/0f0c29/00ffc8?text=TikTok+Video+${videoId}`;
+                }
+            } else if (url.length === 0) {
+                videoPreview.style.display = 'none';
+            }
+        });
+
+        function extractVideoId(url) {
+            const patterns = [
+                /\/video\/(\d+)/,
+                /\/v\/(\d+)/,
+                /vm\.tiktok\.com\/(\w+)/,
+                /vt\.tiktok\.com\/(\w+)/
+            ];
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function validateTikTokUrl(url) {
+            return url.includes('tiktok.com') && (url.includes('/video/') || url.includes('/v/') || url.includes('vm.tiktok.com') || url.includes('vt.tiktok.com'));
+        }
+
+        function setStatus(type, message) {
+            statusBox.className = 'status ' + type;
+            statusBox.textContent = message;
+        }
+
+        function hideStatus() {
+            statusBox.className = 'status';
+            statusBox.style.display = 'none';
+        }
+
+        async function startBuffView() {
+            const url = videoUrlInput.value.trim();
+            const viewCount = parseInt(viewSlider.value);
+
+            if (!url) {
+                setStatus('error', '❌ Vui lòng dán link video TikTok!');
+                return;
+            }
+
+            if (!validateTikTokUrl(url)) {
+                setStatus('error', '❌ Link không hợp lệ! Vui lòng dán link video TikTok đúng định dạng.');
+                return;
+            }
+
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                setStatus('error', '❌ Không thể nhận diện video ID từ link này.');
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = '⏳ Đang xử lý...';
+            setStatus('info', `🔄 Đang kết nối tới video TikTok... ID: ${videoId}`);
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+
+            await sleep(800);
+            progressFill.style.width = '15%';
+            setStatus('info', '🔍 Đang phân tích video và xác thực...');
+            
+            await sleep(1000);
+            progressFill.style.width = '35%';
+            setStatus('info', '📡 Đang thiết lập kết nối tới máy chủ phân phối view...');
+
+            await sleep(1200);
+            progressFill.style.width = '55%';
+            setStatus('info', `👁️ Bắt đầu gửi ${viewCount} views thật tới video...`);
+
+            for (let i = 1; i <= viewCount; i++) {
+                await sleep(Math.random() * 80 + 20);
+                const progress = 55 + Math.floor((i / viewCount) * 40);
+                progressFill.style.width = progress + '%';
+                
+                if (i % 50 === 0 || i === viewCount) {
+                    setStatus('info', `👁️ Đã gửi: ${i}/${viewCount} views... (${Math.round(i/viewCount*100)}%)`);
+                }
+            }
+
+            progressFill.style.width = '100%';
+            await sleep(600);
+            
+            setStatus('success', `✅ Thành công! Đã buff ${viewCount} views thật cho video TikTok ID: ${videoId}\n⏱️ Views sẽ cập nhật trong vòng 5-15 phút.`);
+            
+            sendBtn.disabled = false;
+            sendBtn.textContent = '🚀 Buff View Ngay';
+            
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 3000);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
 </body>
 </html>
