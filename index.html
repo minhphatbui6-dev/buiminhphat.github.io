@@ -1,275 +1,262 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BMPDarkTool</title>
+    <style>
+        /* Reset & toàn cục */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-<title>BMPDarkTool</title>
+        body {
+            background: #050505;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
+        /* Navbar cố định */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: #0d0d0d;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+        }
 
-body{
-background:#050505;
-color:white;
-overflow-x:hidden;
-}
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
 
-/* Navbar */
+        .menu-btn {
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px 18px;
+            border: 1px solid white;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .menu-btn:hover {
+            background: white;
+            color: black;
+        }
 
-nav{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:65px;
-background:#0d0d0d;
-border-bottom:1px solid #222;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-z-index:1000;
-}
+        /* Sidebar trượt từ trái */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: #111;
+            border-right: 1px solid #333;
+            transition: 0.35s;
+            padding-top: 80px;
+            z-index: 999;
+            overflow-y: auto;
+        }
+        .sidebar.active {
+            left: 0;
+        }
 
-.logo{
-font-size:28px;
-font-weight:bold;
-letter-spacing:2px;
-}
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.menu-btn{
-cursor:pointer;
-font-size:20px;
-padding:10px 18px;
-border:1px solid white;
-border-radius:8px;
-transition:.3s;
-}
+        .tool {
+            padding: 18px;
+            margin: 10px;
+            background: #181818;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+            border: 1px solid #2c2c2c;
+        }
+        .tool:hover {
+            background: #fff;
+            color: #000;
+            transform: translateX(8px);
+        }
 
-.menu-btn:hover{
-background:white;
-color:black;
-}
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+        }
 
-/* Sidebar */
+        /* Nội dung chính */
+        .main {
+            margin-top: 90px;
+            padding: 30px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.sidebar{
-position:fixed;
-top:0;
-left:-320px;
-width:300px;
-height:100%;
-background:#111;
-border-right:1px solid #333;
-transition:.35s;
-padding-top:80px;
-z-index:999;
-overflow:auto;
-}
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
 
-.sidebar.active{
-left:0;
-}
+        h1 {
+            margin-top: 20px;
+            font-size: 40px;
+        }
 
-.sidebar h2{
-text-align:center;
-margin-bottom:20px;
-}
+        .main p {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #ccc;
+        }
 
-.tool{
-padding:18px;
-margin:10px;
-background:#181818;
-border-radius:12px;
-cursor:pointer;
-transition:.25s;
-border:1px solid #2c2c2c;
-}
+        /* Chỉ giữ lại ô Kho Tool - thu nhỏ */
+        .box {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
 
-.tool:hover{
-background:#fff;
-color:#000;
-transform:translateX(8px);
-}
+        .card {
+            width: 200px;
+            padding: 20px;
+            background: #101010;
+            border: 1px solid #333;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: white;
+        }
 
-.close{
-position:absolute;
-top:20px;
-right:20px;
-font-size:28px;
-cursor:pointer;
-}
+        .card h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
 
-/* Main */
+        .card p {
+            margin: 10px 0;
+            color: #bbb;
+            font-size: 15px;
+        }
 
-.main{
-margin-top:90px;
-padding:30px;
-text-align:center;
-}
+        button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover {
+            opacity: 0.8;
+            transform: scale(0.97);
+        }
 
-.avatar{
-width:150px;
-height:150px;
-border-radius:50%;
-border:3px solid white;
-object-fit:cover;
-}
-
-h1{
-margin-top:20px;
-font-size:40px;
-}
-
-p{
-margin-top:15px;
-font-size:18px;
-color:#ccc;
-}
-
-.box{
-margin-top:40px;
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-}
-
-.card{
-width:260px;
-padding:25px;
-background:#101010;
-border:1px solid #333;
-border-radius:15px;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-border-color:white;
-}
-
-button{
-margin-top:15px;
-padding:10px 25px;
-background:white;
-color:black;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-opacity:.8;
-}
-</style>
+        /* Phần chữ AA và link ở cuối */
+        .footer {
+            margin-top: 50px;
+            color: #888;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
 
-<nav>
+    <!-- Thanh điều hướng -->
+    <nav>
+        <div class="menu-btn" onclick="openMenu()">☰ Kho Tool</div>
+        <div class="logo">BMPDarkTool</div>
+    </nav>
 
-<div class="menu-btn" onclick="openMenu()">
-☰ Kho Tool
-</div>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="close" onclick="closeMenu()">✖</div>
+        <h2>Kho Tool</h2>
 
-<div class="logo">
-BMPDarkTool
-</div>
+        <div class="tool">🔧 Tool Encode</div>
+        <div class="tool">🔐 Tool Password</div>
+        <div class="tool">📱 Tool IMEI</div>
+        <div class="tool">🌐 Tool IP Lookup</div>
+        <div class="tool">🛰 Tool Ping</div>
+        <div class="tool">⚡ Tool Base64</div>
+        <div class="tool">📦 Tool JSON</div>
+        <div class="tool">📝 Tool Text</div>
+        <div class="tool">📂 Tool Upload</div>
+        <div class="tool">⚙ Cài đặt</div>
+    </div>
 
-</nav>
+    <!-- Nội dung chính -->
+    <div class="main">
+        <!-- Ảnh đại diện -->
+        <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
 
-<div class="sidebar" id="sidebar">
+        <h1>BMPDarkTool</h1>
+        <p>Website Profile &amp; Tool Collection</p>
 
-<div class="close" onclick="closeMenu()">✖</div>
+        <!-- Chỉ giữ lại 1 ô Kho Tool duy nhất, kích thước nhỏ hơn -->
+        <div class="box">
+            <div class="card">
+                <h2>📦 Kho Tool</h2>
+                <p>Bấm góc trái để mở tất cả công cụ.</p>
+                <button onclick="openMenu()">Mở Kho</button>
+            </div>
+        </div>
 
-<h2>Kho Tool</h2>
+        <!-- Phần chữ AA và link ở cuối -->
+        <div class="footer">
+            <span>AA</span> &bull; 
+            <a href="#" target="_blank">hphatbui6-dev.github.io</a>
+        </div>
+    </div>
 
-<div class="tool">🔧 Tool Encode</div>
+    <!-- JavaScript điều khiển Sidebar -->
+    <script>
+        function openMenu() {
+            document.getElementById("sidebar").classList.add("active");
+        }
 
-<div class="tool">🔐 Tool Password</div>
-
-<div class="tool">📱 Tool IMEI</div>
-
-<div class="tool">🌐 Tool IP Lookup</div>
-
-<div class="tool">🛰 Tool Ping</div>
-
-<div class="tool">⚡ Tool Base64</div>
-
-<div class="tool">📦 Tool JSON</div>
-
-<div class="tool">📝 Tool Text</div>
-
-<div class="tool">📂 Tool Upload</div>
-
-<div class="tool">⚙ Cài đặt</div>
-
-</div>
-
-<div class="main">
-
-<img class="avatar" src="https://i.imgur.com/YOURIMAGE.png">
-
-<h1>BMPDarkTool</h1>
-
-<p>
-Website Profile & Tool Collection
-</p>
-
-<div class="box">
-
-<div class="card">
-<h2>Website</h2>
-
-<p>Profile hiện đại giao diện đen.</p>
-
-<button>Thông Tin</button>
-
-</div>
-
-<div class="card">
-
-<h2>Kho Tool</h2>
-
-<p>Bấm góc trái để mở tất cả công cụ.</p>
-
-<button onclick="openMenu()">Mở Kho</button>
-
-</div>
-
-<div class="card">
-
-<h2>Version</h2>
-
-<p>v1.0</p>
-
-<button>Chi Tiết</button>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-function openMenu(){
-document.getElementById("sidebar").classList.add("active");
-}
-
-function closeMenu(){
-document.getElementById("sidebar").classList.remove("active");
-}
-
-</script>
+        function closeMenu() {
+            document.getElementById("sidebar").classList.remove("active");
+        }
+    </script>
 
 </body>
 </html>
