@@ -10,33 +10,171 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', monospace;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
-            background: #0a0000;
-            color: #ff2222;
+            background: #050505;
+            color: white;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
         }
 
-        /* Hiệu ứng nền tối - không máu */
-        body::before {
-            content: '';
+        /* Overlay nhập mật khẩu */
+        .password-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(255,0,0,0.03) 0%, transparent 70%),
-                radial-gradient(ellipse at 80% 50%, rgba(255,0,0,0.03) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .password-overlay.hidden {
+            display: none;
+        }
+
+        .password-box {
+            background: transparent;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .password-box .avatar-key {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #ffd700;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .password-box .title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .password-box .sub-title {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 16px 20px;
+            background: transparent;
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .password-box input::placeholder {
+            color: #666;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .password-box input:focus {
+            border-color: white;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .password-box input.error {
+            border-color: #ff4444;
+            animation: shake 0.3s;
+        }
+
+        .password-box .error-msg {
+            color: #ff4444;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
+        .password-box .btn-continue {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: black;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .password-box .btn-continue:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+
+        .password-box .hint {
+            color: #888;
+            font-size: 13px;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+
+        .password-box .hint span {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .timer-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #222;
+        }
+
+        .timer-section .label {
+            color: #888;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .timer-section .time {
+            color: #ffd700;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-section .sub {
+            color: #666;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
 
         /* Navbar */
@@ -46,45 +184,33 @@
             left: 0;
             width: 100%;
             height: 55px;
-            background: #0a0000;
-            border-bottom: 2px solid #ff0000;
+            background: #0d0d0d;
+            border-bottom: 1px solid #222;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             z-index: 1000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.15);
         }
 
         .menu-btn {
             cursor: pointer;
             font-size: 18px;
             padding: 8px 16px;
-            border: 1px solid #ff0000;
-            border-radius: 4px;
+            border: none;
+            border-radius: 10px;
             background: transparent;
-            color: #ff0000;
+            color: white;
             transition: 0.3s;
-            text-shadow: 0 0 10px rgba(255,0,0,0.3);
         }
         .menu-btn:hover {
-            background: #ff0000;
-            color: #000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.4);
+            background: rgba(255,255,255,0.1);
         }
 
         .logo {
             font-size: 20px;
             font-weight: bold;
-            letter-spacing: 2px;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
-            animation: flicker 3s infinite;
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            letter-spacing: 1px;
         }
 
         /* Sidebar */
@@ -94,13 +220,12 @@
             left: -320px;
             width: 300px;
             height: 100%;
-            background: #0a0000;
-            border-right: 2px solid #ff0000;
+            background: #111;
+            border-right: 1px solid #333;
             transition: 0.35s;
             padding-top: 70px;
             z-index: 999;
             overflow-y: auto;
-            box-shadow: 5px 0 50px rgba(255,0,0,0.2);
         }
         .sidebar.active {
             left: 0;
@@ -111,27 +236,19 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px 15px 20px;
-            border-bottom: 2px solid #ff0000;
+            border-bottom: 1px solid #222;
         }
 
         .sidebar-header h2 {
             font-size: 20px;
             font-weight: bold;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
         }
 
         .close {
             font-size: 24px;
             cursor: pointer;
-            color: #ff0000;
-            transition: 0.3s;
-        }
-        .close:hover {
-            transform: rotate(90deg);
         }
 
-        /* Danh sách tool */
         .tool-list {
             padding: 10px 0;
         }
@@ -139,20 +256,16 @@
         .tool-item {
             padding: 12px 20px;
             cursor: pointer;
-            transition: 0.3s;
-            border-bottom: 1px solid #1a0000;
+            transition: 0.2s;
+            border-bottom: 1px solid #1a1a1a;
             font-size: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #cc3333;
         }
         .tool-item:hover {
-            background: #1a0000;
+            background: #1a1a1a;
             padding-left: 28px;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
-            border-color: #ff0000;
         }
 
         .tool-item .icon {
@@ -171,28 +284,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            z-index: 1;
         }
 
         .avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 3px solid #ff0000;
+            border: 3px solid white;
             object-fit: cover;
-            box-shadow: 0 0 40px rgba(255,0,0,0.2);
-            filter: grayscale(30%) contrast(120%);
         }
 
         .main p {
             margin-top: 10px;
             font-size: 16px;
-            color: #992222;
-            text-shadow: 0 0 10px rgba(255,0,0,0.1);
+            color: #ccc;
         }
 
-        /* Card Kho Tool */
         .box {
             margin-top: 30px;
             display: flex;
@@ -202,144 +309,100 @@
         .card {
             width: 180px;
             padding: 18px;
-            background: #0a0000;
-            border: 2px solid #ff0000;
-            border-radius: 8px;
+            background: #101010;
+            border: none;
+            border-radius: 16px;
             transition: 0.3s;
-            box-shadow: 0 0 30px rgba(255,0,0,0.15);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,0,0,0.05) 0%, transparent 70%);
-            animation: rotateGlow 6s linear infinite;
-        }
-
-        @keyframes rotateGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #ff3333;
-            box-shadow: 0 0 50px rgba(255,0,0,0.3);
+            transform: translateY(-8px);
+            background: #1a1a1a;
         }
 
         .card h2 {
             margin-bottom: 8px;
             font-size: 20px;
             font-weight: normal;
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
-            position: relative;
-            z-index: 1;
+            letter-spacing: 1px;
         }
 
         .card p {
             margin: 8px 0;
-            color: #992222;
+            color: #bbb;
             font-size: 14px;
-            position: relative;
-            z-index: 1;
         }
 
         button {
             margin-top: 12px;
             padding: 8px 20px;
-            background: transparent;
-            color: #ff0000;
-            border: 1px solid #ff0000;
-            border-radius: 4px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
+            transition: 0.2s;
             font-size: 14px;
-            text-shadow: 0 0 10px rgba(255,0,0,0.2);
-            position: relative;
-            z-index: 1;
         }
         button:hover {
-            background: #ff0000;
-            color: #000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.4);
+            opacity: 0.8;
+            transform: scale(0.97);
         }
 
-        /* Footer */
         .footer {
             margin-top: 40px;
-            color: #551111;
+            color: #666;
             font-size: 13px;
             display: flex;
             gap: 8px;
             align-items: center;
         }
         .footer a {
-            color: #771111;
+            color: #888;
             text-decoration: none;
-            transition: 0.3s;
         }
         .footer a:hover {
-            color: #ff0000;
-            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+            color: white;
         }
         .footer .dot {
-            color: #441111;
-        }
-
-        /* Cảnh báo */
-        .warning {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            color: #ff0000;
-            font-size: 12px;
-            animation: blinkWarning 2s infinite;
-            opacity: 0.4;
-            z-index: 100;
-            letter-spacing: 2px;
-        }
-
-        @keyframes blinkWarning {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0; }
-        }
-
-        /* Scrollbar đỏ */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0000;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff0000;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff3333;
+            color: #444;
         }
     </style>
 </head>
 
 <body>
 
+    <!-- Overlay nhập mật khẩu -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <img class="avatar-key" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
+            <div class="title">BMPDarkTool</div>
+            <div class="sub-title">Website Profile &amp; Tool Collection</div>
+            <input type="password" id="passwordInput" placeholder="Nhập mật khẩu" />
+            <div class="error-msg" id="errorMsg"></div>
+            <button class="btn-continue" onclick="checkPassword()">TIẾP TỤC →</button>
+            <div class="hint">
+                🔑 Mật khẩu: <span>BMP123</span>
+            </div>
+
+            <div class="timer-section">
+                <div class="label">Cổng mở sau:</div>
+                <div class="time" id="timer">03:57:02</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav>
-        <div class="menu-btn" onclick="toggleMenu()">☠ Kho Tool</div>
-        <div class="logo">⚠ BMPDarkTool</div>
+        <div class="menu-btn" onclick="toggleMenu()">☰ Kho Tool</div>
+        <div class="logo">BMPDarkTool</div>
     </nav>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>☠ Kho Tool</h2>
+            <h2>📦 Kho Tool</h2>
             <div class="close" onclick="toggleMenu()">✖</div>
         </div>
 
@@ -360,32 +423,106 @@
     <!-- Nội dung chính -->
     <div class="main">
         <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
-        <p>⚠ Website Profile &amp; Tool Collection ⚠</p>
+        <p>Website Profile &amp; Tool Collection</p>
 
         <div class="box">
             <div class="card">
-                <h2>☠ Kho Tool</h2>
-                <p>Bấm góc trái để mở kho</p>
+                <h2>📦 Kho Tool</h2>
+                <p>Bấm góc trái để mở tất cả công cụ.</p>
                 <button onclick="toggleMenu()">Mở Kho</button>
             </div>
         </div>
 
         <div class="footer">
-            <span>☠ AA</span>
+            <span>AA</span>
             <span class="dot">•</span>
             <a href="#" target="_blank">@hphatbui6-dev.github.io</a>
         </div>
     </div>
 
-    <!-- Cảnh báo -->
-    <div class="warning">⚠ DANGER ZONE ⚠</div>
-
     <script>
+        // ===== MẬT KHẨU CỐ ĐỊNH =====
+        const PASSWORD = 'BMP123';
+
+        // Biến timer
+        let timerInterval;
+        let timeLeft = 3 * 60 * 60 + 57 * 60 + 2;
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const overlay = document.getElementById('passwordOverlay');
+            const password = input.value.trim();
+
+            if (!password) {
+                errorMsg.textContent = '❌ Vui lòng nhập mật khẩu!';
+                input.classList.add('error');
+                return;
+            }
+
+            if (password === PASSWORD) {
+                overlay.classList.add('hidden');
+                errorMsg.textContent = '';
+                input.classList.remove('error');
+                stopTimer();
+                // Lưu trạng thái đăng nhập vào session (tạm thời)
+                sessionStorage.setItem('bmpdarktool_logged_in', 'true');
+            } else {
+                errorMsg.textContent = '❌ Mật khẩu không đúng!';
+                input.classList.add('error');
+                input.value = '';
+                input.focus();
+                setTimeout(() => {
+                    input.classList.remove('error');
+                }, 500);
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        window.onload = function() {
+            // Kiểm tra đã đăng nhập chưa (session)
+            if (sessionStorage.getItem('bmpdarktool_logged_in') === 'true') {
+                document.getElementById('passwordOverlay').classList.add('hidden');
+            } else {
+                document.getElementById('passwordInput').focus();
+                startTimer();
+            }
+        };
+
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    clearInterval(timerInterval);
+                }
+                updateTimerDisplay();
+                timeLeft--;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+        }
+
         function toggleMenu() {
             document.getElementById("sidebar").classList.toggle("active");
         }
 
-        // Click ra ngoài để đóng sidebar
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
             const menuBtn = document.querySelector('.menu-btn');
