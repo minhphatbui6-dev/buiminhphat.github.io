@@ -10,257 +10,396 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Courier New', monospace;
         }
 
         body {
-            background: #050505;
-            color: white;
+            background: #0a0000;
+            color: #ff2222;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
-        /* Navbar cố định */
+        /* Hiệu ứng nền tối - không máu */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255,0,0,0.03) 0%, transparent 70%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,0,0,0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navbar */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 65px;
-            background: #0d0d0d;
-            border-bottom: 1px solid #222;
+            height: 55px;
+            background: #0a0000;
+            border-bottom: 2px solid #ff0000;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             z-index: 1000;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255,0,0,0.15);
         }
 
         .menu-btn {
             cursor: pointer;
-            font-size: 20px;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 12px;
+            font-size: 18px;
+            padding: 8px 16px;
+            border: 1px solid #ff0000;
+            border-radius: 4px;
             background: transparent;
-            color: white;
+            color: #ff0000;
             transition: 0.3s;
+            text-shadow: 0 0 10px rgba(255,0,0,0.3);
         }
         .menu-btn:hover {
-            background: rgba(255,255,255,0.1);
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255,0,0,0.4);
         }
 
-        /* Sidebar trượt từ trái */
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+            animation: flicker 3s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
             left: -320px;
             width: 300px;
             height: 100%;
-            background: #111;
-            border-right: 1px solid #333;
+            background: #0a0000;
+            border-right: 2px solid #ff0000;
             transition: 0.35s;
-            padding-top: 80px;
+            padding-top: 70px;
             z-index: 999;
             overflow-y: auto;
+            box-shadow: 5px 0 50px rgba(255,0,0,0.2);
         }
         .sidebar.active {
             left: 0;
         }
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 15px 20px;
+            border-bottom: 2px solid #ff0000;
         }
 
-        .tool {
-            padding: 18px;
-            margin: 10px;
-            background: #181818;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.25s;
-            border: 1px solid #2c2c2c;
-        }
-        .tool:hover {
-            background: #fff;
-            color: #000;
-            transform: translateX(8px);
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
         }
 
         .close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
+            color: #ff0000;
+            transition: 0.3s;
+        }
+        .close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Danh sách tool */
+        .tool-list {
+            padding: 10px 0;
+        }
+
+        .tool-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-bottom: 1px solid #1a0000;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cc3333;
+        }
+        .tool-item:hover {
+            background: #1a0000;
+            padding-left: 28px;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+            border-color: #ff0000;
+        }
+
+        .tool-item .icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
         }
 
         /* Nội dung chính */
         .main {
-            margin-top: 90px;
-            padding: 30px 20px;
+            margin-top: 75px;
+            padding: 20px;
             text-align: center;
             width: 100%;
             max-width: 1200px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .avatar {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 3px solid white;
+            border: 3px solid #ff0000;
             object-fit: cover;
-        }
-
-        h1 {
-            margin-top: 20px;
-            font-size: 40px;
+            box-shadow: 0 0 40px rgba(255,0,0,0.2);
+            filter: grayscale(30%) contrast(120%);
         }
 
         .main p {
-            margin-top: 15px;
-            font-size: 18px;
-            color: #ccc;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #992222;
+            text-shadow: 0 0 10px rgba(255,0,0,0.1);
         }
 
-        /* Card Kho Tool - bo cong, không viền vuông */
+        /* Card Kho Tool */
         .box {
-            margin-top: 40px;
+            margin-top: 30px;
             display: flex;
             justify-content: center;
         }
 
         .card {
-            width: 200px;
-            padding: 20px;
-            background: #101010;
-            border: none;
-            border-radius: 20px;
+            width: 180px;
+            padding: 18px;
+            background: #0a0000;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
             transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(255,0,0,0.15);
+            position: relative;
+            overflow: hidden;
         }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,0,0.05) 0%, transparent 70%);
+            animation: rotateGlow 6s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .card:hover {
-            transform: translateY(-10px);
-            background: #1a1a1a;
+            transform: translateY(-8px) scale(1.02);
+            border-color: #ff3333;
+            box-shadow: 0 0 50px rgba(255,0,0,0.3);
         }
 
         .card h2 {
-            margin-bottom: 10px;
-            font-size: 22px;
+            margin-bottom: 8px;
+            font-size: 20px;
             font-weight: normal;
-            letter-spacing: 1px;
-        }
-
-        /* Chữ Kho Tool đều nhau */
-        .card h2 span {
-            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .card p {
-            margin: 10px 0;
-            color: #bbb;
-            font-size: 15px;
+            margin: 8px 0;
+            color: #992222;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
         }
 
         button {
-            margin-top: 15px;
-            padding: 10px 25px;
-            background: white;
-            color: black;
-            border: none;
-            border-radius: 12px;
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: transparent;
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
+            transition: 0.3s;
+            font-size: 14px;
+            text-shadow: 0 0 10px rgba(255,0,0,0.2);
+            position: relative;
+            z-index: 1;
         }
         button:hover {
-            opacity: 0.8;
-            transform: scale(0.97);
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255,0,0,0.4);
         }
 
-        /* Phần chữ AA và link ở cuối */
+        /* Footer */
         .footer {
-            margin-top: 50px;
-            color: #888;
-            font-size: 14px;
+            margin-top: 40px;
+            color: #551111;
+            font-size: 13px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
         .footer a {
-            color: #aaa;
+            color: #771111;
             text-decoration: none;
+            transition: 0.3s;
         }
         .footer a:hover {
-            color: white;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255,0,0,0.3);
+        }
+        .footer .dot {
+            color: #441111;
+        }
+
+        /* Cảnh báo */
+        .warning {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #ff0000;
+            font-size: 12px;
+            animation: blinkWarning 2s infinite;
+            opacity: 0.4;
+            z-index: 100;
+            letter-spacing: 2px;
+        }
+
+        @keyframes blinkWarning {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0; }
+        }
+
+        /* Scrollbar đỏ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3333;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Thanh điều hướng -->
+    <!-- Navbar -->
     <nav>
-        <div class="menu-btn" onclick="toggleMenu()">≡ Kho Tool</div>
-        <div class="logo">BMPDarkTool</div>
+        <div class="menu-btn" onclick="toggleMenu()">☠ Kho Tool</div>
+        <div class="logo">⚠ BMPDarkTool</div>
     </nav>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <div class="close" onclick="toggleMenu()">✖</div>
-        <h2>Kho Tool</h2>
+        <div class="sidebar-header">
+            <h2>☠ Kho Tool</h2>
+            <div class="close" onclick="toggleMenu()">✖</div>
+        </div>
 
-        <div class="tool">🔧 Tool Encode</div>
-        <div class="tool">🔐 Tool Password</div>
-        <div class="tool">📱 Tool IMEI</div>
-        <div class="tool">🌐 Tool IP Lookup</div>
-        <div class="tool">🛰 Tool Ping</div>
-        <div class="tool">⚡ Tool Base64</div>
-        <div class="tool">📦 Tool JSON</div>
-        <div class="tool">📝 Tool Text</div>
-        <div class="tool">📂 Tool Upload</div>
-        <div class="tool">⚙ Cài đặt</div>
+        <div class="tool-list">
+            <div class="tool-item"><span class="icon">🔧</span> Tool Encode</div>
+            <div class="tool-item"><span class="icon">🔐</span> Tool Password</div>
+            <div class="tool-item"><span class="icon">📱</span> Tool IMEI</div>
+            <div class="tool-item"><span class="icon">🌐</span> Tool IP Lookup</div>
+            <div class="tool-item"><span class="icon">🛰</span> Tool Ping</div>
+            <div class="tool-item"><span class="icon">⚡</span> Tool Base64</div>
+            <div class="tool-item"><span class="icon">📦</span> Tool JSON</div>
+            <div class="tool-item"><span class="icon">📝</span> Tool Text</div>
+            <div class="tool-item"><span class="icon">📂</span> Tool Upload</div>
+            <div class="tool-item"><span class="icon">⚙</span> Cài đặt</div>
+        </div>
     </div>
 
     <!-- Nội dung chính -->
     <div class="main">
-        <!-- Ảnh đại diện -->
         <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
+        <p>⚠ Website Profile &amp; Tool Collection ⚠</p>
 
-        <h1>BMPDarkTool</h1>
-        <p>Website Profile &amp; Tool Collection</p>
-
-        <!-- Card Kho Tool -->
         <div class="box">
             <div class="card">
-                <h2>📦 <span>Kho Tool</span></h2>
-                <p>Bấm góc trái để mở tất cả công cụ.</p>
+                <h2>☠ Kho Tool</h2>
+                <p>Bấm góc trái để mở kho</p>
                 <button onclick="toggleMenu()">Mở Kho</button>
             </div>
         </div>
 
-        <!-- Phần chữ AA và link ở cuối -->
         <div class="footer">
-            <span>AA</span> &bull; 
-            <a href="#" target="_blank">hphatbui6-dev.github.io</a>
+            <span>☠ AA</span>
+            <span class="dot">•</span>
+            <a href="#" target="_blank">@hphatbui6-dev.github.io</a>
         </div>
     </div>
 
-    <!-- JavaScript điều khiển Sidebar - Toggle -->
+    <!-- Cảnh báo -->
+    <div class="warning">⚠ DANGER ZONE ⚠</div>
+
     <script>
         function toggleMenu() {
             document.getElementById("sidebar").classList.toggle("active");
         }
+
+        // Click ra ngoài để đóng sidebar
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.menu-btn');
+            const cardBtn = document.querySelector('.card button');
+            
+            if (sidebar.classList.contains('active')) {
+                const isClickInside = sidebar.contains(event.target) || 
+                                     menuBtn.contains(event.target) || 
+                                     (cardBtn && cardBtn.contains(event.target));
+                if (!isClickInside) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
     </script>
 
 </body>
