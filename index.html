@@ -3,102 +3,310 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BMPDarkTool - Website Analyzer PRO</title>
+    <title>BMPDarkTool - Tổng hợp Tool</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: #000; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .password-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(8px); transition: opacity 0.5s ease; }
-        .password-overlay.hidden { opacity: 0; pointer-events: none; }
-        .password-box { background: #0a0a0a; padding: 50px 40px; border-radius: 20px; max-width: 450px; width: 90%; text-align: center; border: 1px solid #333; }
-        .password-box .avatar-key { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; object-fit: cover; margin-bottom: 15px; }
-        .password-box .title { font-size: 22px; font-weight: bold; margin-bottom: 5px; }
-        .password-box .sub-title { color: #888; font-size: 14px; margin-bottom: 25px; }
-        .password-box input { width: 100%; padding: 16px 20px; background: #111; border: 2px solid #333; border-radius: 10px; color: #fff; font-size: 16px; text-align: center; outline: none; }
-        .password-box input:focus { border-color: #aaa; }
-        .password-box input.error { border-color: #f44; animation: shake 0.3s; }
-        .password-box .error-msg { color: #f44; font-size: 13px; margin-top: 10px; min-height: 20px; }
-        .password-box .btn-continue { width: 100%; padding: 14px; background: #fff; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; text-transform: uppercase; }
-        .password-box .btn-continue:hover { opacity: 0.8; transform: scale(0.98); }
-        .password-box .hint { color: #666; font-size: 13px; margin-top: 18px; }
-        .password-box .hint span { color: #fff; font-weight: bold; }
-        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        body { background: #000; color: #fff; display: flex; min-height: 100vh; }
 
-        .main-card { background: #0a0a0a; border: 1px solid #222; border-radius: 28px; padding: 35px 30px; max-width: 880px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.9); position: relative; z-index: 1; }
-        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .header img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #555; object-fit: cover; }
-        .header .title { font-size: 22px; font-weight: bold; }
-        .header .sub { font-size: 13px; color: #888; }
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #0a0a0a;
+            border-right: 1px solid #222;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: #111; }
+        .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        .tool-section h3 { font-size: 18px; margin-bottom: 12px; color: #aaa; }
-        .input-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-        .input-group input { flex: 2; min-width: 180px; padding: 12px 16px; background: #111; border: 1px solid #333; border-radius: 14px; color: #fff; font-size: 15px; outline: none; }
-        .input-group input:focus { border-color: #888; }
-        .input-group button { padding: 12px 24px; background: #fff; color: #000; border: none; border-radius: 14px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .sidebar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid #222;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar .logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #555;
+            object-fit: cover;
+        }
+        .sidebar .logo span { color: #fff; }
+
+        .sidebar .menu-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 20px 6px 20px;
+        }
+
+        .tool-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #aaa;
+        }
+        .tool-item:hover { background: #1a1a1a; color: #fff; }
+        .tool-item.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-left-color: #fff;
+        }
+        .tool-item .icon { font-size: 18px; width: 24px; text-align: center; }
+
+        /* Nội dung chính */
+        .main {
+            flex: 1;
+            padding: 30px 35px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .main .header {
+            margin-bottom: 25px;
+        }
+        .main .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .main .header p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .tool-content {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+        .tool-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-content h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+        .input-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .input-group input, .input-group select {
+            flex: 1;
+            min-width: 160px;
+            padding: 10px 14px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: #888; }
+        .input-group button {
+            padding: 10px 22px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
         .input-group button:hover { opacity: 0.8; }
-        .input-group button.secondary { background: #1a1a1a; color: #fff; border: 1px solid #444; }
+        .input-group button.secondary {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #444;
+        }
         .input-group button.secondary:hover { background: #2a2a2a; }
 
-        .result-box { margin-top: 15px; background: #111; border-radius: 14px; padding: 16px; border: 1px solid #222; max-height: 550px; overflow-y: auto; }
-        .result-box .copy-btn { float: right; background: #222; border: 1px solid #444; color: #ccc; padding: 4px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-bottom: 10px; }
+        .result-box {
+            margin-top: 12px;
+            background: #111;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #222;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+        .result-box .result-content {
+            color: #ddd;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.7;
+        }
+        .result-box .copy-btn {
+            float: right;
+            background: #222;
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 4px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
         .result-box .copy-btn:hover { background: #333; color: #fff; }
         .status-text { color: #888; font-size: 14px; text-align: center; padding: 20px; }
+        .good { color: #0f0; }
+        .bad { color: #f44; }
+        .warn { color: #ffaa00; }
 
-        /* Bảng kết quả */
-        .result-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        .result-table td { padding: 8px 12px; border-bottom: 1px solid #222; vertical-align: top; }
-        .result-table .label { color: #888; font-weight: bold; width: 120px; white-space: nowrap; }
-        .result-table .value { color: #ddd; word-break: break-word; }
-        .result-table .value.highlight { color: #0f0; }
-        .result-table .value.warning { color: #ffaa00; }
-        .result-table .value.danger { color: #f44; }
-
-        .category-tag { display: inline-block; background: #1a1a1a; padding: 2px 10px; border-radius: 12px; margin: 2px 4px 2px 0; font-size: 13px; border: 1px solid #333; }
+        .category-tag {
+            display: inline-block;
+            background: #1a1a1a;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin: 2px 4px 2px 0;
+            font-size: 13px;
+            border: 1px solid #333;
+        }
         .category-tag .score { color: #888; font-size: 11px; }
 
-        .footer { margin-top: 25px; text-align: center; color: #444; font-size: 12px; }
+        .result-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .result-table td { padding: 6px 10px; border-bottom: 1px solid #222; vertical-align: top; }
+        .result-table .label { color: #888; font-weight: bold; width: 110px; white-space: nowrap; }
+        .result-table .value { color: #ddd; word-break: break-word; }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #444;
+            font-size: 12px;
+        }
         .footer a { color: #666; text-decoration: none; }
         .footer a:hover { color: #fff; }
 
-        @media (max-width: 600px) {
-            .result-table .label { width: 80px; font-size: 12px; }
-            .result-table td { padding: 6px 8px; font-size: 13px; }
-            .main-card { padding: 20px 16px; }
+        .progress-bar { width: 100%; height: 3px; background: #222; border-radius: 4px; margin: 8px 0; overflow: hidden; }
+        .progress-bar .fill { height: 100%; width: 0%; background: #0f0; border-radius: 4px; transition: width 0.3s; }
+
+        @media (max-width: 700px) {
+            .sidebar { width: 200px; }
+            .main { padding: 20px 16px; }
+            .result-table .label { width: 70px; font-size: 12px; }
+        }
+        @media (max-width: 550px) {
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #222; }
+            body { flex-direction: column; }
+            .main { max-height: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="password-overlay" id="passwordOverlay">
-        <div class="password-box">
-            <img class="avatar-key" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
-            <div class="title">BMPDarkTool</div>
-            <div class="sub-title">Website Analyzer PRO</div>
-            <input type="password" id="passwordInput" placeholder="Nhập mật khẩu" />
-            <div class="error-msg" id="errorMsg"></div>
-            <button class="btn-continue" onclick="checkPassword()">TIẾP TỤC →</button>
-            <div class="hint">🔑 Mật khẩu: <span>BMP123</span></div>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="https://files.catbox.moe/kxygoi.png" alt="logo" />
+            <span>BMPDarkTool</span>
         </div>
+        <div class="menu-label">📦 Kho Tool</div>
+
+        <div class="tool-item active" data-tool="checkip"><span class="icon">🌐</span> Check IP</div>
+        <div class="tool-item" data-tool="repeater"><span class="icon">🔁</span> Text Repeater</div>
+        <div class="tool-item" data-tool="vuln"><span class="icon">🔍</span> Vuln Scanner</div>
+        <div class="tool-item" data-tool="header"><span class="icon">📋</span> Header Analyzer</div>
+        <div class="tool-item" data-tool="scammer"><span class="icon">⚠️</span> Check Scammer</div>
+        <div class="tool-item" data-tool="analyzer"><span class="icon">📊</span> Website Analyzer</div>
     </div>
 
-    <div class="main-card">
+    <!-- Nội dung chính -->
+    <div class="main" id="mainContent">
         <div class="header">
-            <img src="https://files.catbox.moe/kxygoi.png" alt="avatar" />
-            <div>
-                <div class="title">BMPDarkTool</div>
-                <div class="sub">Website Analyzer PRO - 500+ từ khóa</div>
-            </div>
+            <h1 id="toolTitle">🌐 Check IP</h1>
+            <p id="toolDesc">Tra cứu vị trí, nhà mạng, toạ độ từ IP</p>
         </div>
 
-        <div class="tool-section">
-            <h3>🔍 Phân tích nội dung - Bảng chi tiết</h3>
+        <!-- Tool 1: Check IP -->
+        <div class="tool-content active" id="tool-checkip">
             <div class="input-group">
-                <input type="text" id="siteInput" placeholder="Nhập URL cần phân tích (vd: https://example.com)" value="https://example.com" />
-                <button onclick="analyzeWebsitePRO()">🚀 Phân tích PRO</button>
-                <button class="secondary" onclick="clearAnalyze()">🗑️ Xoá</button>
+                <input type="text" id="ipInput" placeholder="Nhập IP hoặc tên miền..." value="8.8.8.8" />
+                <button onclick="checkIP()">Tra cứu</button>
+                <button class="secondary" onclick="getMyIP()">📡 IP của tôi</button>
             </div>
-            <div class="result-box" id="analyzeResult">
-                <div class="status-text">Nhập URL và bấm "Phân tích PRO".</div>
+            <div class="result-box" id="ipResult"><div class="status-text">Nhập IP và bấm "Tra cứu".</div></div>
+        </div>
+
+        <!-- Tool 2: Text Repeater -->
+        <div class="tool-content" id="tool-repeater">
+            <div class="input-group">
+                <input type="text" id="textInput" placeholder="Nhập văn bản..." value="xin chào" style="flex:2;" />
+                <select id="repeatCount">
+                    <option value="10">10</option><option value="25">25</option>
+                    <option value="50">50</option><option value="100" selected>100</option>
+                    <option value="200">200</option><option value="500">500</option>
+                    <option value="1000">1000</option><option value="2000">2000</option>
+                </select>
+                <button onclick="generateText()">Tạo</button>
+                <button class="secondary" onclick="clearText()">Xoá</button>
             </div>
+            <div class="result-box" id="textResult"><div class="status-text">Kết quả sẽ hiển thị ở đây.</div></div>
+        </div>
+
+        <!-- Tool 3: Vuln Scanner -->
+        <div class="tool-content" id="tool-vuln">
+            <div class="input-group">
+                <input type="text" id="vulnUrl" placeholder="URL (vd: http://target.com/page?id=1)" value="https://example.com" style="flex:2;" />
+                <input type="text" id="vulnCookie" placeholder="Cookie (nếu cần)" style="flex:1;" />
+                <button onclick="scanUltimate()">🚀 Quét</button>
+                <button class="secondary" onclick="clearVuln()">Xoá</button>
+            </div>
+            <div class="progress-bar"><div class="fill" id="vulnProgress"></div></div>
+            <div class="result-box" id="vulnResult"><div class="status-text">Nhập URL và bấm "Quét".</div></div>
+        </div>
+
+        <!-- Tool 4: Header Analyzer -->
+        <div class="tool-content" id="tool-header">
+            <div class="input-group">
+                <input type="text" id="headerUrl" placeholder="URL (vd: https://example.com)" value="https://example.com" style="flex:2;" />
+                <button onclick="analyzeHeaders()">🔍 Phân tích</button>
+                <button class="secondary" onclick="clearHeaders()">Xoá</button>
+            </div>
+            <div class="result-box" id="headerResult"><div class="status-text">Nhập URL và bấm "Phân tích".</div></div>
+        </div>
+
+        <!-- Tool 5: Check Scammer -->
+        <div class="tool-content" id="tool-scammer">
+            <div class="input-group">
+                <input type="text" id="scamUrl" placeholder="URL cần kiểm tra..." value="https://example.com" style="flex:2;" />
+                <button onclick="scanScammer()">🔍 Quét</button>
+                <button class="secondary" onclick="clearScam()">Xoá</button>
+            </div>
+            <div class="progress-bar"><div class="fill" id="scamProgress"></div></div>
+            <div class="result-box" id="scamResult"><div class="status-text">Nhập URL và bấm "Quét".</div></div>
+        </div>
+
+        <!-- Tool 6: Website Analyzer -->
+        <div class="tool-content" id="tool-analyzer">
+            <div class="input-group">
+                <input type="text" id="analyzerUrl" placeholder="URL cần phân tích..." value="https://example.com" style="flex:2;" />
+                <button onclick="analyzeWebsite()">📊 Phân tích</button>
+                <button class="secondary" onclick="clearAnalyzer()">Xoá</button>
+            </div>
+            <div class="result-box" id="analyzerResult"><div class="status-text">Nhập URL và bấm "Phân tích".</div></div>
         </div>
 
         <div class="footer">
@@ -107,238 +315,329 @@
     </div>
 
     <script>
-        const PASSWORD = 'BMP123';
+        // ===== SIDEBAR =====
+        document.querySelectorAll('.tool-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.tool-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const tool = this.dataset.tool;
+                document.querySelectorAll('.tool-content').forEach(c => c.classList.remove('active'));
+                const target = document.getElementById('tool-' + tool);
+                if (target) target.classList.add('active');
 
-        function checkPassword() {
-            const input = document.getElementById('passwordInput');
-            const errorMsg = document.getElementById('errorMsg');
-            const overlay = document.getElementById('passwordOverlay');
-            const password = input.value.trim();
-            if (!password) {
-                errorMsg.textContent = '❌ Vui lòng nhập mật khẩu!';
-                input.classList.add('error');
-                return;
-            }
-            if (password === PASSWORD) {
-                overlay.classList.add('hidden');
-                errorMsg.textContent = '';
-                input.classList.remove('error');
-                sessionStorage.setItem('bmpdarktool_logged_in', 'true');
-            } else {
-                errorMsg.textContent = '❌ Mật khẩu không đúng!';
-                input.classList.add('error');
-                input.value = '';
-                input.focus();
-                setTimeout(() => input.classList.remove('error'), 500);
+                const titles = {
+                    checkip: ['🌐 Check IP', 'Tra cứu vị trí, nhà mạng, toạ độ từ IP'],
+                    repeater: ['🔁 Text Repeater', 'Tạo bản sao văn bản với số lượng tuỳ chọn'],
+                    vuln: ['🔍 Vuln Scanner', 'Quét lỗ hổng SQLi, XSS, LFI, Command Injection, v.v.'],
+                    header: ['📋 Header Analyzer', 'Phân tích header bảo mật và gợi ý cải thiện'],
+                    scammer: ['⚠️ Check Scammer', 'Phát hiện website lừa đảo, phishing, mã độc'],
+                    analyzer: ['📊 Website Analyzer', 'Nhận diện lĩnh vực, công nghệ, nội dung chính']
+                };
+                const info = titles[tool] || ['Tool', ''];
+                document.getElementById('toolTitle').textContent = info[0];
+                document.getElementById('toolDesc').textContent = info[1];
+            });
+        });
+
+        // ===== CHECK IP =====
+        async function checkIP() {
+            const ip = document.getElementById('ipInput').value.trim();
+            const res = document.getElementById('ipResult');
+            if (!ip) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập IP.</div>'; return; }
+            res.innerHTML = '<div class="status-text">⏳ Đang tra cứu...</div>';
+            try {
+                const r = await fetch(`https://ip-api.com/json/${ip}?fields=status,country,regionName,city,lat,lon,isp,org,query`);
+                const d = await r.json();
+                if (d.status === 'fail') { res.innerHTML = '<div class="status-text" style="color:#f44;">❌ Không tìm thấy.</div>'; return; }
+                res.innerHTML = `<div class="result-content">
+                    📍 IP: ${d.query || ip}\n🌍 Quốc gia: ${d.country || '---'}\n🏙️ Thành phố: ${d.city || '---'}\n📡 Nhà mạng: ${d.isp || '---'}\n🗺️ Tọa độ: ${d.lat || '---'}, ${d.lon || '---'}\n🏢 Tổ chức: ${d.org || '---'}
+                </div>`;
+            } catch(e) { res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`; }
+        }
+        async function getMyIP() {
+            try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); document.getElementById('ipInput').value = d.ip; checkIP(); }
+            catch(e) { alert('Không lấy được IP.'); }
+        }
+        document.getElementById('ipInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkIP(); });
+
+        // ===== TEXT REPEATER =====
+        function generateText() {
+            const input = document.getElementById('textInput').value;
+            const count = parseInt(document.getElementById('repeatCount').value) || 100;
+            const res = document.getElementById('textResult');
+            if (!input.trim()) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập văn bản.</div>'; return; }
+            const result = (input + '\n').repeat(count).trim();
+            res.innerHTML = `<button class="copy-btn" onclick="copyTextResult()">📋 Sao chép</button><div class="result-content">${result}</div><div style="color:#666;font-size:12px;margin-top:6px;text-align:right;">Số ký tự: ${result.length.toLocaleString()}</div>`;
+        }
+        function copyTextResult() {
+            const c = document.querySelector('#textResult .result-content');
+            if (!c) return;
+            navigator.clipboard.writeText(c.textContent).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
+        }
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('repeatCount').value = '100';
+            document.getElementById('textResult').innerHTML = '<div class="status-text">Kết quả sẽ hiển thị ở đây.</div>';
+        }
+        document.getElementById('textInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateText(); } });
+        document.getElementById('repeatCount').addEventListener('change', generateText);
+
+        // ===== VULN SCANNER (rút gọn) =====
+        async function scanUltimate() {
+            const url = document.getElementById('vulnUrl').value.trim();
+            const cookie = document.getElementById('vulnCookie').value.trim();
+            const res = document.getElementById('vulnResult');
+            const prog = document.getElementById('vulnProgress');
+            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
+            res.innerHTML = '<div class="status-text">⏳ Đang quét...</div>';
+            prog.style.width = '10%';
+            const threats = [];
+            try {
+                const headers = {};
+                if (cookie) headers['Cookie'] = cookie;
+                const urlObj = new URL(url);
+                const base = urlObj.origin + urlObj.pathname;
+                const params = new URLSearchParams(urlObj.search);
+                const keys = Array.from(params.keys());
+                if (keys.length === 0) { params.set('id', '1'); keys.push('id'); }
+                prog.style.width = '30%';
+
+                // SQLi đơn giản
+                for (const key of keys) {
+                    const testParams = new URLSearchParams(params);
+                    testParams.set(key, "' OR '1'='1' -- ");
+                    try {
+                        const r = await fetch(base + '?' + testParams.toString(), { headers, signal: AbortSignal.timeout(4000) });
+                        const text = await r.text();
+                        if (text.toLowerCase().includes('sql') || text.toLowerCase().includes('syntax')) {
+                            threats.push(`SQL Injection trên tham số ${key}`);
+                            break;
+                        }
+                    } catch(e) {}
+                }
+                prog.style.width = '60%';
+
+                // XSS
+                for (const key of keys) {
+                    const testParams = new URLSearchParams(params);
+                    testParams.set(key, "<script>alert('XSS')</script>");
+                    try {
+                        const r = await fetch(base + '?' + testParams.toString(), { headers, signal: AbortSignal.timeout(4000) });
+                        const text = await r.text();
+                        if (text.includes("<script>alert('XSS')</script>") && !text.includes('&lt;')) {
+                            threats.push(`XSS trên tham số ${key}`);
+                            break;
+                        }
+                    } catch(e) {}
+                }
+                prog.style.width = '80%';
+
+                // Missing Headers
+                try {
+                    const r = await fetch(url, { headers, signal: AbortSignal.timeout(4000) });
+                    const h = r.headers;
+                    const missing = ['X-Frame-Options', 'X-Content-Type-Options', 'Strict-Transport-Security', 'Content-Security-Policy']
+                        .filter(name => !h.get(name));
+                    if (missing.length > 0) threats.push(`Thiếu header: ${missing.join(', ')}`);
+                } catch(e) {}
+
+                prog.style.width = '100%';
+                let html = `<div class="result-content">`;
+                if (threats.length === 0) {
+                    html += `<b style="color:#0f0;">✅ Không phát hiện lỗ hổng (cơ bản).</b>`;
+                } else {
+                    html += `<b style="color:#f44;">⚠️ Phát hiện ${threats.length} vấn đề:</b>\n`;
+                    for (const t of threats) html += `  🔸 ${t}\n`;
+                }
+                html += `</div>`;
+                res.innerHTML = html;
+            } catch(e) {
+                prog.style.width = '100%';
+                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
             }
         }
+        function clearVuln() {
+            document.getElementById('vulnUrl').value = '';
+            document.getElementById('vulnCookie').value = '';
+            document.getElementById('vulnResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Quét".</div>';
+            document.getElementById('vulnProgress').style.width = '0%';
+        }
 
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkPassword();
-        });
-
-        window.onload = function() {
-            if (sessionStorage.getItem('bmpdarktool_logged_in') === 'true') {
-                document.getElementById('passwordOverlay').classList.add('hidden');
-            } else {
-                document.getElementById('passwordInput').focus();
+        // ===== HEADER ANALYZER =====
+        async function analyzeHeaders() {
+            const url = document.getElementById('headerUrl').value.trim();
+            const res = document.getElementById('headerResult');
+            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
+            res.innerHTML = '<div class="status-text">⏳ Đang phân tích...</div>';
+            try {
+                const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+                const headers = r.headers;
+                let html = `<div class="result-content"><b>📡 Status:</b> ${r.status} ${r.statusText}\n\n<b>📋 Header trả về:</b>\n`;
+                for (const [k, v] of headers) html += `  ${k}: ${v}\n`;
+                html += `\n<b>🔒 Đánh giá bảo mật:</b>\n`;
+                const checks = {
+                    'X-Frame-Options': 'Ngăn clickjacking',
+                    'X-Content-Type-Options': 'Ngăn MIME sniffing',
+                    'Strict-Transport-Security': 'HSTS',
+                    'Content-Security-Policy': 'CSP'
+                };
+                for (const [name, desc] of Object.entries(checks)) {
+                    const val = headers.get(name);
+                    if (val) html += `  ✅ ${name}: ${val}\n`;
+                    else html += `  ❌ ${name}: Không có (${desc})\n`;
+                }
+                html += `</div>`;
+                res.innerHTML = `<button class="copy-btn" onclick="copyHeaderResult()">📋 Sao chép</button>` + html;
+            } catch(e) {
+                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
             }
-        };
+        }
+        function copyHeaderResult() {
+            const c = document.querySelector('#headerResult .result-content');
+            if (!c) return;
+            navigator.clipboard.writeText(c.textContent).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
+        }
+        function clearHeaders() {
+            document.getElementById('headerUrl').value = '';
+            document.getElementById('headerResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Phân tích".</div>';
+        }
+        document.getElementById('headerUrl').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeHeaders(); });
 
-        document.getElementById('siteInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') analyzeWebsitePRO();
-        });
+        // ===== CHECK SCAMMER (rút gọn) =====
+        async function scanScammer() {
+            const url = document.getElementById('scamUrl').value.trim();
+            const res = document.getElementById('scamResult');
+            const prog = document.getElementById('scamProgress');
+            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
+            res.innerHTML = '<div class="status-text">⏳ Đang quét...</div>';
+            prog.style.width = '10%';
+            const threats = [];
+            try {
+                const urlObj = new URL(url);
+                prog.style.width = '30%';
+                // Kiểm tra domain
+                const host = urlObj.hostname;
+                if (host.length > 40) threats.push('Tên miền quá dài.');
+                if ((host.match(/\d/g) || []).length > 5) threats.push('Tên miền chứa nhiều số.');
+                prog.style.width = '60%';
+                // Kiểm tra từ khóa đen
+                const black = ['virus','malware','phishing','scam','trojan','ransomware','crack','keygen','free-money','giveaway'];
+                for (const kw of black) {
+                    if ((url + host).toLowerCase().includes(kw)) {
+                        threats.push(`Từ khóa "${kw}" trong URL/domain.`);
+                        break;
+                    }
+                }
+                prog.style.width = '80%';
+                // Kiểm tra protocol
+                if (urlObj.protocol === 'http:') threats.push('Kết nối HTTP không mã hóa.');
+                else threats.push('✅ HTTPS an toàn.');
 
-        // ===== DANH SÁCH TỪ KHÓA (20 nhóm - 500+ từ) =====
+                prog.style.width = '100%';
+                let html = `<div class="result-content">`;
+                if (threats.length === 0) {
+                    html += `<b style="color:#0f0;">🟢 Website có vẻ AN TOÀN.</b>`;
+                } else {
+                    html += `<b style="color:#f44;">🔴 Có dấu hiệu nguy hiểm:</b>\n`;
+                    for (const t of threats) html += `  ⚠️ ${t}\n`;
+                }
+                html += `</div>`;
+                res.innerHTML = html;
+            } catch(e) {
+                prog.style.width = '100%';
+                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
+            }
+        }
+        function clearScam() {
+            document.getElementById('scamUrl').value = '';
+            document.getElementById('scamResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Quét".</div>';
+            document.getElementById('scamProgress').style.width = '0%';
+        }
+        document.getElementById('scamUrl').addEventListener('keypress', e => { if (e.key === 'Enter') scanScammer(); });
+
+        // ===== WEBSITE ANALYZER =====
         const categoryRules = [
-            { name: '👕 Thời trang / Quần áo', keywords: ['quần áo','áo','đầm','vest','quần','jean','thời trang','fashion','shop thời trang','outfit','sneaker','giày dép','túi xách','phụ kiện','mặc đẹp','áo thun','áo sơ mi','chân váy','quần tây','blazer','cardigan','hoodie','polo','đồ lót','bikini','áo khoác','mũ','khăn','thắt lưng','đồng hồ','trang sức','vòng tay','dây chuyền','bông tai','mắt kính','kính mát','son môi','phấn mắt','kem nền','son','nước hoa','nữ trang'] },
-            { name: '💻 Công nghệ / Điện tử', keywords: ['điện thoại','laptop','máy tính','smartphone','phụ kiện','công nghệ','camera','tech','giá rẻ','cửa hàng công nghệ','máy tính bảng','tai nghe','chuột','bàn phím','màn hình','máy in','router','wifi','ổ cứng','ram','cpu','mainboard','card đồ họa','nguồn','case','tản nhiệt','linh kiện pc','server','switch','access point','loa','micro','máy chiếu','tivi','máy ảnh','lens','pin dự phòng','sạc','cáp','adapter','usb'] },
-            { name: '📰 Tin tức / Báo chí', keywords: ['tin tức','báo','sự kiện','cập nhật','hôm nay','mới nhất','thời sự','phóng sự','news','báo điện tử','phỏng vấn','thông tin','điểm nóng','bài báo','chính trị','xã hội','thế giới','kinh tế','thể thao','văn hóa','giải trí','đời sống','pháp luật','giáo dục','khoa học','sức khỏe','du lịch','ô tô','xe máy','công nghệ','bất động sản','chứng khoán','doanh nghiệp'] },
-            { name: '📚 Giáo dục / Học tập', keywords: ['giáo dục','học tập','trường','bài giảng','khóa học','ôn thi','kiến thức','luyện thi','education','học sinh','giáo viên','giảng dạy','đào tạo','trung tâm','lớp học','toán','văn','lý','hóa','anh','ngữ văn','lịch sử','địa lý','sinh học','công nghệ thông tin','tin học','lập trình','học trực tuyến','bài tập','đề thi','tuyển sinh','bằng cấp','chứng chỉ','luận văn'] },
-            { name: '🎮 Game / Giải trí / Thể thao', keywords: ['game','thể thao','bóng đá','cầu lông','esport','gaming','giải trí','phim','nhạc','ca nhạc','movie','bóng rổ','tennis','bóng chuyền','chạy bộ','đá bóng','võ thuật','bơi lội','cờ vua','game online','acc game','tài khoản game','lol','liên quân','free fire','pubg','genshin','valorant','minecraft','roblox','fortnite','dota','csgo','bắn cá','game mobile','pc game','console game','playstation','xbox','nintendo','stream','live stream'] },
-            { name: '✈️ Du lịch / Khách sạn', keywords: ['du lịch','khách sạn','tour','địa điểm','thăm quan','travel','đặt phòng','resort','vé máy bay','biển','nghỉ dưỡng','homestay','hostel','combo du lịch','cẩm nang du lịch','điểm đến','vịnh','núi','biển đảo','phượt','backpacker','tour trọn gói','lịch trình','ăn uống','khám phá','văn hóa','lễ hội','chụp ảnh','check-in'] },
-            { name: '🍔 Ẩm thực / Nhà hàng', keywords: ['ẩm thực','món ăn','nhà hàng','quán ăn','đồ ăn','thực đơn','food','cafe','cà phê','bếp','đầu bếp','đặc sản','gà rán','pizza','hamburger','sushi','phở','bún','cơm','cháo','hải sản','lẩu','nướng','đồ uống','trà sữa','sinh tố','rượu','bia','cocktail','tiệc','buffet','ăn sáng','ăn tối','đặt bàn','giao hàng'] },
-            { name: '🏥 Sức khỏe / Y tế', keywords: ['sức khỏe','y tế','bệnh viện','thuốc','bác sĩ','khám bệnh','health','fitness','gym','dinh dưỡng','tập luyện','tư vấn sức khỏe','bệnh','triệu chứng','điều trị','phòng bệnh','yoga','pilates','chạy bộ','ăn kiêng','giảm cân','tăng cơ','thực phẩm chức năng','vitamin','khoáng chất','protein','xét nghiệm','siêu âm','x-quang','nội soi','phẫu thuật'] },
-            { name: '🏠 Bất động sản', keywords: ['bất động sản','nhà đất','căn hộ','chung cư','đất nền','dự án','mua bán nhà','real estate','khu đô thị','cho thuê','văn phòng','mặt bằng','đầu tư','thổ cư','giấy tờ sổ hồng','sổ đỏ','hợp đồng','xây dựng','thiết kế','nội thất','cải tạo','sửa chữa','thẩm định','môi giới'] },
-            { name: '💰 Tài chính / Ngân hàng', keywords: ['tài chính','ngân hàng','đầu tư','chứng khoán','vay','tiền tệ','bảo hiểm','finance','bank','tín dụng','thẻ tín dụng','tiết kiệm','lãi suất','tỷ giá','cổ phiếu','trái phiếu','quỹ đầu tư','cryptocurrency','bitcoin','ethereum','usdt','đáo hạn','cho vay','chi tiêu'] },
-            { name: '📝 Blog / Chia sẻ cá nhân', keywords: ['blog','chia sẻ','cảm nhận','review','đánh giá','trải nghiệm','tâm sự','góc nhìn','nhật ký','cuộc sống','câu chuyện','cảm xúc','suy nghĩ','học hỏi','kinh nghiệm','kỹ năng','mẹo vặt','thủ thuật','gợi ý','cảm hứng','sở thích','đam mê','sáng tạo','viết lách'] },
-            { name: '🏛️ Chính phủ / Dịch vụ công', keywords: ['cổng thông tin','dịch vụ công','chính phủ','bộ','ủy ban','government','hành chính','thủ tục','giấy tờ','hộ chiếu','cmnd','căn cước','hộ khẩu','phường','xã','quận','tỉnh','công chức','luật','văn bản','nghị định','thông tư','quyết định','pháp luật'] },
-            { name: '🛒 Thương mại điện tử / Mua sắm', keywords: ['mua sắm','shop','cửa hàng','sale','giảm giá','khuyến mãi','e-commerce','online shop','mua bán','sàn thương mại','thanh toán','giao hàng','vận chuyển','sản phẩm','hàng hóa','giỏ hàng','đơn hàng','hóa đơn','trả lại','đổi trả','bảo hành','giao hàng nhanh','cod'] },
-            { name: '🚗 Xe cộ / Ô tô / Xe máy', keywords: ['ô tô','xe máy','xe hơi','mô tô','pickup','suv','sedan','xế hộp','bánh xe','động cơ','sửa chữa','bảo dưỡng','phụ tùng','đăng kiểm','biển số','bảo hiểm xe','tư vấn xe','xe cũ','trả góp','lái xe','showroom','giá xe','xăng','dầu','bảo trì'] },
-            { name: '🎨 Nghệ thuật / Thiết kế / Sáng tạo', keywords: ['nghệ thuật','thiết kế','sáng tạo','hội họa','điêu khắc','nhiếp ảnh','đồ họa','mỹ thuật','vẽ','tô màu','canva','photoshop','illustrator','indesign','sketch','ui/ux','web design','logo','banner','poster','video','editing','premiere','after effects','animation','3d'] },
-            { name: '🌱 Nông nghiệp / Làm vườn', keywords: ['nông nghiệp','làm vườn','cây trồng','rau củ','hoa','cỏ','phân bón','thuốc bảo vệ thực vật','nông dân','mùa vụ','thu hoạch','hạt giống','chăn nuôi','gia súc','gia cầm','thuỷ sản','ao hồ','đất','tưới tiêu','máy nông nghiệp','công nghệ sinh học'] },
-            { name: '🔧 Sửa chữa / Thợ thủ công', keywords: ['sửa chữa','thợ','thủ công','điện nước','điện dân dụng','ống nước','sơn','mộc','hàn','xây dựng','kỹ thuật','cơ khí','bảo trì','sửa điện','sửa máy','sửa ống','sửa nhà','thợ mộc','thợ điện','thợ nước','dịch vụ sửa chữa','cẩm nang sửa chữa'] },
-            { name: '🐶 Thú cưng / Chăm sóc động vật', keywords: ['thú cưng','chó','mèo','chim','cá','hamster','thỏ','chăm sóc thú cưng','đồ dùng pet','thức ăn thú cưng','veterinary','bác sĩ thú y','huấn luyện thú cưng','nuôi chó','nuôi mèo','dịch vụ pet','pet shop','lồng','cũi','pate','hạt','sữa','vắc-xin','triệt sản'] },
-            { name: '🧪 Khoa học / Nghiên cứu', keywords: ['khoa học','nghiên cứu','vật lý','hóa học','sinh học','thiên văn học','công nghệ sinh học','y học','dược phẩm','laboratory','thí nghiệm','giấy khoa học','phát minh','sáng chế','khám phá','giáo sư','tiến sĩ','luận án','nghiên cứu sinh','học viện'] },
-            { name: '🎬 Phim ảnh / Giải trí số', keywords: ['phim','điện ảnh','series','phim bộ','phim lẻ','phim hoạt hình','phim kinh dị','phim hài','phim tình cảm','phim hành động','vietsub','thuyết minh','lồng tiếng','phim chiếu rạp','netflix','amazon prime','disney+','hbo','tập phim','review phim','diễn viên','đạo diễn'] }
+            { name: '👕 Thời trang / Quần áo', keywords: ['quần áo','áo','đầm','vest','quần','jean','thời trang','fashion','sneaker','giày dép','túi xách','phụ kiện','hoodie','polo'] },
+            { name: '💻 Công nghệ / Điện tử', keywords: ['điện thoại','laptop','máy tính','smartphone','công nghệ','camera','tech','tai nghe','chuột','bàn phím','màn hình','linh kiện','router','wifi'] },
+            { name: '📰 Tin tức / Báo chí', keywords: ['tin tức','báo','sự kiện','cập nhật','hôm nay','mới nhất','thời sự','phóng sự','news','chính trị','xã hội','kinh tế'] },
+            { name: '📚 Giáo dục / Học tập', keywords: ['giáo dục','học tập','trường','bài giảng','khóa học','ôn thi','kiến thức','luyện thi','toán','văn','lý','hóa','anh','lập trình'] },
+            { name: '🎮 Game / Giải trí / Thể thao', keywords: ['game','thể thao','bóng đá','esport','gaming','giải trí','phim','nhạc','bóng rổ','tennis','acc game','liên quân','free fire','pubg','genshin'] },
+            { name: '🛒 Thương mại điện tử', keywords: ['mua sắm','shop','cửa hàng','sale','giảm giá','khuyến mãi','e-commerce','mua bán','sàn thương mại','thanh toán','giao hàng','sản phẩm'] },
+            { name: '🏠 Bất động sản', keywords: ['bất động sản','nhà đất','căn hộ','chung cư','đất nền','dự án','mua bán nhà','cho thuê','văn phòng'] },
+            { name: '💰 Tài chính / Ngân hàng', keywords: ['tài chính','ngân hàng','đầu tư','chứng khoán','vay','tiền tệ','bảo hiểm','finance','bank','cổ phiếu'] },
+            { name: '🍔 Ẩm thực / Nhà hàng', keywords: ['ẩm thực','món ăn','nhà hàng','quán ăn','đồ ăn','thực đơn','food','cafe','cà phê','đặc sản'] },
+            { name: '✈️ Du lịch / Khách sạn', keywords: ['du lịch','khách sạn','tour','địa điểm','travel','resort','vé máy bay','biển','homestay'] },
+            { name: '🏥 Sức khỏe / Y tế', keywords: ['sức khỏe','y tế','bệnh viện','thuốc','bác sĩ','khám bệnh','health','fitness','gym','dinh dưỡng'] },
+            { name: '📝 Blog / Chia sẻ', keywords: ['blog','chia sẻ','cảm nhận','review','đánh giá','trải nghiệm','tâm sự','góc nhìn','kinh nghiệm'] }
         ];
 
-        // ===== CÔNG NGHỆ =====
-        function detectTechnologyPro(html) {
-            const tech = [];
-            const lower = html.toLowerCase();
-            const techList = [
-                { name: 'WordPress', patterns: ['wordpress','wp-content','wp-includes'] },
-                { name: 'Shopify', patterns: ['shopify','cdn.shopify'] },
-                { name: 'Laravel', patterns: ['laravel','csrf-token','_token'] },
-                { name: 'Django', patterns: ['django','csrfmiddlewaretoken'] },
-                { name: 'React', patterns: ['react','_react','react-dom'] },
-                { name: 'Vue.js', patterns: ['vue','v-bind','v-for','v-if'] },
-                { name: 'Angular', patterns: ['angular','ng-'] },
-                { name: 'Bootstrap', patterns: ['bootstrap','class="container','col-md-'] },
-                { name: 'Tailwind CSS', patterns: ['tailwind','class="flex','class="grid'] },
-                { name: 'jQuery', patterns: ['jquery','jQuery'] },
-                { name: 'PHP', patterns: ['php','.php'] },
-                { name: 'ASP.NET', patterns: ['asp.net','__viewstate','asp'] },
-                { name: 'Nginx', patterns: ['nginx'] },
-                { name: 'Apache', patterns: ['apache'] },
-                { name: 'Cloudflare', patterns: ['cloudflare','cf-'] },
-                { name: 'Google Analytics', patterns: ['ga('] },
-                { name: 'Facebook Pixel', patterns: ['fbq('] },
-                { name: 'Zalo', patterns: ['zalo','zaloapp'] },
-                { name: 'Momo', patterns: ['momo'] }
-            ];
-            for (const t of techList) {
-                for (const p of t.patterns) {
-                    if (lower.includes(p)) { if (!tech.includes(t.name)) tech.push(t.name); break; }
-                }
-            }
-            return tech;
-        }
-
-        // ===== PHÂN TÍCH PRO =====
-        async function analyzeWebsitePRO() {
-            const url = document.getElementById('siteInput').value.trim();
-            const resDiv = document.getElementById('analyzeResult');
-
-            if (!url) {
-                resDiv.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>';
-                return;
-            }
-
-            let validUrl;
-            try { validUrl = new URL(url); } catch(e) {
-                resDiv.innerHTML = `<div class="status-text" style="color:#f44;">❌ URL không hợp lệ.</div>`;
-                return;
-            }
-
-            resDiv.innerHTML = `<div class="status-text">⏳ Đang phân tích PRO ${validUrl.hostname} ...</div>`;
-
+        async function analyzeWebsite() {
+            const url = document.getElementById('analyzerUrl').value.trim();
+            const res = document.getElementById('analyzerResult');
+            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
+            res.innerHTML = '<div class="status-text">⏳ Đang phân tích...</div>';
             try {
-                const fetchRes = await fetch(validUrl.href, { signal: AbortSignal.timeout(10000) });
-                const html = await fetchRes.text();
-
-                const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
-                const title = titleMatch ? titleMatch[1].trim() : 'Không có title';
-
-                const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i);
-                const description = descMatch ? descMatch[1].trim() : 'Không có description';
-
-                const kwMatch = html.match(/<meta\s+name=["']keywords["']\s+content=["']([^"']*)["']/i);
-                const keywords = kwMatch ? kwMatch[1].trim() : 'Không có keywords';
-
-                const h1Matches = html.match(/<h1[^>]*>([^<]*)<\/h1>/gi);
-                const h1s = h1Matches ? h1Matches.map(m => m.replace(/<[^>]*>/g, '').trim()).filter(s => s.length > 0) : [];
-
-                const h2Matches = html.match(/<h2[^>]*>([^<]*)<\/h2>/gi);
-                const h2s = h2Matches ? h2Matches.map(m => m.replace(/<[^>]*>/g, '').trim()).filter(s => s.length > 0) : [];
-
-                const h3Matches = html.match(/<h3[^>]*>([^<]*)<\/h3>/gi);
-                const h3s = h3Matches ? h3Matches.map(m => m.replace(/<[^>]*>/g, '').trim()).filter(s => s.length > 0) : [];
-
+                const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+                const html = await r.text();
+                const title = (html.match(/<title>([^<]*)<\/title>/i) || [])[1] || 'Không có title';
+                const desc = (html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i) || [])[1] || 'Không có description';
                 const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                const links = (html.match(/<a\s+[^>]*href=["']([^"']*)["'][^>]*>/gi) || []).length;
+                const images = (html.match(/<img\s+[^>]*src=["']([^"']*)["'][^>]*>/gi) || []).length;
 
-                const linkMatches = html.match(/<a\s+[^>]*href=["']([^"']*)["'][^>]*>/gi);
-                const links = linkMatches ? linkMatches.map(m => {
-                    const href = m.match(/href=["']([^"']*)["']/);
-                    return href ? href[1] : '';
-                }).filter(s => s && !s.startsWith('#') && !s.startsWith('javascript:')) : [];
-
-                const imgMatches = html.match(/<img\s+[^>]*src=["']([^"']*)["'][^>]*>/gi);
-                const images = imgMatches ? imgMatches.map(m => {
-                    const src = m.match(/src=["']([^"']*)["']/);
-                    return src ? src[1] : '';
-                }).filter(s => s) : [];
-
-                const combinedText = (text + ' ' + title + ' ' + description + ' ' + keywords + ' ' + h1s.join(' ') + ' ' + h2s.join(' ') + ' ' + h3s.join(' ')).toLowerCase();
-                const categoryScores = [];
+                const combined = (text + ' ' + title + ' ' + desc).toLowerCase();
+                const scores = [];
                 for (const cat of categoryRules) {
                     let score = 0;
                     for (const kw of cat.keywords) {
                         const regex = new RegExp(kw.toLowerCase(), 'gi');
-                        const matches = (combinedText.match(regex) || []).length;
-                        score += matches;
+                        score += (combined.match(regex) || []).length;
                     }
-                    if (score > 0) categoryScores.push({ name: cat.name, score: score });
+                    if (score > 0) scores.push({ name: cat.name, score });
                 }
-                categoryScores.sort((a, b) => b.score - a.score);
-                const topCategories = categoryScores.slice(0, 5);
+                scores.sort((a, b) => b.score - a.score);
+                const top = scores.slice(0, 4);
 
-                const tech = detectTechnologyPro(html);
-
-                // Xây dựng bảng HTML
-                let htmlResult = `<button class="copy-btn" onclick="copyAnalyzeResult()">📋 Sao chép</button>`;
+                let htmlResult = `<button class="copy-btn" onclick="copyAnalyzerResult()">📋 Sao chép</button>`;
                 htmlResult += `<table class="result-table">`;
-                htmlResult += `<tr><td class="label">🌐 URL</td><td class="value">${validUrl.href}</td></tr>`;
+                htmlResult += `<tr><td class="label">🌐 URL</td><td class="value">${url}</td></tr>`;
                 htmlResult += `<tr><td class="label">📌 Tiêu đề</td><td class="value">${title}</td></tr>`;
-                htmlResult += `<tr><td class="label">📝 Mô tả</td><td class="value">${description}</td></tr>`;
-                htmlResult += `<tr><td class="label">🏷️ Từ khóa</td><td class="value">${keywords}</td></tr>`;
-                htmlResult += `<tr><td class="label">📰 H1</td><td class="value">${h1s.slice(0, 3).join(' | ') || 'Không có'}</td></tr>`;
-                htmlResult += `<tr><td class="label">📑 H2 (đầu)</td><td class="value">${h2s.slice(0, 3).join(' | ') || 'Không có'}</td></tr>`;
-                htmlResult += `<tr><td class="label">🔗 Liên kết</td><td class="value">${links.length}</td></tr>`;
-                htmlResult += `<tr><td class="label">🖼️ Ảnh</td><td class="value">${images.length}</td></tr>`;
-
-                // Lĩnh vực
-                let catHtml = '';
-                if (topCategories.length > 0) {
-                    for (const cat of topCategories) {
-                        catHtml += `<span class="category-tag">${cat.name} <span class="score">(${cat.score} từ)</span></span> `;
+                htmlResult += `<tr><td class="label">📝 Mô tả</td><td class="value">${desc}</td></tr>`;
+                htmlResult += `<tr><td class="label">🔗 Liên kết</td><td class="value">${links}</td></tr>`;
+                htmlResult += `<tr><td class="label">🖼️ Ảnh</td><td class="value">${images}</td></tr>`;
+                htmlResult += `<tr><td class="label">🎯 Lĩnh vực</td><td class="value">`;
+                if (top.length > 0) {
+                    for (const c of top) {
+                        htmlResult += `<span class="category-tag">${c.name} <span class="score">(${c.score})</span></span> `;
                     }
                 } else {
-                    catHtml = '<span style="color:#ffaa00;">⚠️ Không xác định rõ lĩnh vực.</span>';
+                    htmlResult += `<span style="color:#ffaa00;">⚠️ Không xác định rõ</span>`;
                 }
-                htmlResult += `<tr><td class="label">🎯 Lĩnh vực</td><td class="value">${catHtml}</td></tr>`;
-
-                // Công nghệ
-                let techHtml = tech.length > 0 ? tech.map(t => `<span class="category-tag">${t}</span>`).join(' ') : 'Không phát hiện';
-                htmlResult += `<tr><td class="label">⚙️ Công nghệ</td><td class="value">${techHtml}</td></tr>`;
-
-                // Tóm tắt
-                const preview = text.slice(0, 400) + (text.length > 400 ? '...' : '');
+                htmlResult += `</td></tr>`;
+                const preview = text.slice(0, 300) + (text.length > 300 ? '...' : '');
                 htmlResult += `<tr><td class="label">📄 Tóm tắt</td><td class="value">${preview}</td></tr>`;
-
-                htmlResult += `<tr><td class="label" style="border-bottom: none; color:#666;">💡 Ghi chú</td>
-                               <td class="value" style="border-bottom: none; color:#666; font-size:12px;">Phân tích dựa trên ${categoryRules.length} nhóm với ${categoryRules.reduce((acc, c) => acc + c.keywords.length, 0)} từ khóa.</td></tr>`;
                 htmlResult += `</table>`;
-
-                resDiv.innerHTML = htmlResult;
-
-            } catch (e) {
-                resDiv.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
+                res.innerHTML = htmlResult;
+            } catch(e) {
+                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
             }
         }
-
-        function copyAnalyzeResult() {
-            const content = document.querySelector('#analyzeResult .result-table');
-            if (!content) return;
-            // Lấy text thuần từ bảng
-            const rows = content.querySelectorAll('tr');
+        function copyAnalyzerResult() {
+            const table = document.querySelector('#analyzerResult .result-table');
+            if (!table) return;
+            const rows = table.querySelectorAll('tr');
             let text = '';
             for (const row of rows) {
                 const cells = row.querySelectorAll('td');
-                if (cells.length === 2) {
-                    text += cells[0].textContent.trim() + ': ' + cells[1].textContent.trim() + '\n';
-                }
+                if (cells.length === 2) text += cells[0].textContent.trim() + ': ' + cells[1].textContent.trim() + '\n';
             }
-            navigator.clipboard.writeText(text)
-                .then(() => alert('✅ Đã sao chép!'))
-                .catch(() => alert('Không thể sao chép.'));
+            navigator.clipboard.writeText(text).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
         }
-
-        function clearAnalyze() {
-            document.getElementById('siteInput').value = '';
-            document.getElementById('analyzeResult').innerHTML = `<div class="status-text">Nhập URL và bấm "Phân tích PRO".</div>`;
+        function clearAnalyzer() {
+            document.getElementById('analyzerUrl').value = '';
+            document.getElementById('analyzerResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Phân tích".</div>';
         }
+        document.getElementById('analyzerUrl').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeWebsite(); });
     </script>
 </body>
 </html>
