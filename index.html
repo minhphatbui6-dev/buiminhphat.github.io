@@ -159,7 +159,9 @@
             font-size: 14px;
         }
 
-        .tool-card input, .tool-card textarea, .tool-card select {
+        .tool-card input,
+        .tool-card textarea,
+        .tool-card select {
             width: 100%;
             padding: 12px 16px;
             background: #1a1a1a;
@@ -172,7 +174,8 @@
             margin-bottom: 12px;
         }
 
-        .tool-card input:focus, .tool-card textarea:focus {
+        .tool-card input:focus,
+        .tool-card textarea:focus {
             border-color: white;
         }
 
@@ -410,7 +413,7 @@
             width: 90%;
             text-align: center;
             border: 1px solid #222;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
         }
 
         .password-box .avatar-key {
@@ -497,9 +500,16 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
         }
     </style>
 </head>
@@ -744,7 +754,8 @@
         function copyResult(id) {
             const el = document.getElementById(id);
             let text = el.textContent;
-            if (text && !text.includes('📭') && !text.includes('🔍') && !text.includes('📝') && !text.includes('📋') && !text.includes('⚠️') && !text.includes('📊')) {
+            if (text && !text.includes('📭') && !text.includes('🔍') && !text.includes('📝') && !text.includes('📋') && !text
+                .includes('⚠️') && !text.includes('📊')) {
                 navigator.clipboard.writeText(text).then(() => {
                     const orig = el.textContent;
                     el.textContent = '✅ Đã sao chép!';
@@ -769,7 +780,8 @@
                 const res = await fetch(`https://ipapi.co/${input}/json/`);
                 const data = await res.json();
                 if (data.error) { result.textContent = '❌ ' + data.error; return; }
-                result.innerHTML = `
+                result.innerHTML =
+                    `
                     📍 <b>IP:</b> ${data.ip || 'N/A'}\n
                     🌍 <b>Quốc gia:</b> ${data.country_name || 'N/A'} (${data.country || 'N/A'})\n
                     🏙️ <b>Thành phố:</b> ${data.city || 'N/A'}\n
@@ -796,7 +808,7 @@
         }
 
         // ============================================================
-        // 2. TEXT REPEATER - FIXED COPY
+        // 2. TEXT REPEATER
         // ============================================================
         let lastRepeatedText = '';
 
@@ -821,7 +833,6 @@
                 el.textContent = '✅ Đã sao chép ' + lastRepeatedText.length + ' ký tự!';
                 setTimeout(() => el.textContent = orig, 1500);
             }).catch(() => {
-                // Fallback: copy bằng cách tạo textarea tạm
                 const textarea = document.createElement('textarea');
                 textarea.value = lastRepeatedText;
                 document.body.appendChild(textarea);
@@ -845,7 +856,7 @@
         }
 
         // ============================================================
-        // 3. VULN SCANNER
+        // 3. VULN SCANNER - FIXED CORS
         // ============================================================
         async function scanVuln() {
             const url = document.getElementById('vulnUrl').value.trim();
@@ -859,17 +870,21 @@
             if (cookie) headers['Cookie'] = cookie;
 
             try {
-                const res = await fetch(url, { headers });
+                // Sử dụng proxy để bypass CORS
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                const res = await fetch(proxyUrl, { headers });
                 const text = await res.text();
 
                 // SQL Injection test
                 if (url.includes('?') && url.includes('=')) {
                     const testUrl = url + "' OR '1'='1";
                     try {
-                        const testRes = await fetch(testUrl, { headers });
+                        const proxyTest = 'https://corsproxy.io/?' + encodeURIComponent(testUrl);
+                        const testRes = await fetch(proxyTest, { headers });
                         if (testRes.status === 200) {
                             const testText = await testRes.text();
-                            if (testText.includes('mysql') || testText.includes('sql') || testText.includes('database') || testText.includes('SQL')) {
+                            if (testText.includes('mysql') || testText.includes('sql') || testText.includes(
+                                    'database') || testText.includes('SQL')) {
                                 vulns.push('⚠️ Có dấu hiệu SQL Injection (lỗi SQL xuất hiện)');
                             }
                         }
@@ -877,20 +892,26 @@
                 }
 
                 // XSS test
-                if (text.includes('<script>') || text.includes('onerror=') || text.includes('onload=') || text.includes('javascript:')) {
+                if (text.includes('<script>') || text.includes('onerror=') || text.includes('onload=') || text
+                    .includes('javascript:')) {
                     vulns.push('⚠️ Phát hiện dấu hiệu XSS (thẻ script hoặc sự kiện JS)');
                 }
 
-                // Security Headers
-                const headersList = res.headers;
+                // Security Headers - kiểm tra từ response
                 const securityHeaders = {
-                    'X-Frame-Options': '⚠️ Thiếu X-Frame-Options (nguy cơ clickjacking)',
-                    'Content-Security-Policy': '⚠️ Thiếu CSP (nguy cơ XSS)',
-                    'Strict-Transport-Security': '⚠️ Thiếu HSTS (nguy cơ MITM)',
+                    'x-frame-options': '⚠️ Thiếu X-Frame-Options (nguy cơ clickjacking)',
+                    'content-security-policy': '⚠️ Thiếu CSP (nguy cơ XSS)',
+                    'strict-transport-security': '⚠️ Thiếu HSTS (nguy cơ MITM)',
                 };
+
+                // Lấy headers từ response (có thể không đầy đủ do proxy)
+                const headersList = res.headers;
+                let hasSecurity = false;
                 for (const [key, msg] of Object.entries(securityHeaders)) {
                     if (!headersList.get(key)) {
                         vulns.push(msg);
+                    } else {
+                        hasSecurity = true;
                     }
                 }
 
@@ -905,7 +926,7 @@
         }
 
         // ============================================================
-        // 4. HEADER ANALYZER
+        // 4. HEADER ANALYZER - FIXED CORS
         // ============================================================
         async function analyzeHeader() {
             const url = document.getElementById('headerUrl').value.trim();
@@ -914,20 +935,29 @@
             result.textContent = '⏳ Đang phân tích header...';
 
             try {
-                const res = await fetch(url);
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                const res = await fetch(proxyUrl);
                 const headers = res.headers;
+
                 let output = `📋 <b>Status Code:</b> ${res.status}\n\n`;
                 output += `<b>📋 Danh sách header:</b>\n`;
+
+                let hasHeaders = false;
                 headers.forEach((value, key) => {
                     output += `  ${key}: ${value}\n`;
+                    hasHeaders = true;
                 });
+
+                if (!hasHeaders) {
+                    output += `  (Không có header nào được trả về)\n`;
+                }
 
                 output += `\n<b>🔒 Đánh giá bảo mật:</b>\n`;
                 const securityHeaders = {
-                    'X-Frame-Options': '✅ Bảo vệ clickjacking',
-                    'Content-Security-Policy': '✅ Bảo vệ XSS',
-                    'Strict-Transport-Security': '✅ Bảo vệ MITM',
-                    'X-Content-Type-Options': '✅ Chống MIME sniffing',
+                    'x-frame-options': '✅ Bảo vệ clickjacking',
+                    'content-security-policy': '✅ Bảo vệ XSS',
+                    'strict-transport-security': '✅ Bảo vệ MITM',
+                    'x-content-type-options': '✅ Chống MIME sniffing',
                 };
                 let hasSecurity = false;
                 for (const [key, msg] of Object.entries(securityHeaders)) {
@@ -947,7 +977,7 @@
         }
 
         // ============================================================
-        // 5. CHECK SCAMMER
+        // 5. CHECK SCAMMER - FIXED CORS
         // ============================================================
         async function checkScammer() {
             const url = document.getElementById('scamUrl').value.trim();
@@ -975,15 +1005,18 @@
             } catch (e) {}
 
             // Blacklist keywords
-            const blacklist = ['virus', 'malware', 'phishing', 'scam', 'crack', 'giveaway', 'free', 'lucky', 'win', 'prize', 'bank', 'paypal', 'login', 'verify', 'update', 'security', 'alert', 'warning'];
+            const blacklist = ['virus', 'malware', 'phishing', 'scam', 'crack', 'giveaway', 'free', 'lucky', 'win',
+                'prize', 'bank', 'paypal', 'login', 'verify', 'update', 'security', 'alert', 'warning'
+            ];
             const found = blacklist.filter(kw => urlLower.includes(kw));
             if (found.length > 0) {
                 warnings.push(`⚠️ Từ khóa đen: ${found.join(', ')}`);
             }
 
-            // Check response
+            // Check response - dùng proxy
             try {
-                const res = await fetch(url);
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                const res = await fetch(proxyUrl);
                 if (res.status !== 200) {
                     warnings.push(`⚠️ Status code: ${res.status} - trang web không hợp lệ`);
                 }
@@ -999,7 +1032,7 @@
         }
 
         // ============================================================
-        // 6. WEBSITE ANALYZER
+        // 6. WEBSITE ANALYZER - FIXED CORS
         // ============================================================
         async function analyzeWebsite() {
             const url = document.getElementById('analyzeUrl').value.trim();
@@ -1008,7 +1041,8 @@
             result.textContent = '⏳ Đang phân tích website...';
 
             try {
-                const res = await fetch(url);
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                const res = await fetch(proxyUrl);
                 const html = await res.text();
 
                 // Parse title
@@ -1026,10 +1060,14 @@
                 // Detect category (keywords)
                 const keywords = {
                     'thời trang': ['thời trang', 'fashion', 'áo', 'quần', 'vải', 'style', 'trend', 'shopping'],
-                    'công nghệ': ['công nghệ', 'tech', 'điện thoại', 'laptop', 'máy tính', 'iphone', 'android', 'gadget', 'AI', 'công nghệ'],
+                    'công nghệ': ['công nghệ', 'tech', 'điện thoại', 'laptop', 'máy tính', 'iphone', 'android',
+                        'gadget', 'AI', 'công nghệ'
+                    ],
                     'tin tức': ['tin tức', 'news', 'báo', 'thời sự', 'sự kiện', 'vấn đề', 'cập nhật'],
                     'game': ['game', 'gaming', 'esport', 'đấu', 'cày', 'skin', 'online', 'mmo'],
-                    'thương mại điện tử': ['mua', 'bán', 'giá', 'sản phẩm', 'shop', 'store', 'ecommerce', 'thương mại', 'đặt hàng'],
+                    'thương mại điện tử': ['mua', 'bán', 'giá', 'sản phẩm', 'shop', 'store', 'ecommerce',
+                        'thương mại', 'đặt hàng'
+                    ],
                     'giải trí': ['giải trí', 'phim', 'nhạc', 'video', 'show', 'entertainment', 'music', 'movie'],
                     'giáo dục': ['giáo dục', 'học', 'trường', 'lớp', 'bài', 'kiến thức', 'education', 'study'],
                     'sức khỏe': ['sức khỏe', 'y tế', 'bệnh', 'điều trị', 'sức khoẻ', 'health', 'medical'],
@@ -1068,12 +1106,24 @@
         }
 
         // Enter key support for inputs
-        document.getElementById('ipInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkIP(); });
-        document.getElementById('repeatText').addEventListener('keypress', function(e) { if (e.key === 'Enter') repeatText(); });
-        document.getElementById('vulnUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') scanVuln(); });
-        document.getElementById('headerUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeHeader(); });
-        document.getElementById('scamUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkScammer(); });
-        document.getElementById('analyzeUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeWebsite(); });
+        document.getElementById('ipInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkIP();
+        });
+        document.getElementById('repeatText').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') repeatText();
+        });
+        document.getElementById('vulnUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') scanVuln();
+        });
+        document.getElementById('headerUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') analyzeHeader();
+        });
+        document.getElementById('scamUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkScammer();
+        });
+        document.getElementById('analyzeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') analyzeWebsite();
+        });
     </script>
 
 </body>
