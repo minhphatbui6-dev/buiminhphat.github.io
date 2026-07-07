@@ -365,7 +365,6 @@
             background: #555;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .home-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -600,8 +599,8 @@
                 </select>
                 <div class="btn-group">
                     <button class="btn" onclick="repeatText()">Tạo</button>
-                    <button class="btn btn-secondary" onclick="copyResult('repeatResult')">Sao chép</button>
-                    <button class="btn btn-danger" onclick="clearResult('repeatResult')">Xoá</button>
+                    <button class="btn btn-secondary" onclick="copyRepeaterResult()">Sao chép</button>
+                    <button class="btn btn-danger" onclick="clearRepeaterResult()">Xoá</button>
                 </div>
                 <div class="result-box" id="repeatResult">📝 Nhập văn bản và chọn số lần lặp...</div>
             </div>
@@ -743,13 +742,15 @@
 
         // ===== COPY RESULT =====
         function copyResult(id) {
-            const text = document.getElementById(id).textContent;
+            const el = document.getElementById(id);
+            let text = el.textContent;
             if (text && !text.includes('📭') && !text.includes('🔍') && !text.includes('📝') && !text.includes('📋') && !text.includes('⚠️') && !text.includes('📊')) {
                 navigator.clipboard.writeText(text).then(() => {
-                    const el = document.getElementById(id);
                     const orig = el.textContent;
                     el.textContent = '✅ Đã sao chép!';
                     setTimeout(() => el.textContent = orig, 1500);
+                }).catch(() => {
+                    alert('Không thể sao chép! Vui lòng thử lại.');
                 });
             } else {
                 alert('Không có dữ liệu để sao chép!');
@@ -795,15 +796,52 @@
         }
 
         // ============================================================
-        // 2. TEXT REPEATER
+        // 2. TEXT REPEATER - FIXED COPY
         // ============================================================
+        let lastRepeatedText = '';
+
         function repeatText() {
             const text = document.getElementById('repeatText').value.trim();
             const count = parseInt(document.getElementById('repeatCount').value);
             const result = document.getElementById('repeatResult');
             if (!text) { result.textContent = '❌ Vui lòng nhập văn bản!'; return; }
             const repeated = (text + '\n').repeat(count);
+            lastRepeatedText = repeated;
             result.textContent = repeated + `\n📊 Tổng ký tự: ${repeated.length}`;
+        }
+
+        function copyRepeaterResult() {
+            if (!lastRepeatedText) {
+                alert('❌ Không có dữ liệu để sao chép! Hãy tạo văn bản trước.');
+                return;
+            }
+            navigator.clipboard.writeText(lastRepeatedText).then(() => {
+                const el = document.getElementById('repeatResult');
+                const orig = el.textContent;
+                el.textContent = '✅ Đã sao chép ' + lastRepeatedText.length + ' ký tự!';
+                setTimeout(() => el.textContent = orig, 1500);
+            }).catch(() => {
+                // Fallback: copy bằng cách tạo textarea tạm
+                const textarea = document.createElement('textarea');
+                textarea.value = lastRepeatedText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const el = document.getElementById('repeatResult');
+                    const orig = el.textContent;
+                    el.textContent = '✅ Đã sao chép ' + lastRepeatedText.length + ' ký tự!';
+                    setTimeout(() => el.textContent = orig, 1500);
+                } catch (e) {
+                    alert('❌ Không thể sao chép! Vui lòng thử lại.');
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+
+        function clearRepeaterResult() {
+            document.getElementById('repeatResult').textContent = '📭 Đã xoá kết quả.';
+            lastRepeatedText = '';
         }
 
         // ============================================================
@@ -818,7 +856,6 @@
 
             const vulns = [];
             const headers = {};
-
             if (cookie) headers['Cookie'] = cookie;
 
             try {
@@ -1008,7 +1045,6 @@
                     if (score > 0) scores[category] = score;
                 }
 
-                // Sort categories by score
                 const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
                 const topCategory = sorted.length > 0 ? sorted[0][0] : 'Không xác định';
 
