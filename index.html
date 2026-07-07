@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BMPDarkTool</title>
     <style>
-        /* Reset & toàn cục */
         * {
             margin: 0;
             padding: 0;
@@ -18,124 +17,6 @@
             color: white;
             overflow-x: hidden;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Overlay nhập mật khẩu */
-        .password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(8px);
-            transition: opacity 0.5s ease;
-        }
-        .password-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .password-box {
-            background: #0a0a0a;
-            padding: 50px 40px;
-            border-radius: 20px;
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            border: 1px solid #222;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-        }
-        .password-box .avatar-key {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid white;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-        .password-box .title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: white;
-        }
-        .password-box .sub-title {
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-        .password-box input {
-            width: 100%;
-            padding: 16px 20px;
-            background: #111;
-            border: 2px solid #333;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            transition: 0.3s;
-        }
-        .password-box input::placeholder {
-            color: #555;
-            font-size: 16px;
-            letter-spacing: 2px;
-        }
-        .password-box input:focus {
-            border-color: white;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-        }
-        .password-box input.error {
-            border-color: #ff4444;
-            animation: shake 0.3s;
-        }
-        .password-box .error-msg {
-            color: #ff4444;
-            font-size: 13px;
-            margin-top: 10px;
-            min-height: 20px;
-        }
-        .password-box .btn-continue {
-            width: 100%;
-            padding: 14px;
-            background: white;
-            color: black;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .password-box .btn-continue:hover {
-            opacity: 0.8;
-            transform: scale(0.98);
-        }
-        .password-box .hint {
-            color: #666;
-            font-size: 13px;
-            margin-top: 18px;
-            letter-spacing: 1px;
-        }
-        .password-box .hint span {
-            color: white;
-            font-weight: bold;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
         }
 
         /* Navbar */
@@ -153,6 +34,7 @@
             padding: 0 20px;
             z-index: 1000;
         }
+
         .menu-btn {
             cursor: pointer;
             font-size: 18px;
@@ -166,6 +48,7 @@
         .menu-btn:hover {
             background: rgba(255,255,255,0.1);
         }
+
         .logo {
             font-size: 20px;
             font-weight: bold;
@@ -189,6 +72,7 @@
         .sidebar.active {
             left: 0;
         }
+
         .sidebar-header {
             display: flex;
             justify-content: space-between;
@@ -196,17 +80,21 @@
             padding: 0 20px 15px 20px;
             border-bottom: 1px solid #222;
         }
+
         .sidebar-header h2 {
             font-size: 20px;
             font-weight: bold;
         }
+
         .close {
             font-size: 24px;
             cursor: pointer;
         }
+
         .tool-list {
             padding: 10px 0;
         }
+
         .tool-item {
             padding: 12px 20px;
             cursor: pointer;
@@ -216,258 +104,244 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #aaa;
         }
         .tool-item:hover {
             background: #1a1a1a;
             padding-left: 28px;
-            color: #fff;
         }
-        .tool-item.active {
-            background: #1a1a1a;
-            color: #fff;
-            border-left: 3px solid white;
-        }
+
         .tool-item .icon {
             font-size: 18px;
             width: 24px;
             text-align: center;
         }
 
-        /* Nội dung chính */
+        /* Main Content */
         .main {
             margin-top: 75px;
             padding: 20px;
-            text-align: center;
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid white;
-            object-fit: cover;
-        }
-        .main p {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #ccc;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Tool content */
-        .tool-content {
+        .tool-container {
             display: none;
-            width: 100%;
-            margin-top: 20px;
-            text-align: left;
-            animation: fadeIn 0.25s ease;
+            animation: fadeIn 0.3s ease;
         }
-        .tool-content.active {
+
+        .tool-container.active {
             display: block;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .tool-content h2 {
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: #aaa;
-            text-align: center;
+
+        .tool-card {
+            background: #101010;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
         }
-        .tool-content .input-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
+
+        .tool-card h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
         }
-        .tool-content .input-group input,
-        .tool-content .input-group select {
-            flex: 1;
-            min-width: 160px;
-            padding: 10px 14px;
-            background: #111;
+
+        .tool-card label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .tool-card input, .tool-card textarea, .tool-card select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a1a1a;
             border: 1px solid #333;
             border-radius: 10px;
-            color: #fff;
+            color: white;
             font-size: 14px;
             outline: none;
-        }
-        .tool-content .input-group input:focus,
-        .tool-content .input-group select:focus {
-            border-color: #888;
-        }
-        .tool-content .input-group button {
-            padding: 10px 22px;
-            background: #fff;
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
             transition: 0.3s;
-        }
-        .tool-content .input-group button:hover {
-            opacity: 0.8;
-        }
-        .tool-content .input-group button.secondary {
-            background: #1a1a1a;
-            color: #fff;
-            border: 1px solid #444;
-        }
-        .tool-content .input-group button.secondary:hover {
-            background: #2a2a2a;
+            margin-bottom: 12px;
         }
 
-        .result-box {
-            margin-top: 10px;
-            background: #111;
-            border-radius: 12px;
-            padding: 16px;
+        .tool-card input:focus, .tool-card textarea:focus {
+            border-color: white;
+        }
+
+        .tool-card textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        .tool-card .result-box {
+            background: #0a0a0a;
             border: 1px solid #222;
-            max-height: 420px;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            max-height: 400px;
             overflow-y: auto;
-        }
-        .result-box .result-content {
-            color: #ddd;
             font-size: 14px;
+            line-height: 1.8;
             white-space: pre-wrap;
-            word-break: break-all;
-            line-height: 1.7;
-        }
-        .result-box .copy-btn {
-            float: right;
-            background: #222;
-            border: 1px solid #444;
-            color: #ccc;
-            padding: 4px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-        .result-box .copy-btn:hover {
-            background: #333;
-            color: #fff;
-        }
-        .status-text {
-            color: #888;
-            font-size: 14px;
-            text-align: center;
-            padding: 20px;
-        }
-        .good { color: #0f0; }
-        .bad { color: #f44; }
-        .warn { color: #ffaa00; }
-
-        .progress-bar {
-            width: 100%;
-            height: 3px;
-            background: #222;
-            border-radius: 4px;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-        .progress-bar .fill {
-            height: 100%;
-            width: 0%;
-            background: #0f0;
-            border-radius: 4px;
-            transition: width 0.3s;
+            word-wrap: break-word;
         }
 
-        .category-tag {
-            display: inline-block;
-            background: #1a1a1a;
-            padding: 2px 10px;
-            border-radius: 12px;
-            margin: 2px 4px 2px 0;
-            font-size: 13px;
-            border: 1px solid #333;
+        .tool-card .result-box .success {
+            color: #4caf50;
         }
-        .category-tag .score { color: #888; font-size: 11px; }
-
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
+        .tool-card .result-box .danger {
+            color: #ff4444;
         }
-        .result-table td {
-            padding: 6px 10px;
-            border-bottom: 1px solid #222;
-            vertical-align: top;
+        .tool-card .result-box .warning {
+            color: #ffa500;
         }
-        .result-table .label {
-            color: #888;
-            font-weight: bold;
-            width: 110px;
-            white-space: nowrap;
-        }
-        .result-table .value {
-            color: #ddd;
-            word-break: break-word;
+        .tool-card .result-box .info {
+            color: #4fc3f7;
         }
 
-        .box {
-            margin-top: 30px;
+        .btn-group {
             display: flex;
-            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 5px;
         }
-        .card {
-            width: 180px;
-            padding: 18px;
-            background: #101010;
-            border: none;
-            border-radius: 16px;
-            transition: 0.3s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            background: #1a1a1a;
-        }
-        .card h2 {
-            margin-bottom: 8px;
-            font-size: 20px;
-            font-weight: normal;
-            letter-spacing: 1px;
-        }
-        .card p {
-            margin: 8px 0;
-            color: #bbb;
-            font-size: 14px;
-        }
-        .card button {
-            margin-top: 12px;
-            padding: 8px 20px;
+
+        .btn {
+            padding: 10px 24px;
             background: white;
             color: black;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
+            transition: 0.3s;
             font-size: 14px;
         }
-        .card button:hover {
+
+        .btn:hover {
             opacity: 0.8;
             transform: scale(0.97);
         }
 
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid #333;
+        }
+
+        .btn-secondary:hover {
+            background: #1a1a1a;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #cc0000;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #388e3c;
+        }
+
+        .btn-warning {
+            background: #ffa500;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e69500;
+        }
+
+        .home-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .home-section .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .home-section h1 {
+            margin-top: 20px;
+            font-size: 36px;
+        }
+
+        .home-section p {
+            margin-top: 10px;
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .home-grid .item {
+            background: #101010;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .home-grid .item:hover {
+            background: #1a1a1a;
+            transform: translateY(-5px);
+            border-color: white;
+        }
+
+        .home-grid .item .icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .home-grid .item .name {
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        /* Footer */
         .footer {
             margin-top: 40px;
+            padding: 20px;
+            text-align: center;
             color: #666;
             font-size: 13px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
+            border-top: 1px solid #1a1a1a;
         }
+
         .footer a {
             color: #888;
             text-decoration: none;
@@ -475,19 +349,164 @@
         .footer a:hover {
             color: white;
         }
-        .footer .dot {
-            color: #444;
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
-        @media (max-width: 600px) {
-            .result-table .label { width: 70px; font-size: 12px; }
-            .main { padding: 15px; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .home-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tool-card {
+                padding: 15px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Password Overlay */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+            transition: opacity 0.5s ease;
+        }
+
+        .password-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .password-box {
+            background: #0a0a0a;
+            padding: 50px 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #222;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+        }
+
+        .password-box .avatar-key {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .password-box .title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .password-box .sub-title {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 16px 20px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .password-box input:focus {
+            border-color: white;
+        }
+
+        .password-box input.error {
+            border-color: #ff4444;
+            animation: shake 0.3s;
+        }
+
+        .password-box .error-msg {
+            color: #ff4444;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        .password-box .btn-continue {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .password-box .btn-continue:hover {
+            opacity: 0.8;
+            transform: scale(0.98);
+        }
+
+        .password-box .hint {
+            color: #666;
+            font-size: 13px;
+            margin-top: 18px;
+        }
+
+        .password-box .hint span {
+            color: white;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Overlay nhập mật khẩu -->
+    <!-- Password Overlay -->
     <div class="password-overlay" id="passwordOverlay">
         <div class="password-box">
             <img class="avatar-key" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
@@ -496,9 +515,7 @@
             <input type="password" id="passwordInput" placeholder="Nhập mật khẩu" />
             <div class="error-msg" id="errorMsg"></div>
             <button class="btn-continue" onclick="checkPassword()">TIẾP TỤC →</button>
-            <div class="hint">
-                🔑 Mật khẩu: <span>BMP123</span>
-            </div>
+            <div class="hint">🔑 Mật khẩu: <span>BMP123</span></div>
         </div>
     </div>
 
@@ -515,112 +532,145 @@
             <div class="close" onclick="toggleMenu()">✖</div>
         </div>
         <div class="tool-list">
-            <div class="tool-item active" data-tool="checkip"><span class="icon">🌐</span> Check IP</div>
-            <div class="tool-item" data-tool="repeater"><span class="icon">🔁</span> Text Repeater</div>
-            <div class="tool-item" data-tool="vuln"><span class="icon">🔍</span> Vuln Scanner</div>
-            <div class="tool-item" data-tool="header"><span class="icon">📋</span> Header Analyzer</div>
-            <div class="tool-item" data-tool="scammer"><span class="icon">⚠️</span> Check Scammer</div>
-            <div class="tool-item" data-tool="analyzer"><span class="icon">📊</span> Website Analyzer</div>
+            <div class="tool-item" onclick="showTool('home')"><span class="icon">🏠</span> Trang chủ</div>
+            <div class="tool-item" onclick="showTool('checkip')"><span class="icon">🌐</span> Check IP</div>
+            <div class="tool-item" onclick="showTool('repeater')"><span class="icon">🔁</span> Text Repeater</div>
+            <div class="tool-item" onclick="showTool('vuln')"><span class="icon">🔍</span> Vuln Scanner</div>
+            <div class="tool-item" onclick="showTool('header')"><span class="icon">📋</span> Header Analyzer</div>
+            <div class="tool-item" onclick="showTool('scammer')"><span class="icon">⚠️</span> Check Scammer</div>
+            <div class="tool-item" onclick="showTool('analyzer')"><span class="icon">📊</span> Website Analyzer</div>
         </div>
     </div>
 
-    <!-- Nội dung chính -->
-    <div class="main">
-        <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
-        <p>Website Profile &amp; Tool Collection</p>
+    <!-- Main Content -->
+    <div class="main" id="mainContent">
 
-        <!-- Tool 1: Check IP -->
-        <div class="tool-content active" id="tool-checkip">
-            <h2>🌐 Check IP</h2>
-            <div class="input-group">
-                <input type="text" id="ipInput" placeholder="Nhập IP hoặc tên miền..." value="8.8.8.8" />
-                <button onclick="checkIP()">Tra cứu</button>
-                <button class="secondary" onclick="getMyIP()">📡 IP của tôi</button>
+        <!-- HOME -->
+        <div class="tool-container active" id="tool-home">
+            <div class="home-section">
+                <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
+                <h1>BMPDarkTool</h1>
+                <p>Website Profile &amp; Tool Collection</p>
+                <div class="home-grid">
+                    <div class="item" onclick="showTool('checkip')"><span class="icon">🌐</span><span class="name">Check IP</span></div>
+                    <div class="item" onclick="showTool('repeater')"><span class="icon">🔁</span><span class="name">Text Repeater</span></div>
+                    <div class="item" onclick="showTool('vuln')"><span class="icon">🔍</span><span class="name">Vuln Scanner</span></div>
+                    <div class="item" onclick="showTool('header')"><span class="icon">📋</span><span class="name">Header Analyzer</span></div>
+                    <div class="item" onclick="showTool('scammer')"><span class="icon">⚠️</span><span class="name">Check Scammer</span></div>
+                    <div class="item" onclick="showTool('analyzer')"><span class="icon">📊</span><span class="name">Website Analyzer</span></div>
+                </div>
+                <div class="footer">
+                    <span>AA</span> <span class="dot">•</span>
+                    <a href="#" target="_blank">@hphatbui6-dev.github.io</a>
+                </div>
             </div>
-            <div class="result-box" id="ipResult"><div class="status-text">Nhập IP và bấm "Tra cứu".</div></div>
         </div>
 
-        <!-- Tool 2: Text Repeater -->
-        <div class="tool-content" id="tool-repeater">
-            <h2>🔁 Text Repeater</h2>
-            <div class="input-group">
-                <input type="text" id="textInput" placeholder="Nhập văn bản..." value="xin chào" style="flex:2;" />
+        <!-- CHECK IP -->
+        <div class="tool-container" id="tool-checkip">
+            <div class="tool-card">
+                <h2>🌐 Check IP</h2>
+                <label>Nhập IP hoặc tên miền:</label>
+                <input type="text" id="ipInput" placeholder="Ví dụ: 8.8.8.8 hoặc google.com" />
+                <div class="btn-group">
+                    <button class="btn" onclick="checkIP()">Tra cứu</button>
+                    <button class="btn btn-secondary" onclick="getMyIP()">IP của tôi</button>
+                    <button class="btn btn-danger" onclick="clearResult('ipResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="ipResult">🔍 Nhập IP hoặc tên miền để tra cứu...</div>
+            </div>
+        </div>
+
+        <!-- TEXT REPEATER -->
+        <div class="tool-container" id="tool-repeater">
+            <div class="tool-card">
+                <h2>🔁 Text Repeater</h2>
+                <label>Nhập văn bản:</label>
+                <input type="text" id="repeatText" placeholder="Ví dụ: xin chào" />
+                <label>Số lần lặp:</label>
                 <select id="repeatCount">
-                    <option value="10">10</option><option value="25">25</option>
-                    <option value="50">50</option><option value="100" selected>100</option>
-                    <option value="200">200</option><option value="500">500</option>
-                    <option value="1000">1000</option><option value="2000">2000</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100" selected>100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="2000">2000</option>
                 </select>
-                <button onclick="generateText()">Tạo</button>
-                <button class="secondary" onclick="clearText()">Xoá</button>
-            </div>
-            <div class="result-box" id="textResult"><div class="status-text">Kết quả sẽ hiển thị ở đây.</div></div>
-        </div>
-
-        <!-- Tool 3: Vuln Scanner -->
-        <div class="tool-content" id="tool-vuln">
-            <h2>🔍 Vuln Scanner</h2>
-            <div class="input-group">
-                <input type="text" id="vulnUrl" placeholder="URL (vd: http://target.com/page?id=1)" value="https://example.com" style="flex:2;" />
-                <input type="text" id="vulnCookie" placeholder="Cookie (nếu cần)" style="flex:1;" />
-                <button onclick="scanUltimate()">🚀 Quét</button>
-                <button class="secondary" onclick="clearVuln()">Xoá</button>
-            </div>
-            <div class="progress-bar"><div class="fill" id="vulnProgress"></div></div>
-            <div class="result-box" id="vulnResult"><div class="status-text">Nhập URL và bấm "Quét".</div></div>
-        </div>
-
-        <!-- Tool 4: Header Analyzer -->
-        <div class="tool-content" id="tool-header">
-            <h2>📋 Header Analyzer</h2>
-            <div class="input-group">
-                <input type="text" id="headerUrl" placeholder="URL (vd: https://example.com)" value="https://example.com" style="flex:2;" />
-                <button onclick="analyzeHeaders()">🔍 Phân tích</button>
-                <button class="secondary" onclick="clearHeaders()">Xoá</button>
-            </div>
-            <div class="result-box" id="headerResult"><div class="status-text">Nhập URL và bấm "Phân tích".</div></div>
-        </div>
-
-        <!-- Tool 5: Check Scammer -->
-        <div class="tool-content" id="tool-scammer">
-            <h2>⚠️ Check Scammer</h2>
-            <div class="input-group">
-                <input type="text" id="scamUrl" placeholder="URL cần kiểm tra..." value="https://example.com" style="flex:2;" />
-                <button onclick="scanScammer()">🔍 Quét</button>
-                <button class="secondary" onclick="clearScam()">Xoá</button>
-            </div>
-            <div class="progress-bar"><div class="fill" id="scamProgress"></div></div>
-            <div class="result-box" id="scamResult"><div class="status-text">Nhập URL và bấm "Quét".</div></div>
-        </div>
-
-        <!-- Tool 6: Website Analyzer -->
-        <div class="tool-content" id="tool-analyzer">
-            <h2>📊 Website Analyzer</h2>
-            <div class="input-group">
-                <input type="text" id="analyzerUrl" placeholder="URL cần phân tích..." value="https://example.com" style="flex:2;" />
-                <button onclick="analyzeWebsite()">📊 Phân tích</button>
-                <button class="secondary" onclick="clearAnalyzer()">Xoá</button>
-            </div>
-            <div class="result-box" id="analyzerResult"><div class="status-text">Nhập URL và bấm "Phân tích".</div></div>
-        </div>
-
-        <div class="box">
-            <div class="card">
-                <h2>📦 Kho Tool</h2>
-                <p>Bấm góc trái để mở tất cả công cụ.</p>
-                <button onclick="toggleMenu()">Mở Kho</button>
+                <div class="btn-group">
+                    <button class="btn" onclick="repeatText()">Tạo</button>
+                    <button class="btn btn-secondary" onclick="copyResult('repeatResult')">Sao chép</button>
+                    <button class="btn btn-danger" onclick="clearResult('repeatResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="repeatResult">📝 Nhập văn bản và chọn số lần lặp...</div>
             </div>
         </div>
 
-        <div class="footer">
-            <span>AA</span>
-            <span class="dot">•</span>
-            <a href="#" target="_blank">@hphatbui6-dev.github.io</a>
+        <!-- VULN SCANNER -->
+        <div class="tool-container" id="tool-vuln">
+            <div class="tool-card">
+                <h2>🔍 Vuln Scanner</h2>
+                <label>URL cần quét:</label>
+                <input type="text" id="vulnUrl" placeholder="http://target.com/page?id=1" />
+                <label>Cookie (nếu cần):</label>
+                <input type="text" id="vulnCookie" placeholder="session=abc123" />
+                <div class="btn-group">
+                    <button class="btn btn-warning" onclick="scanVuln()">Quét</button>
+                    <button class="btn btn-danger" onclick="clearResult('vulnResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="vulnResult">🔍 Nhập URL để quét lỗ hổng...</div>
+            </div>
         </div>
+
+        <!-- HEADER ANALYZER -->
+        <div class="tool-container" id="tool-header">
+            <div class="tool-card">
+                <h2>📋 Header Analyzer</h2>
+                <label>URL cần phân tích:</label>
+                <input type="text" id="headerUrl" placeholder="https://example.com" />
+                <div class="btn-group">
+                    <button class="btn" onclick="analyzeHeader()">Phân tích</button>
+                    <button class="btn btn-secondary" onclick="copyResult('headerResult')">Sao chép</button>
+                    <button class="btn btn-danger" onclick="clearResult('headerResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="headerResult">📋 Nhập URL để phân tích header...</div>
+            </div>
+        </div>
+
+        <!-- CHECK SCAMMER -->
+        <div class="tool-container" id="tool-scammer">
+            <div class="tool-card">
+                <h2>⚠️ Check Scammer</h2>
+                <label>URL cần kiểm tra:</label>
+                <input type="text" id="scamUrl" placeholder="https://example.com" />
+                <div class="btn-group">
+                    <button class="btn btn-warning" onclick="checkScammer()">Quét</button>
+                    <button class="btn btn-danger" onclick="clearResult('scamResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="scamResult">⚠️ Nhập URL để kiểm tra dấu hiệu lừa đảo...</div>
+            </div>
+        </div>
+
+        <!-- WEBSITE ANALYZER -->
+        <div class="tool-container" id="tool-analyzer">
+            <div class="tool-card">
+                <h2>📊 Website Analyzer</h2>
+                <label>URL cần phân tích:</label>
+                <input type="text" id="analyzeUrl" placeholder="https://example.com" />
+                <div class="btn-group">
+                    <button class="btn" onclick="analyzeWebsite()">Phân tích</button>
+                    <button class="btn btn-secondary" onclick="copyResult('analyzeResult')">Sao chép</button>
+                    <button class="btn btn-danger" onclick="clearResult('analyzeResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="analyzeResult">📊 Nhập URL để phân tích website...</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // ===== MẬT KHẨU =====
+        // ===== PASSWORD =====
         const PASSWORD = 'BMP123';
 
         function checkPassword() {
@@ -628,11 +678,13 @@
             const errorMsg = document.getElementById('errorMsg');
             const overlay = document.getElementById('passwordOverlay');
             const password = input.value.trim();
+
             if (!password) {
                 errorMsg.textContent = '❌ Vui lòng nhập mật khẩu!';
                 input.classList.add('error');
                 return;
             }
+
             if (password === PASSWORD) {
                 overlay.classList.add('hidden');
                 errorMsg.textContent = '';
@@ -643,7 +695,9 @@
                 input.classList.add('error');
                 input.value = '';
                 input.focus();
-                setTimeout(() => input.classList.remove('error'), 500);
+                setTimeout(() => {
+                    input.classList.remove('error');
+                }, 500);
             }
         }
 
@@ -667,319 +721,324 @@
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
             const menuBtn = document.querySelector('.menu-btn');
-            const cardBtn = document.querySelector('.card button');
             if (sidebar.classList.contains('active')) {
-                const isClickInside = sidebar.contains(event.target) || menuBtn.contains(event.target) || (cardBtn && cardBtn.contains(event.target));
-                if (!isClickInside) {
+                if (!sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
                     sidebar.classList.remove('active');
                 }
             }
         });
 
-        document.querySelectorAll('.tool-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.tool-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                const tool = this.dataset.tool;
-                document.querySelectorAll('.tool-content').forEach(c => c.classList.remove('active'));
-                const target = document.getElementById('tool-' + tool);
-                if (target) target.classList.add('active');
-                // đóng sidebar
-                document.getElementById('sidebar').classList.remove('active');
-            });
-        });
+        // ===== SHOW TOOL =====
+        function showTool(tool) {
+            document.querySelectorAll('.tool-container').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('tool-' + tool);
+            if (target) target.classList.add('active');
+            document.getElementById('sidebar').classList.remove('active');
+        }
 
-        // ===== CHECK IP =====
+        // ===== CLEAR RESULT =====
+        function clearResult(id) {
+            document.getElementById(id).textContent = '📭 Đã xoá kết quả.';
+        }
+
+        // ===== COPY RESULT =====
+        function copyResult(id) {
+            const text = document.getElementById(id).textContent;
+            if (text && !text.includes('📭') && !text.includes('🔍') && !text.includes('📝') && !text.includes('📋') && !text.includes('⚠️') && !text.includes('📊')) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const el = document.getElementById(id);
+                    const orig = el.textContent;
+                    el.textContent = '✅ Đã sao chép!';
+                    setTimeout(() => el.textContent = orig, 1500);
+                });
+            } else {
+                alert('Không có dữ liệu để sao chép!');
+            }
+        }
+
+        // ============================================================
+        // 1. CHECK IP
+        // ============================================================
         async function checkIP() {
-            const ip = document.getElementById('ipInput').value.trim();
-            const res = document.getElementById('ipResult');
-            if (!ip) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập IP.</div>'; return; }
-            res.innerHTML = '<div class="status-text">⏳ Đang tra cứu...</div>';
+            const input = document.getElementById('ipInput').value.trim();
+            const result = document.getElementById('ipResult');
+            if (!input) { result.textContent = '❌ Vui lòng nhập IP hoặc tên miền!'; return; }
+            result.textContent = '⏳ Đang tra cứu...';
             try {
-                const r = await fetch(`https://ip-api.com/json/${ip}?fields=status,country,regionName,city,lat,lon,isp,org,query`);
-                const d = await r.json();
-                if (d.status === 'fail') { res.innerHTML = '<div class="status-text" style="color:#f44;">❌ Không tìm thấy.</div>'; return; }
-                res.innerHTML = `<div class="result-content">
-                    📍 IP: ${d.query || ip}\n🌍 Quốc gia: ${d.country || '---'}\n🏙️ Thành phố: ${d.city || '---'}\n📡 Nhà mạng: ${d.isp || '---'}\n🗺️ Tọa độ: ${d.lat || '---'}, ${d.lon || '---'}\n🏢 Tổ chức: ${d.org || '---'}
-                </div>`;
-            } catch(e) { res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`; }
+                const res = await fetch(`https://ipapi.co/${input}/json/`);
+                const data = await res.json();
+                if (data.error) { result.textContent = '❌ ' + data.error; return; }
+                result.innerHTML = `
+                    📍 <b>IP:</b> ${data.ip || 'N/A'}\n
+                    🌍 <b>Quốc gia:</b> ${data.country_name || 'N/A'} (${data.country || 'N/A'})\n
+                    🏙️ <b>Thành phố:</b> ${data.city || 'N/A'}\n
+                    📡 <b>Nhà mạng:</b> ${data.org || data.isp || 'N/A'}\n
+                    📌 <b>Tọa độ:</b> ${data.latitude || 'N/A'}, ${data.longitude || 'N/A'}\n
+                    🏢 <b>Tổ chức:</b> ${data.org || 'N/A'}
+                `;
+            } catch (e) {
+                result.textContent = '❌ Lỗi kết nối! Vui lòng thử lại.';
+            }
         }
+
         async function getMyIP() {
-            try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); document.getElementById('ipInput').value = d.ip; checkIP(); }
-            catch(e) { alert('Không lấy được IP.'); }
+            const result = document.getElementById('ipResult');
+            result.textContent = '⏳ Đang lấy IP...';
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                document.getElementById('ipInput').value = data.ip;
+                await checkIP();
+            } catch (e) {
+                result.textContent = '❌ Không thể lấy IP!';
+            }
         }
-        document.getElementById('ipInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkIP(); });
 
-        // ===== TEXT REPEATER =====
-        function generateText() {
-            const input = document.getElementById('textInput').value;
-            const count = parseInt(document.getElementById('repeatCount').value) || 100;
-            const res = document.getElementById('textResult');
-            if (!input.trim()) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập văn bản.</div>'; return; }
-            const result = (input + '\n').repeat(count).trim();
-            res.innerHTML = `<button class="copy-btn" onclick="copyTextResult()">📋 Sao chép</button><div class="result-content">${result}</div><div style="color:#666;font-size:12px;margin-top:6px;text-align:right;">Số ký tự: ${result.length.toLocaleString()}</div>`;
+        // ============================================================
+        // 2. TEXT REPEATER
+        // ============================================================
+        function repeatText() {
+            const text = document.getElementById('repeatText').value.trim();
+            const count = parseInt(document.getElementById('repeatCount').value);
+            const result = document.getElementById('repeatResult');
+            if (!text) { result.textContent = '❌ Vui lòng nhập văn bản!'; return; }
+            const repeated = (text + '\n').repeat(count);
+            result.textContent = repeated + `\n📊 Tổng ký tự: ${repeated.length}`;
         }
-        function copyTextResult() {
-            const c = document.querySelector('#textResult .result-content');
-            if (!c) return;
-            navigator.clipboard.writeText(c.textContent).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
-        }
-        function clearText() {
-            document.getElementById('textInput').value = '';
-            document.getElementById('repeatCount').value = '100';
-            document.getElementById('textResult').innerHTML = '<div class="status-text">Kết quả sẽ hiển thị ở đây.</div>';
-        }
-        document.getElementById('textInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateText(); } });
-        document.getElementById('repeatCount').addEventListener('change', generateText);
 
-        // ===== VULN SCANNER =====
-        async function scanUltimate() {
+        // ============================================================
+        // 3. VULN SCANNER
+        // ============================================================
+        async function scanVuln() {
             const url = document.getElementById('vulnUrl').value.trim();
             const cookie = document.getElementById('vulnCookie').value.trim();
-            const res = document.getElementById('vulnResult');
-            const prog = document.getElementById('vulnProgress');
-            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
-            res.innerHTML = '<div class="status-text">⏳ Đang quét...</div>';
-            prog.style.width = '10%';
-            const threats = [];
-            try {
-                const headers = {};
-                if (cookie) headers['Cookie'] = cookie;
-                const urlObj = new URL(url);
-                const base = urlObj.origin + urlObj.pathname;
-                const params = new URLSearchParams(urlObj.search);
-                const keys = Array.from(params.keys());
-                if (keys.length === 0) { params.set('id', '1'); keys.push('id'); }
-                prog.style.width = '30%';
-                // SQLi
-                for (const key of keys) {
-                    const testParams = new URLSearchParams(params);
-                    testParams.set(key, "' OR '1'='1' -- ");
-                    try {
-                        const r = await fetch(base + '?' + testParams.toString(), { headers, signal: AbortSignal.timeout(4000) });
-                        const text = await r.text();
-                        if (text.toLowerCase().includes('sql') || text.toLowerCase().includes('syntax')) {
-                            threats.push(`SQL Injection trên tham số ${key}`);
-                            break;
-                        }
-                    } catch(e) {}
-                }
-                prog.style.width = '60%';
-                // XSS
-                for (const key of keys) {
-                    const testParams = new URLSearchParams(params);
-                    testParams.set(key, "<script>alert('XSS')</script>");
-                    try {
-                        const r = await fetch(base + '?' + testParams.toString(), { headers, signal: AbortSignal.timeout(4000) });
-                        const text = await r.text();
-                        if (text.includes("<script>alert('XSS')</script>") && !text.includes('&lt;')) {
-                            threats.push(`XSS trên tham số ${key}`);
-                            break;
-                        }
-                    } catch(e) {}
-                }
-                prog.style.width = '80%';
-                // Missing Headers
-                try {
-                    const r = await fetch(url, { headers, signal: AbortSignal.timeout(4000) });
-                    const h = r.headers;
-                    const missing = ['X-Frame-Options', 'X-Content-Type-Options', 'Strict-Transport-Security', 'Content-Security-Policy']
-                        .filter(name => !h.get(name));
-                    if (missing.length > 0) threats.push(`Thiếu header: ${missing.join(', ')}`);
-                } catch(e) {}
-                prog.style.width = '100%';
-                let html = `<div class="result-content">`;
-                if (threats.length === 0) {
-                    html += `<b style="color:#0f0;">✅ Không phát hiện lỗ hổng (cơ bản).</b>`;
-                } else {
-                    html += `<b style="color:#f44;">⚠️ Phát hiện ${threats.length} vấn đề:</b>\n`;
-                    for (const t of threats) html += `  🔸 ${t}\n`;
-                }
-                html += `</div>`;
-                res.innerHTML = html;
-            } catch(e) {
-                prog.style.width = '100%';
-                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
-            }
-        }
-        function clearVuln() {
-            document.getElementById('vulnUrl').value = '';
-            document.getElementById('vulnCookie').value = '';
-            document.getElementById('vulnResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Quét".</div>';
-            document.getElementById('vulnProgress').style.width = '0%';
-        }
+            const result = document.getElementById('vulnResult');
+            if (!url) { result.textContent = '❌ Vui lòng nhập URL!'; return; }
+            result.textContent = '⏳ Đang quét lỗ hổng...';
 
-        // ===== HEADER ANALYZER =====
-        async function analyzeHeaders() {
-            const url = document.getElementById('headerUrl').value.trim();
-            const res = document.getElementById('headerResult');
-            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
-            res.innerHTML = '<div class="status-text">⏳ Đang phân tích...</div>';
+            const vulns = [];
+            const headers = {};
+
+            if (cookie) headers['Cookie'] = cookie;
+
             try {
-                const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
-                const headers = r.headers;
-                let html = `<div class="result-content"><b>📡 Status:</b> ${r.status} ${r.statusText}\n\n<b>📋 Header trả về:</b>\n`;
-                for (const [k, v] of headers) html += `  ${k}: ${v}\n`;
-                html += `\n<b>🔒 Đánh giá bảo mật:</b>\n`;
-                const checks = {
-                    'X-Frame-Options': 'Ngăn clickjacking',
-                    'X-Content-Type-Options': 'Ngăn MIME sniffing',
-                    'Strict-Transport-Security': 'HSTS',
-                    'Content-Security-Policy': 'CSP'
+                const res = await fetch(url, { headers });
+                const text = await res.text();
+
+                // SQL Injection test
+                if (url.includes('?') && url.includes('=')) {
+                    const testUrl = url + "' OR '1'='1";
+                    try {
+                        const testRes = await fetch(testUrl, { headers });
+                        if (testRes.status === 200) {
+                            const testText = await testRes.text();
+                            if (testText.includes('mysql') || testText.includes('sql') || testText.includes('database') || testText.includes('SQL')) {
+                                vulns.push('⚠️ Có dấu hiệu SQL Injection (lỗi SQL xuất hiện)');
+                            }
+                        }
+                    } catch (e) {}
+                }
+
+                // XSS test
+                if (text.includes('<script>') || text.includes('onerror=') || text.includes('onload=') || text.includes('javascript:')) {
+                    vulns.push('⚠️ Phát hiện dấu hiệu XSS (thẻ script hoặc sự kiện JS)');
+                }
+
+                // Security Headers
+                const headersList = res.headers;
+                const securityHeaders = {
+                    'X-Frame-Options': '⚠️ Thiếu X-Frame-Options (nguy cơ clickjacking)',
+                    'Content-Security-Policy': '⚠️ Thiếu CSP (nguy cơ XSS)',
+                    'Strict-Transport-Security': '⚠️ Thiếu HSTS (nguy cơ MITM)',
                 };
-                for (const [name, desc] of Object.entries(checks)) {
-                    const val = headers.get(name);
-                    if (val) html += `  ✅ ${name}: ${val}\n`;
-                    else html += `  ❌ ${name}: Không có (${desc})\n`;
+                for (const [key, msg] of Object.entries(securityHeaders)) {
+                    if (!headersList.get(key)) {
+                        vulns.push(msg);
+                    }
                 }
-                html += `</div>`;
-                res.innerHTML = `<button class="copy-btn" onclick="copyHeaderResult()">📋 Sao chép</button>` + html;
-            } catch(e) {
-                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
+
+                if (vulns.length === 0) {
+                    result.innerHTML = '✅ <span class="success">Không phát hiện lỗ hổng cơ bản!</span>';
+                } else {
+                    result.innerHTML = '🔍 <b>Phát hiện lỗ hổng:</b>\n' + vulns.map(v => '• ' + v).join('\n');
+                }
+            } catch (e) {
+                result.textContent = '❌ Không thể kết nối đến URL! Vui lòng kiểm tra lại.';
             }
         }
-        function copyHeaderResult() {
-            const c = document.querySelector('#headerResult .result-content');
-            if (!c) return;
-            navigator.clipboard.writeText(c.textContent).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
-        }
-        function clearHeaders() {
-            document.getElementById('headerUrl').value = '';
-            document.getElementById('headerResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Phân tích".</div>';
-        }
-        document.getElementById('headerUrl').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeHeaders(); });
 
-        // ===== CHECK SCAMMER =====
-        async function scanScammer() {
+        // ============================================================
+        // 4. HEADER ANALYZER
+        // ============================================================
+        async function analyzeHeader() {
+            const url = document.getElementById('headerUrl').value.trim();
+            const result = document.getElementById('headerResult');
+            if (!url) { result.textContent = '❌ Vui lòng nhập URL!'; return; }
+            result.textContent = '⏳ Đang phân tích header...';
+
+            try {
+                const res = await fetch(url);
+                const headers = res.headers;
+                let output = `📋 <b>Status Code:</b> ${res.status}\n\n`;
+                output += `<b>📋 Danh sách header:</b>\n`;
+                headers.forEach((value, key) => {
+                    output += `  ${key}: ${value}\n`;
+                });
+
+                output += `\n<b>🔒 Đánh giá bảo mật:</b>\n`;
+                const securityHeaders = {
+                    'X-Frame-Options': '✅ Bảo vệ clickjacking',
+                    'Content-Security-Policy': '✅ Bảo vệ XSS',
+                    'Strict-Transport-Security': '✅ Bảo vệ MITM',
+                    'X-Content-Type-Options': '✅ Chống MIME sniffing',
+                };
+                let hasSecurity = false;
+                for (const [key, msg] of Object.entries(securityHeaders)) {
+                    if (headers.get(key)) {
+                        output += `  ✅ ${msg}\n`;
+                        hasSecurity = true;
+                    }
+                }
+                if (!hasSecurity) {
+                    output += `  ⚠️ Không có header bảo mật nào được tìm thấy!`;
+                }
+
+                result.innerHTML = output;
+            } catch (e) {
+                result.textContent = '❌ Không thể kết nối đến URL! Vui lòng kiểm tra lại.';
+            }
+        }
+
+        // ============================================================
+        // 5. CHECK SCAMMER
+        // ============================================================
+        async function checkScammer() {
             const url = document.getElementById('scamUrl').value.trim();
-            const res = document.getElementById('scamResult');
-            const prog = document.getElementById('scamProgress');
-            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
-            res.innerHTML = '<div class="status-text">⏳ Đang quét...</div>';
-            prog.style.width = '10%';
-            const threats = [];
+            const result = document.getElementById('scamResult');
+            if (!url) { result.textContent = '❌ Vui lòng nhập URL!'; return; }
+            result.textContent = '⏳ Đang quét...';
+
+            const warnings = [];
+            const urlLower = url.toLowerCase();
+
+            // Check HTTP
+            if (urlLower.startsWith('http://')) {
+                warnings.push('⚠️ Giao thức HTTP không an toàn! (không mã hóa)');
+            }
+
+            // Check domain length
             try {
-                const urlObj = new URL(url);
-                prog.style.width = '30%';
-                const host = urlObj.hostname;
-                if (host.length > 40) threats.push('Tên miền quá dài.');
-                if ((host.match(/\d/g) || []).length > 5) threats.push('Tên miền chứa nhiều số.');
-                prog.style.width = '60%';
-                const black = ['virus','malware','phishing','scam','trojan','ransomware','crack','keygen','free-money','giveaway'];
-                for (const kw of black) {
-                    if ((url + host).toLowerCase().includes(kw)) {
-                        threats.push(`Từ khóa "${kw}" trong URL/domain.`);
-                        break;
-                    }
+                const domain = new URL(url).hostname;
+                if (domain.length > 30) {
+                    warnings.push('⚠️ Tên miền dài (>30 ký tự) - dấu hiệu lừa đảo');
                 }
-                prog.style.width = '80%';
-                if (urlObj.protocol === 'http:') threats.push('Kết nối HTTP không mã hóa.');
-                else threats.push('✅ HTTPS an toàn.');
-                prog.style.width = '100%';
-                let html = `<div class="result-content">`;
-                if (threats.length === 0) {
-                    html += `<b style="color:#0f0;">🟢 Website có vẻ AN TOÀN.</b>`;
-                } else {
-                    html += `<b style="color:#f44;">🔴 Có dấu hiệu nguy hiểm:</b>\n`;
-                    for (const t of threats) html += `  ⚠️ ${t}\n`;
+                if ((domain.match(/\d/g) || []).length > 4) {
+                    warnings.push('⚠️ Tên miền chứa nhiều số - dấu hiệu lừa đảo');
                 }
-                html += `</div>`;
-                res.innerHTML = html;
-            } catch(e) {
-                prog.style.width = '100%';
-                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
+            } catch (e) {}
+
+            // Blacklist keywords
+            const blacklist = ['virus', 'malware', 'phishing', 'scam', 'crack', 'giveaway', 'free', 'lucky', 'win', 'prize', 'bank', 'paypal', 'login', 'verify', 'update', 'security', 'alert', 'warning'];
+            const found = blacklist.filter(kw => urlLower.includes(kw));
+            if (found.length > 0) {
+                warnings.push(`⚠️ Từ khóa đen: ${found.join(', ')}`);
+            }
+
+            // Check response
+            try {
+                const res = await fetch(url);
+                if (res.status !== 200) {
+                    warnings.push(`⚠️ Status code: ${res.status} - trang web không hợp lệ`);
+                }
+            } catch (e) {
+                warnings.push('⚠️ Không thể kết nối đến trang web!');
+            }
+
+            if (warnings.length === 0) {
+                result.innerHTML = '✅ <span class="success">AN TOÀN - Không phát hiện dấu hiệu lừa đảo!</span>';
+            } else {
+                result.innerHTML = '⚠️ <b>Phát hiện dấu hiệu nguy hiểm:</b>\n' + warnings.map(w => '• ' + w).join('\n');
             }
         }
-        function clearScam() {
-            document.getElementById('scamUrl').value = '';
-            document.getElementById('scamResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Quét".</div>';
-            document.getElementById('scamProgress').style.width = '0%';
-        }
-        document.getElementById('scamUrl').addEventListener('keypress', e => { if (e.key === 'Enter') scanScammer(); });
 
-        // ===== WEBSITE ANALYZER =====
-        const categoryRules = [
-            { name: '👕 Thời trang / Quần áo', keywords: ['quần áo','áo','đầm','vest','quần','jean','thời trang','fashion','sneaker','giày dép','túi xách','phụ kiện','hoodie','polo'] },
-            { name: '💻 Công nghệ / Điện tử', keywords: ['điện thoại','laptop','máy tính','smartphone','công nghệ','camera','tech','tai nghe','chuột','bàn phím','màn hình','linh kiện','router','wifi'] },
-            { name: '📰 Tin tức / Báo chí', keywords: ['tin tức','báo','sự kiện','cập nhật','hôm nay','mới nhất','thời sự','phóng sự','news','chính trị','xã hội','kinh tế'] },
-            { name: '📚 Giáo dục / Học tập', keywords: ['giáo dục','học tập','trường','bài giảng','khóa học','ôn thi','kiến thức','luyện thi','toán','văn','lý','hóa','anh','lập trình'] },
-            { name: '🎮 Game / Giải trí / Thể thao', keywords: ['game','thể thao','bóng đá','esport','gaming','giải trí','phim','nhạc','bóng rổ','tennis','acc game','liên quân','free fire','pubg','genshin'] },
-            { name: '🛒 Thương mại điện tử', keywords: ['mua sắm','shop','cửa hàng','sale','giảm giá','khuyến mãi','e-commerce','mua bán','sàn thương mại','thanh toán','giao hàng','sản phẩm'] },
-            { name: '🏠 Bất động sản', keywords: ['bất động sản','nhà đất','căn hộ','chung cư','đất nền','dự án','mua bán nhà','cho thuê','văn phòng'] },
-            { name: '💰 Tài chính / Ngân hàng', keywords: ['tài chính','ngân hàng','đầu tư','chứng khoán','vay','tiền tệ','bảo hiểm','finance','bank','cổ phiếu'] },
-            { name: '🍔 Ẩm thực / Nhà hàng', keywords: ['ẩm thực','món ăn','nhà hàng','quán ăn','đồ ăn','thực đơn','food','cafe','cà phê','đặc sản'] },
-            { name: '✈️ Du lịch / Khách sạn', keywords: ['du lịch','khách sạn','tour','địa điểm','travel','resort','vé máy bay','biển','homestay'] },
-            { name: '🏥 Sức khỏe / Y tế', keywords: ['sức khỏe','y tế','bệnh viện','thuốc','bác sĩ','khám bệnh','health','fitness','gym','dinh dưỡng'] },
-            { name: '📝 Blog / Chia sẻ', keywords: ['blog','chia sẻ','cảm nhận','review','đánh giá','trải nghiệm','tâm sự','góc nhìn','kinh nghiệm'] }
-        ];
-
+        // ============================================================
+        // 6. WEBSITE ANALYZER
+        // ============================================================
         async function analyzeWebsite() {
-            const url = document.getElementById('analyzerUrl').value.trim();
-            const res = document.getElementById('analyzerResult');
-            if (!url) { res.innerHTML = '<div class="status-text" style="color:#f44;">⚠️ Vui lòng nhập URL.</div>'; return; }
-            res.innerHTML = '<div class="status-text">⏳ Đang phân tích...</div>';
+            const url = document.getElementById('analyzeUrl').value.trim();
+            const result = document.getElementById('analyzeResult');
+            if (!url) { result.textContent = '❌ Vui lòng nhập URL!'; return; }
+            result.textContent = '⏳ Đang phân tích website...';
+
             try {
-                const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
-                const html = await r.text();
-                const title = (html.match(/<title>([^<]*)<\/title>/i) || [])[1] || 'Không có title';
-                const desc = (html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i) || [])[1] || 'Không có description';
-                const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-                const links = (html.match(/<a\s+[^>]*href=["']([^"']*)["'][^>]*>/gi) || []).length;
-                const images = (html.match(/<img\s+[^>]*src=["']([^"']*)["'][^>]*>/gi) || []).length;
+                const res = await fetch(url);
+                const html = await res.text();
 
-                const combined = (text + ' ' + title + ' ' + desc).toLowerCase();
-                const scores = [];
-                for (const cat of categoryRules) {
+                // Parse title
+                const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+                const title = titleMatch ? titleMatch[1].trim() : 'Không có tiêu đề';
+
+                // Parse meta description
+                const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["'](.*?)["']/i);
+                const description = descMatch ? descMatch[1].trim() : 'Không có mô tả';
+
+                // Count links
+                const links = (html.match(/<a\s+href=/gi) || []).length;
+                const images = (html.match(/<img\s+src=/gi) || []).length;
+
+                // Detect category (keywords)
+                const keywords = {
+                    'thời trang': ['thời trang', 'fashion', 'áo', 'quần', 'vải', 'style', 'trend', 'shopping'],
+                    'công nghệ': ['công nghệ', 'tech', 'điện thoại', 'laptop', 'máy tính', 'iphone', 'android', 'gadget', 'AI', 'công nghệ'],
+                    'tin tức': ['tin tức', 'news', 'báo', 'thời sự', 'sự kiện', 'vấn đề', 'cập nhật'],
+                    'game': ['game', 'gaming', 'esport', 'đấu', 'cày', 'skin', 'online', 'mmo'],
+                    'thương mại điện tử': ['mua', 'bán', 'giá', 'sản phẩm', 'shop', 'store', 'ecommerce', 'thương mại', 'đặt hàng'],
+                    'giải trí': ['giải trí', 'phim', 'nhạc', 'video', 'show', 'entertainment', 'music', 'movie'],
+                    'giáo dục': ['giáo dục', 'học', 'trường', 'lớp', 'bài', 'kiến thức', 'education', 'study'],
+                    'sức khỏe': ['sức khỏe', 'y tế', 'bệnh', 'điều trị', 'sức khoẻ', 'health', 'medical'],
+                    'ẩm thực': ['ẩm thực', 'món ăn', 'công thức', 'nấu', 'bếp', 'food', 'recipe', 'cooking']
+                };
+
+                let scores = {};
+                for (const [category, words] of Object.entries(keywords)) {
                     let score = 0;
-                    for (const kw of cat.keywords) {
-                        const regex = new RegExp(kw.toLowerCase(), 'gi');
-                        score += (combined.match(regex) || []).length;
+                    for (const word of words) {
+                        if (html.toLowerCase().includes(word.toLowerCase())) score++;
                     }
-                    if (score > 0) scores.push({ name: cat.name, score });
+                    if (score > 0) scores[category] = score;
                 }
-                scores.sort((a, b) => b.score - a.score);
-                const top = scores.slice(0, 4);
 
-                let htmlResult = `<button class="copy-btn" onclick="copyAnalyzerResult()">📋 Sao chép</button>`;
-                htmlResult += `<table class="result-table">`;
-                htmlResult += `<tr><td class="label">🌐 URL</td><td class="value">${url}</td></tr>`;
-                htmlResult += `<tr><td class="label">📌 Tiêu đề</td><td class="value">${title}</td></tr>`;
-                htmlResult += `<tr><td class="label">📝 Mô tả</td><td class="value">${desc}</td></tr>`;
-                htmlResult += `<tr><td class="label">🔗 Liên kết</td><td class="value">${links}</td></tr>`;
-                htmlResult += `<tr><td class="label">🖼️ Ảnh</td><td class="value">${images}</td></tr>`;
-                htmlResult += `<tr><td class="label">🎯 Lĩnh vực</td><td class="value">`;
-                if (top.length > 0) {
-                    for (const c of top) {
-                        htmlResult += `<span class="category-tag">${c.name} <span class="score">(${c.score})</span></span> `;
+                // Sort categories by score
+                const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+                const topCategory = sorted.length > 0 ? sorted[0][0] : 'Không xác định';
+
+                let output = `📊 <b>Kết quả phân tích:</b>\n\n`;
+                output += `📌 <b>Tiêu đề:</b> ${title}\n`;
+                output += `📝 <b>Mô tả:</b> ${description}\n`;
+                output += `🔗 <b>Số liên kết:</b> ${links}\n`;
+                output += `🖼️ <b>Số ảnh:</b> ${images}\n`;
+                output += `\n🏷️ <b>Lĩnh vực chính:</b> ${topCategory}\n`;
+                if (sorted.length > 0) {
+                    output += `\n<b>📊 Điểm từ khóa:</b>\n`;
+                    for (const [cat, score] of sorted.slice(0, 5)) {
+                        output += `  ${cat}: ${score} từ khóa\n`;
                     }
-                } else {
-                    htmlResult += `<span style="color:#ffaa00;">⚠️ Không xác định rõ</span>`;
                 }
-                htmlResult += `</td></tr>`;
-                const preview = text.slice(0, 300) + (text.length > 300 ? '...' : '');
-                htmlResult += `<tr><td class="label">📄 Tóm tắt</td><td class="value">${preview}</td></tr>`;
-                htmlResult += `</table>`;
-                res.innerHTML = htmlResult;
-            } catch(e) {
-                res.innerHTML = `<div class="status-text" style="color:#f44;">❌ Lỗi: ${e.message}</div>`;
+
+                result.innerHTML = output;
+            } catch (e) {
+                result.textContent = '❌ Không thể kết nối đến URL! Vui lòng kiểm tra lại.';
             }
         }
-        function copyAnalyzerResult() {
-            const table = document.querySelector('#analyzerResult .result-table');
-            if (!table) return;
-            const rows = table.querySelectorAll('tr');
-            let text = '';
-            for (const row of rows) {
-                const cells = row.querySelectorAll('td');
-                if (cells.length === 2) text += cells[0].textContent.trim() + ': ' + cells[1].textContent.trim() + '\n';
-            }
-            navigator.clipboard.writeText(text).then(() => alert('✅ Đã sao chép!')).catch(() => alert('Không thể sao chép.'));
-        }
-        function clearAnalyzer() {
-            document.getElementById('analyzerUrl').value = '';
-            document.getElementById('analyzerResult').innerHTML = '<div class="status-text">Nhập URL và bấm "Phân tích".</div>';
-        }
-        document.getElementById('analyzerUrl').addEventListener('keypress', e => { if (e.key === 'Enter') analyzeWebsite(); });
+
+        // Enter key support for inputs
+        document.getElementById('ipInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkIP(); });
+        document.getElementById('repeatText').addEventListener('keypress', function(e) { if (e.key === 'Enter') repeatText(); });
+        document.getElementById('vulnUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') scanVuln(); });
+        document.getElementById('headerUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeHeader(); });
+        document.getElementById('scamUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkScammer(); });
+        document.getElementById('analyzeUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeWebsite(); });
     </script>
+
 </body>
 </html>
