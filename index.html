@@ -30,25 +30,31 @@
             .time-display .time { font-size: 14px; }
         }
 
+        /* LOADING OVERLAY - VIDEO HÌNH TRÒN */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.88); display: none; justify-content: center; align-items: center;
             flex-direction: column; z-index: 99999; backdrop-filter: blur(6px);
         }
         .loading-overlay.show { display: flex; }
-        .loading-overlay img {
-            width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff;
-            object-fit: cover; box-shadow: 0 0 40px rgba(255,255,255,0.15);
+        .loading-overlay .avatar-video {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 0 50px rgba(255,255,255,0.2);
             animation: pulse 1.2s ease-in-out infinite;
+            background: #0a0a0a;
         }
         .loading-overlay .loading-text {
             margin-top: 18px; color: #aaa; font-size: 16px; letter-spacing: 2px;
             animation: fadeText 1.2s ease-in-out infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.06); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
+            0% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 30px rgba(255,255,255,0.1); }
+            50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 60px rgba(255,255,255,0.25); }
+            100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 30px rgba(255,255,255,0.1); }
         }
         @keyframes fadeText {
             0% { opacity: 0.4; }
@@ -142,6 +148,7 @@
             .tool-card { padding: 15px; }
             .btn-group { flex-direction: column; }
             .btn { width: 100%; text-align: center; }
+            .loading-overlay .avatar-video { width: 90px; height: 90px; }
         }
 
         .password-overlay {
@@ -184,9 +191,13 @@
         </div>
     </div>
 
-    <!-- LOADING -->
+    <!-- LOADING OVERLAY - VIDEO HÌNH TRÒN -->
     <div class="loading-overlay" id="loadingOverlay">
-        <img src="https://files.catbox.moe/kxygoi.png" alt="Loading" />
+        <video id="loadingVideo" class="avatar-video" loop muted playsinline>
+            <source src="https://files.catbox.moe/3loi68.mov" type="video/quicktime">
+            <source src="https://files.catbox.moe/kxygoi.png" type="image/png">
+            <img src="https://files.catbox.moe/kxygoi.png" alt="Loading" />
+        </video>
         <div class="loading-text">⏳ ĐANG XỬ LÝ...</div>
     </div>
 
@@ -213,12 +224,9 @@
             <div class="tool-item" onclick="showTool('header')"><span class="icon">📋</span> Header Analyzer</div>
             <div class="tool-item" onclick="showTool('scammer')"><span class="icon">⚠️</span> Check Scammer</div>
             <div class="tool-item" onclick="showTool('analyzer')"><span class="icon">📊</span> Website Analyzer</div>
-            <div class="tool-item" onclick="showTool('adminfinder')"><span class="icon">🎯</span> Admin Finder</div>
-            <div class="tool-item" onclick="showTool('portscanner')"><span class="icon">🔌</span> Port Scanner</div>
-            <div class="tool-item" onclick="showTool('dirbrute')"><span class="icon">📂</span> Dir Brute</div>
             <div class="tool-item" onclick="showTool('sqli')"><span class="icon">💣</span> SQLi Tester</div>
             <div class="tool-item" onclick="showTool('recon')"><span class="icon">🔍</span> Recon Pro</div>
-            <div class="tool-item" onclick="showTool('scanner')"><span class="icon">🚨</span> Device Scanner</div>
+            <div class="tool-item" onclick="showTool('scanner')"><span class="icon">🚨</span> Device Scanner Pro</div>
         </div>
     </div>
 
@@ -237,12 +245,9 @@
                     <div class="item" onclick="showTool('header')"><span class="icon">📋</span><span class="name">Header Analyzer</span></div>
                     <div class="item" onclick="showTool('scammer')"><span class="icon">⚠️</span><span class="name">Check Scammer</span></div>
                     <div class="item" onclick="showTool('analyzer')"><span class="icon">📊</span><span class="name">Website Analyzer</span></div>
-                    <div class="item" onclick="showTool('adminfinder')"><span class="icon">🎯</span><span class="name">Admin Finder</span></div>
-                    <div class="item" onclick="showTool('portscanner')"><span class="icon">🔌</span><span class="name">Port Scanner</span></div>
-                    <div class="item" onclick="showTool('dirbrute')"><span class="icon">📂</span><span class="name">Dir Brute</span></div>
                     <div class="item" onclick="showTool('sqli')"><span class="icon">💣</span><span class="name">SQLi Tester</span></div>
                     <div class="item" onclick="showTool('recon')"><span class="icon">🔍</span><span class="name">Recon Pro</span></div>
-                    <div class="item" onclick="showTool('scanner')"><span class="icon">🚨</span><span class="name">Device Scanner</span></div>
+                    <div class="item" onclick="showTool('scanner')"><span class="icon">🚨</span><span class="name">Device Scanner Pro</span></div>
                 </div>
             </div>
         </div>
@@ -343,53 +348,7 @@
             </div>
         </div>
 
-        <!-- TOOL 7: ADMIN FINDER -->
-        <div class="tool-container" id="tool-adminfinder">
-            <div class="tool-card">
-                <h2>🎯 Admin Finder</h2>
-                <label>URL cần tìm:</label>
-                <input type="text" id="adminUrl" placeholder="https://example.com" />
-                <div class="btn-group">
-                    <button class="btn btn-hack" onclick="findAdmin()">Tìm Admin</button>
-                    <button class="btn btn-danger" onclick="clearResult('adminResult')">Xoá</button>
-                </div>
-                <div class="result-box" id="adminResult">🎯 Nhập URL để tìm trang admin...</div>
-            </div>
-        </div>
-
-        <!-- TOOL 8: PORT SCANNER -->
-        <div class="tool-container" id="tool-portscanner">
-            <div class="tool-card">
-                <h2>🔌 Port Scanner</h2>
-                <label>IP hoặc Domain:</label>
-                <input type="text" id="portTarget" placeholder="8.8.8.8" />
-                <label>Cổng (cách nhau dấu phẩy):</label>
-                <input type="text" id="portList" value="80,443,22,8080,3306" />
-                <div class="btn-group">
-                    <button class="btn btn-hack" onclick="scanPorts()">Quét cổng</button>
-                    <button class="btn btn-danger" onclick="clearResult('portResult')">Xoá</button>
-                </div>
-                <div class="result-box" id="portResult">🔌 Nhập IP và danh sách cổng để quét...</div>
-            </div>
-        </div>
-
-        <!-- TOOL 9: DIR BRUTE -->
-        <div class="tool-container" id="tool-dirbrute">
-            <div class="tool-card">
-                <h2>📂 Directory Brute</h2>
-                <label>URL cần dò:</label>
-                <input type="text" id="dirTarget" placeholder="https://example.com" />
-                <label>Danh sách thư mục:</label>
-                <input type="text" id="dirList" value="admin,login,wp-admin,dashboard,phpmyadmin" />
-                <div class="btn-group">
-                    <button class="btn btn-hack" onclick="bruteDir()">Dò thư mục</button>
-                    <button class="btn btn-danger" onclick="clearResult('dirResult')">Xoá</button>
-                </div>
-                <div class="result-box" id="dirResult">📂 Nhập URL và danh sách thư mục để dò...</div>
-            </div>
-        </div>
-
-        <!-- TOOL 10: SQLI TESTER -->
+        <!-- TOOL 7: SQLI TESTER -->
         <div class="tool-container" id="tool-sqli">
             <div class="tool-card">
                 <h2>💣 SQLi Tester</h2>
@@ -403,31 +362,40 @@
             </div>
         </div>
 
-        <!-- TOOL 11: RECON PRO -->
+        <!-- TOOL 8: RECON PRO -->
         <div class="tool-container" id="tool-recon">
             <div class="tool-card">
                 <h2>🔍 Recon Pro</h2>
-                <p style="color:#888;font-size:13px;margin-bottom:10px;">Nhập tên miền để xem WHOIS, DNS, SSL và vị trí server.</p>
-                <label>Nhập tên miền:</label>
-                <input type="text" id="reconInput" placeholder="Ví dụ: google.com" />
+                <p style="color:#888;font-size:13px;margin-bottom:10px;">
+                    Nhập URL hoặc tên miền để xem WHOIS, DNS, SSL và vị trí server.
+                    <span style="color:#4fc3f7;">(Tự động bỏ https://, http://)</span>
+                </p>
+                <label>Nhập URL hoặc tên miền:</label>
+                <input type="text" id="reconInput" placeholder="Ví dụ: https://catbox.moe hoặc google.com" />
                 <div class="btn-group">
                     <button class="btn btn-hack" onclick="reconPro()">🚀 Quét toàn bộ</button>
                     <button class="btn btn-danger" onclick="clearResult('reconResult')">Xoá</button>
                 </div>
-                <div class="result-box" id="reconResult">🔍 Nhập tên miền để quét thông tin...</div>
+                <div class="result-box" id="reconResult">
+                    🔍 Nhập URL hoặc tên miền để quét thông tin...
+                </div>
             </div>
         </div>
 
-        <!-- TOOL 12: DEVICE SCANNER -->
+        <!-- TOOL 9: DEVICE SCANNER PRO -->
         <div class="tool-container" id="tool-scanner">
             <div class="tool-card" style="border-color:#ff4444;">
-                <h2 style="color:#ff4444;">🚨 Device Scanner</h2>
-                <p style="color:#888;font-size:13px;margin-bottom:10px;">Quét thông tin thiết bị của bạn. Dữ liệu chỉ hiển thị trên màn hình.</p>
+                <h2 style="color:#ff4444;">🚨 Device Scanner Pro</h2>
+                <p style="color:#888;font-size:13px;margin-bottom:10px;">
+                    Quét thông tin thiết bị: IP, RAM, CPU, Pin, Lưu trữ, Trình duyệt, Hệ điều hành.
+                </p>
                 <div class="btn-group">
-                    <button class="btn btn-scanner" onclick="runScanner()">🚨 BẮT ĐẦU QUÉT</button>
+                    <button class="btn btn-scanner" onclick="runScannerPro()">🚨 BẮT ĐẦU QUÉT</button>
                     <button class="btn btn-danger" onclick="clearResult('scannerResult')">Xoá</button>
                 </div>
-                <div class="result-box" id="scannerResult" style="font-family:monospace;font-size:13px;color:#4fc3f7;">🚨 Nhấn "BẮT ĐẦU QUÉT" để phân tích thiết bị này...</div>
+                <div class="result-box" id="scannerResult" style="font-family:monospace;font-size:13px;color:#4fc3f7;">
+                    🚨 Nhấn "BẮT ĐẦU QUÉT" để phân tích thiết bị này...
+                </div>
             </div>
         </div>
 
@@ -508,11 +476,22 @@
             } else { alert('Không có dữ liệu để sao chép!'); }
         }
 
+        // ===== LOADING - VIDEO HÌNH TRÒN =====
         function showLoading(callback) {
             const overlay = document.getElementById('loadingOverlay');
+            const video = document.getElementById('loadingVideo');
+            
+            if (video) {
+                video.currentTime = 0;
+                video.play().catch(e => console.log('Video play error:', e));
+            }
+            
             overlay.classList.add('show');
             setTimeout(() => {
                 overlay.classList.remove('show');
+                if (video) {
+                    video.pause();
+                }
                 if (callback) callback();
             }, 3000);
         }
@@ -676,81 +655,7 @@
         }
 
         // ============================================================
-        // TOOL 7: ADMIN FINDER
-        // ============================================================
-        async function findAdmin() {
-            showLoading(async () => {
-                const url = document.getElementById('adminUrl').value.trim();
-                const result = document.getElementById('adminResult');
-                if (!url) { result.textContent = '❌ Nhập URL!'; return; }
-                result.textContent = '⏳ Đang tìm...';
-                const paths = ['admin','login','wp-admin','dashboard','administrator','admin.php','panel','cpanel'];
-                const base = url.replace(/\/+$/, '');
-                let found = [];
-                for (const p of paths) {
-                    try {
-                        const test = base + '/' + p;
-                        const proxy = 'https://corsproxy.io/?' + encodeURIComponent(test);
-                        const res = await fetch(proxy, { method: 'HEAD' });
-                        if (res.status === 200) found.push('✅ ' + test);
-                    } catch (e) {}
-                }
-                if (found.length === 0) result.innerHTML = '⚠️ <span class="warning">Không tìm thấy!</span>';
-                else result.innerHTML = '🎯 Tìm thấy:\n' + found.join('\n');
-            });
-        }
-
-        // ============================================================
-        // TOOL 8: PORT SCANNER
-        // ============================================================
-        async function scanPorts() {
-            showLoading(async () => {
-                const target = document.getElementById('portTarget').value.trim();
-                const ports = document.getElementById('portList').value.split(',').map(p => parseInt(p.trim())).filter(p => !isNaN(p));
-                const result = document.getElementById('portResult');
-                if (!target) { result.textContent = '❌ Nhập IP!'; return; }
-                result.textContent = '⏳ Đang quét...';
-                let open = [], closed = [];
-                for (const port of ports) {
-                    try {
-                        const proxy = 'https://corsproxy.io/?' + encodeURIComponent(`http://${target}:${port}/`);
-                        const res = await fetch(proxy, { method: 'HEAD' });
-                        if (res.status < 600) open.push('✅ ' + port + ' Mở');
-                        else closed.push('❌ ' + port + ' Đóng');
-                    } catch (e) { closed.push('❌ ' + port + ' Đóng'); }
-                }
-                if (open.length === 0) result.innerHTML = '🔌 <span class="warning">Không có cổng mở!</span>\n' + closed.join('\n');
-                else result.innerHTML = '🔌 Cổng mở:\n' + open.join('\n') + '\n\n' + closed.join('\n');
-            });
-        }
-
-        // ============================================================
-        // TOOL 9: DIR BRUTE
-        // ============================================================
-        async function bruteDir() {
-            showLoading(async () => {
-                const url = document.getElementById('dirTarget').value.trim();
-                const dirs = document.getElementById('dirList').value.split(',').map(d => d.trim());
-                const result = document.getElementById('dirResult');
-                if (!url) { result.textContent = '❌ Nhập URL!'; return; }
-                result.textContent = '⏳ Đang dò...';
-                const base = url.replace(/\/+$/, '');
-                let found = [];
-                for (const d of dirs) {
-                    try {
-                        const test = base + '/' + d;
-                        const proxy = 'https://corsproxy.io/?' + encodeURIComponent(test);
-                        const res = await fetch(proxy, { method: 'HEAD' });
-                        if (res.status === 200) found.push('✅ ' + test);
-                    } catch (e) {}
-                }
-                if (found.length === 0) result.innerHTML = '📂 <span class="warning">Không tìm thấy!</span>';
-                else result.innerHTML = '📂 Tìm thấy:\n' + found.join('\n');
-            });
-        }
-
-        // ============================================================
-        // TOOL 10: SQLI TESTER
+        // TOOL 7: SQLI TESTER
         // ============================================================
         async function testSQLi() {
             showLoading(async () => {
@@ -778,23 +683,38 @@
         }
 
         // ============================================================
-        // TOOL 11: RECON PRO
+        // TOOL 8: RECON PRO
         // ============================================================
         async function reconPro() {
             showLoading(async () => {
-                const domain = document.getElementById('reconInput').value.trim();
+                let rawInput = document.getElementById('reconInput').value.trim();
                 const result = document.getElementById('reconResult');
-                if (!domain) { result.textContent = '❌ Vui lòng nhập tên miền!'; return; }
+                
+                let domain = rawInput
+                    .replace(/^https?:\/\//, '')
+                    .replace(/\/.*$/, '')
+                    .trim();
+
+                if (!domain) {
+                    result.textContent = '❌ Vui lòng nhập URL hoặc tên miền!';
+                    return;
+                }
+
                 result.innerHTML = '⏳ Đang quét thông tin cho <b>' + domain + '</b>...<br><br>';
 
                 // WHOIS
-                result.innerHTML += `<div class="recon-section"><h3>📋 1. WHOIS - Chủ sở hữu</h3><span class="label">Đang tra cứu...</span></div>`;
+                result.innerHTML += `<div class="recon-section">
+                    <h3>📋 1. WHOIS - Chủ sở hữu</h3>
+                    <span class="label">Đang tra cứu...</span>
+                </div>`;
+
                 try {
                     const whoisRes = await fetch(`https://whoisjson.com/api/v1/whois?domain=${domain}`);
                     const whoisData = await whoisRes.json();
-                    let whoisHTML = `<div class="recon-section"><h3>📋 1. WHOIS - Chủ sở hữu</h3>`;
+                    let whoisHTML = `<div class="recon-section">
+                        <h3>📋 1. WHOIS - Chủ sở hữu</h3>`;
                     if (whoisData.error || !whoisData.WhoisRecord) {
-                        whoisHTML += `<span class="notfound">❌ Không tìm thấy thông tin WHOIS</span>`;
+                        whoisHTML += `<span class="notfound">❌ Không tìm thấy thông tin WHOIS (có thể bị ẩn)</span>`;
                     } else {
                         const w = whoisData.WhoisRecord;
                         whoisHTML += `
@@ -820,16 +740,26 @@
                 }
 
                 // DNS
-                result.innerHTML += `<div class="recon-section"><h3>🖥️ 2. DNS - Bản ghi</h3><span class="label">Đang tra cứu...</span></div>`;
+                result.innerHTML += `<div class="recon-section">
+                    <h3>🖥️ 2. DNS - Bản ghi</h3>
+                    <span class="label">Đang tra cứu...</span>
+                </div>`;
+
                 try {
                     const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=ANY`);
                     const dnsData = await dnsRes.json();
-                    let dnsHTML = `<div class="recon-section"><h3>🖥️ 2. DNS - Bản ghi</h3>`;
+                    let dnsHTML = `<div class="recon-section">
+                        <h3>🖥️ 2. DNS - Bản ghi</h3>`;
                     if (dnsData.Status === 0 && dnsData.Answer) {
                         const types = {1:'A', 2:'NS', 5:'CNAME', 15:'MX', 16:'TXT', 28:'AAAA'};
+                        let hasRecord = false;
                         for (const record of dnsData.Answer) {
                             const typeName = types[record.type] || record.type;
                             dnsHTML += `<span class="label">${typeName}:</span> <span class="value">${record.data}</span><br>`;
+                            hasRecord = true;
+                        }
+                        if (!hasRecord) {
+                            dnsHTML += `<span class="notfound">❌ Không tìm thấy bản ghi DNS</span>`;
                         }
                     } else {
                         dnsHTML += `<span class="notfound">❌ Không tìm thấy bản ghi DNS</span>`;
@@ -847,11 +777,16 @@
                 }
 
                 // SSL
-                result.innerHTML += `<div class="recon-section"><h3>🔒 3. SSL - Chứng chỉ</h3><span class="label">Đang kiểm tra...</span></div>`;
+                result.innerHTML += `<div class="recon-section">
+                    <h3>🔒 3. SSL - Chứng chỉ</h3>
+                    <span class="label">Đang kiểm tra...</span>
+                </div>`;
+
                 try {
                     const sslRes = await fetch(`https://api.hackertarget.com/sslcheck/?q=${domain}`);
                     const sslData = await sslRes.text();
-                    let sslHTML = `<div class="recon-section"><h3>🔒 3. SSL - Chứng chỉ</h3>`;
+                    let sslHTML = `<div class="recon-section">
+                        <h3>🔒 3. SSL - Chứng chỉ</h3>`;
                     if (sslData && !sslData.includes('error') && sslData.length > 10) {
                         const lines = sslData.split('\n');
                         let hasInfo = false;
@@ -885,7 +820,11 @@
                 }
 
                 // GeoIP
-                result.innerHTML += `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3><span class="label">Đang tra cứu...</span></div>`;
+                result.innerHTML += `<div class="recon-section">
+                    <h3>🌍 4. GeoIP - Vị trí server</h3>
+                    <span class="label">Đang tra cứu...</span>
+                </div>`;
+
                 try {
                     const ipRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
                     const ipData = await ipRes.json();
@@ -898,7 +837,8 @@
                             }
                         }
                     }
-                    let geoHTML = `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3>`;
+                    let geoHTML = `<div class="recon-section">
+                        <h3>🌍 4. GeoIP - Vị trí server</h3>`;
                     if (ip) {
                         const geoRes = await fetch(`https://ip-api.com/json/${ip}?fields=status,country,city,isp,org,lat,lon,query`);
                         const geoData = await geoRes.json();
@@ -914,7 +854,7 @@
                             geoHTML += `<span class="notfound">❌ Không tìm thấy vị trí của IP ${ip}</span>`;
                         }
                     } else {
-                        geoHTML += `<span class="notfound">❌ Không tìm thấy IP của tên miền</span>`;
+                        geoHTML += `<span class="notfound">❌ Không tìm thấy IP của tên miền (có thể dùng Cloudflare)</span>`;
                     }
                     geoHTML += `</div>`;
                     result.innerHTML = result.innerHTML.replace(
@@ -927,15 +867,16 @@
                         `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3><span class="notfound">❌ Lỗi kết nối GeoIP</span></div>`
                     );
                 }
+
                 result.innerHTML += `<br><span style="color:#666;font-size:12px;">✅ Quét hoàn tất cho ${domain}</span>`;
                 result.scrollTop = 0;
             });
         }
 
         // ============================================================
-        // TOOL 12: DEVICE SCANNER
+        // TOOL 9: DEVICE SCANNER PRO
         // ============================================================
-        async function runScanner() {
+        async function runScannerPro() {
             showLoading(async () => {
                 const result = document.getElementById('scannerResult');
                 result.innerHTML = '⏳ Đang quét thiết bị...<br><span style="color:#888;font-size:12px;">Đang thu thập thông tin hệ thống...</span>';
@@ -943,19 +884,37 @@
                 let publicIP = 'Không thể lấy';
                 let city = 'Không xác định';
                 let isp = 'Không xác định';
-                try {
-                    const ipRes = await fetch('https://ip-api.com/json/?fields=status,query,city,isp,org,country');
-                    const ipData = await ipRes.json();
-                    if (ipData.status === 'success') {
-                        publicIP = ipData.query || 'N/A';
-                        city = ipData.city || 'N/A';
-                        isp = ipData.isp || ipData.org || 'N/A';
-                    }
-                } catch (e) {}
+                let country = 'Không xác định';
+                let lat = 'N/A';
+                let lon = 'N/A';
+                let timezone = 'N/A';
 
-                let localIP = 'Không thể lấy';
+                const ipApis = [
+                    'https://ip-api.com/json/?fields=status,query,country,city,isp,org,lat,lon,timezone',
+                    'https://ipinfo.io/json',
+                    'https://api.ipify.org?format=json'
+                ];
+
+                for (const api of ipApis) {
+                    try {
+                        const res = await fetch(api);
+                        const data = await res.json();
+                        if (data.query || data.ip) {
+                            publicIP = data.query || data.ip || 'N/A';
+                            city = data.city || 'N/A';
+                            isp = data.isp || data.org || data.hostname || 'N/A';
+                            country = data.country || 'N/A';
+                            lat = data.lat || data.loc?.split(',')[0] || 'N/A';
+                            lon = data.lon || data.loc?.split(',')[1] || 'N/A';
+                            timezone = data.timezone || 'N/A';
+                            break;
+                        }
+                    } catch (e) {}
+                }
+
+                let localIPs = [];
                 try {
-                    const pc = new RTCPeerConnection({ iceServers: [] });
+                    const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
                     pc.createDataChannel('');
                     const offer = await pc.createOffer();
                     await pc.setLocalDescription(offer);
@@ -965,33 +924,77 @@
                             const parts = line.split(' ');
                             const ipCandidate = parts[4];
                             if (ipCandidate && !ipCandidate.includes('::') && !ipCandidate.includes('0.0.0.0')) {
-                                localIP = ipCandidate;
-                                break;
+                                if (!localIPs.includes(ipCandidate)) localIPs.push(ipCandidate);
                             }
                         }
                     }
                     pc.close();
                 } catch (e) {}
+                const localIP = localIPs.length > 0 ? localIPs.join(', ') : 'Không thể lấy';
 
                 const ua = navigator.userAgent;
                 let device = 'Không xác định';
+                let os = 'Không xác định';
+                let osVersion = 'N/A';
+                let browser = 'Khác';
+                let browserVersion = 'N/A';
+
                 if (ua.includes('iPhone')) device = 'iPhone';
                 else if (ua.includes('iPad')) device = 'iPad';
                 else if (ua.includes('Android')) {
                     const match = ua.match(/Android\s+([\d.]+)/);
-                    device = `Android ${match ? match[1] : ''}`;
+                    device = 'Android';
+                    osVersion = match ? match[1] : 'N/A';
                 } else if (ua.includes('Windows')) device = 'Windows PC';
-                else if (ua.includes('Mac OS')) device = 'MacBook/iMac';
+                else if (ua.includes('Mac OS')) device = 'Mac';
                 else if (ua.includes('Linux')) device = 'Linux PC';
 
-                let browser = 'Khác';
-                if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
-                else if (ua.includes('Firefox')) browser = 'Firefox';
-                else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-                else if (ua.includes('Edg')) browser = 'Edge';
+                if (ua.includes('Windows NT 10.0')) os = 'Windows 10/11';
+                else if (ua.includes('Windows NT 6.3')) os = 'Windows 8.1';
+                else if (ua.includes('Windows NT 6.2')) os = 'Windows 8';
+                else if (ua.includes('Windows NT 6.1')) os = 'Windows 7';
+                else if (ua.includes('Mac OS X')) {
+                    os = 'macOS';
+                    const match = ua.match(/Mac OS X ([\d_]+)/);
+                    osVersion = match ? match[1].replace(/_/g, '.') : 'N/A';
+                } else if (ua.includes('Android')) os = 'Android';
+                else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
 
-                const now = new Date();
-                const time = now.toLocaleString('vi-VN');
+                if (ua.includes('Chrome') && !ua.includes('Edg')) {
+                    browser = 'Chrome';
+                    const match = ua.match(/Chrome\/([\d.]+)/);
+                    browserVersion = match ? match[1] : 'N/A';
+                } else if (ua.includes('Firefox')) {
+                    browser = 'Firefox';
+                    const match = ua.match(/Firefox\/([\d.]+)/);
+                    browserVersion = match ? match[1] : 'N/A';
+                } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+                    browser = 'Safari';
+                    const match = ua.match(/Version\/([\d.]+)/);
+                    browserVersion = match ? match[1] : 'N/A';
+                } else if (ua.includes('Edg')) {
+                    browser = 'Edge';
+                    const match = ua.match(/Edg\/([\d.]+)/);
+                    browserVersion = match ? match[1] : 'N/A';
+                }
+
+                let ram = 'Không hỗ trợ';
+                if (navigator.deviceMemory) {
+                    ram = navigator.deviceMemory + ' GB';
+                } else {
+                    if (ua.includes('Android') || ua.includes('iPhone') || ua.includes('iPad')) {
+                        ram = '~2-4 GB (ước lượng)';
+                    } else if (ua.includes('Windows') || ua.includes('Mac OS')) {
+                        ram = '~4-8 GB (ước lượng)';
+                    }
+                }
+
+                let cpu = 'Không hỗ trợ';
+                if (navigator.hardwareConcurrency) {
+                    cpu = navigator.hardwareConcurrency + ' nhân (cốt lõi)';
+                } else {
+                    cpu = 'Không xác định';
+                }
 
                 let battery = 'Không hỗ trợ';
                 if (navigator.getBattery) {
@@ -1012,38 +1015,62 @@
                 }
 
                 const screenSize = `${window.screen.width} x ${window.screen.height}`;
+                const colorDepth = window.screen.colorDepth + ' bit';
                 const language = navigator.language;
+
                 let connection = 'Không hỗ trợ';
                 if (navigator.connection) {
                     const conn = navigator.connection;
                     connection = `${conn.effectiveType || 'N/A'} (${conn.downlink || 'N/A'} Mbps)`;
                 }
 
+                const now = new Date();
+                const time = now.toLocaleString('vi-VN');
+                const timezoneOffset = now.getTimezoneOffset() / -60;
+                const timezoneStr = `UTC${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`;
+                const platform = navigator.platform || 'N/A';
+                const cookiesEnabled = navigator.cookieEnabled ? '✅ Có' : '❌ Không';
+                const localStorageEnabled = window.localStorage ? '✅ Có' : '❌ Không';
+
                 const output = `
-🚨 <b style="color:#ff4444;">TARGET DEVICE SCANNER</b>
-═════════════════════════════════
+🚨 <b style="color:#ff4444;">DEVICE SCANNER PRO</b>
+══════════════════════════════════════════
 
 🌐 <b style="color:#4fc3f7;">Kết nối mạng</b>
    ▪ IP công khai: <span style="color:#fff;">${publicIP}</span>
    ▪ IP cục bộ: <span style="color:#fff;">${localIP}</span>
+   ▪ Quốc gia: <span style="color:#fff;">${country}</span>
    ▪ Thành phố: <span style="color:#fff;">${city}</span>
    ▪ Nhà mạng: <span style="color:#fff;">${isp}</span>
+   ▪ Tọa độ: <span style="color:#fff;">${lat}, ${lon}</span>
+   ▪ Múi giờ: <span style="color:#fff;">${timezone}</span>
    ▪ Tốc độ kết nối: <span style="color:#fff;">${connection}</span>
 
-💻 <b style="color:#4fc3f7;">Thông tin thiết bị</b>
+💻 <b style="color:#4fc3f7;">Thiết bị & Hệ điều hành</b>
    ▪ Thiết bị: <span style="color:#fff;">${device}</span>
-   ▪ Trình duyệt: <span style="color:#fff;">${browser}</span>
+   ▪ Hệ điều hành: <span style="color:#fff;">${os} ${osVersion}</span>
+   ▪ Trình duyệt: <span style="color:#fff;">${browser} ${browserVersion}</span>
    ▪ Ngôn ngữ: <span style="color:#fff;">${language}</span>
-   ▪ Màn hình: <span style="color:#fff;">${screenSize}</span>
+   ▪ Nền tảng: <span style="color:#fff;">${platform}</span>
+
+⚙️ <b style="color:#4fc3f7;">Phần cứng</b>
+   ▪ RAM: <span style="color:#fff;">${ram}</span>
+   ▪ CPU: <span style="color:#fff;">${cpu}</span>
+   ▪ Màn hình: <span style="color:#fff;">${screenSize} (${colorDepth})</span>
 
 🔋 <b style="color:#4fc3f7;">Năng lượng & Lưu trữ</b>
    ▪ Pin: <span style="color:#fff;">${battery}</span>
    ▪ Dung lượng lưu trữ: <span style="color:#fff;">${storage}</span>
 
+🍪 <b style="color:#4fc3f7;">Trình duyệt</b>
+   ▪ Cookie: <span style="color:#fff;">${cookiesEnabled}</span>
+   ▪ Local Storage: <span style="color:#fff;">${localStorageEnabled}</span>
+
 🕐 <b style="color:#4fc3f7;">Thời gian</b>
    ▪ ${time}
+   ▪ Múi giờ: ${timezoneStr}
 
-═════════════════════════════════
+══════════════════════════════════════════
 ⚠️ <span style="color:#ffa500;">Thông tin chỉ hiển thị trên màn hình của bạn. KHÔNG gửi đi đâu.</span>
                 `;
                 result.innerHTML = output;
@@ -1057,9 +1084,6 @@
         document.getElementById('headerUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeHeader(); });
         document.getElementById('scamUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkScammer(); });
         document.getElementById('analyzeUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeWebsite(); });
-        document.getElementById('adminUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') findAdmin(); });
-        document.getElementById('portTarget').addEventListener('keypress', function(e) { if (e.key === 'Enter') scanPorts(); });
-        document.getElementById('dirTarget').addEventListener('keypress', function(e) { if (e.key === 'Enter') bruteDir(); });
         document.getElementById('sqliUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') testSQLi(); });
         document.getElementById('reconInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') reconPro(); });
     </script>
