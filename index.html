@@ -2,289 +2,491 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Bui Minh Phat</title>
-    <!-- Tối ưu tải nhanh: preconnect và preload các tài nguyên quan trọng -->
-    <link rel="preconnect" href="https://files.catbox.moe">
-    <link rel="preload" as="image" href="https://files.catbox.moe/k3xvri.png">
-    <link rel="preload" as="audio" href="https://files.catbox.moe/mwpdge.mp3">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Creator Pro - Tạo Proxy + Gmail Hàng Loạt</title>
     <style>
-        /* Reset và style tối giản, không dùng font ngoài để tránh chậm */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background-color: #0b0e1a;
-            color: #fff;
+            background: linear-gradient(135deg, #0a0e1a, #141b2b);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 20px 16px 40px;
-            opacity: 0;
-            animation: fadeIn 0.2s ease-in forwards;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
+            align-items: center;
         }
         .container {
-            max-width: 420px;
+            max-width: 750px;
             width: 100%;
-            background: linear-gradient(145deg, #141a2b, #0e1220);
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 36px;
-            padding: 24px 20px 32px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.8);
-            border: 1px solid #2a3350;
+            padding: 35px 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
-        .avatar {
-            display: block;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 10px;
-            border: 3px solid #4a7cf7;
-            box-shadow: 0 0 20px rgba(74, 124, 247, 0.3);
-            background: #1a2140; /* màu nền chờ khi ảnh chưa tải xong */
-        }
-        .username {
-            text-align: center;
+        h1 {
+            color: #fff;
             font-size: 28px;
             font-weight: 700;
+            text-align: center;
             letter-spacing: 0.5px;
-            background: linear-gradient(to right, #f0f4ff, #a0c0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
         }
-        .subhead {
+        h1 span {
+            color: #64ffda;
+        }
+        .sub {
             text-align: center;
             color: #8892b0;
             font-size: 14px;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
+            margin: 6px 0 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .time-bar {
-            background: #1a2140;
-            border-radius: 60px;
-            padding: 10px 18px;
-            margin-bottom: 20px;
-            border: 1px solid #2d365a;
-            text-align: center;
-            font-size: 22px;
-            font-weight: 600;
-            color: #b0caff;
-            letter-spacing: 3px;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
-        }
-        .time-bar span {
-            background: #0b0e1a;
-            padding: 4px 16px;
-            border-radius: 40px;
-            display: inline-block;
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #aab8e0;
-            padding: 12px 0 8px;
-            border-bottom: 1px solid #28304f;
-            margin-bottom: 14px;
-            letter-spacing: 1px;
-        }
-        .key-item, .game-item {
-            background: #161e34;
-            border-radius: 18px;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-            border-left: 4px solid #4a7cf7;
+        .tab-wrap {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #283257;
-            transition: none; /* bỏ hiệu ứng để nhanh hơn */
+            gap: 10px;
+            margin-bottom: 25px;
         }
-        .key-item .name, .game-item .name {
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            color: #8892b0;
             font-weight: 600;
-            font-size: 16px;
-            color: #e8edff;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .key-item .sub, .game-item .sub {
-            font-size: 13px;
-            color: #7a8bb0;
-            width: 100%;
-            margin-top: 4px;
+        .tab-btn.active {
+            background: rgba(100, 255, 218, 0.12);
+            border-color: #64ffda;
+            color: #64ffda;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.05);
         }
-        .key-item .badge, .game-item .badge {
-            background: #283a6a;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            color: #b0caff;
-            font-weight: 500;
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.05);
         }
-        .game-item .preview {
-            color: #f7c948;
+        .panel {
+            display: none;
+            animation: fade 0.3s ease;
+        }
+        .panel.active {
+            display: block;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #ccd6f6;
             font-size: 14px;
-            letter-spacing: 1px;
+            font-weight: 500;
+            margin-bottom: 5px;
         }
-        .game-item .platform {
-            background: #1e2a4a;
+        input, textarea, select {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            color: #e6f1ff;
+            font-size: 15px;
+            outline: none;
+            transition: 0.25s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #64ffda;
+            background: rgba(100,255,218,0.03);
+            box-shadow: 0 0 0 3px rgba(100,255,218,0.08);
+        }
+        .row-2 {
+            display: flex;
+            gap: 16px;
+        }
+        .row-2 .form-group {
+            flex: 1;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0 16px;
+        }
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            accent-color: #64ffda;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            margin: 0;
+            color: #a8b2d1;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            margin-top: 22px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: #64ffda;
+            color: #0a0e1a;
+        }
+        .btn-primary:hover {
+            background: #52e0c0;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(100,255,218,0.2);
+        }
+        .btn-danger {
+            background: rgba(255,80,80,0.12);
+            color: #ff6b6b;
+            border: 1px solid rgba(255,80,80,0.15);
+        }
+        .btn-danger:hover {
+            background: rgba(255,80,80,0.2);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            color: #a8b2d1;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .log-area {
+            margin-top: 25px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 16px;
+            padding: 16px 18px;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .log-area p {
+            color: #8a9bb5;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.7;
+            margin: 0;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+        .log-success { color: #64ffda !important; }
+        .log-error { color: #ff6b6b !important; }
+        .log-info { color: #64b5f6 !important; }
+        .log-warn { color: #ffd93d !important; }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            color: #495670;
+            font-size: 13px;
+        }
+        .status-bar .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .dot.idle { background: #495670; }
+        .dot.running { background: #64ffda; box-shadow: 0 0 12px #64ffda; }
+        .dot.stopped { background: #ff6b6b; }
+        .proxy-list-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 10px 14px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 13px;
+            color: #a8b2d1;
+            font-family: monospace;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-top: 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .badge-count {
+            background: rgba(100,255,218,0.12);
+            color: #64ffda;
             padding: 2px 12px;
             border-radius: 30px;
             font-size: 12px;
-            color: #8ea4dd;
+            font-weight: 600;
         }
-        .footer-note {
-            text-align: center;
-            color: #3e4a6a;
-            font-size: 11px;
-            margin-top: 24px;
-            letter-spacing: 1px;
-            border-top: 1px solid #1e2640;
-            padding-top: 18px;
+        @media (max-width: 550px) {
+            .row-2 { flex-direction: column; gap: 0; }
+            .container { padding: 22px 16px; }
+            .tab-wrap { flex-direction: column; }
         }
-        /* Ẩn các phần đã xóa */
-        .stats, .btn-download {
-            display: none !important;
-        }
-        /* Load nhanh hơn bằng cách không chờ font */
-        @font-face {
-            font-family: 'system';
-            src: local('-apple-system'), local('Segoe UI'), local('Roboto');
-        }
+        .log-area::-webkit-scrollbar { width: 4px; }
+        .log-area::-webkit-scrollbar-track { background: transparent; }
+        .log-area::-webkit-scrollbar-thumb { background: #64ffda; border-radius: 10px; }
+        .proxy-list-box::-webkit-scrollbar { width: 3px; }
+        .proxy-list-box::-webkit-scrollbar-thumb { background: #64ffda; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <!-- Ảnh đại diện - có sẵn kích thước và background chờ -->
-        <img src="https://files.catbox.moe/k3xvri.png" alt="Avatar" class="avatar" id="avatarImg" width="100" height="100" loading="eager">
-        
-        <div class="username">Bui Minh Phat</div>
-        <div class="subhead">Scroll down to explore</div>
+<div class="container">
+    <h1>⚡ G-<span>CREATOR</span> PRO</h1>
+    <div class="sub">Tạo proxy thật + Tạo Gmail hàng loạt · Tích hợp 1 chạm</div>
 
-        <!-- Thanh thời gian -->
-        <div class="time-bar" id="timeDisplay">
-            <span id="clock">--:--:--</span>
-        </div>
-
-        <!-- GET KEY -->
-        <div class="section-title">🔑 GET KEY</div>
-
-        <div class="key-item">
-            <div>
-                <div class="name">Get Key LQ iOS</div>
-                <div class="sub">Vượt 1 Link • Key 1 Ngày</div>
-            </div>
-            <span class="badge">iOS</span>
-        </div>
-
-        <div class="key-item">
-            <div>
-                <div class="name">Get Key LQ Android</div>
-                <div class="sub">Vượt 1 Link • Key 1 Ngày</div>
-            </div>
-            <span class="badge">Android</span>
-        </div>
-
-        <div class="key-item">
-            <div>
-                <div class="name">Get Key Roblox iOS</div>
-                <div class="sub">Vượt 1 Link • Key 1 Ngày</div>
-            </div>
-            <span class="badge">iOS</span>
-        </div>
-
-        <!-- GAME MODS -->
-        <div class="section-title" style="margin-top: 8px;">🎮 Game Mods</div>
-
-        <div class="game-item">
-            <div>
-                <div class="name">Roblox iOS Client Delta iPA</div>
-                <div class="sub">Cập nhật 14/6</div>
-            </div>
-            <div>
-                <span class="platform">iOS</span>
-                <span class="preview"> ★★★★</span>
-            </div>
-        </div>
-
-        <div class="game-item">
-            <div>
-                <div class="name">Aov Mod (No Hack)</div>
-                <div class="sub">Cập nhật 15/6</div>
-            </div>
-            <div>
-                <span class="platform">iOS</span>
-                <span class="preview"> ★★★</span>
-            </div>
-        </div>
-
-        <div class="game-item">
-            <div>
-                <div class="name">Aov Cheat (Map+Mod)</div>
-                <div class="sub">Cập nhật 14/6</div>
-            </div>
-            <div>
-                <span class="platform">iOS</span>
-                <span class="preview"> ★★★★★</span>
-            </div>
-        </div>
-
-        <div class="game-item">
-            <div>
-                <div class="name">Map/Skin AOV Android</div>
-                <div class="sub">Cập nhật 10/6</div>
-            </div>
-            <div>
-                <span class="platform">Android</span>
-                <span class="preview"> ★★★</span>
-            </div>
-        </div>
-
-        <div class="footer-note">MOD FILES • Bui Minh Phat</div>
+    <!-- Tab -->
+    <div class="tab-wrap">
+        <button class="tab-btn active" data-tab="tabProxy">🌐 Tạo Proxy</button>
+        <button class="tab-btn" data-tab="tabGmail">📧 Tạo Gmail</button>
     </div>
 
-    <script>
-        (function() {
-            // ----- Đồng hồ (chạy ngay khi script load) -----
-            function updateClock() {
-                const now = new Date();
-                const h = String(now.getHours()).padStart(2, '0');
-                const m = String(now.getMinutes()).padStart(2, '0');
-                const s = String(now.getSeconds()).padStart(2, '0');
-                document.getElementById('clock').textContent = h + ':' + m + ':' + s;
+    <!-- PANEL 1: TẠO PROXY -->
+    <div id="tabProxy" class="panel active">
+        <div class="form-group">
+            <label>Số lượng proxy muốn có (sau khi lọc)</label>
+            <input type="number" id="proxySoLuong" value="30" min="5" max="200">
+        </div>
+        <div class="form-group">
+            <label>Timeout kiểm tra (giây)</label>
+            <input type="number" id="proxyTimeout" value="5" min="2" max="15">
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="proxyGhiFile" checked>
+            <label for="proxyGhiFile">Tự động ghi vào <strong>proxy.txt</strong> (dùng cho tạo Gmail)</label>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="btnLayProxy">🔍 LẤY PROXY</button>
+            <button class="btn btn-secondary" id="btnXemProxy">👁 Xem danh sách</button>
+        </div>
+        <div id="proxyDisplay" class="proxy-list-box" style="display:none; margin-top:15px;">-- chưa có --</div>
+    </div>
+
+    <!-- PANEL 2: TẠO GMAIL -->
+    <div id="tabGmail" class="panel">
+        <div class="row-2">
+            <div class="form-group">
+                <label>Số lượng tài khoản</label>
+                <input type="number" id="gmailSoLuong" value="10" min="1" max="50">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="text" id="gmailMatKhau" value="Abc@123456">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Tiền tố username</label>
+            <input type="text" id="gmailTienTo" value="zepdry">
+        </div>
+        <div class="form-group">
+            <label>File proxy sử dụng (mặc định: proxy.txt)</label>
+            <input type="text" id="gmailProxyFile" value="proxy.txt">
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="gmailHeadless" checked>
+            <label for="gmailHeadless">Chạy nền (headless) - tăng tốc</label>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="btnTaoGmail">🚀 BẮT ĐẦU TẠO</button>
+            <button class="btn btn-danger" id="btnDungGmail">⏹ DỪNG LẠI</button>
+        </div>
+    </div>
+
+    <!-- LOG CHUNG -->
+    <div class="log-area" id="logArea">
+        <p class="log-info">⏳ Sẵn sàng ...</p>
+    </div>
+    <div class="status-bar">
+        <span id="statusText"><span class="dot idle"></span> Đang chờ</span>
+        <span id="logCount" class="badge-count">0</span>
+    </div>
+</div>
+
+<script>
+    // ========== LOGGING ==========
+    const logArea = document.getElementById('logArea');
+    const statusText = document.getElementById('statusText');
+    const logCount = document.getElementById('logCount');
+    let logCounter = 0;
+
+    function addLog(msg, type = 'info') {
+        const p = document.createElement('p');
+        const time = new Date().toLocaleTimeString();
+        p.textContent = `[${time}] ${msg}`;
+        p.className = 'log-' + type;
+        logArea.appendChild(p);
+        logArea.scrollTop = logArea.scrollHeight;
+        logCounter++;
+        logCount.textContent = logCounter;
+        while (logArea.children.length > 100) {
+            logArea.removeChild(logArea.firstChild);
+        }
+    }
+
+    function setStatus(text, state = 'idle') {
+        const dot = state === 'idle' ? 'idle' : (state === 'running' ? 'running' : 'stopped');
+        statusText.innerHTML = `<span class="dot ${dot}"></span> ${text}`;
+    }
+
+    // ========== TAB SWITCH ==========
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const target = this.dataset.tab;
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+        });
+    });
+
+    // ========== TẠO PROXY (gọi API backend) ==========
+    document.getElementById('btnLayProxy').addEventListener('click', async function() {
+        const soLuong = parseInt(document.getElementById('proxySoLuong').value) || 30;
+        const timeout = parseInt(document.getElementById('proxyTimeout').value) || 5;
+        const ghiFile = document.getElementById('proxyGhiFile').checked;
+
+        addLog(`🌐 Bắt đầu lấy proxy, mục tiêu ${soLuong} proxy hoạt động...`, 'info');
+        setStatus('Đang lấy proxy...', 'running');
+        this.disabled = true;
+
+        try {
+            const resp = await fetch('/api/lay_proxy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ so_luong: soLuong, timeout: timeout, ghi_file: ghiFile })
+            });
+            const data = await resp.json();
+            if (data.status === 'success') {
+                addLog(`✅ Lấy thành công ${data.so_luong} proxy`, 'success');
+                addLog(`📁 Đã ghi vào ${data.file || 'proxy.txt'}`, 'info');
+                // Hiển thị danh sách
+                const display = document.getElementById('proxyDisplay');
+                display.style.display = 'block';
+                display.textContent = data.danh_sach.join('\n');
+                setStatus(`Đã có ${data.so_luong} proxy`, 'idle');
+            } else {
+                addLog(`❌ Lỗi: ${data.msg || 'Không xác định'}`, 'error');
+                setStatus('Lỗi lấy proxy', 'stopped');
             }
-            updateClock();
-            setInterval(updateClock, 1000);
+        } catch (e) {
+            addLog(`🔥 Lỗi kết nối backend: ${e.message}`, 'error');
+            setStatus('Lỗi kết nối', 'stopped');
+        }
+        this.disabled = false;
+    });
 
-            // ----- Phát nhạc khi chạm/click (tối ưu, không làm chậm load) -----
-            const audio = document.getElementById('bgMusic');
-            let musicStarted = false;
+    document.getElementById('btnXemProxy').addEventListener('click', async function() {
+        try {
+            const resp = await fetch('/api/doc_proxy?file=proxy.txt');
+            const data = await resp.json();
+            const display = document.getElementById('proxyDisplay');
+            display.style.display = 'block';
+            if (data.status === 'success' && data.danh_sach.length > 0) {
+                display.textContent = data.danh_sach.join('\n');
+                addLog(`👁 Đã tải ${data.danh_sach.length} proxy từ file`, 'info');
+            } else {
+                display.textContent = '-- chưa có proxy hoặc file trống --';
+                addLog('⚠️ File proxy trống hoặc chưa tồn tại', 'warn');
+            }
+        } catch (e) {
+            addLog(`🔥 Không thể đọc file proxy: ${e.message}`, 'error');
+        }
+    });
 
-            function playMusic() {
-                if (!musicStarted && audio) {
-                    audio.play().then(() => { musicStarted = true; }).catch(() => {});
+    // ========== TẠO GMAIL (gọi API backend) ==========
+    let isRunning = false;
+    let stopFlag = false;
+
+    document.getElementById('btnTaoGmail').addEventListener('click', async function() {
+        if (isRunning) {
+            addLog('⚠️ Đang chạy, không thể khởi động lại!', 'warn');
+            return;
+        }
+        const soLuong = parseInt(document.getElementById('gmailSoLuong').value) || 10;
+        const matKhau = document.getElementById('gmailMatKhau').value.trim() || 'Abc@123456';
+        const tienTo = document.getElementById('gmailTienTo').value.trim() || 'zepdry';
+        const proxyFile = document.getElementById('gmailProxyFile').value.trim() || 'proxy.txt';
+        const headless = document.getElementById('gmailHeadless').checked;
+
+        if (!soLuong || soLuong < 1) {
+            addLog('❌ Số lượng phải >= 1', 'error');
+            return;
+        }
+
+        addLog(`🚀 Bắt đầu tạo ${soLuong} Gmail, tiền tố "${tienTo}", proxy từ "${proxyFile}"`, 'info');
+        setStatus('Đang tạo Gmail...', 'running');
+        isRunning = true;
+        stopFlag = false;
+        this.disabled = true;
+        document.getElementById('btnDungGmail').disabled = false;
+
+        try {
+            const resp = await fetch('/api/tao_gmail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    so_luong: soLuong,
+                    mat_khau: matKhau,
+                    tien_to: tienTo,
+                    file_proxy: proxyFile,
+                    headless: headless
+                })
+            });
+            const data = await resp.json();
+            if (data.status === 'success') {
+                addLog(`✅ Tạo thành công ${data.thanh_cong}/${data.tong} tài khoản`, 'success');
+                if (data.danh_sach && data.danh_sach.length) {
+                    data.danh_sach.forEach(acc => addLog(`📧 ${acc}`, 'info'));
                 }
+                setStatus(`Hoàn tất: ${data.thanh_cong}/${data.tong}`, 'idle');
+            } else {
+                addLog(`❌ Lỗi: ${data.msg || 'Không xác định'}`, 'error');
+                setStatus('Lỗi tạo Gmail', 'stopped');
             }
+        } catch (e) {
+            addLog(`🔥 Lỗi kết nối backend: ${e.message}`, 'error');
+            setStatus('Lỗi kết nối', 'stopped');
+        }
 
-            // Dùng passive: true để không block thao tác
-            document.addEventListener('touchstart', playMusic, { passive: true });
-            document.addEventListener('click', playMusic, { passive: true });
-            document.getElementById('avatarImg').addEventListener('click', playMusic, { passive: true });
+        isRunning = false;
+        this.disabled = false;
+        document.getElementById('btnDungGmail').disabled = true;
+    });
 
-            // ----- Tăng tốc hiển thị: ẩn preload không cần thiết -----
-            // (Đã có preload ở link, không cần thêm)
-        })();
-    </script>
+    document.getElementById('btnDungGmail').addEventListener('click', function() {
+        if (isRunning) {
+            stopFlag = true;
+            addLog('⏹ Đang gửi tín hiệu dừng...', 'warn');
+            // Gửi yêu cầu dừng tới backend (nếu có endpoint)
+            fetch('/api/dung_tao_gmail', { method: 'POST' }).catch(() => {});
+        } else {
+            addLog('ℹ️ Không có tiến trình nào đang chạy', 'info');
+        }
+    });
 
-    <!-- Đặt audio ở cuối body để không chặn render -->
-    <audio id="bgMusic" loop preload="metadata" style="display:none;">
-        <source src="https://files.catbox.moe/mwpdge.mp3" type="audio/mpeg">
-    </audio>
+    // Khởi tạo
+    addLog('🛠 G-Creator Pro sẵn sàng. Dùng tab "Tạo Proxy" trước để lấy proxy.', 'info');
+    addLog('📌 Backend Python cần chạy tại /api/lay_proxy, /api/tao_gmail, /api/doc_proxy', 'info');
+    setStatus('Sẵn sàng', 'idle');
+</script>
 </body>
 </html>
