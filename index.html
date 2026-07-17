@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Bui Minh Phat</title>
-    <!-- Phát nhạc khi chạm/click bất kỳ đâu trên trang -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://files.catbox.moe/mwpdge.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Tối ưu tải nhanh: preconnect và preload các tài nguyên quan trọng -->
+    <link rel="preconnect" href="https://files.catbox.moe">
+    <link rel="preload" as="image" href="https://files.catbox.moe/k3xvri.png">
+    <link rel="preload" as="audio" href="https://files.catbox.moe/mwpdge.mp3">
     <style>
+        /* Reset và style tối giản, không dùng font ngoài để tránh chậm */
         * {
             margin: 0;
             padding: 0;
@@ -23,6 +24,11 @@
             align-items: flex-start;
             min-height: 100vh;
             padding: 20px 16px 40px;
+            opacity: 0;
+            animation: fadeIn 0.2s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
         .container {
             max-width: 420px;
@@ -33,7 +39,6 @@
             box-shadow: 0 12px 40px rgba(0,0,0,0.8);
             border: 1px solid #2a3350;
         }
-        /* Ảnh đại diện */
         .avatar {
             display: block;
             width: 100px;
@@ -43,6 +48,7 @@
             margin: 0 auto 10px;
             border: 3px solid #4a7cf7;
             box-shadow: 0 0 20px rgba(74, 124, 247, 0.3);
+            background: #1a2140; /* màu nền chờ khi ảnh chưa tải xong */
         }
         .username {
             text-align: center;
@@ -61,44 +67,24 @@
             letter-spacing: 2px;
             margin-bottom: 16px;
         }
-        .stats {
-            display: flex;
-            justify-content: space-around;
+        .time-bar {
             background: #1a2140;
             border-radius: 60px;
-            padding: 10px 8px;
+            padding: 10px 18px;
             margin-bottom: 20px;
             border: 1px solid #2d365a;
-        }
-        .stats span {
-            font-size: 13px;
-            color: #b0c0e0;
-        }
-        .stats strong {
-            display: block;
-            font-size: 18px;
-            color: #fff;
-        }
-        .btn-download {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, #4a7cf7, #6a4cf7);
-            border: none;
-            border-radius: 60px;
-            color: #fff;
-            font-size: 20px;
-            font-weight: 700;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 6px 20px rgba(74, 124, 247, 0.4);
-            margin-bottom: 28px;
-            cursor: pointer;
-            transition: 0.2s;
+            font-size: 22px;
+            font-weight: 600;
+            color: #b0caff;
+            letter-spacing: 3px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
         }
-        .btn-download:active {
-            transform: scale(0.96);
+        .time-bar span {
+            background: #0b0e1a;
+            padding: 4px 16px;
+            border-radius: 40px;
+            display: inline-block;
         }
         .section-title {
             font-size: 18px;
@@ -119,8 +105,8 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            transition: 0.1s;
             border: 1px solid #283257;
+            transition: none; /* bỏ hiệu ứng để nhanh hơn */
         }
         .key-item .name, .game-item .name {
             font-weight: 600;
@@ -162,31 +148,33 @@
             border-top: 1px solid #1e2640;
             padding-top: 18px;
         }
+        /* Ẩn các phần đã xóa */
+        .stats, .btn-download {
+            display: none !important;
+        }
+        /* Load nhanh hơn bằng cách không chờ font */
+        @font-face {
+            font-family: 'system';
+            src: local('-apple-system'), local('Segoe UI'), local('Roboto');
+        }
     </style>
 </head>
 <body>
     <div class="container" id="app">
-        <!-- Ảnh đại diện -->
-        <img src="https://files.catbox.moe/k3xvri.png" alt="Avatar" class="avatar" id="avatarImg">
+        <!-- Ảnh đại diện - có sẵn kích thước và background chờ -->
+        <img src="https://files.catbox.moe/k3xvri.png" alt="Avatar" class="avatar" id="avatarImg" width="100" height="100" loading="eager">
         
-        <!-- Tên + phụ đề -->
         <div class="username">Bui Minh Phat</div>
         <div class="subhead">Scroll down to explore</div>
 
-        <!-- Thống kê -->
-        <div class="stats">
-            <span><strong>500M+</strong> Lượt tải</span>
-            <span><strong>2026</strong> Cập nhật</span>
-            <span><strong>#1</strong> iOS</span>
+        <!-- Thanh thời gian -->
+        <div class="time-bar" id="timeDisplay">
+            <span id="clock">--:--:--</span>
         </div>
 
-        <!-- Nút TẢI GAME -->
-        <div class="btn-download" id="downloadBtn">TẢI GAME</div>
-
-        <!-- KHU VỰC GET KEY -->
+        <!-- GET KEY -->
         <div class="section-title">🔑 GET KEY</div>
 
-        <!-- Key LQ iOS -->
         <div class="key-item">
             <div>
                 <div class="name">Get Key LQ iOS</div>
@@ -195,7 +183,6 @@
             <span class="badge">iOS</span>
         </div>
 
-        <!-- Key LQ Android -->
         <div class="key-item">
             <div>
                 <div class="name">Get Key LQ Android</div>
@@ -204,7 +191,6 @@
             <span class="badge">Android</span>
         </div>
 
-        <!-- Key Roblox iOS -->
         <div class="key-item">
             <div>
                 <div class="name">Get Key Roblox iOS</div>
@@ -213,10 +199,9 @@
             <span class="badge">iOS</span>
         </div>
 
-        <!-- DANH SÁCH GAME MODS -->
+        <!-- GAME MODS -->
         <div class="section-title" style="margin-top: 8px;">🎮 Game Mods</div>
 
-        <!-- Roblox -->
         <div class="game-item">
             <div>
                 <div class="name">Roblox iOS Client Delta iPA</div>
@@ -228,7 +213,6 @@
             </div>
         </div>
 
-        <!-- Aov Mod (No Hack) -->
         <div class="game-item">
             <div>
                 <div class="name">Aov Mod (No Hack)</div>
@@ -240,7 +224,6 @@
             </div>
         </div>
 
-        <!-- Aov Cheat (Map+Mod) -->
         <div class="game-item">
             <div>
                 <div class="name">Aov Cheat (Map+Mod)</div>
@@ -252,7 +235,6 @@
             </div>
         </div>
 
-        <!-- Map/Skin AOV Android -->
         <div class="game-item">
             <div>
                 <div class="name">Map/Skin AOV Android</div>
@@ -267,50 +249,42 @@
         <div class="footer-note">MOD FILES • Bui Minh Phat</div>
     </div>
 
-    <!-- JavaScript: Phát nhạc khi chạm/click bất kỳ đâu trên trang -->
     <script>
         (function() {
+            // ----- Đồng hồ (chạy ngay khi script load) -----
+            function updateClock() {
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                document.getElementById('clock').textContent = h + ':' + m + ':' + s;
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // ----- Phát nhạc khi chạm/click (tối ưu, không làm chậm load) -----
             const audio = document.getElementById('bgMusic');
             let musicStarted = false;
 
-            // Hàm phát nhạc (chỉ gọi khi chưa phát)
             function playMusic() {
                 if (!musicStarted && audio) {
-                    audio.play().then(() => {
-                        musicStarted = true;
-                    }).catch((err) => {
-                        // Nếu trình duyệt chặn, không làm gì
-                        console.log('Không thể phát nhạc tự động:', err);
-                    });
+                    audio.play().then(() => { musicStarted = true; }).catch(() => {});
                 }
             }
 
-            // Sự kiện cho cảm ứng (chạm)
+            // Dùng passive: true để không block thao tác
             document.addEventListener('touchstart', playMusic, { passive: true });
-
-            // Sự kiện cho chuột (click) - dành cho PC
             document.addEventListener('click', playMusic, { passive: true });
+            document.getElementById('avatarImg').addEventListener('click', playMusic, { passive: true });
 
-            // Dự phòng: nếu có thao tác trên nút tải game cũng kích hoạt
-            const downloadBtn = document.getElementById('downloadBtn');
-            if (downloadBtn) {
-                downloadBtn.addEventListener('click', playMusic, { passive: true });
-            }
-
-            // Dự phòng cho ảnh đại diện (có thể chạm vào)
-            const avatar = document.getElementById('avatarImg');
-            if (avatar) {
-                avatar.addEventListener('click', playMusic, { passive: true });
-            }
-
-            // Nếu người dùng đã tương tác với bất kỳ đâu, nhưng nếu chưa phát thì thử lại sau 1s
-            // (Tránh trường hợp sự kiện chạm không bắt được)
-            setTimeout(() => {
-                if (!musicStarted) {
-                    // Thử phát nếu có tương tác trước đó (hiếm)
-                }
-            }, 3000);
+            // ----- Tăng tốc hiển thị: ẩn preload không cần thiết -----
+            // (Đã có preload ở link, không cần thêm)
         })();
     </script>
+
+    <!-- Đặt audio ở cuối body để không chặn render -->
+    <audio id="bgMusic" loop preload="metadata" style="display:none;">
+        <source src="https://files.catbox.moe/mwpdge.mp3" type="audio/mpeg">
+    </audio>
 </body>
 </html>
