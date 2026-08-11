@@ -3,227 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCCD Fake - Bản siêu sát thật</title>
+    <title>Game bắn mục tiêu</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #e0e0e0; display: flex; justify-content: center; padding: 30px 10px; font-family: 'Times New Roman', Arial, sans-serif; }
-        .container { max-width: 550px; width: 100%; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: #b30000; margin-bottom: 5px; font-size: 20px; }
-        .card {
-            background: #fefcf5;
-            border: 2px solid #a00000;
-            border-radius: 12px;
-            padding: 18px 16px 12px;
-            position: relative;
-            box-shadow: inset 0 0 0 1px #d4c9a0;
-            background-image: repeating-linear-gradient(45deg, rgba(200,180,140,0.02) 0px, rgba(200,180,140,0.02) 2px, transparent 2px, transparent 8px);
-        }
-        /* Header */
-        .header { text-align: center; border-bottom: 2px solid #a00000; padding-bottom: 6px; margin-bottom: 10px; }
-        .header h3 { font-size: 16px; font-weight: bold; color: #a00000; letter-spacing: 1px; }
-        .header .sub { font-size: 11px; color: #333; }
-        .header .eng { font-size: 10px; color: #555; font-style: italic; }
-
-        /* Ảnh + thông tin chính */
-        .top-row { display: flex; gap: 15px; margin-bottom: 10px; }
-        .avatar-box { width: 110px; height: 140px; border: 2px solid #a00000; border-radius: 4px; overflow: hidden; flex-shrink: 0; background: #ddd; }
-        .avatar-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .info-main { flex: 1; font-size: 13px; }
-        .info-main .line { display: flex; border-bottom: 1px dotted #aaa; padding: 3px 0; }
-        .info-main .label { font-weight: bold; width: 70px; color: #2d2d2d; }
-        .info-main .value { flex: 1; color: #000; }
-
-        /* Vân tay + chip */
-        .finger-chip { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 10px; }
-        .finger { width: 70px; height: 70px; background: #f0ede5; border: 1px solid #8a7a5a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #555; background-image: radial-gradient(circle, #b8a88a 1px, transparent 1px); background-size: 4px 4px; }
-        .chip { width: 40px; height: 30px; background: #c9b48a; border: 1px solid #8a7a5a; border-radius: 4px; position: relative; }
-        .chip::after { content: ''; position: absolute; top: 4px; left: 6px; width: 28px; height: 20px; border: 1px solid #6a5a3a; border-radius: 2px; background: repeating-linear-gradient(45deg, #b8a88a 0px, #b8a88a 2px, #d4c4a0 2px, #d4c4a0 4px); }
-        .barcode { margin: 6px 0; text-align: center; }
-        .barcode img { max-width: 100%; height: 30px; background: #fff; }
-
-        /* Các trường nhập liệu (ẩn khi in) */
-        .form-area { margin-top: 14px; background: #f8f4ec; padding: 12px; border-radius: 8px; border: 1px solid #ccc; }
-        .form-area .field { margin-bottom: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-        .form-area .field label { font-weight: bold; font-size: 12px; width: 80px; }
-        .form-area .field input, .form-area .field select { flex: 1; padding: 4px 6px; border: 1px solid #aaa; border-radius: 4px; font-size: 13px; min-width: 100px; }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
-        .btn-group button { padding: 6px 14px; border: none; border-radius: 20px; font-weight: bold; background: #a00000; color: #fff; cursor: pointer; font-size: 12px; flex: 1; min-width: 70px; }
-        .btn-group button:hover { opacity: 0.85; }
-        .btn-random { background: #1f6b2e; }
-        .btn-copy { background: #1a4d7a; }
-        .btn-age { background: #7a5a1a; }
-
-        .result-box { background: #f0f0e8; padding: 10px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px; white-space: pre-line; border-left: 4px solid #a00000; margin-top: 8px; max-height: 200px; overflow: auto; }
-        .note { font-size: 10px; color: #888; text-align: center; margin-top: 6px; border-top: 1px dashed #ccc; padding-top: 6px; }
-        .watermark { position: relative; }
-        .watermark::before { content: 'MẪU THỬ NGHIỆM'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-25deg); font-size: 40px; color: rgba(160,0,0,0.07); font-weight: bold; pointer-events: none; z-index: 0; }
+        body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
+        .game-wrapper { background: #16213e; padding: 20px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); }
+        canvas { display: block; background: #0f3460; border-radius: 10px; cursor: crosshair; border: 3px solid #e94560; }
+        .info { display: flex; justify-content: space-between; color: #fff; padding: 10px 6px 0; font-size: 18px; font-weight: bold; }
+        .info span { background: #0f3460; padding: 4px 16px; border-radius: 20px; border: 1px solid #e94560; }
+        button { background: #e94560; color: white; border: none; padding: 8px 24px; border-radius: 30px; font-weight: bold; font-size: 16px; cursor: pointer; margin-left: 10px; }
+        button:hover { background: #c73652; transform: scale(0.97); }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>CĂN CƯỚC CÔNG DÂN</h2>
-    <div class="card watermark">
-        <!-- Header -->
-        <div class="header">
-            <div class="sub">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
-            <div class="eng">SOCIALIST REPUBLIC OF VIET NAM</div>
-            <div style="font-size:14px; font-weight:bold; color:#a00000;">CĂN CƯỚC CÔNG DÂN</div>
-            <div class="eng" style="font-size:10px;">CITIZEN IDENTITY CARD</div>
-        </div>
-
-        <!-- Top: ảnh + info -->
-        <div class="top-row">
-            <div class="avatar-box">
-                <img id="avatarImg" src="https://i.pravatar.cc/150?img=12" alt="face">
-            </div>
-            <div class="info-main">
-                <div class="line"><span class="label">Số:</span><span class="value" id="displaySo">001234567890</span></div>
-                <div class="line"><span class="label">Họ tên:</span><span class="value" id="displayTen">Nguyễn Văn A</span></div>
-                <div class="line"><span class="label">Ngày sinh:</span><span class="value" id="displayNgay">01/01/1990</span></div>
-                <div class="line"><span class="label">Giới tính:</span><span class="value" id="displayGioi">Nam</span></div>
-                <div class="line"><span class="label">Quốc tịch:</span><span class="value" id="displayQt">Việt Nam</span></div>
-                <div class="line"><span class="label">Quê quán:</span><span class="value" id="displayQue">Hà Nội</span></div>
-                <div class="line" style="border-bottom: none;"><span class="label">Nơi thường trú:</span><span class="value" id="displayThuongtru">123 Lê Lợi, Q.1, TP.HCM</span></div>
-            </div>
-        </div>
-
-        <!-- Vân tay + chip + mã vạch -->
-        <div class="finger-chip">
-            <div class="finger">✋ VÂN TAY</div>
-            <div class="chip"></div>
-        </div>
-        <div class="barcode">
-            <svg width="100%" height="30" style="background:#fff; border:1px solid #aaa;">
-                <rect x="0" y="0" width="4" height="30" fill="#222"/>
-                <rect x="8" y="0" width="2" height="30" fill="#222"/>
-                <rect x="12" y="0" width="6" height="30" fill="#222"/>
-                <rect x="22" y="0" width="2" height="30" fill="#222"/>
-                <rect x="28" y="0" width="10" height="30" fill="#222"/>
-                <rect x="42" y="0" width="4" height="30" fill="#222"/>
-                <rect x="50" y="0" width="2" height="30" fill="#222"/>
-                <rect x="56" y="0" width="8" height="30" fill="#222"/>
-                <rect x="68" y="0" width="4" height="30" fill="#222"/>
-                <rect x="76" y="0" width="12" height="30" fill="#222"/>
-                <rect x="92" y="0" width="3" height="30" fill="#222"/>
-                <rect x="98" y="0" width="6" height="30" fill="#222"/>
-                <rect x="108" y="0" width="4" height="30" fill="#222"/>
-                <rect x="116" y="0" width="8" height="30" fill="#222"/>
-                <rect x="128" y="0" width="2" height="30" fill="#222"/>
-                <rect x="134" y="0" width="10" height="30" fill="#222"/>
-                <rect x="148" y="0" width="4" height="30" fill="#222"/>
-                <rect x="156" y="0" width="6" height="30" fill="#222"/>
-                <rect x="166" y="0" width="12" height="30" fill="#222"/>
-                <rect x="182" y="0" width="3" height="30" fill="#222"/>
-                <rect x="188" y="0" width="8" height="30" fill="#222"/>
-            </svg>
-        </div>
-        <div style="text-align:right; font-size:9px; color:#666; margin-top:-2px;">Mã QR động</div>
-
-        <!-- FORM NHẬP LIỆU -->
-        <div class="form-area">
-            <div class="field"><label>Số CCCD:</label><input type="text" id="soCccd" placeholder="12 số" maxlength="12"></div>
-            <div class="field"><label>Họ tên:</label><input type="text" id="hoTen" placeholder="Tên"></div>
-            <div class="field"><label>Ngày sinh:</label><input type="text" id="ngaySinh" placeholder="DD/MM/YYYY"></div>
-            <div class="field"><label>Giới tính:</label><input type="text" id="gioiTinh" placeholder="Nam/Nữ/Other"></div>
-            <div class="field"><label>Quốc tịch:</label><input type="text" id="quocTich" placeholder="Quốc tịch"></div>
-            <div class="field"><label>Quê quán:</label><input type="text" id="queQuan" placeholder="Quê quán"></div>
-            <div class="field"><label>Nơi thường trú:</label><input type="text" id="noiThuongTru" placeholder="Địa chỉ"></div>
-            <div class="btn-group">
-                <button class="btn-random" id="btnRandom">🎲 Random hết</button>
-                <button class="btn-age" id="btnYoung">🧒 Trẻ</button>
-                <button class="btn-age" id="btnMid">🧑 Trung niên</button>
-                <button class="btn-age" id="btnOld">👴 Già</button>
-                <button id="btnShow">📋 Cập nhật thẻ</button>
-                <button class="btn-copy" id="btnCopy">📄 Copy</button>
-            </div>
-        </div>
-
-        <div class="result-box" id="resultDisplay">Nhập thông tin hoặc bấm Random rồi Cập nhật thẻ.</div>
-        <div class="note">* Đây là bản fake mô phỏng giao diện. Không thể tạo giấy tờ thật. Không sử dụng lừa đảo.</div>
+<div class="game-wrapper">
+    <div class="info">
+        <span>🎯 Điểm: <span id="scoreDisplay">0</span></span>
+        <span>❤️ Mạng: <span id="livesDisplay">3</span></span>
+        <button id="restartBtn">🔄 Chơi lại</button>
     </div>
+    <canvas id="gameCanvas" width="700" height="500"></canvas>
 </div>
-
 <script>
-    // ========== DỮ LIỆU MẪU ==========
-    function randomSo() { let s=''; for(let i=0;i<12;i++) s+=Math.floor(Math.random()*10); return s; }
-    const tenList = ['Nguyễn Văn An','Trần Thị Bình','Lê Hoàng Cường','Phạm Thanh Dung','Hoàng Minh Đức','Vũ Hồng Hạnh','Đặng Quang Huy','Bùi Ngọc Lan','Đỗ Thị Mai','Ngô Đức Nam','John Smith','Emma Watson','Liam O’Brien','Sophia Müller','Noah Chen','Mia Yamamoto','James Johnson','Olivia Brown','William Garcia','Ava Martinez'];
-    const ngayList = ['12/05/1985','23/08/1992','03/11/1978','17/06/2000','09/02/1995','30/10/1980','21/07/1988','15/12/1999','04/04/1983','26/09/1991','01/01/1996','14/02/1982','07/07/1975','19/03/1998','25/12/1989','08/06/1993','16/10/1986','28/01/2001','05/09/1977','11/04/1990'];
-    const gioiList = ['Nam','Nữ','Nam','Nữ','Nam','Nữ','Other','Nam','Nữ','Nam'];
-    const qtList = ['Việt Nam','Hoa Kỳ','Anh','Pháp','Đức','Nhật Bản','Hàn Quốc','Úc','Canada','Singapore'];
-    const queList = ['Hà Nội','TP.HCM','Đà Nẵng','New York, USA','London, UK','Paris, Pháp','Berlin, Đức','Tokyo, Nhật','Seoul, HQ','Sydney, Úc','Cần Thơ','Nghệ An','California, USA'];
-    const ttList = ['123 Lê Lợi, P.Bến Nghé, Q.1, TP.HCM','45 Nguyễn Huệ, P.Bến Thành, Q.1','78 Trần Hưng Đạo, P.Cầu Kho, Q.1','234 Điện Biên Phủ, P.25, Bình Thạnh','56 Võ Văn Tần, P.6, Q.3','12 Nguyễn Thái Học, P.Minh Khai, HN','89 Đường 30/4, P.Hòa Cường, Đà Nẵng','345 Hùng Vương, P.Vĩnh Trung, Hải Phòng','67 Ngô Quyền, P.An Hải, Cần Thơ','101 Lý Tự Trọng, P.Quyết Thắng, NA','22 Wall St, NY, USA','10 Downing St, London','5 Rue Rivoli, Paris'];
-    function rand(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreSpan = document.getElementById('scoreDisplay');
+    const livesSpan = document.getElementById('livesDisplay');
 
-    // Ảnh theo tuổi
-    function getAvatarByAge(ageSeed) {
-        let base = Math.floor(Math.random()*70)+1;
-        if(ageSeed==='young') base += 10;
-        else if(ageSeed==='mid') base += 200;
-        else base += 400;
-        base = (base + Math.floor(Math.random()*20)) % 100 + 1;
-        return `https://i.pravatar.cc/150?img=${base}`;
-    }
+    // Biến game
+    let score = 0;
+    let lives = 3;
+    let gameOver = false;
+    let frames = 0;
 
-    let currentAge = 'young';
-    function setAvatar(age) {
-        currentAge = age;
-        document.getElementById('avatarImg').src = getAvatarByAge(age);
-    }
+    // Mục tiêu
+    let targets = [];
+    const TARGET_RADIUS = 25;
+    const MAX_TARGETS = 8;
+    const SPAWN_RATE = 30; // số frame giữa mỗi lần spawn
 
-    // Cập nhật toàn bộ thẻ từ form
-    function updateCard() {
-        const so = document.getElementById('soCccd').value.trim() || randomSo();
-        const ten = document.getElementById('hoTen').value.trim() || rand(tenList);
-        const ngay = document.getElementById('ngaySinh').value.trim() || rand(ngayList);
-        const gioi = document.getElementById('gioiTinh').value.trim() || rand(gioiList);
-        const qt = document.getElementById('quocTich').value.trim() || rand(qtList);
-        const que = document.getElementById('queQuan').value.trim() || rand(queList);
-        const tt = document.getElementById('noiThuongTru').value.trim() || rand(ttList);
-
-        document.getElementById('displaySo').textContent = so;
-        document.getElementById('displayTen').textContent = ten;
-        document.getElementById('displayNgay').textContent = ngay;
-        document.getElementById('displayGioi').textContent = gioi;
-        document.getElementById('displayQt').textContent = qt;
-        document.getElementById('displayQue').textContent = que;
-        document.getElementById('displayThuongtru').textContent = tt;
-
-        // Cập nhật result
-        const txt = `Số: ${so}\nHọ tên: ${ten}\nNgày sinh: ${ngay}\nGiới tính: ${gioi}\nQuốc tịch: ${qt}\nQuê quán: ${que}\nNơi thường trú: ${tt}`;
-        document.getElementById('resultDisplay').textContent = txt;
-    }
-
-    // Random toàn bộ form + ảnh
-    function randomAll() {
-        document.getElementById('soCccd').value = randomSo();
-        document.getElementById('hoTen').value = rand(tenList);
-        document.getElementById('ngaySinh').value = rand(ngayList);
-        document.getElementById('gioiTinh').value = rand(gioiList);
-        document.getElementById('quocTich').value = rand(qtList);
-        document.getElementById('queQuan').value = rand(queList);
-        document.getElementById('noiThuongTru').value = rand(ttList);
-        setAvatar(currentAge);
-        updateCard();
-    }
-
-    // ====== SỰ KIỆN ======
-    document.getElementById('btnRandom').addEventListener('click', randomAll);
-    document.getElementById('btnYoung').addEventListener('click', function(){ setAvatar('young'); updateCard(); });
-    document.getElementById('btnMid').addEventListener('click', function(){ setAvatar('mid'); updateCard(); });
-    document.getElementById('btnOld').addEventListener('click', function(){ setAvatar('old'); updateCard(); });
-    document.getElementById('btnShow').addEventListener('click', updateCard);
-    document.getElementById('btnCopy').addEventListener('click', function(){
-        const txt = document.getElementById('resultDisplay').textContent;
-        if(txt && !txt.includes('Nhập thông tin')) {
-            navigator.clipboard.writeText(txt).then(()=>alert('Đã copy')).catch(()=>alert('Copy thủ công'));
-        } else alert('Hãy cập nhật thẻ trước');
-    });
+    // Đạn (hiệu ứng)
+    let bullets = [];
 
     // Khởi tạo
-    window.onload = function(){
-        setAvatar('young');
-        randomAll();
-    };
+    function init() {
+        score = 0;
+        lives = 3;
+        gameOver = false;
+        targets = [];
+        bullets = [];
+        frames = 0;
+        updateUI();
+    }
+
+    // Cập nhật UI
+    function updateUI() {
+        scoreSpan.textContent = score;
+        livesSpan.textContent = lives;
+    }
+
+    // Sinh mục tiêu mới
+    function spawnTarget() {
+        if (targets.length >= MAX_TARGETS) return;
+        const x = Math.random() * (canvas.width - 2 * TARGET_RADIUS) + TARGET_RADIUS;
+        const y = Math.random() * (canvas.height - 2 * TARGET_RADIUS) + TARGET_RADIUS;
+        const vx = (Math.random() - 0.5) * 3;
+        const vy = (Math.random() - 0.5) * 3;
+        const radius = TARGET_RADIUS;
+        const color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+        targets.push({ x, y, vx, vy, radius, color });
+    }
+
+    // Vẽ game
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Vẽ mục tiêu
+        for (let t of targets) {
+            ctx.beginPath();
+            ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+            ctx.fillStyle = t.color;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            // Vẽ chữ X ở giữa
+            ctx.fillStyle = '#000';
+            ctx.font = '18px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('✕', t.x, t.y);
+        }
+
+        // Vẽ đạn (hiệu ứng nổ nhỏ)
+        for (let b of bullets) {
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, 8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 100, 0.9)';
+            ctx.fill();
+            ctx.strokeStyle = '#ffaa00';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // Nếu game over
+        if (gameOver) {
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 48px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💀 GAME OVER', canvas.width/2, canvas.height/2 - 20);
+            ctx.font = '24px Arial';
+            ctx.fillText('Bấm "Chơi lại"', canvas.width/2, canvas.height/2 + 50);
+        }
+    }
+
+    // Cập nhật logic
+    function update() {
+        if (gameOver) return;
+
+        frames++;
+        // Sinh mục tiêu
+        if (frames % SPAWN_RATE === 0) {
+            spawnTarget();
+        }
+
+        // Di chuyển mục tiêu + va chạm biên
+        for (let t of targets) {
+            t.x += t.vx;
+            t.y += t.vy;
+            if (t.x - t.radius < 0 || t.x + t.radius > canvas.width) t.vx = -t.vx;
+            if (t.y - t.radius < 0 || t.y + t.radius > canvas.height) t.vy = -t.vy;
+        }
+
+        // Cập nhật đạn (bay ra và biến mất)
+        bullets = bullets.filter(b => {
+            b.x += b.vx;
+            b.y += b.vy;
+            return b.x > 0 && b.x < canvas.width && b.y > 0 && b.y < canvas.height;
+        });
+
+        // Va chạm đạn - mục tiêu
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            const b = bullets[i];
+            for (let j = targets.length - 1; j >= 0; j--) {
+                const t = targets[j];
+                const dx = b.x - t.x;
+                const dy = b.y - t.y;
+                if (dx * dx + dy * dy < (t.radius + 8) ** 2) {
+                    // Trúng mục tiêu
+                    targets.splice(j, 1);
+                    bullets.splice(i, 1);
+                    score++;
+                    updateUI();
+                    break;
+                }
+            }
+        }
+
+        // Mục tiêu thoát khỏi màn hình (không dùng, đã xử lý biên)
+        // Không có mất mạng do thoát biên vì đã dội lại
+    }
+
+    // Xử lý bắn
+    function shoot(e) {
+        if (gameOver) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
+        const mouseY = (e.clientY - rect.top) * scaleY;
+        // Tạo đạn bay theo hướng chuột (bắn từ tâm màn hình)
+        const startX = canvas.width / 2;
+        const startY = canvas.height / 2;
+        const dx = mouseX - startX;
+        const dy = mouseY - startY;
+        const len = Math.sqrt(dx*dx + dy*dy);
+        if (len === 0) return;
+        const speed = 10;
+        bullets.push({
+            x: startX,
+            y: startY,
+            vx: (dx / len) * speed,
+            vy: (dy / len) * speed
+        });
+    }
+
+    // Mất mạng (khi click vào mục tiêu - nhưng bắn đã xử lý, thêm cơ chế mất mạng nếu mục tiêu chạm vào tâm)
+    // Ở đây mỗi khi mục tiêu chạm vào tâm người chơi (giữa màn hình) sẽ mất 1 mạng
+    function checkCollisionWithCenter() {
+        if (gameOver) return;
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        for (let i = targets.length - 1; i >= 0; i--) {
+            const t = targets[i];
+            const dx = t.x - cx;
+            const dy = t.y - cy;
+            if (dx*dx + dy*dy < (t.radius + 20) ** 2) { // vùng nguy hiểm quanh tâm
+                targets.splice(i, 1);
+                lives--;
+                updateUI();
+                if (lives <= 0) {
+                    gameOver = true;
+                    lives = 0;
+                    updateUI();
+                }
+                break; // mất 1 mạng mỗi frame
+            }
+        }
+    }
+
+    // Vòng lặp game
+    function gameLoop() {
+        update();
+        checkCollisionWithCenter();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Sự kiện click bắn
+    canvas.addEventListener('click', shoot);
+
+    // Restart
+    document.getElementById('restartBtn').addEventListener('click', function() {
+        init();
+    });
+
+    // Bắt đầu
+    init();
+    gameLoop();
 </script>
 </body>
 </html>
