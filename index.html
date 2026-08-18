@@ -3,237 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game bắn mục tiêu</title>
+    <title>Gửi Thanh Tâm...</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
-        .game-wrapper { background: #16213e; padding: 20px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); }
-        canvas { display: block; background: #0f3460; border-radius: 10px; cursor: crosshair; border: 3px solid #e94560; }
-        .info { display: flex; justify-content: space-between; color: #fff; padding: 10px 6px 0; font-size: 18px; font-weight: bold; }
-        .info span { background: #0f3460; padding: 4px 16px; border-radius: 20px; border: 1px solid #e94560; }
-        button { background: #e94560; color: white; border: none; padding: 8px 24px; border-radius: 30px; font-weight: bold; font-size: 16px; cursor: pointer; margin-left: 10px; }
-        button:hover { background: #c73652; transform: scale(0.97); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+        }
+
+        h1 {
+            color: #2d3436;
+            font-size: 24px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: #e84393;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            min-height: 60px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff7675;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.4);
+        }
+
+        #yesBtn:hover {
+            background-color: #d63031;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background-color: #b2bec3;
+            color: white;
+            position: absolute;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff7675;
+            font-size: 20px;
+            animation: flyUp 4s linear infinite;
+        }
+
+        @keyframes flyUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-500px) scale(1.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="game-wrapper">
-    <div class="info">
-        <span>🎯 Điểm: <span id="scoreDisplay">0</span></span>
-        <span>❤️ Mạng: <span id="livesDisplay">3</span></span>
-        <button id="restartBtn">🔄 Chơi lại</button>
+
+    <div class="container" id="card">
+        <h1>Ê <span class="highlight">Thanh Tâm</span>! Làm người yêu bớt làm bạn thân đi, chịu hông? 😏</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="sayYes()">Chịu luôn á 🥰</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Còn lâu nhé ế</button>
+        </div>
     </div>
-    <canvas id="gameCanvas" width="700" height="500"></canvas>
-</div>
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const scoreSpan = document.getElementById('scoreDisplay');
-    const livesSpan = document.getElementById('livesDisplay');
 
-    // Biến game
-    let score = 0;
-    let lives = 3;
-    let gameOver = false;
-    let frames = 0;
-
-    // Mục tiêu
-    let targets = [];
-    const TARGET_RADIUS = 25;
-    const MAX_TARGETS = 8;
-    const SPAWN_RATE = 30; // số frame giữa mỗi lần spawn
-
-    // Đạn (hiệu ứng)
-    let bullets = [];
-
-    // Khởi tạo
-    function init() {
-        score = 0;
-        lives = 3;
-        gameOver = false;
-        targets = [];
-        bullets = [];
-        frames = 0;
-        updateUI();
-    }
-
-    // Cập nhật UI
-    function updateUI() {
-        scoreSpan.textContent = score;
-        livesSpan.textContent = lives;
-    }
-
-    // Sinh mục tiêu mới
-    function spawnTarget() {
-        if (targets.length >= MAX_TARGETS) return;
-        const x = Math.random() * (canvas.width - 2 * TARGET_RADIUS) + TARGET_RADIUS;
-        const y = Math.random() * (canvas.height - 2 * TARGET_RADIUS) + TARGET_RADIUS;
-        const vx = (Math.random() - 0.5) * 3;
-        const vy = (Math.random() - 0.5) * 3;
-        const radius = TARGET_RADIUS;
-        const color = `hsl(${Math.random() * 360}, 80%, 60%)`;
-        targets.push({ x, y, vx, vy, radius, color });
-    }
-
-    // Vẽ game
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Vẽ mục tiêu
-        for (let t of targets) {
-            ctx.beginPath();
-            ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
-            ctx.fillStyle = t.color;
-            ctx.fill();
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            // Vẽ chữ X ở giữa
-            ctx.fillStyle = '#000';
-            ctx.font = '18px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('✕', t.x, t.y);
+    <script>
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 100);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 100);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
         }
 
-        // Vẽ đạn (hiệu ứng nổ nhỏ)
-        for (let b of bullets) {
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, 8, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 100, 0.9)';
-            ctx.fill();
-            ctx.strokeStyle = '#ffaa00';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        function sayYes() {
+            const card = document.getElementById('card');
+            card.innerHTML = `
+                <h1 style="color: #e84393;">Hợp lý quá nha! 🎉</h1>
+                <p style="color: #636e72; font-size: 18px; margin-top: 15px;">Từ giờ đổi chức vụ từ bạn thân thành "gấu" của nhau luôn nhé Tâm ơi! ❤️</p>
+            `;
+            createHearts();
         }
 
-        // Nếu game over
-        if (gameOver) {
-            ctx.fillStyle = 'rgba(0,0,0,0.6)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 48px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('💀 GAME OVER', canvas.width/2, canvas.height/2 - 20);
-            ctx.font = '24px Arial';
-            ctx.fillText('Bấm "Chơi lại"', canvas.width/2, canvas.height/2 + 50);
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.bottom = '0px';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }, 300);
         }
-    }
-
-    // Cập nhật logic
-    function update() {
-        if (gameOver) return;
-
-        frames++;
-        // Sinh mục tiêu
-        if (frames % SPAWN_RATE === 0) {
-            spawnTarget();
-        }
-
-        // Di chuyển mục tiêu + va chạm biên
-        for (let t of targets) {
-            t.x += t.vx;
-            t.y += t.vy;
-            if (t.x - t.radius < 0 || t.x + t.radius > canvas.width) t.vx = -t.vx;
-            if (t.y - t.radius < 0 || t.y + t.radius > canvas.height) t.vy = -t.vy;
-        }
-
-        // Cập nhật đạn (bay ra và biến mất)
-        bullets = bullets.filter(b => {
-            b.x += b.vx;
-            b.y += b.vy;
-            return b.x > 0 && b.x < canvas.width && b.y > 0 && b.y < canvas.height;
-        });
-
-        // Va chạm đạn - mục tiêu
-        for (let i = bullets.length - 1; i >= 0; i--) {
-            const b = bullets[i];
-            for (let j = targets.length - 1; j >= 0; j--) {
-                const t = targets[j];
-                const dx = b.x - t.x;
-                const dy = b.y - t.y;
-                if (dx * dx + dy * dy < (t.radius + 8) ** 2) {
-                    // Trúng mục tiêu
-                    targets.splice(j, 1);
-                    bullets.splice(i, 1);
-                    score++;
-                    updateUI();
-                    break;
-                }
-            }
-        }
-
-        // Mục tiêu thoát khỏi màn hình (không dùng, đã xử lý biên)
-        // Không có mất mạng do thoát biên vì đã dội lại
-    }
-
-    // Xử lý bắn
-    function shoot(e) {
-        if (gameOver) return;
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const mouseX = (e.clientX - rect.left) * scaleX;
-        const mouseY = (e.clientY - rect.top) * scaleY;
-        // Tạo đạn bay theo hướng chuột (bắn từ tâm màn hình)
-        const startX = canvas.width / 2;
-        const startY = canvas.height / 2;
-        const dx = mouseX - startX;
-        const dy = mouseY - startY;
-        const len = Math.sqrt(dx*dx + dy*dy);
-        if (len === 0) return;
-        const speed = 10;
-        bullets.push({
-            x: startX,
-            y: startY,
-            vx: (dx / len) * speed,
-            vy: (dy / len) * speed
-        });
-    }
-
-    // Mất mạng (khi click vào mục tiêu - nhưng bắn đã xử lý, thêm cơ chế mất mạng nếu mục tiêu chạm vào tâm)
-    // Ở đây mỗi khi mục tiêu chạm vào tâm người chơi (giữa màn hình) sẽ mất 1 mạng
-    function checkCollisionWithCenter() {
-        if (gameOver) return;
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        for (let i = targets.length - 1; i >= 0; i--) {
-            const t = targets[i];
-            const dx = t.x - cx;
-            const dy = t.y - cy;
-            if (dx*dx + dy*dy < (t.radius + 20) ** 2) { // vùng nguy hiểm quanh tâm
-                targets.splice(i, 1);
-                lives--;
-                updateUI();
-                if (lives <= 0) {
-                    gameOver = true;
-                    lives = 0;
-                    updateUI();
-                }
-                break; // mất 1 mạng mỗi frame
-            }
-        }
-    }
-
-    // Vòng lặp game
-    function gameLoop() {
-        update();
-        checkCollisionWithCenter();
-        draw();
-        requestAnimationFrame(gameLoop);
-    }
-
-    // Sự kiện click bắn
-    canvas.addEventListener('click', shoot);
-
-    // Restart
-    document.getElementById('restartBtn').addEventListener('click', function() {
-        init();
-    });
-
-    // Bắt đầu
-    init();
-    gameLoop();
-</script>
+    </script>
 </body>
 </html>
