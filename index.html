@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hành Trình Của Thanh Tâm 🌸</title>
+    <title>Phá Đảo Nhận Quà Cùng Thanh Tâm 🌸</title>
     <style>
         * {
             margin: 0;
@@ -86,7 +86,6 @@
             box-shadow: 0 3px 10px rgba(255, 65, 108, 0.5);
         }
 
-        /* Avatar nhân vật lấy trực tiếp từ link ảnh của bạn */
         .avatar-img {
             width: 50px;
             height: 50px;
@@ -135,7 +134,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 12, 41, 0.9);
+            background: rgba(15, 12, 41, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -146,36 +145,36 @@
         }
 
         .overlay-screen h1 {
-            font-size: 32px;
+            font-size: 28px;
             color: #ff758c;
             margin-bottom: 10px;
         }
 
         .overlay-screen p {
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 15px;
             color: #dfe6e9;
         }
 
         .reward-box {
             background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
+            padding: 8px;
             border-radius: 15px;
             border: 2px dashed #ff758c;
             margin-bottom: 15px;
         }
 
-        /* Ảnh phần thưởng cuối map lấy từ link ảnh */
-        .reward-box img {
-            width: 180px;
+        .reward-box video {
+            width: 240px;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            outline: none;
         }
 
         .btn {
-            padding: 12px 30px;
-            font-size: 18px;
+            padding: 10px 25px;
+            font-size: 16px;
             font-weight: bold;
             background: linear-gradient(135deg, #00b09b, #96c93d);
             color: white;
@@ -201,11 +200,10 @@
         <div class="cloud" style="top: 35px; width: 90px; height: 28px; animation-duration: 12s;"></div>
         <div class="cloud" style="top: 90px; width: 140px; height: 35px; animation-duration: 18s;"></div>
 
-        <div class="score-board">Điểm: <span id="score">0</span> / 200</div>
+        <div class="score-board">Điểm: <span id="score">0</span> / 100</div>
 
         <div id="player">
             <div class="name-tag">Thanh Tâm ✨</div>
-            <!-- Sử dụng trực tiếp link ảnh làm avatar nhân vật -->
             <img src="https://files.catbox.moe/midx04.jpeg" class="avatar-img" alt="Thanh Tâm">
         </div>
 
@@ -214,26 +212,28 @@
 
         <!-- Màn hình bắt đầu -->
         <div class="overlay-screen" id="startScreen">
-            <h1>Hành Trình Của Thanh Tâm 🌸</h1>
-            <p>Game đã được chỉnh <b>rất dễ chơi</b>! Đạt <b>200 điểm</b> để phá đảo nhận quà nhé.</p>
+            <h1>Hành Trình Ngắn Của Thanh Tâm 🌸</h1>
+            <p>Đạt <b>100 điểm</b> là vượt qua map để xem video mới nhé!</p>
             <button class="btn" onclick="startGame()">Bắt đầu chơi</button>
         </div>
 
         <!-- Màn hình THUA -->
         <div class="overlay-screen" id="gameOverScreen">
             <h1>Chạm nhẹ cái mà thua mất rồi! 🥺</h1>
-            <p>Thử lại nhẹ nhàng nha!</p>
+            <p>Thử lại siêu nhanh nha!</p>
             <button class="btn" onclick="restartGame()">Chơi lại</button>
         </div>
 
-        <!-- Màn hình THẮNG (Cuối map) -->
+        <!-- Màn hình THẮNG (Cuối map hiện Video mới) -->
         <div class="overlay-screen" id="winScreen">
             <h1>🎉 Phá Đảo Thành Công! 🎉</h1>
             <div class="reward-box">
-                <!-- Sử dụng trực tiếp link ảnh làm phần thưởng cuối map -->
-                <img src="https://files.catbox.moe/midx04.jpeg" alt="Phần thưởng cuối map">
+                <video id="rewardVideo" controls autoplay>
+                    <source src="https://files.catbox.moe/txya2j.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ video.
+                </video>
             </div>
-            <p>Phần thưởng cực kỳ xuất sắc dành cho Thanh Tâm! 🥰</p>
+            <p>Món quà cuối map dành riêng cho Thanh Tâm! 🥰</p>
             <button class="btn" onclick="restartGame()">Chơi lại từ đầu</button>
         </div>
     </div>
@@ -245,12 +245,13 @@
         const startScreen = document.getElementById('startScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         const winScreen = document.getElementById('winScreen');
+        const rewardVideo = document.getElementById('rewardVideo');
 
         let isJumping = false;
         let score = 0;
         let obstacleInterval;
         let isPlaying = false;
-        const obstacleTypes = ['🌵', '🎁']; // Chỉ để xương rồng và hộp quà cho dễ né
+        const obstacleTypes = ['🌵', '🎁'];
 
         function jump() {
             if (isJumping || !isPlaying) return;
@@ -295,8 +296,7 @@
             const randomObs = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
             obstacle.innerHTML = randomObs;
             
-            // Tốc độ chậm rãi, dễ quan sát để nhảy
-            let obstacleDuration = 2.8; 
+            let obstacleDuration = 3.0; 
             obstacle.style.animationDuration = obstacleDuration + 's';
             
             gameContainer.appendChild(obstacle);
@@ -318,11 +318,10 @@
                     clearInterval(checkCollision);
                     obstacle.remove();
                     if (isPlaying) {
-                        score += (randomObs === '🎁' ? 20 : 10);
+                        score += (randomObs === '🎁' ? 25 : 10);
                         scoreDisplay.innerText = score;
 
-                        // Giảm mốc chiến thắng xuống 200 điểm cho dễ chinh phục
-                        if (score >= 200) {
+                        if (score >= 100) {
                             winGame();
                         }
                     }
@@ -344,8 +343,7 @@
             scoreDisplay.innerText = score;
             isPlaying = true;
             
-            // Khoảng thời gian xuất hiện vật cản thưa hơn để dễ thở
-            obstacleInterval = setInterval(createObstacle, 2500);
+            obstacleInterval = setInterval(createObstacle, 2800);
         }
 
         function gameOver() {
@@ -360,11 +358,14 @@
             clearInterval(obstacleInterval);
             document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
             winScreen.style.display = 'flex';
+            rewardVideo.currentTime = 0;
+            rewardVideo.play();
         }
 
         function restartGame() {
             gameOverScreen.style.display = 'none';
             winScreen.style.display = 'none';
+            rewardVideo.pause();
             startGame();
         }
     </script>
