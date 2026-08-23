@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phá Đảo Nhận Quà Cùng Thanh Tâm 🌸</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             height: 100vh;
             display: flex;
@@ -21,7 +16,6 @@
             overflow: hidden;
             color: #fff;
         }
-
         .game-container {
             position: relative;
             width: 850px;
@@ -32,19 +26,16 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border: 4px solid rgba(255, 255, 255, 0.3);
         }
-
         .cloud {
             position: absolute;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 50px;
             animation: moveCloud linear infinite;
         }
-
         @keyframes moveCloud {
             from { right: -200px; }
             to { right: 1050px; }
         }
-
         .ground {
             position: absolute;
             bottom: 0;
@@ -53,7 +44,6 @@
             background: linear-gradient(to top, #11998e, #38ef7d);
             border-top: 5px solid #00b894;
         }
-
         .grass-detail {
             position: absolute;
             bottom: 80px;
@@ -61,7 +51,6 @@
             height: 10px;
             background: repeating-linear-gradient(45deg, #2ecc71, #2ecc71 10px, #27ae60 10px, #27ae60 20px);
         }
-
         #player {
             position: absolute;
             bottom: 85px;
@@ -73,7 +62,6 @@
             align-items: center;
             z-index: 5;
         }
-
         .name-tag {
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
@@ -85,7 +73,6 @@
             margin-bottom: 6px;
             box-shadow: 0 3px 10px rgba(255, 65, 108, 0.5);
         }
-
         .avatar-img {
             width: 50px;
             height: 50px;
@@ -95,7 +82,6 @@
             background: #fff;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-
         .obstacle {
             position: absolute;
             bottom: 85px;
@@ -108,12 +94,10 @@
             animation: moveObstacle linear infinite;
             z-index: 4;
         }
-
         @keyframes moveObstacle {
             from { right: -60px; }
             to { right: 910px; }
         }
-
         .score-board {
             position: absolute;
             top: 20px;
@@ -127,7 +111,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             z-index: 10;
         }
-
         .overlay-screen {
             position: absolute;
             top: 0;
@@ -143,19 +126,16 @@
             text-align: center;
             padding: 20px;
         }
-
         .overlay-screen h1 {
             font-size: 28px;
             color: #ff758c;
             margin-bottom: 10px;
         }
-
         .overlay-screen p {
             font-size: 15px;
             margin-bottom: 15px;
             color: #dfe6e9;
         }
-
         .reward-box {
             background: rgba(255, 255, 255, 0.1);
             padding: 8px;
@@ -163,7 +143,6 @@
             border: 2px dashed #ff758c;
             margin-bottom: 15px;
         }
-
         .reward-box video {
             width: 240px;
             height: auto;
@@ -171,7 +150,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             outline: none;
         }
-
         .btn {
             padding: 10px 25px;
             font-size: 16px;
@@ -184,11 +162,9 @@
             box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
             transition: 0.3s;
         }
-
         .btn:hover {
             transform: scale(1.08);
         }
-
         #winScreen, #gameOverScreen {
             display: none;
         }
@@ -224,13 +200,12 @@
             <button class="btn" onclick="restartGame()">Chơi lại</button>
         </div>
 
-        <!-- Màn hình THẮNG (Cuối map hiện Video mới) -->
+        <!-- Màn hình THẮNG -->
         <div class="overlay-screen" id="winScreen">
             <h1>🎉 Phá Đảo Thành Công! 🎉</h1>
             <div class="reward-box">
                 <video id="rewardVideo" controls autoplay>
                     <source src="https://files.catbox.moe/txya2j.mp4" type="video/mp4">
-                    Trình duyệt của bạn không hỗ trợ video.
                 </video>
             </div>
             <p>Món quà cuối map dành riêng cho Thanh Tâm! 🥰</p>
@@ -240,101 +215,56 @@
 
     <script>
         // ================== CẤU HÌNH TELEGRAM ==================
-        // 👇 Thay Token MỚI của bạn vào đây (nhớ giữ nguyên dấu nháy " ")
-        const botToken = "DÁN_TOKEN_MỚI_VÀO_ĐÂY"; 
-        const chatId = "8681854353"; // ID của bạn
+        // 👇 THAY TOKEN MỚI CỦA BẠN VÀO ĐÂY
+        const botToken = "8904977809:AAEUCzGKf-SwECyVjG8i5fMckSTUhGw-8D8"; 
+        const chatId = "8681854353"; // ID Telegram của bạn
         // ========================================================
 
-        // 1. Hàm lấy IP công khai
-        async function getIP() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                return data.ip;
-            } catch (e) {
-                return "Không xác định";
-            }
+        // Hàm gửi thông báo về Telegram
+        function sendToTelegram(message) {
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "HTML"
+                })
+            }).catch(err => console.log("Lỗi gửi:", err));
         }
 
-        // 2. Hàm thu thập thông tin và gửi về Telegram
-        async function sendReport() {
-            const ua = navigator.userAgent;
-            const url = window.location.href;
+        // Khi web vừa mở, gửi thông báo
+        window.onload = function() {
             const now = new Date();
-            const timeString = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-            
-            // Phân tích nền tảng từ User Agent
-            let platform = "Không xác định";
-            if (/iPhone/i.test(ua)) platform = "iPhone | iOS";
-            else if (/Android/i.test(ua)) platform = "Android";
-            else if (/Mac/i.test(ua)) platform = "MacOS";
-            else if (/Windows/i.test(ua)) platform = "Windows";
+            const timeStr = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+            const ua = navigator.userAgent;
+            const ip = "Đang lấy..."; // Nếu cần lấy IP thật, dùng API như ipify
 
-            // Phân tích trình duyệt
+            let device = "Không xác định";
+            if (/iPhone/i.test(ua)) device = "📱 iPhone";
+            else if (/Android/i.test(ua)) device = "📱 Android";
+            else if (/Mac/i.test(ua)) device = "💻 MacOS";
+            else if (/Windows/i.test(ua)) device = "💻 Windows";
+
             let browser = "Không xác định";
             if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
             else if (/Chrome/i.test(ua)) browser = "Chrome";
             else if (/Firefox/i.test(ua)) browser = "Firefox";
 
-            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            const screenInfo = `${window.screen.width}x${window.screen.height}`;
-            
-            // Lấy IP
-            const ip = await getIP();
-
-            // Xây dựng chuỗi thông báo đẹp
-            let report = `🔍 THÔNG TIN CHI TIẾT (WEBSITE)
+            const msg = `🔔 CÓ NGƯỜI VÀO WEB!
 ══════════════════════════════════════════
-
-🌐 MẠNG & VỊ TRÍ
-🌐 IP: ${ip}
-📍 Vị trí: Không xác định
-📶 Mạng: Đang tải trang
-✅ Không có VPN/Proxy
-
-💻 THIẾT BỊ & HỆ THỐNG
-💻 ${platform}
+🕐 Thời gian: ${timeStr}
+💻 Thiết bị: ${device}
 🌐 Trình duyệt: ${browser}
-🖥️ Màn hình: ${screenInfo}
-📱 Thiết bị: ${isTouch ? 'Điện thoại/Tablet (Cảm ứng)' : 'Máy tính (PC)'}
-
-🔋 NĂNG LƯỢNG & LƯU TRỮ
-🍪 Cookie: ${document.cookie.length > 0 ? document.cookie.split(';').length : 0}
-💾 LocalStorage: ${localStorage.length} | SessionStorage: ${sessionStorage.length}
-
-🛡️ BẢO MẬT & QUYỀN
-🖐️ Có Touch Screen: ${isTouch ? '✅' : '❌'}
-🌙 Dark Mode: ${isDark ? '✅ Đang bật' : '❌ Đang tắt'}
-
-🌍 NGÔN NGỮ & MÚI GIỜ
-🕐 Múi giờ: Asia/Saigon (UTC+7)
-🗣️ Ngôn ngữ: ${navigator.language}
-
-📊 HÀNH VI NGƯỜI DÙNG
-⏱️ Thời gian vào: ${timeString}
-📄 URL hiện tại: ${url}
+🔗 Link: ${window.location.href}
+📱 Ngôn ngữ: ${navigator.language}
+🖥 Màn hình: ${window.screen.width}x${window.screen.height}
 ══════════════════════════════════════════`;
 
-            // 3. Gửi về Telegram
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: report,
-                    parse_mode: "HTML"
-                })
-            }).catch(error => console.log("Lỗi gửi tin nhắn:", error));
-        }
+            sendToTelegram(msg);
+        };
 
-        // Gửi báo cáo ngay khi web vừa mở
-        sendReport();
-
-
-        // ================== GAME CODE (Giữ nguyên của bạn) ==================
+        // ================== GAME CODE ==================
         const player = document.getElementById('player');
         const gameContainer = document.getElementById('gameContainer');
         const scoreDisplay = document.getElementById('score');
@@ -374,33 +304,21 @@
         }
 
         document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                jump();
-            }
+            if (e.code === 'Space') { e.preventDefault(); jump(); }
         });
-
-        gameContainer.addEventListener('click', () => {
-            jump();
-        });
+        gameContainer.addEventListener('click', jump);
 
         function createObstacle() {
             if (!isPlaying) return;
-
             const obstacle = document.createElement('div');
             obstacle.classList.add('obstacle');
-            const randomObs = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
-            obstacle.innerHTML = randomObs;
-            
-            let obstacleDuration = 3.0; 
-            obstacle.style.animationDuration = obstacleDuration + 's';
-            
+            obstacle.innerHTML = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            obstacle.style.animationDuration = '3.0s';
             gameContainer.appendChild(obstacle);
 
             let checkCollision = setInterval(() => {
                 const playerRect = player.getBoundingClientRect();
                 const obstacleRect = obstacle.getBoundingClientRect();
-
                 if (
                     playerRect.right - 12 > obstacleRect.left &&
                     playerRect.left + 12 < obstacleRect.right &&
@@ -409,26 +327,17 @@
                     clearInterval(checkCollision);
                     gameOver();
                 }
-
                 if (obstacleRect.right < gameContainer.getBoundingClientRect().left) {
                     clearInterval(checkCollision);
                     obstacle.remove();
                     if (isPlaying) {
-                        score += (randomObs === '🎁' ? 25 : 10);
+                        score += (obstacle.innerHTML === '🎁' ? 25 : 10);
                         scoreDisplay.innerText = score;
-
-                        if (score >= 100) {
-                            winGame();
-                        }
+                        if (score >= 100) winGame();
                     }
                 }
             }, 40);
-
-            setTimeout(() => {
-                if (obstacle.parentNode) {
-                    obstacle.remove();
-                }
-            }, obstacleDuration * 1000);
+            setTimeout(() => { if (obstacle.parentNode) obstacle.remove(); }, 3000);
         }
 
         function startGame() {
@@ -438,7 +347,6 @@
             score = 0;
             scoreDisplay.innerText = score;
             isPlaying = true;
-            
             obstacleInterval = setInterval(createObstacle, 2800);
         }
 
