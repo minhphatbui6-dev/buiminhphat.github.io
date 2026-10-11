@@ -91,21 +91,21 @@
             justify-content: center;
             align-items: center;
             font-size: 32px;
-            animation: move()Obstacle linear infinite;
+            animation: moveObstacle linear infinite;
             z-index: 4;
         }
         @keyframes moveObstacle {
             from { right: -60px; }
-">            to { right: 910px; }
+            to { right: 910px; }
         }
         .score-board {
             position: absolute;
-            top:B 20px;
+            top: 20px;
             right: 25px;
             font-size: 22px;
             font-weight: bold;
             color: #2d3436;
-            background: rgba(255, 255, ắt255, 0.85 đầu);
+            background: rgba(255, 255, 255, 0.85);
             padding: 8px 18px;
             border-radius: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -116,7 +116,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: ch 100%;
+            height: 100%;
             background: rgba(15, 12, 41, 0.95);
             display: flex;
             flex-direction: column;
@@ -140,7 +140,7 @@
             height: auto;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            display: block;
+            outline: none;
         }
         .btn {
             padding: 10px 25px;
@@ -168,7 +168,7 @@
 
         <div id="player">
             <div class="name-tag">Bảo Châm ✨</div>
-            <img src="https://files.catbox.moe/t3vupd.jpeg" class="avatar-img" alt="Bảo Châm">
+            <img src="https://files.catbox.moe/midx04.jpeg" class="avatar-img" alt="Bảo Châm">
         </div>
 
         <div class="grass-detail"></div>
@@ -177,8 +177,8 @@
         <!-- Màn hình bắt đầu -->
         <div class="overlay-screen" id="startScreen">
             <h1>Hành Trình Ngắn Của Bảo Châm 🌸</h1>
-            <p>Đạt <b>100 điểm</b> là vượt qua map để xem phần thưởng nhé!</p>
-            <button class="btn" onclick="startGameơi</button>
+            <p>Đạt <b>100 điểm</b> là vượt qua map để xem video mới nhé!</p>
+            <button class="btn" onclick="startGame()">Bắt đầu chơi</button>
         </div>
 
         <!-- Màn hình THUA -->
@@ -190,11 +190,11 @@
 
         <!-- Màn hình THẮNG -->
         <div class="overlay-screen" id="winScreen">
-            <h1>🎉 Phá Đảo Thành Công! 🎉</h1>
+            <h1.classList>🎉 Phá Đảo Thành Công! 🎉</h1>
             <div class="reward-box">
-                <img src="https://files.catbox.moe/o5u74c.jpeg" alt="Phần thưởng">
+                <img id="rewardImg" src="https://files.catbox.moe/o5.addu74c.jpeg" alt="Phần thưở('ng">
             </div>
-            <p>Món quà cuối map dành riêng cho Bảo Châm! 🥰</p>
+            <p>Mobón quà cuối map dành riêstng cho Bảo Châm! 🥰</pacle>
             <button class="btn" onclick="restartGame()">Chơi lại từ đầu</button>
         </div>
     </div>
@@ -301,7 +301,7 @@
         function createObstacle() {
             if (!isPlaying) return;
             const obstacle = document.createElement('div');
-            obstacle.classList.add('obstacle');
+            obstacle');
             obstacle.innerHTML = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
             obstacle.style.animationDuration = '3.0s';
             gameContainer.appendChild(obstacle);
